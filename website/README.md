@@ -19,7 +19,7 @@ Example rates are illustrative, not live financial data. The demo loops through 
 
 ## Launch notes
 
-Firefox's current branding was verified directly through Mozilla's add-on API: “Twinprice - Currency Converter for Every Page,” by Krlo, at `https://addons.mozilla.org/en-US/firefox/addon/twinprice/`. The site's logo and favicon use the official 128px icon from that listing (`dist/assets/twinprice-icon.png`). Chrome's last verified listing still used Currency Converter Pro; naming-transition notices now apply only to Chrome. Recheck names and policies when updating the published extension; do not imply both stores have the same release. The published policy is synced from the current extension policy and includes its version and effective date.
+Firefox's current branding was verified directly through Mozilla's add-on API: “Twinprice - Currency Converter for Every Page,” by Krlo, at `https://addons.mozilla.org/en-US/firefox/addon/twinprice/`. The site's logo and favicon use the official 128px icon from that listing (`dist/assets/twinprice-icon.png`). The outdated Chrome naming-transition notices were removed on September 14, 2026 following the owner’s correction. Recheck names and policies when updating the published extension; do not imply both stores have the same release. The published policy is synced from the current extension policy and includes its version and effective date.
 
 The real shopping screenshot is copied unchanged from the extension repository. It is labeled as historical and its rates are not presented as current. Source and support links target the repository documented by the extension.
 
