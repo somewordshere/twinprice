@@ -2,7 +2,7 @@
 
 Twinprice is a Chrome and Firefox extension that converts prices on shopping pages into a currency you understand.
 
-**[twinprice.com](https://twinprice.com/)** brings together installation links, help, privacy information, and source code. The add-on links to the website for product information and support.
+**[twinprice.com](https://twinprice.com/)** brings together installation links, help, privacy information, and source code. The add-on links to the website for product information and support. Follow the [illustrated user guide](https://twinprice.com/guide/) to convert a page or a selected price.
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
 
