@@ -4,12 +4,68 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#245bea">
-  <title>twinprice.com — Shop abroad. See prices in your currency.</title>
+  <title>Twinprice — Currency Converter Extension for Chrome &amp; Firefox</title>
   <meta name="description" content="See converted prices beside the originals while you shop. Twinprice is a free Chrome and Firefox extension with local price detection and no advertising trackers.">
-  <meta property="og:title" content="Twinprice — A familiar price, wherever you shop.">
+  <meta property="og:title" content="Twinprice — Currency Converter Extension for Chrome &amp; Firefox">
   <meta property="og:description" content="Shop abroad. See prices in your currency. Meet the free currency conversion extension for Chrome and Firefox.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://twinprice.com/">
+
+  <meta property="og:site_name" content="Twinprice">
+  <meta property="og:image" content="https://twinprice.com/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Twinprice: a free currency converter extension for Chrome and Firefox. Shop abroad. See prices in your currency.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://twinprice.com/#website",
+      "url": "https://twinprice.com/",
+      "name": "Twinprice",
+      "alternateName": "twinprice.com",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://twinprice.com/#extension",
+      "name": "Twinprice",
+      "url": "https://twinprice.com/",
+      "description": "A free Chrome and Firefox currency converter extension. Convert shopping page prices or a highlighted price, with local price detection and no account required.",
+      "applicationCategory": "BrowserApplication",
+      "softwareRequirements": "Google Chrome or Mozilla Firefox",
+      "isAccessibleForFree": true,
+      "image": "https://twinprice.com/assets/social-preview.png",
+      "featureList": [
+        "Convert prices on webpages",
+        "Convert a selected price",
+        "Choose source and target currencies",
+        "Remember automatic conversion for chosen sites",
+        "Restore original prices"
+      ],
+      "installUrl": [
+        "https://chromewebstore.google.com/detail/currency-converter-pro/mocmiipnkiobjgjkfehpcmlapgjaepfk",
+        "https://addons.mozilla.org/en-US/firefox/addon/twinprice/"
+      ],
+      "sameAs": [
+        "https://chromewebstore.google.com/detail/currency-converter-pro/mocmiipnkiobjgjkfehpcmlapgjaepfk",
+        "https://addons.mozilla.org/en-US/firefox/addon/twinprice/",
+        "https://github.com/somewordshere/CurrencyConversionAddon"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "url": "https://twinprice.com/#install"
+      }
+    }
+  ]
+}
+  </script>
   <link rel="canonical" href="https://twinprice.com/">
   <link rel="icon" href="assets/twinprice-icon.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
@@ -20,7 +76,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header wrap">
     <a class="brand" href="./" aria-label="twinprice.com home"><img src="assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
-    <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#privacy">Privacy</a><a href="#faq">FAQ</a></nav>
+    <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="guide/">Guide</a><a href="#privacy">Privacy</a><a href="#faq">FAQ</a></nav>
     <a class="button button-small" href="#install">Get Twinprice <span aria-hidden="true">↗</span></a>
   </header>
   <main id="main">
@@ -28,12 +84,12 @@
       <div class="hero-copy">
         <p class="eyebrow"><span class="mini-rule"></span> A LITTLE CLARITY FOR YOUR CART</p>
         <h1 id="hero-title">Shop abroad.<br>See prices in<br><span>your currency.</span></h1>
-        <p class="hero-description">Twinprice adds converted prices beside the originals while you browse. Convert a whole page, or highlight a single price and click “Convert selection.”</p>
+        <p class="hero-description">Twinprice is a free currency converter extension for Chrome and Firefox. See converted prices beside the originals while you shop, or highlight one price and click “Convert selection.”</p>
         <div class="install-buttons">
           <a class="button" href="https://chromewebstore.google.com/detail/currency-converter-pro/mocmiipnkiobjgjkfehpcmlapgjaepfk">Get Twinprice for Chrome <span aria-hidden="true">↗</span></a>
           <a class="text-button" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a>
         </div>
-        <p class="free-note">Free to install. No account needed.</p>
+        <p class="free-note">Free to install. No account needed. <a href="guide/">Read the getting started guide</a>.</p>
       </div>
       <div class="demo-stage" id="demo">
         <div class="demo-topline"><span>ONE PRICE. TWO PERSPECTIVES.</span><span class="demo-tag">Interactive demo</span></div>
@@ -95,7 +151,7 @@
           <article class="feature"><span class="feature-index">03 / MAKE IT YOURS</span><h3>Easy on your eyes.</h3><p>Choose converted-price colors and shapes, with a live preview. Keep the originals beside them or show converted prices in their place.</p><div class="appearance-samples" aria-label="Examples of converted price appearance"><span>≈ $97.90</span><span>≈ $97.90</span><span>≈ $97.90</span></div></article>
           <article class="feature"><span class="feature-index">04 / JUST ONE PRICE</span><h3>Highlight. Click. Convert.</h3><p>Highlight a price with its currency, then click <strong>Convert selection</strong> beneath it. Get a conversion for just the price you need. You can also convert a whole page or type an amount into the extension.</p><div class="mode-examples" aria-label="Three steps to convert a selected price"><span>1. Highlight a price</span><span>2. Click Convert selection</span><span>3. See your result</span></div></article>
         </div>
-        <details class="screenshot-disclosure"><summary>See Twinprice on a real shopping page <span aria-hidden="true">+</span></summary><figure><a href="assets/page-conversion.png" aria-label="Open full-size screenshot of the extension on a shopping page"><img src="assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="A real shopping page with green currency conversions added beside the original prices."></a><figcaption>Actual extension screenshot. Older extension screens may still show the name Currency Converter Pro. Rates shown are from the screenshot, not current rates.</figcaption></figure></details>
+        <details class="screenshot-disclosure"><summary>See Twinprice on a real shopping page <span aria-hidden="true">+</span></summary><figure><a href="assets/page-conversion.png" aria-label="Open full-size screenshot of the extension on a shopping page"><img src="assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="A real shopping page with green currency conversions added beside the original prices."></a><figcaption>Actual extension screenshot. Rates shown are from the screenshot, not current rates.</figcaption></figure></details>
       </div>
     </section>
     <section class="section wrap privacy-section" id="privacy">
@@ -119,6 +175,6 @@
     </section>
     <section class="install-section wrap" id="install" aria-labelledby="install-title"><p class="eyebrow">LESS MENTAL MATH. MORE WINDOW SHOPPING.</p><h2 id="install-title">Make yourself at home.<br>In any currency.</h2><p>Add a familiar price to your next find.</p><div class="install-buttons"><a class="button" href="https://chromewebstore.google.com/detail/currency-converter-pro/mocmiipnkiobjgjkfehpcmlapgjaepfk">Get Twinprice for Chrome <span aria-hidden="true">↗</span></a><a class="button button-outline" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a></div><p class="free-note">Free to install. No account needed.</p></section>
   </main>
-  <footer class="site-footer wrap"><a class="brand" href="./"><span>twinprice<span class="brand-period">.</span>com</span></a><span>A familiar price, wherever you shop.</span><a href="privacy/">Privacy policy</a><a href="https://github.com/somewordshere/CurrencyConversionAddon/issues">Help / Report an issue</a><a href="https://github.com/somewordshere/CurrencyConversionAddon">Source code</a></footer>
+  <footer class="site-footer wrap"><a class="brand" href="./"><span>twinprice<span class="brand-period">.</span>com</span></a><span>A familiar price, wherever you shop.</span><a href="guide/">User guide</a><a href="privacy/">Privacy policy</a><a href="https://github.com/somewordshere/CurrencyConversionAddon/issues">Help / Report an issue</a><a href="https://github.com/somewordshere/CurrencyConversionAddon">Source code</a></footer>
 </body>
 </html>
