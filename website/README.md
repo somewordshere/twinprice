@@ -13,7 +13,8 @@ Run `npm run check` to check JavaScript syntax. No installation or build is requ
 - `dist/styles.css`: shared responsive styles, keyboard focus, reduced motion.
 - `dist/demo.js`: local example conversions; no requests or persistence.
 - `dist/privacy/index.html`: the full existing extension policy and website privacy information.
-- `dist/guide/index.html`: illustrated installation, conversion, settings, and troubleshooting guide.
+- `dist/guide/index.html`: illustrated installation and conversion guide, with worked shopping examples and troubleshooting.
+- `dist/about/index.html`: public product facts, publisher attribution, sources, rate and privacy details, and an invitation for honest reviews. Publisher attribution was checked against both official store listings on 2026-09-14; avoid presenting an invented personal biography or a common store version.
 - `dist/sitemap.xml` and `dist/robots.txt`: canonical page discovery for search crawlers. Update `lastmod` only when that page changes substantially; omit verification and asset URLs.
 - `dist/assets/social-preview.png`: 1200 × 630 sharing card. Rebuild with `node social-preview.mjs` using the repository's Playwright dependency; deployment uses the committed image without a build step.
 - `sync-policy.mjs`: run `node sync-policy.mjs` from this directory to refresh the privacy page from the parent extension's `privacy-policy.md`.
@@ -38,8 +39,8 @@ The website source and assets are tracked in GitHub. Extension source and releas
 
 Keep the homepage's `msvalidate.01` meta tag for Bing Webmaster Tools ownership verification. It is a public verification value and must remain after verification succeeds.
 
-The homepage includes WebSite and SoftwareApplication JSON-LD describing the visible product, free price, official store links, and source repository. There are no invented ratings or reviews. Without a qualifying real rating or review, this does not fulfill Google's software-app rich-result requirements; it still provides truthful semantic product information. Keep the data consistent with visible content and store listings. Do not hardcode a version shared by both stores.
+The homepage includes WebSite and SoftwareApplication JSON-LD describing the visible product, free price, official store links, and source repository. There are no invented ratings or reviews. Without a qualifying real rating or review, this does not fulfill Google's software-app rich-result requirements; it still provides truthful semantic product information. Keep the data consistent with visible content and store listings. Do not hardcode a version shared by both stores. The AboutPage uses the same extension ID as the homepage, and the homepage links back to it. External store links use Chrome’s current Twinprice URL slug with the unchanged extension ID.
 
-All public content is delivered as HTML and remains usable without JavaScript. Canonical URLs and social metadata are set on the homepage, guide, and privacy page. Robots permits crawling and advertises the sitemap; this preserves the existing crawler policy, including its treatment of AI training bots. It does not override Cloudflare rules or guarantee indexing or AI citations. No special AI text file, tracking script, or third-party font is required.
+All public content is delivered as HTML and remains usable without JavaScript. Canonical URLs and social metadata are set on the homepage, guide, about page, and privacy page. Robots permits crawling and advertises the sitemap; this preserves the existing crawler policy, including its treatment of AI training bots. It does not override Cloudflare rules or guarantee indexing or AI citations. No special AI text file, tracking script, or third-party font is required.
 
 Keep `dist/google72aa11731b778087.html` and its exact-path 200 rewrite in `dist/_redirects` for Google ownership verification. Submit `https://twinprice.com/sitemap.xml` through the verified Google Search Console property and Bing Webmaster Tools. Public pages and crawler files must remain accessible without a login or challenge; verify production after deploying without altering the shared preview Access policy.
