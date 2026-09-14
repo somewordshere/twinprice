@@ -1028,7 +1028,7 @@ h1 {
 
 /* Reading pages share the landing page's typography and colors. */
 .policy-content { overflow-wrap: anywhere; }
-.guide-main { max-width: 860px; padding-block: 45px 80px; }
+.guide-main { max-width: 860px; padding-block: 45px 80px; overflow-wrap: anywhere; }
 .guide-intro h1 { font-size: clamp(36px, 5vw, 56px); line-height: 1.12; letter-spacing: -1.7px; margin-block: 22px; }
 .guide-intro > p:not(.eyebrow) { color: var(--muted); }
 .guide-updated { font-size: 13px; margin-top: 18px; }
@@ -1036,6 +1036,12 @@ h1 {
 .guide-contents strong { width: 100%; }
 .guide-contents a { text-decoration: underline; color: var(--blue); }
 .guide-main section { margin-block: 42px; scroll-margin-top: 24px; }
+.guide-main section h3 { font-size: 21px; line-height: 1.4; margin: 28px 0 12px; scroll-margin-top: 24px; }
+.product-facts { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; line-height: 1.7; }
+.product-facts caption { text-align: left; color: var(--muted); padding-bottom: 12px; }
+.product-facts th, .product-facts td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.product-facts th { width: 27%; background: var(--pale); }
+@media (max-width: 380px) { .product-facts th, .product-facts td { padding: 10px 8px; } .product-facts { font-size: 14px; } }
 .guide-main h2 { font-size: clamp(25px, 3vw, 32px); line-height: 1.25; letter-spacing: -.6px; margin-bottom: 18px; }
 .guide-main section p + p { margin-top: 16px; }
 .guide-main li { padding-left: 5px; margin-block: 12px; line-height: 1.75; }

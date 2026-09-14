@@ -28,7 +28,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header wrap">
     <a class="brand" href="../" aria-label="twinprice.com home"><img src="../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
-    <nav aria-label="Main navigation"><a href="../#how-it-works">How it works</a><a href="./" aria-current="page">Guide</a><a href="../privacy/">Privacy</a><a href="../#faq">FAQ</a></nav>
+    <nav aria-label="Main navigation"><a href="../#how-it-works">How it works</a><a href="./" aria-current="page">Guide</a><a href="../privacy/">Privacy</a><a href="../about/">About</a></nav>
     <a class="button button-small" href="../#install">Get Twinprice <span aria-hidden="true">↗</span></a>
   </header>
   <main class="wrap guide-main" id="main">
@@ -39,10 +39,10 @@
         <p>Twinprice is a free browser extension that converts prices on shopping pages into your preferred currency. Install it, choose your currencies, and select <strong>Convert page prices</strong>. For just one price, highlight it with its currency and click <strong>Convert selection</strong>.</p>
         <p class="guide-updated">Updated <time datetime="2026-09-14">14 September 2026</time></p>
       </header>
-      <nav class="guide-contents" aria-label="In this guide"><strong>In this guide</strong><a href="#install">Install Twinprice</a><a href="#whole-page">Convert a whole page</a><a href="#one-price">Convert one price</a><a href="#automatic">Remember your settings</a><a href="#restore">Restore original prices</a><a href="#troubleshooting">If a price will not convert</a></nav>
+      <nav class="guide-contents" aria-label="In this guide"><strong>In this guide</strong><a href="#install">Install Twinprice</a><a href="#whole-page">Convert a whole page</a><a href="#one-price">Convert one price</a><a href="#automatic">Remember your settings</a><a href="#restore">Restore original prices</a><a href="#shopping-examples">Shopping examples</a><a href="#troubleshooting">If a price will not convert</a></nav>
       <section id="install">
         <h2>1. Install Twinprice in your browser</h2>
-        <p>Open the <a href="https://chromewebstore.google.com/detail/currency-converter-pro/mocmiipnkiobjgjkfehpcmlapgjaepfk">Twinprice Chrome Web Store listing</a> or the <a href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Twinprice Firefox Add-ons listing</a> and follow your browser’s installation steps. There is no Twinprice account to create.</p>
+        <p>Open the <a href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk">Twinprice Chrome Web Store listing</a> or the <a href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Twinprice Firefox Add-ons listing</a> and follow your browser’s installation steps. There is no Twinprice account to create.</p>
         <p>Open an ordinary shopping webpage. Use your browser’s extensions menu to open Twinprice; pin it to the toolbar if you want quicker access. Webpage access lets the extension find supported prices and display conversions. Read the <a href="../privacy/">privacy policy</a> for how permissions and exchange-rate requests work.</p>
       </section>
       <section id="whole-page">
@@ -72,6 +72,25 @@
         <p>After converting a page, open the popup and select <strong>Restore original prices</strong> to undo its conversions. To stop automatic conversion on that shop, turn off <strong>Convert this site automatically</strong> under Page options.</p>
         <p>To stop price scanning, prompts, and automatic conversion everywhere, turn off <strong>Enable converter</strong>.</p>
       </section>
+      <section id="shopping-examples">
+        <h2>Practical examples for shopping abroad</h2>
+        <p>These examples show how to choose currencies and interpret a conversion. All rates below are invented for illustration; the extension uses the rate available from its provider.</p>
+        <h3 id="euros-to-zloty">How do I see a euro price in Polish złoty?</h3>
+        <p>For a shop charging euros, choose <strong>FROM: EUR</strong> and <strong>TO: PLN</strong>, then click <strong>Convert page prices</strong>. If a lamp costs €89 and the example rate is 4.30 PLN per EUR, its converted price is <strong>382.70 PLN</strong> (89 × 4.30). Keep the original visible to compare the shop’s amount with the estimate in your home currency.</p>
+        <p>To convert just that lamp’s price, set PLN as your target currency, highlight the price including € or EUR, and click <strong>Convert selection</strong>.</p>
+        <h3 id="dollar-currencies">Does a dollar sign always mean US dollars?</h3>
+        <p>No. USD, CAD, AUD and other currencies use a dollar sign. Confirm the currency in the shop’s currency selector or payment information. For a Canadian-dollar listing, choose <strong>FROM: CAD</strong>, even if the displayed price is simply $100. Choosing USD would use a different currency pair.</p>
+        <p>AUTO uses the page’s currency context. If the result is unclear, choose the source manually. When a shop lets you change its displayed currency, match Twinprice’s source to the currency currently shown on the page.</p>
+        <h3 id="checkout-differences">Why is the amount charged different from Twinprice’s conversion?</h3>
+        <p>Twinprice estimates a price for comparison using a reference exchange rate. It does not change the shop’s price or set the rate used by your bank, card provider, or payment service. Shipping, taxes, conversion margins, and other fees can change the final total.</p>
+        <p>For example, at an invented rate of 0.90 EUR per USD, a USD 100 item is EUR 90. A hypothetical 3% conversion fee on that amount would add EUR 2.70, making EUR 92.70 before any other charges. Twinprice’s price conversion does not calculate that fee. Check the shop’s final total and your payment provider’s terms for the amount you will pay.</p>
+        <h3 id="compare-shops">How can I compare prices from two shops?</h3>
+        <p>Use the same target currency on both sites, but choose the correct source currency for each shop. Convert the product prices, then compare the final totals including shipping and taxes. An item with a lower converted price can still cost more overall.</p>
+        <p>If you only want to compare amounts you already know, open <strong>Convert custom amount</strong> in the popup and type an amount. Choose an explicit source currency first if AUTO has not identified one.</p>
+        <h3 id="offline-rates">Can I convert prices without a fresh internet connection?</h3>
+        <p>Recent cached rates can support a conversion when a fresh rate is unavailable. This depends on having a usable cached rate for the requested currencies; Twinprice is not guaranteed to work fully offline. It warns when cached rates pass 48 hours and will not use rates older than seven days.</p>
+        <p>See <a href="../about/#rates">where the rates come from</a> and <a href="../about/#product-facts">the product’s browser and currency limitations</a>.</p>
+      </section>
       <section id="troubleshooting">
         <h2>If a price will not convert</h2>
         <dl class="guide-answers">
@@ -86,6 +105,6 @@
       <aside class="guide-next"><h2>Ready for your next find?</h2><p><a href="../#install">Get Twinprice for Chrome or Firefox</a>, or <a href="../#demo">try the website demo</a> before installing.</p></aside>
     </article>
   </main>
-  <footer class="site-footer wrap"><a class="brand" href="../"><span>twinprice<span class="brand-period">.</span>com</span></a><span>A familiar price, wherever you shop.</span><a href="./" aria-current="page">User guide</a><a href="../privacy/">Privacy policy</a><a href="https://github.com/somewordshere/CurrencyConversionAddon/issues">Help / Report an issue</a><a href="https://github.com/somewordshere/CurrencyConversionAddon">Source code</a></footer>
+  <footer class="site-footer wrap"><a class="brand" href="../"><span>twinprice<span class="brand-period">.</span>com</span></a><span>A familiar price, wherever you shop.</span><a href="./" aria-current="page">User guide</a><a href="../about/">About</a><a href="../privacy/">Privacy policy</a><a href="https://github.com/somewordshere/CurrencyConversionAddon/issues">Help / Report an issue</a><a href="https://github.com/somewordshere/CurrencyConversionAddon">Source code</a></footer>
 </body>
 </html>
