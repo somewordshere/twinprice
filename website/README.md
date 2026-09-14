@@ -36,6 +36,8 @@ The website source and assets are tracked in GitHub. Extension source and releas
 
 ## Search information
 
+Keep the homepage's `msvalidate.01` meta tag for Bing Webmaster Tools ownership verification. It is a public verification value and must remain after verification succeeds.
+
 The homepage includes WebSite and SoftwareApplication JSON-LD describing the visible product, free price, official store links, and source repository. There are no invented ratings or reviews. Without a qualifying real rating or review, this does not fulfill Google's software-app rich-result requirements; it still provides truthful semantic product information. Keep the data consistent with visible content and store listings. Do not hardcode a version shared by both stores.
 
 All public content is delivered as HTML and remains usable without JavaScript. Canonical URLs and social metadata are set on the homepage, guide, and privacy page. Robots permits crawling and advertises the sitemap; this preserves the existing crawler policy, including its treatment of AI training bots. It does not override Cloudflare rules or guarantee indexing or AI citations. No special AI text file, tracking script, or third-party font is required.
