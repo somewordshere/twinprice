@@ -1,6 +1,6 @@
 # Legacy screenshots
 
-These images show the previous Currency Converter Pro interface. They were removed in the 2.0 redesign and restored from the parent of commit [c7b54cd](https://github.com/somewordshere/CurrencyConversionAddon/commit/c7b54cd1dc0b9eb9ed414b591648fb5248dcaae6).
+These images show the previous Currency Converter Pro interface. They were removed in the 2.0 redesign and restored from the parent of commit [c7b54cd](https://github.com/somewordshere/twinprice/commit/c7b54cd1dc0b9eb9ed414b591648fb5248dcaae6).
 
 | Popup | Page conversion |
 | --- | --- |

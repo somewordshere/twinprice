@@ -133,5 +133,5 @@ If the extension's data practices change, this policy will be updated before the
 ## Contact
 
 For privacy questions, open an issue at
-https://github.com/somewordshere/CurrencyConversionAddon/issues. Issues are public;
+https://github.com/somewordshere/twinprice/issues. Issues are public;
 do not include anything you would not want published.
