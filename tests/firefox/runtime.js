@@ -190,7 +190,7 @@ async function createFirefoxDriver() {
   const binary = resolveFirefoxBinary();
   if (binary) options.setBinary(binary);
 
-  const service = new firefox.ServiceBuilder().addArguments("--allow-system-access");
+  const service = new firefox.ServiceBuilder(process.env.GECKODRIVER_BIN).addArguments("--allow-system-access");
   return new Builder()
     .forBrowser(Browser.FIREFOX)
     .setFirefoxOptions(options)

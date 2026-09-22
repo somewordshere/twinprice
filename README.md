@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
 
-**Current version:** 2.1.4 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.1.7 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/CurrencyConversionAddon/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/CurrencyConversionAddon/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.1.4/twinprice-2.1.4-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.1.4/twinprice-2.1.4-firefox.zip)
+[![Verify](https://github.com/somewordshere/CurrencyConversionAddon/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/CurrencyConversionAddon/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.1.7/twinprice-2.1.7-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.1.7/twinprice-2.1.7-firefox.zip)
 
 **[View the complete changelog →](CHANGELOG.md)**
 
@@ -36,6 +36,8 @@ Or select a single price to convert just that one:
 | --- | --- |
 | ![A single highlighted price with a Convert selection button beside it](screenshots/v2-inpage-selection.png) | ![The same selection showing the converted euro amount](screenshots/v2-inpage-selection-done.png) |
 
+Earlier screenshots are preserved in the [legacy screenshot archive](screenshots/old/README.md). They show the previous Currency Converter Pro interface.
+
 ## Features
 
 - Search currencies by name or ISO code, with conservative **AUTO** detection when the source currency is unknown.
@@ -43,6 +45,7 @@ Or select a single price to convert just that one:
 - Handle prices added later by dynamic and single-page websites.
 - Show converted prices beside the originals or replace them, with exact undo support.
 - Customize converted-price text, background, and corner shape with a live before-and-after preview and contrast guidance.
+- Choose whether the popup follows the system theme or always uses light or dark mode.
 - Keep the popup focused on the current site, currency pair, and one adaptive page-conversion action, with less-used controls in closed disclosures.
 - Scan ordinary webpages locally as they open and show the on-page conversion prompt only after a supported price is found.
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
@@ -51,7 +54,7 @@ Or select a single price to convert just that one:
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.1.4/twinprice-2.1.4-chrome.zip) or [Firefox build](release/2.1.4/twinprice-2.1.4-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.1.7/twinprice-2.1.7-chrome.zip) or [Firefox build](release/2.1.7/twinprice-2.1.7-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -68,6 +71,8 @@ The global **Enable converter** switch is under **Page options**. Turning it off
 ### Customize converted prices
 
 Open **Page options** and use **Converted price appearance** to choose text and background colors plus a square, rounded, or pill shape. The **Before** sample keeps the original converter style while **After** updates as you edit. The contrast message reports whether the selected colors meet WCAG AA for normal text, and **Reset appearance** restores the accessible green default.
+
+Use **App theme** in the same panel to match the browser's system theme or keep the popup in light or dark mode. The choice is synchronized with the rest of the extension settings.
 
 ### Convert a custom amount
 
@@ -131,6 +136,7 @@ The only external requests retrieve the currency catalog and reference rates fro
 | HTTP and HTTPS webpage access | Loads the local detector as pages open so it can find supported prices and offer conversion without a toolbar click. Page contents and URLs are not transmitted. |
 | `activeTab` and `scripting` | Provides a user-triggered fallback on supported pages where the normal detector was not loaded, including manually allowed local files. |
 | `api.frankfurter.dev` | Retrieves reference exchange rates using ISO currency codes. |
+| Optional HTTP and HTTPS site access | Requested when you click **Activate my open tabs**, allowing the detector to start in existing tabs without reloading them. You can decline and reload those tabs instead. |
 | Firefox `websiteContent` data declaration | Discloses that a source ISO currency code detected from the page can be transmitted to the rate provider; raw page text, prices, and URLs are not transmitted. |
 
 Read the complete [privacy policy](privacy-policy.md) for retention, deletion, and provider details.
@@ -200,6 +206,9 @@ CI runs every one of these on each push. `npm run build:icons` and `npm run buil
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.1.7 | Refreshed release packages, documentation, and restored legacy screenshots | [Chrome](release/2.1.7/twinprice-2.1.7-chrome.zip) · [Firefox](release/2.1.7/twinprice-2.1.7-firefox.zip) |
+| 2.1.6 | User-selectable system, light, and dark popup themes | [Chrome](release/2.1.6/twinprice-2.1.6-chrome.zip) · [Firefox](release/2.1.6/twinprice-2.1.6-firefox.zip) |
+| 2.1.5 | Setup, conversion, parsing, and dynamic-price reliability fixes | [Chrome](release/2.1.5/twinprice-2.1.5-chrome.zip) · [Firefox](release/2.1.5/twinprice-2.1.5-firefox.zip) |
 | 2.1.4 | Website and help links route through the Twinprice website; compact footer preserves the normal popup layout | [Chrome](release/2.1.4/twinprice-2.1.4-chrome.zip) · [Firefox](release/2.1.4/twinprice-2.1.4-firefox.zip) |
 | 2.1.1 | Support link in the extension, a privacy policy that names a contact that exists, and the Firefox listing name the add-on actually uses | [Chrome](release/2.1.1/twinprice-2.1.1-chrome.zip) · [Firefox](release/2.1.1/twinprice-2.1.1-firefox.zip) |
 | 2.1.0 | Renamed to Twinprice, onboarding on first install, and a home currency taken from your browser region | [Chrome](release/2.1.0/twinprice-2.1.0-chrome.zip) · [Firefox](release/2.1.0/twinprice-2.1.0-firefox.zip) |
@@ -226,7 +235,7 @@ src/          Shared extension runtime used by both browsers
 manifests/    Common manifest plus Chrome and Firefox overrides
 dist/         Generated unpacked browser builds (not committed)
 release/      Versioned Chrome and Firefox release archives
-screenshots/  Images used by this README
+screenshots/  Current screenshots and an old/ archive of the previous interface
 scripts/      Manifest composition, validation, icon, screenshot, and release utilities
 tests/        Unit, integration, fixture, Chrome Playwright, and Firefox runtime tests
 ```

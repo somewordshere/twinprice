@@ -13,7 +13,7 @@
   const DOM_WRITE_BATCH_SIZE = 200;
   const MAX_DISCOVERY_TEXT_NODES = 6000;
   const MAX_DISCOVERY_PRICE_ELEMENTS = 300;
-  const POSSIBLE_PRICE_TEXT_PATTERN = /[0-9０-９]/;
+  const POSSIBLE_PRICE_TEXT_PATTERN = /[0-9０-９٠-٩۰-۹]/;
   const QUICK_CURRENCY_MARKER_PATTERN = new RegExp(
     [...new Set(Object.entries(CurrencyCatalog.CURRENCY_META).flatMap(([currency, meta]) =>
       [currency, ...meta.symbols]
@@ -47,6 +47,7 @@
   let conversionGeneration = 0;
   let discoveryCallback = null;
   let observedUrl = window.location.href;
+  let splitPriceRecords = new WeakMap();
   const conversionRegistry = CurrencyConversionRegistry.create({
     updateWrapperPresentation: updateConvertedPresentation
   });
@@ -267,12 +268,16 @@
     if (!settings?.enabled) return { ok: false, error: "Extension is turned off." };
     const generation = conversionGeneration;
     const runSettings = settings;
-    const match = CurrencyDetector.findMatchesForContext(
+    const matches = CurrencyDetector.findMatchesForContext(
       selectedText,
       element,
       runSettings,
       { selection: true }
-    )[0];
+    );
+    if (matches.length > 1) {
+      return { ok: false, error: "Select one price at a time." };
+    }
+    const match = matches[0];
 
     if (!match) {
       return {
@@ -409,6 +414,7 @@
 
   function inspectDiscoveryRoots(roots) {
     if (!roots.length || !settings?.enabled) return;
+    if (settings.fromCurrency === "AUTO") CurrencyDetector.resetPageCurrencyDetection();
     const detection = detectPagePrices({ roots });
     if (!detection.found) return;
     const callback = discoveryCallback;
@@ -641,6 +647,20 @@
     return result || { ok: false, error: "Could not load exchange rates." };
   }
 
+  function ratesCacheChangeAffectsActiveRates(change) {
+    const oldBases = change?.oldValue?.bases || {};
+    const newBases = change?.newValue?.bases || {};
+    return Object.keys(activeRatesByBase).some((baseCurrency) => {
+      const oldEntry = oldBases[baseCurrency];
+      const newEntry = newBases[baseCurrency];
+      if (!oldEntry && !newEntry) return false;
+      if (!newEntry) return true;
+      return newEntry.fetchedAt !== activeRateMetaByBase[baseCurrency]?.fetchedAt ||
+        newEntry.rateDate !== activeRateMetaByBase[baseCurrency]?.date ||
+        newEntry.rates?.[settings?.toCurrency] !== activeRatesByBase[baseCurrency]?.[settings?.toCurrency];
+    });
+  }
+
   async function applyPlansInBatches(textPlans, splitPlans, generation, runSettings) {
     let count = 0;
     let processed = 0;
@@ -720,6 +740,7 @@
     if (displayMode === "replace") captureOriginalContent(badge, element);
     element.appendChild(badge);
     conversionRegistry.add(badge);
+    splitPriceRecords.set(element, { badge, originalText });
     return 1;
   }
 
@@ -845,9 +866,33 @@
     if (conversionScheduler.start(document.body)) observedUrl = window.location.href;
   }
 
-  function handleObservedMutations(_mutations, scheduler) {
+  function handleObservedMutations(mutations, scheduler) {
     if (!settings?.enabled) return;
-    if (window.location.href !== observedUrl) {
+    let hasSiteMutation = mutations.some((mutation) => !isOwnedElement(
+      mutation.target.nodeType === Node.TEXT_NODE ? mutation.target.parentElement : mutation.target
+    ));
+    for (const mutation of mutations) {
+      if (mutation.type === "attributes") continue;
+      let host = mutation.target.nodeType === Node.TEXT_NODE
+        ? mutation.target.parentElement : mutation.target;
+      for (; host; host = host.parentElement) {
+        const record = splitPriceRecords.get(host);
+        if (!record) continue;
+        const captured = record.badge.querySelector(":scope > .ccp-original");
+        const currentText = captured && host.contains(record.badge)
+          ? captured.textContent.trim()
+          : [...host.childNodes].filter((node) => node !== record.badge)
+            .map((node) => node.textContent).join("").trim();
+        if (currentText !== record.originalText || !host.contains(record.badge)) {
+          hasSiteMutation = true;
+          splitPriceRecords.delete(host);
+          conversionRegistry.restore(record.badge);
+          scheduler.queue(host);
+        }
+        break;
+      }
+    }
+    if (hasSiteMutation && window.location.href !== observedUrl) {
       observedUrl = window.location.href;
       CurrencyDetector.resetPageCurrencyDetection();
       scheduler.queue(document.body);
@@ -856,12 +901,13 @@
 
   async function convertMutationRoots(roots) {
     if (!roots.length || !settings?.enabled) return;
+    if (settings.fromCurrency === "AUTO") CurrencyDetector.resetPageCurrencyDetection();
     await runSiteConversion({ clearExisting: false, observe: true, roots }).catch(() => {});
   }
 
   function isOwnedElement(element) {
-    return Boolean(element.matches?.(`${OWNED_SELECTOR}, ${UI_SELECTOR}`) ||
-      element.closest?.(`${OWNED_SELECTOR}, ${UI_SELECTOR}`));
+    return Boolean(element?.matches?.(`${OWNED_SELECTOR}, ${UI_SELECTOR}`) ||
+      element?.closest?.(`${OWNED_SELECTOR}, ${UI_SELECTOR}`));
   }
 
   function stopWatching() {
@@ -869,9 +915,19 @@
   }
 
   function isRendered(element) {
-    if (typeof element.getClientRects !== "function" || element.getClientRects().length === 0) return false;
     const style = window.getComputedStyle?.(element);
-    return !style || (style.display !== "none" && style.visibility !== "hidden" && style.visibility !== "collapse");
+    if (style && (style.display === "none" || style.visibility === "hidden" || style.visibility === "collapse")) {
+      return false;
+    }
+    if (typeof element.getClientRects === "function" && element.getClientRects().length > 0) return true;
+    try {
+      const range = element.ownerDocument?.createRange?.();
+      if (!range) return false;
+      range.selectNodeContents(element);
+      return range.getClientRects().length > 0;
+    } catch (_error) {
+      return false;
+    }
   }
 
   function prioritizeViewportElements(elements) {
@@ -887,6 +943,7 @@
 
   function removeConversionsOnly() {
     conversionRegistry.restoreAll();
+    splitPriceRecords = new WeakMap();
   }
 
   function clearConversions() {
@@ -920,6 +977,7 @@
     detectPagePrices,
     prefetchRates,
     describeRate,
+    ratesCacheChangeAffectsActiveRates,
     startDiscovering,
     stopDiscovering,
     startWatching,

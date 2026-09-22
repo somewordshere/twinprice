@@ -69,14 +69,15 @@ async function stubRateProvider(extensionWorker) {
 }
 
 async function seedExtension(extensionWorker, options = {}) {
+  // Installation loads the currency catalog. Stub its provider before waiting
+  // for initialization so a live network retry cannot delay the test fixture.
+  await stubRateProvider(extensionWorker);
   await expect.poll(async () => extensionWorker.evaluate(async () => (
     typeof (await chrome.storage.sync.get("enabled")).enabled === "boolean"
   )), {
     message: "extension installation to initialize sync storage",
     timeout: 15_000
   }).toBe(true);
-
-  await stubRateProvider(extensionWorker);
 
   const state = createSeededExtensionState({
     ...options,

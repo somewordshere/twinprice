@@ -25,9 +25,13 @@
 
     function restoreAll() {
       for (const wrapper of [...wrappers]) {
-        wrappers.delete(wrapper);
-        if (wrapper?.isConnected) restoreWrapper(wrapper);
+        restore(wrapper);
       }
+    }
+
+    function restore(wrapper) {
+      wrappers.delete(wrapper);
+      if (wrapper?.isConnected) restoreWrapper(wrapper);
     }
 
     function updatePresentation(settings) {
@@ -50,6 +54,7 @@
       prune,
       hasAny,
       restoreAll,
+      restore,
       updatePresentation,
       size
     });

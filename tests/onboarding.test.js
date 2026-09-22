@@ -117,7 +117,7 @@ test("an existing choice survives the seeding, including one that matches no reg
   assert.equal(syncStore.toCurrency, "JPY");
 });
 
-function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = false } = {}) {
+function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = false, granted = true } = {}) {
   const created = [];
   const injected = [];
   const context = load([
@@ -133,6 +133,7 @@ function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = fa
   const service = context.CurrencyOnboardingService.create({
     api: {
       runtime: { getURL: (page) => `moz-extension://test/${page}` },
+      permissions: { contains: async () => granted },
       tabs: {
         create: async (options) => created.push(options.url),
         query: async () => {
@@ -204,4 +205,12 @@ test("a browser that refuses to list tabs reports the failure instead of throwin
   const result = await service.activateOpenTabs();
   assert.equal(result.ok, false);
   assert.match(result.error, /Tabs cannot be listed/);
+});
+
+test("activating tabs without host access reports missing permission instead of an empty browser", async () => {
+  const { service, injected } = createOnboarding({ granted: false, tabs: [{ id: 1 }] });
+  const result = await service.activateOpenTabs();
+  assert.equal(result.ok, false);
+  assert.match(result.error, /Allow site access/);
+  assert.deepEqual(injected, []);
 });

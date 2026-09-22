@@ -10,6 +10,7 @@
     buildMarkerPattern
   } = global.CurrencyNumberParser;
   const SYMBOL_GROUPS = createSymbolGroups();
+  const PRICE_MARKER_PATTERNS = new Map();
   const SINGLE_CURRENCY_MARKER_PATTERNS = createSingleCurrencyMarkerPatterns();
   const MAX_COUNTED_PRICE_MARKERS = 4;
   const CURRENCY_CODE_PATTERN = new RegExp(
@@ -17,7 +18,6 @@
     "g"
   );
   const WORD_LIKE_CURRENCY_CODES = new Set(["AMD", "MAD", "TRY"]);
-  const THREE_DECIMAL_CURRENCIES = new Set(["BHD", "JOD", "KWD", "OMR"]);
   const NON_PRICE_CONTEXT_PATTERN =
     /\b(?:available|availability|delivery|items?|left|quantity|rating|reviews?|stock|stück|stueck|verfügbar|lieferung|anzahl|оцінок|наявност[іи]|товар(?:ів|а)?|залишилось)\b/iu;
   let pageCurrencyDetection = null;
@@ -39,7 +39,7 @@
     const allowBare = manualCurrency
       ? selection || (
         isLikelyStandalonePriceText(text, element) &&
-        !hasMarkedPriceInContainer(element)
+        !hasMarkedPriceInContainer(element, manualCurrency)
       )
       : detection.confidence === "high" && (
         selection || (
@@ -86,7 +86,7 @@
       const marked = findMarkedMatchesForCurrency(text, forcedCurrency);
       return marked.length
         ? marked
-        : allowBare
+        : allowBare && !findCurrencyMatches(text, { pageDetection }).length
           ? findBareMatches(text, forcedCurrency)
           : [];
     }
@@ -160,7 +160,7 @@
 
   function findMatchesWithMarkers(text, markers, currency, strength) {
     const markerPattern = [...new Set(markers)]
-      .map(buildMarkerPattern)
+      .map((marker) => priceMarkerPattern(marker, currency))
       .sort((a, b) => b.length - a.length)
       .join("|");
 
@@ -169,15 +169,15 @@
     }
 
     const regex = new RegExp(
-      `(?:(?:${markerPattern})[\\s\\u00a0\\u202f]*${NUMBER_CAPTURE}(?![\\p{L}\\p{N}.,\\uFF0C\\uFF0E])|(?<![\\p{L}\\p{N}])${NUMBER_CAPTURE}[\\s\\u00a0\\u202f]*(?:${markerPattern}))`,
+      `(?:(?<![\\p{N}.,，．\\u066b\\u066c+\\-−])([+\\-−]?)\\s*(?:${markerPattern})[\\s\\u00a0\\u202f]*${NUMBER_CAPTURE}(?![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])|(?<![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])${NUMBER_CAPTURE}[\\s\\u00a0\\u202f]*(?:${markerPattern})(?![\\p{L}\\p{N}]))`,
       "giu"
     );
     const results = [];
     let found;
 
     while ((found = regex.exec(text)) !== null) {
-      const amount = parseLocaleNumber(found[1] || found[2], {
-        allowThreeDecimals: THREE_DECIMAL_CURRENCIES.has(currency)
+      const amount = parseLocaleNumber(`${found[1] || ""}${found[2] || found[3]}`, {
+        allowThreeDecimals: CurrencyCatalog.currencyFractionDigits(currency) === 3
       });
 
       if (Number.isFinite(amount)) {
@@ -194,9 +194,23 @@
     return results;
   }
 
+  function priceMarkerPattern(marker, currency) {
+    const key = `${currency}:${marker}`;
+    if (PRICE_MARKER_PATTERNS.has(key)) return PRICE_MARKER_PATTERNS.get(key);
+    // A short symbol must not match inside an explicit foreign marker, e.g.
+    // USD's "$" in "CA$". Preserve symbols beside non-Latin labels such as 価格￥.
+    const prefixes = Object.entries(CURRENCY_META).flatMap(([code, meta]) => code === currency ? [] :
+      meta.symbols.filter((other) => other.length > marker.length && other.endsWith(marker))
+        .map((other) => other.slice(0, -marker.length).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    );
+    const pattern = `${prefixes.length ? `(?<!${[...new Set(prefixes)].join("|")})` : ""}${buildMarkerPattern(marker)}`;
+    PRICE_MARKER_PATTERNS.set(key, pattern);
+    return pattern;
+  }
+
   function findBareMatches(text, currency) {
     const regex = new RegExp(
-      `(?<![\\p{L}\\p{N}])${NUMBER_CAPTURE}(?![\\p{L}\\p{N}])`,
+      `(?<![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])${NUMBER_CAPTURE}(?![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])`,
       "gu"
     );
     const results = [];
@@ -211,7 +225,7 @@
       }
 
       const amount = parseLocaleNumber(found[1], {
-        allowThreeDecimals: THREE_DECIMAL_CURRENCIES.has(currency)
+        allowThreeDecimals: CurrencyCatalog.currencyFractionDigits(currency) === 3
       });
 
       if (Number.isFinite(amount)) {
@@ -502,12 +516,13 @@
     return isLikelyPriceElement(element);
   }
 
-  function hasMarkedPriceInContainer(element) {
+  function hasMarkedPriceInContainer(element, forcedCurrency = null) {
     const container = element?.parentElement;
     const text = container?.textContent?.trim();
     if (!text || text.length > 100) return false;
 
     return findCurrencyMatches(text, {
+      forcedCurrency,
       allowBare: false,
       pageDetection: getPageCurrencyDetection()
     }).length > 0;

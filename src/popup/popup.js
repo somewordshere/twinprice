@@ -7,6 +7,7 @@ const toCurrencySearch = document.getElementById("toCurrencySearch");
 const fromCurrencyList = document.getElementById("fromCurrencyList");
 const toCurrencyList = document.getElementById("toCurrencyList");
 const swapButton = document.getElementById("swapCurrencies");
+const themeSelect = document.getElementById("theme");
 const displayModeSelect = document.getElementById("displayMode");
 const convertedTextColorInput = document.getElementById("convertedTextColor");
 const convertedTextColorHexInput = document.getElementById("convertedTextColorHex");
@@ -132,6 +133,7 @@ async function initialize() {
   fromCurrencySelect.value = settings.fromCurrency;
   toCurrencySelect.value = settings.toCurrency;
   syncCurrencyComboboxes();
+  applyTheme(settings.theme);
   displayModeSelect.value = settings.displayMode;
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
@@ -184,6 +186,10 @@ async function initialize() {
   toCurrencySelect.addEventListener("change", () => {
     updateCurrencyDiscs();
     saveSettings();
+  });
+  themeSelect.addEventListener("change", () => {
+    applyTheme(themeSelect.value);
+    saveSettings({ syncPage: false });
   });
   displayModeSelect.addEventListener("change", () => saveSettings());
   bindAppearanceControls();
@@ -731,6 +737,7 @@ function setPopupInteractivity(enabled) {
     fromCurrencySearch,
     toCurrencySearch,
     swapButton,
+    themeSelect,
     displayModeSelect,
     convertedTextColorInput,
     convertedTextColorHexInput,
@@ -765,6 +772,7 @@ function readSettingsFromControls() {
     enabled: enabledInput.checked,
     fromCurrency: fromCurrencySelect.value,
     toCurrency: toCurrencySelect.value,
+    theme: themeSelect.value,
     displayMode: displayModeSelect.value,
     convertedTextColor: convertedTextColorInput.value,
     convertedBackgroundColor: convertedBackgroundColorInput.value,
@@ -779,6 +787,9 @@ function validateSettingsPayload(payload) {
     return "Choose a currency from the suggestion list.";
   }
   if (payload.fromCurrency === payload.toCurrency) return "Choose two different currencies.";
+  if (!CurrencySettings.THEMES.includes(payload.theme)) {
+    return "Choose a supported app theme.";
+  }
   if (!CurrencySettings.normalizeHexColor(payload.convertedTextColor) ||
       !CurrencySettings.normalizeHexColor(payload.convertedBackgroundColor)) {
     return "Use six-digit hex colors such as #166534.";
@@ -843,6 +854,7 @@ function applySettingsToControls(settings) {
   enabledInput.checked = settings.enabled;
   fromCurrencySelect.value = settings.fromCurrency;
   toCurrencySelect.value = settings.toCurrency;
+  applyTheme(settings.theme);
   displayModeSelect.value = settings.displayMode;
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
@@ -853,6 +865,14 @@ function applySettingsToControls(settings) {
   updateSwapState();
   updateSiteState();
   scheduleQuickConversion({ immediate: true });
+}
+
+function applyTheme(theme) {
+  const normalizedTheme = CurrencySettings.THEMES.includes(theme)
+    ? theme
+    : CurrencySettings.DEFAULTS.theme;
+  themeSelect.value = normalizedTheme;
+  document.documentElement.dataset.theme = normalizedTheme;
 }
 
 function swapCurrencies() {
@@ -1166,7 +1186,9 @@ async function calculateQuickConversion() {
   }
   // The rate is fetched even when the amount is unusable so the header hero stays
   // truthful while the amount field is empty or mid-edit.
-  const amount = amountText ? CurrencyNumberParser.parseLocaleNumber(amountText) : NaN;
+  const amount = amountText ? CurrencyNumberParser.parseLocaleNumber(amountText, {
+    allowThreeDecimals: CurrencyCatalog.currencyFractionDigits(sourceCurrency) === 3
+  }) : NaN;
   const amountProblem = !amountText
     ? { result: "Enter an amount", detail: "" }
     : !Number.isFinite(amount)

@@ -10,6 +10,7 @@
   const doneNote = document.getElementById("doneNote");
 
   let currencyNames = null;
+  let currencyDetails = new Map();
   try {
     currencyNames = new Intl.DisplayNames([navigator.language || "en"], { type: "currency" });
   } catch (_error) {
@@ -37,6 +38,7 @@
     }
 
     const selected = settings?.settings?.toCurrency;
+    currencyDetails = new Map((catalog.details || []).map((currency) => [currency.code, currency]));
     currencySelect.replaceChildren(...catalog.currencies.map((code) => {
       const option = document.createElement("option");
       option.value = code;
@@ -72,23 +74,34 @@
 
   async function activateOpenTabs() {
     activateButton.disabled = true;
-    setNote(tabsNote, "Switching on your open tabs…");
-    const result = await send({ type: messages.ACTIVATE_OPEN_TABS });
-
-    if (!result?.ok) {
+    setNote(tabsNote, "Allow site access in your browser to activate your open tabs…");
+    try {
+      // Keep the permission request directly in the button's user gesture.
+      const granted = await api.permissions.request({ origins: ["http://*/*", "https://*/*"] });
+      if (!granted) {
+        setNote(tabsNote, "Site access was not granted. Try again to activate existing tabs, or reload them to start the detector.", "error");
+        return;
+      }
+      setNote(tabsNote, "Switching on your open tabs…");
+      const result = await send({ type: messages.ACTIVATE_OPEN_TABS });
+      if (!result?.ok) {
+        setNote(tabsNote, result?.error || "Those tabs could not be switched on. Reloading them works too.", "error");
+        return;
+      }
+      setNote(tabsNote, summarizeActivation(result), "ok");
+    } catch (error) {
+      setNote(tabsNote, error instanceof Error ? error.message : "Site access could not be requested. Try again or reload your tabs.", "error");
+    } finally {
       activateButton.disabled = false;
-      setNote(tabsNote, result?.error || "Those tabs could not be switched on. Reloading them works too.", "error");
-      return;
     }
-    setNote(tabsNote, summarizeActivation(result), "ok");
   }
 
   function summarizeActivation({ activated = 0, skipped = 0 }) {
-    if (!activated && !skipped) return "No other tabs were open, so there was nothing to do.";
+    if (!activated && !skipped) return "No other web pages are open. Open a shop, then try again.";
     if (!activated) return "No open tab could be switched on. Browser and extension pages are always skipped.";
     const tabs = activated === 1 ? "1 tab is" : `${activated} tabs are`;
     return skipped
-      ? `${tabs} now watched for prices. ${skipped} was skipped, which browser pages always are.`
+      ? `${tabs} now watched for prices. ${skipped} ${skipped === 1 ? "tab was" : "tabs were"} skipped because access was unavailable.`
       : `${tabs} now watched for prices.`;
   }
 
@@ -106,7 +119,10 @@
   }
 
   function describe(code) {
-    const name = currencyNames?.of?.(code);
+    let name = currencyDetails.get(code)?.name;
+    if (!name || name === code) {
+      try { name = currencyNames?.of?.(code); } catch (_error) { name = null; }
+    }
     return name && name !== code ? `${code} — ${name}` : code;
   }
 
