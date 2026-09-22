@@ -2,25 +2,20 @@
 
 All notable changes to Twinprice are documented here. Dates reflect the release preparation date for each version.
 
-Twenty-two versions have shipped. Every one has a signed-off archive under
-`release/<version>/` and a `v<version>` tag, but the tags do not all mean the
-same thing, because the source history does not cover every release:
+Release packages are preserved under `release/<version>/` and published on
+[GitHub Releases](https://github.com/somewordshere/twinprice/releases).
 
-- **1.4.0, 1.4.1, 1.4.2 and 1.5.0 predate the source.** The repository's first
-  two commits contain only `README.md` and `privacy-policy.md`; the first commit
-  carrying any code is already 1.5.1. These four shipped before the extension was
-  under version control, and their archives were added afterwards.
-- **1.7.0, 1.7.1, 1.7.3 and 1.9.0 were built from working trees that never
-  landed.** No commit in this repository declares any of those versions, and
-  their archives arrived attached to a later release commit.
+Tags distinguish source releases from historical archives:
 
-For those eight, `v<version>` marks the commit that carries the archive, not a
-commit whose source is that version — each tag's own message says so. Checking
-one out gives you a neighbouring version's source; the archive under
-`release/<version>/` is the authoritative record of what actually shipped.
+- **1.4.0, 1.4.1, 1.4.2 and 1.5.0** predate version-controlled source.
+- **1.7.0, 1.7.1, 1.7.3, 1.9.0, 2.1.5 and 2.1.6** were packaged from working
+  trees whose exact versioned source was not committed separately.
 
-The remaining fourteen tags each point at a commit whose `package.json` declares
-exactly that version.
+For these versions, the tag identifies the commit containing the preserved ZIPs,
+not source declaring that version. Use the versioned ZIPs for the exact build;
+GitHub's automatically generated source archives contain the tagged commit's source.
+The tag annotations record this distinction. Other release tags identify source
+whose `package.json` declares the release version.
 
 ## Unreleased
 
