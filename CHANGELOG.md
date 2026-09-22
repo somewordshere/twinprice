@@ -22,6 +22,46 @@ one out gives you a neighbouring version's source; the archive under
 The remaining fourteen tags each point at a commit whose `package.json` declares
 exactly that version.
 
+## Unreleased
+
+## 2.1.7 - 2026-09-23
+
+### Changed
+
+- Prepared Chrome and Firefox release packages as version 2.1.7 using the same runtime as 2.1.6.
+- Updated the README version and download links.
+- Restored the two screenshots removed during the 2.0 redesign into `screenshots/old/`, with their Git history recorded.
+
+## 2.1.6 - 2026-09-15
+
+### Added
+
+- Added an App theme setting with system, light, and dark options.
+- Synchronized the selected theme with the extension's existing settings and restored it whenever the popup reopens.
+
+### Fixed
+
+- Parse Indian digit grouping, Arabic-Indic digits, Arabic separators, and leading-decimal prices without converting numeric fragments from malformed values.
+- Re-evaluate automatic currency detection when dynamic pages add prices without changing the URL.
+- Refresh prices already on the page when a newer exchange-rate cache arrives.
+- Convert visible prices rendered through `display: contents`.
+- Reject selections containing multiple prices instead of silently converting only the first.
+
+### Testing
+
+- Added schema validation and real-browser coverage for system theme behavior, immediate theme changes, persistence across popup sessions, dynamic currency detection, live rate refreshes, visibility edge cases, and selection safety.
+
+## 2.1.5 - 2026-09-15
+
+- Show provider-supplied currency names during setup when the browser only knows the currency code.
+- Request optional site access before activating existing tabs, show permission feedback, and allow retries.
+- Contain conversion-control events so clicks and keyboard actions do not reach a shop's delegated controls.
+- Refresh converted split prices when the site changes their original amount, preserving the latest price on undo in both display modes.
+- Convert existing prices when a site reveals them through visibility attributes or styles.
+- Preserve negative amounts and currency-specific three-decimal amounts, and reject malformed calculator input.
+- Keep explicit foreign currency markers out of manual-source conversions and selections.
+- Check popup content width and scrolling without assuming Chromium's surrounding viewport has the same width.
+
 ## 2.1.4 - 2026-09-10
 
 - Made the popup title a clickable website link with keyboard focus styling.

@@ -23,7 +23,10 @@
     async function activateOpenTabs() {
       let tabs;
       try {
-        tabs = await api.tabs.query({ url: ["http://*/*", "https://*/*"] });
+        if (!await api.permissions.contains({ origins: ["http://*/*", "https://*/*"] })) {
+          return { ok: false, error: "Allow site access using Activate my open tabs, then try again." };
+        }
+        tabs = await api.tabs.query({});
       } catch (error) {
         return { ok: false, error: errorMessage(error) };
       }
@@ -31,6 +34,7 @@
       let activated = 0;
       let skipped = 0;
       for (const tab of tabs) {
+        if (tab.url?.startsWith(api.runtime.getURL(""))) continue;
         if (!tab?.id || pageAccess.unsupportedPageMessage(tab.url)) {
           skipped += 1;
           continue;

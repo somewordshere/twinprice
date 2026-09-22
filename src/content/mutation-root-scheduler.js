@@ -52,7 +52,7 @@
       if (!active) return;
       onBeforeMutations?.(mutations, controller);
       for (const mutation of mutations) {
-        if (mutation.type === "characterData") {
+        if (mutation.type === "characterData" || mutation.type === "attributes") {
           queue(mutation.target);
           continue;
         }
@@ -130,7 +130,11 @@
     function observeMutationRoot(root) {
       if (!observer || !root || observedRoots.has(root)) return;
       observedRoots.add(root);
-      observer.observe(root, { childList: true, characterData: true, subtree: true });
+      observer.observe(root, {
+        childList: true, characterData: true, subtree: true,
+        attributes: true,
+        attributeFilter: ["hidden", "inert", "aria-hidden", "class", "style", "open"]
+      });
     }
 
     function observeOpenShadowRoots(root) {

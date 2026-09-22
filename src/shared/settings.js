@@ -3,6 +3,7 @@
     enabled: true,
     fromCurrency: "AUTO",
     toCurrency: "EUR",
+    theme: "system",
     displayMode: "beside",
     convertedTextColor: "#166534",
     convertedBackgroundColor: "#dcfce7",
@@ -11,6 +12,7 @@
   });
   const KEYS = Object.freeze(Object.keys(DEFAULTS));
   const DISPLAY_MODES = Object.freeze(["beside", "replace"]);
+  const THEMES = Object.freeze(["system", "light", "dark"]);
   const CONVERTED_SHAPES = Object.freeze(["square", "rounded", "pill"]);
   const SHAPE_RADII = Object.freeze({
     square: "0",
@@ -37,6 +39,7 @@
       toCurrency: codes.includes(value?.toCurrency)
         ? value.toCurrency
         : DEFAULTS.toCurrency,
+      theme: THEMES.includes(value?.theme) ? value.theme : DEFAULTS.theme,
       displayMode: DISPLAY_MODES.includes(value?.displayMode)
         ? value.displayMode
         : DEFAULTS.displayMode,
@@ -58,6 +61,7 @@
         typeof value.enabled !== "boolean" ||
         typeof value.fromCurrency !== "string" ||
         typeof value.toCurrency !== "string" ||
+        !THEMES.includes(value.theme) ||
         !DISPLAY_MODES.includes(value.displayMode) ||
         !normalizeHexColor(value.convertedTextColor) ||
         !normalizeHexColor(value.convertedBackgroundColor) ||
@@ -78,6 +82,7 @@
       enabled: value.enabled,
       fromCurrency: value.fromCurrency,
       toCurrency: value.toCurrency,
+      theme: value.theme,
       displayMode: value.displayMode,
       convertedTextColor: normalizeHexColor(value.convertedTextColor),
       convertedBackgroundColor: normalizeHexColor(value.convertedBackgroundColor),
@@ -121,6 +126,7 @@
   global.CurrencySettings = Object.freeze({
     DEFAULTS,
     KEYS,
+    THEMES,
     CONVERTED_SHAPES,
     SHAPE_RADII,
     RATE_AFFECTING_KEYS,

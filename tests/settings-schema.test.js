@@ -17,6 +17,7 @@ test("shared settings schema sanitizes every persisted field", () => {
     enabled: "yes",
     fromCurrency: "BTC",
     toCurrency: "DOGE",
+    theme: "neon",
     displayMode: "html",
     convertedTextColor: "#ABCDEF",
     convertedBackgroundColor: "invalid",
@@ -28,6 +29,7 @@ test("shared settings schema sanitizes every persisted field", () => {
     enabled: true,
     fromCurrency: "AUTO",
     toCurrency: "EUR",
+    theme: "system",
     displayMode: "beside",
     convertedTextColor: "#abcdef",
     convertedBackgroundColor: "#dcfce7",
@@ -40,6 +42,7 @@ test("shared settings schema validates and compares complete snapshots", () => {
   const snapshot = {
     ...JSON.parse(JSON.stringify(settings.DEFAULTS)),
     fromCurrency: "USD",
+    theme: "dark",
     convertedTextColor: "#ABCDEF"
   };
   const normalized = settings.normalizeSnapshot(snapshot, ["EUR", "USD"]);
@@ -47,6 +50,7 @@ test("shared settings schema validates and compares complete snapshots", () => {
   assert.equal(normalized.convertedTextColor, "#abcdef");
   assert.equal(settings.snapshotEquals(normalized, { ...normalized }), true);
   assert.equal(settings.normalizeSnapshot({ ...snapshot, convertedShape: "cloud" }), null);
+  assert.equal(settings.normalizeSnapshot({ ...snapshot, theme: "neon" }), null);
   assert.equal(settings.normalizeSnapshot({ ...snapshot, toCurrency: "JPY" }, ["EUR", "USD"]), null);
 });
 

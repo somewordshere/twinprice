@@ -91,6 +91,14 @@
   const currencyFormatters = new Map();
 
   function formatCurrencyAmount(amount, currency) {
+    return getCurrencyFormatter(currency).format(amount);
+  }
+
+  function currencyFractionDigits(currency) {
+    return getCurrencyFormatter(currency).resolvedOptions().maximumFractionDigits;
+  }
+
+  function getCurrencyFormatter(currency) {
     const meta = CURRENCY_META[currency];
     const locale = meta?.locale || "en-US";
     const key = `${locale}:${currency}`;
@@ -102,7 +110,7 @@
       });
       currencyFormatters.set(key, formatter);
     }
-    return formatter.format(amount);
+    return formatter;
   }
 
   global.CurrencyCatalog = Object.freeze({
@@ -110,6 +118,7 @@
     CURRENCY_CODES,
     CONTEXT_REQUIRED_SYMBOLS,
     currencyForLocale,
+    currencyFractionDigits,
     formatCurrencyAmount
   });
 })(globalThis);

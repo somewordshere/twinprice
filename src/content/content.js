@@ -44,6 +44,9 @@
       }
     }
     if (areaName === "local") {
+      const ratesChanged = changes.ratesCache &&
+        CurrencyPageConverter.ratesCacheChangeAffectsActiveRates(changes.ratesCache);
+      if (ratesChanged) await queueSettingsTask(refreshRenderedConversionsForRates);
       const sourceChanged = changes.siteSourceCurrencies &&
         changeAffectsCurrentOrigin(changes.siteSourceCurrencies);
       const preferenceChanged = changes.autoConvertSites &&
@@ -365,6 +368,17 @@
     }
     await updateBadge(result?.ok ? result.count : 0);
     return result;
+  }
+
+  async function refreshRenderedConversionsForRates() {
+    if (!settings?.enabled || !CurrencyPageConverter.hasConversions()) return;
+    CurrencyPageConverter.configure(settings);
+    const result = await runSiteConversion();
+    if (!result?.ok && !result?.cancelled) {
+      CurrencyPageUi.showToast(
+        `Updated rates arrived, but prices could not be refreshed. ${result?.error || "Try converting the page again."}`
+      );
+    }
   }
 
   async function clearSiteConversion({ forgetSite = false, suppressPrompt = false } = {}) {
