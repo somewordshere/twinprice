@@ -31,3 +31,7 @@ screenshots/*
 !screenshots/v2-inpage.png
 !screenshots/v2-inpage-selection.png
 !screenshots/v2-inpage-selection-done.png
+
+# Preserve historical screenshots restored from Git history
+!screenshots/old/
+!screenshots/old/**

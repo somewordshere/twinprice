@@ -74,7 +74,8 @@ assert.deepEqual(
   ["https://api.frankfurter.dev/*"],
   "required host access must be limited to the exchange-rate provider"
 );
-assert.equal(Object.hasOwn(baseManifest, "optional_host_permissions"), false);
+assert.deepEqual(baseManifest.optional_host_permissions, ["http://*/*", "https://*/*"],
+  "activating pre-existing tabs may request optional access to ordinary websites");
 assert.ok(Array.isArray(baseManifest.content_scripts) && baseManifest.content_scripts.length === 1);
 assert.deepEqual(
   baseManifest.content_scripts[0].matches,

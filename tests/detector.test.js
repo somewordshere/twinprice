@@ -57,6 +57,41 @@ function element(className, textContent = "", parentElement = null) {
 
 const settings = { fromCurrency: "AUTO", toCurrency: "USD" };
 const detector = context.CurrencyDetector;
+for (const text of ["-10.00 USD", "−10.00 USD", "USD -10.00", "-$10.00", "$-10.00", "−$10.00"]) {
+  const matches = detector.findCurrencyMatches(text, { forcedCurrency: "USD" });
+  assert.equal(matches.length, 1, text);
+  assert.equal(matches[0].amount, -10, text);
+  assert.equal(matches[0].raw, text, "the negative sign must stay inside the converted original");
+}
+for (const text of ["CA$100.00", "AU$100.00", "HK$100.00", "R$100.00", "MX$100.00"]) {
+  assert.equal(detector.findCurrencyMatches(text, { forcedCurrency: "USD" }).length, 0, text);
+  assert.equal(detector.findCurrencyMatches(text, { forcedCurrency: "USD", allowBare: true }).length, 0, text);
+}
+assert.equal(detector.findCurrencyMatches("US$100.00", { forcedCurrency: "USD" })[0].amount, 100);
+assert.equal(detector.findCurrencyMatches("価格￥100", { forcedCurrency: "JPY" })[0].amount, 100);
+const indianPrice = detector.findCurrencyMatches("1,23,456.78 INR", { forcedCurrency: "INR" });
+assert.equal(indianPrice.length, 1);
+assert.equal(indianPrice[0].raw, "1,23,456.78 INR");
+assert.equal(indianPrice[0].amount, 123456.78);
+const arabicPrice = detector.findCurrencyMatches("د.إ ١٬٢٣٤٫٥٦", { forcedCurrency: "AED" });
+assert.equal(arabicPrice.length, 1);
+assert.equal(arabicPrice[0].amount, 1234.56);
+const leadingDecimalPrice = detector.findCurrencyMatches("$.50", { forcedCurrency: "USD" });
+assert.equal(leadingDecimalPrice.length, 1);
+assert.equal(leadingDecimalPrice[0].amount, 0.5);
+for (const malformed of ["1.2.3 USD", "--$10", "10..00 USD"]) {
+  assert.equal(
+    detector.findCurrencyMatches(malformed, { forcedCurrency: "USD" }).length,
+    0,
+    `must not convert a substring of malformed input: ${malformed}`
+  );
+}
+const bareIndianPrice = detector.findCurrencyMatches("1,23,456", {
+  forcedCurrency: "INR",
+  allowBare: true
+});
+assert.equal(bareIndianPrice.length, 1);
+assert.equal(bareIndianPrice[0].amount, 123456);
 const fixtures = JSON.parse(
   fs.readFileSync(path.join(root, "tests/fixtures/prices.json"), "utf8")
 );

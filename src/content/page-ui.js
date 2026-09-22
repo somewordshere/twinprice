@@ -20,6 +20,17 @@
   let toastPreviousFocus = null;
   let toastTimer = null;
 
+  function isolateControls(element) {
+    // Page-level delegated handlers must not treat extension controls as shop
+    // buttons. Preserve focus and keyboard defaults, but contain their events.
+    for (const type of ["pointerdown", "pointerup", "mousedown", "mouseup", "click", "dblclick", "keydown", "keyup"]) {
+      element.addEventListener(type, (event) => {
+        event.stopPropagation();
+        if (type === "click") event.preventDefault();
+      });
+    }
+  }
+
   function configure(options) {
     settings = options.settings;
     runConversion = options.runConversion;
@@ -48,6 +59,7 @@
     pagePromptPreviousFocus = getActiveElementForRestore();
     pagePromptAction = "convert";
     pageConvertPrompt = document.createElement("aside");
+    isolateControls(pageConvertPrompt);
     pageConvertPrompt.className = "ccp-page-prompt";
     pageConvertPrompt.setAttribute("aria-labelledby", "ccp-page-prompt-title");
     pageConvertPrompt.setAttribute(
@@ -246,17 +258,18 @@
       return;
     }
     const selectedText = selection.toString().trim();
-    const match = CurrencyDetector.findMatchesForContext(
+    const matches = CurrencyDetector.findMatchesForContext(
       selectedText,
       selection.anchorNode?.parentElement,
       settings,
       { selection: true }
-    )[0];
-    if (!match) {
+    );
+    if (matches.length !== 1) {
       if (focus && popupHadFocus) restoreFocusTo(previousFocus);
       selectionPreviousFocus = null;
       return;
     }
+    const match = matches[0];
 
     const rect = selection.getRangeAt(0).getBoundingClientRect();
     if (!rect.width && !rect.height) {
@@ -271,6 +284,7 @@
       ? previousFocus || (popupHadFocus ? null : activeBeforeRefresh)
       : null;
     selectionPopup = document.createElement("button");
+    isolateControls(selectionPopup);
     selectionPopup.type = "button";
     selectionPopup.className = "ccp-selection-popup";
     selectionPopup.setAttribute("aria-live", "polite");
@@ -396,6 +410,7 @@
     removeToast({ restoreFocus: false });
     toastPreviousFocus = getActiveElementForRestore();
     const toast = document.createElement("div");
+    isolateControls(toast);
     toast.className = "ccp-toast";
     const text = document.createElement("span");
     text.className = "ccp-toast-message";

@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: September 10, 2026 (version 2.1.4)
+Effective date: September 23, 2026 (version 2.1.7)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 
@@ -88,6 +88,9 @@ The extension uses the following browser permissions:
 - `activeTab` and `scripting`: provides a user-triggered fallback on supported
   pages where the normal detector was not loaded, including manually allowed local files
 - Access to `api.frankfurter.dev`: retrieves exchange rates
+- Optional HTTP and HTTPS site access: requested by **Activate my open tabs**
+  to find existing web tabs and start the local detector without reloading them.
+  You can decline and reload those tabs instead. Tab URLs are not transmitted
 
 ## Limited Use
 

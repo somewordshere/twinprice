@@ -195,6 +195,7 @@ test("preserves every canonical settings field through ambiguous-write reconcili
     enabled: false,
     fromCurrency: "USD",
     toCurrency: "PLN",
+    theme: "dark",
     displayMode: "replace",
     convertedTextColor: "#123456",
     convertedBackgroundColor: "#abcdef",

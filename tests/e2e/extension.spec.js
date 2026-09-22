@@ -105,12 +105,14 @@ test("real action popup keeps its designed width and scrolls expanded options", 
     })()`
   );
 
-  expect(metrics.closed.innerWidth).toBe(420);
   expect(metrics.closed.bodyWidth).toBe(420);
   expect(metrics.closed.appScrollHeight).toBeLessThanOrEqual(metrics.closed.appClientHeight);
 
   for (const state of [metrics.closed, metrics.expanded]) {
     expect(state.bodyWidth).toBe(420);
+    // Test the extension's content width and overflow. Chromium controls the
+    // surrounding popup viewport, which can be wider than its 420px document.
+    expect(state.innerWidth).toBeGreaterThanOrEqual(state.bodyWidth);
     expect(state.pageScrollWidth).toBeLessThanOrEqual(state.innerWidth);
   }
   expect(metrics.expanded.appClientHeight).toBe(600);
@@ -627,11 +629,12 @@ test("rescans the full document when an SPA route changes", async ({
     status: 200,
     contentType: "text/html; charset=utf-8",
     body: `<!doctype html>
-      <head><meta property="product:price:currency" content="USD"></head>
+      <head><meta property="product:price:currency" content="USD">
+        <style>#next-route-price { display: none; }</style></head>
       <body>
         <main>
           <p id="initial-route-price" class="product-price">Initial: $10.00</p>
-          <p id="next-route-price" class="product-price" hidden>Next route: $20.00</p>
+          <p id="next-route-price" class="product-price">Next route: $20.00</p>
         </main>
         <aside id="route-mutation-slot"></aside>
       </body>`
@@ -668,7 +671,10 @@ test("rescans the full document when an SPA route changes", async ({
     await shop.evaluate(() => {
       history.pushState({}, "", "/spa-route-two");
       document.querySelector("meta[property='product:price:currency']").content = "MXN";
-      document.querySelector("#next-route-price").hidden = false;
+      // Visibility attributes now deliberately trigger conversion. A CSSOM
+      // change keeps this test's reveal outside MutationObserver so it can
+      // still exercise startWatching before the first observed route mutation.
+      document.styleSheets[0].deleteRule(0);
     });
 
     // Exercise the idempotent startWatching path between pushState and the first
@@ -1426,6 +1432,49 @@ test("rapid popup changes remain consistent across close and validation races", 
       delete globalThis.__ccpReleaseSecondDelayedPopupRate;
     });
   }
+});
+
+test("popup theme follows the system and persists explicit choices", async ({
+  context,
+  extensionWorker,
+  extensionId
+}) => {
+  await seedExtension(extensionWorker, { settings: { theme: "system" } });
+
+  const shop = await context.newPage();
+  await shop.route(SHOP_URL, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/html; charset=utf-8",
+    body: SHOP_HTML
+  }));
+  await shop.goto(SHOP_URL);
+
+  const popup = await openPopupForPage(context, extensionId, shop);
+  await popup.emulateMedia({ colorScheme: "dark" });
+  await popup.getByText("Page options", { exact: true }).click();
+  const theme = popup.getByLabel("App theme");
+
+  await expect(theme).toHaveValue("system");
+  await expect(popup.locator("html")).toHaveCSS("background-color", "rgb(15, 22, 34)");
+
+  await theme.selectOption("light");
+  await expect(popup.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(popup.locator("html")).toHaveCSS("background-color", "rgb(246, 248, 252)");
+  await expect.poll(() => extensionWorker.evaluate(async () =>
+    (await chrome.storage.sync.get("theme")).theme
+  )).toBe("light");
+
+  await popup.close();
+  const reopenedPopup = await openPopupForPage(context, extensionId, shop);
+  await reopenedPopup.emulateMedia({ colorScheme: "light" });
+  await reopenedPopup.getByText("Page options", { exact: true }).click();
+  await expect(reopenedPopup.getByLabel("App theme")).toHaveValue("light");
+
+  await reopenedPopup.getByLabel("App theme").selectOption("dark");
+  await expect(reopenedPopup.locator("html")).toHaveCSS("background-color", "rgb(15, 22, 34)");
+  await expect.poll(() => extensionWorker.evaluate(async () =>
+    (await chrome.storage.sync.get("theme")).theme
+  )).toBe("dark");
 });
 
 test("converted price appearance previews live, persists, and styles the page", async ({
