@@ -204,12 +204,16 @@ CI runs every one of these on each push. `npm run build:icons` and `npm run buil
 
 ## 📦 Recent releases
 
+Browse all published versions and download packages on [GitHub Releases](https://github.com/somewordshere/twinprice/releases).
+
 | Version | Highlights | Download |
 | --- | --- | --- |
 | 2.1.7 | Refreshed release packages, documentation, and restored legacy screenshots | [Chrome](release/2.1.7/twinprice-2.1.7-chrome.zip) · [Firefox](release/2.1.7/twinprice-2.1.7-firefox.zip) |
 | 2.1.6 | User-selectable system, light, and dark popup themes | [Chrome](release/2.1.6/twinprice-2.1.6-chrome.zip) · [Firefox](release/2.1.6/twinprice-2.1.6-firefox.zip) |
 | 2.1.5 | Setup, conversion, parsing, and dynamic-price reliability fixes | [Chrome](release/2.1.5/twinprice-2.1.5-chrome.zip) · [Firefox](release/2.1.5/twinprice-2.1.5-firefox.zip) |
 | 2.1.4 | Website and help links route through the Twinprice website; compact footer preserves the normal popup layout | [Chrome](release/2.1.4/twinprice-2.1.4-chrome.zip) · [Firefox](release/2.1.4/twinprice-2.1.4-firefox.zip) |
+| 2.1.3 | Public twinprice.com website, popup heading, and help links | [Chrome](release/2.1.3/twinprice-2.1.3-chrome.zip) · [Firefox](release/2.1.3/twinprice-2.1.3-firefox.zip) |
+| 2.1.2 | Website links in the extension and a compact popup layout | [Chrome](release/2.1.2/twinprice-2.1.2-chrome.zip) · [Firefox](release/2.1.2/twinprice-2.1.2-firefox.zip) |
 | 2.1.1 | Support link in the extension, a privacy policy that names a contact that exists, and the Firefox listing name the add-on actually uses | [Chrome](release/2.1.1/twinprice-2.1.1-chrome.zip) · [Firefox](release/2.1.1/twinprice-2.1.1-firefox.zip) |
 | 2.1.0 | Renamed to Twinprice, onboarding on first install, and a home currency taken from your browser region | [Chrome](release/2.1.0/twinprice-2.1.0-chrome.zip) · [Firefox](release/2.1.0/twinprice-2.1.0-firefox.zip) |
 | 2.0.3 | Turkish product pages with a single price now resolve, and a price whose symbol is nested deeper than its amount is no longer converted twice | [Chrome](release/2.0.3/currency-converter-pro-2.0.3-chrome.zip) · [Firefox](release/2.0.3/currency-converter-pro-2.0.3-firefox.zip) |
