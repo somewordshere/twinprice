@@ -14,5 +14,6 @@ importScripts(
   "settings-service.js",
   "page-actions.js",
   "onboarding.js",
+  "review-prompt.js",
   "main.js"
 );

@@ -5,8 +5,12 @@
   const sites = global.CurrencySitePreferences;
   const pageActions = global.CurrencyPageActions;
   const onboarding = global.CurrencyOnboardingService;
+  const reviewPrompt = global.CurrencyReviewPrompt;
 
   api.runtime.onInstalled.addListener(async (details) => {
+    onboarding.setUninstallPage().catch((error) => {
+      console.error("Could not set the uninstall page.", error);
+    });
     try {
       const supportedCodes = await settings.initializeDefaults();
       await pageActions.initializeContextMenu();
@@ -66,6 +70,14 @@
         return onboarding.activateOpenTabs();
       case messages.SET_BADGE:
         return pageActions.setBadge(sender?.tab?.id, message.count);
+      case messages.RECORD_SUCCESS:
+        return reviewPrompt.recordSuccess();
+      case messages.GET_REVIEW_PROMPT:
+        return reviewPrompt.getState();
+      case messages.DISMISS_REVIEW_PROMPT:
+        return reviewPrompt.dismiss();
+      case messages.MARK_REVIEW_OPENED:
+        return reviewPrompt.markRated();
       default:
         return { ok: false, error: "Unknown extension request." };
     }

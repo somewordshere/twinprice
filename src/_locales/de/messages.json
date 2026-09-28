@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - Währungsrechner für jeden Preis auf der Seite",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Währungsrechner für jede Seite",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Shop-Preise in deiner Währung, direkt neben dem Original. Über 160 Währungen. Seiteninhalte verlassen nie deinen Browser.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

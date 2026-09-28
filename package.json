@@ -1,6 +1,6 @@
 {
   "name": "twinprice-extension",
-  "version": "2.1.7",
+  "version": "2.2.0",
   "private": true,
   "description": "Privacy-focused Manifest V3 currency conversion extension",
   "scripts": {

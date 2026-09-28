@@ -79,6 +79,7 @@
 
   global.CurrencyPageAccess = Object.freeze({
     describeFailure,
+    isFirefoxBuild,
     unsupportedPageMessage
   });
 })(globalThis);
