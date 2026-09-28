@@ -101,16 +101,16 @@ const markup = `
       <path d="M24 9.5v29"/>
     </g>
   </svg>
-  <span class="name">Currency&nbsp;Converter&nbsp;Pro</span>
+  <span class="name">Twinprice</span>
 </div>
 
 <div class="demo">
   <span class="from">$68.00</span>
   <span class="arrow">&rarr;</span>
-  <span class="badge">61,20&nbsp;&euro;</span>
+  <span class="badge">￥10,200</span>
 </div>
 
-<p class="tag"><b>Every price in your currency.</b> Detected and converted right in your browser.</p>
+<p class="tag"><b>Every price in your currency.</b> Right beside the original, and private to your browser.</p>
 `;
 
 const outDir = (() => {

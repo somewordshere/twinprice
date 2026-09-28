@@ -149,6 +149,54 @@ test("website links open and stay clear of footer text", async ({ context, exten
   }
 });
 
+test("the rating link appears after five helped pages and stays gone once dismissed", async ({
+  context,
+  extensionWorker,
+  extensionId
+}, testInfo) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  const successCount = () => extensionWorker.evaluate(async () => (
+    (await chrome.storage.local.get("reviewPrompt")).reviewPrompt?.successCount || 0
+  ));
+
+  // Converting the same page again is still one use.
+  await shop.goto(SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  await expect.poll(successCount).toBe(1);
+
+  let popup = await openPopupForPage(context, extensionId, shop);
+  await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+  await expect(popup.locator("#reviewPrompt")).toBeHidden();
+  await popup.close();
+
+  for (let page = 2; page <= 5; page += 1) {
+    await shop.reload();
+    await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+    await expect.poll(successCount).toBe(page);
+  }
+
+  popup = await openPopupForPage(context, extensionId, shop);
+  await expect(popup.locator("#reviewPrompt")).toBeVisible();
+  await expect(popup.locator("#reviewLink")).toHaveAttribute(
+    "href",
+    "https://chromewebstore.google.com/detail/mocmiipnkiobjgjkfehpcmlapgjaepfk/reviews"
+  );
+  for (const colorScheme of ["light", "dark"]) {
+    await popup.emulateMedia({ colorScheme });
+    await popup.locator(".foot").screenshot({ path: testInfo.outputPath(`review-${colorScheme}.png`) });
+  }
+  await popup.locator("#dismissReview").click();
+  await expect(popup.locator("#reviewPrompt")).toBeHidden();
+  await popup.close();
+
+  popup = await openPopupForPage(context, extensionId, shop);
+  await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+  await expect(popup.locator("#reviewPrompt")).toBeHidden();
+});
+
 test("automatically detects prices and offers conversion on an ordinary website", async ({
   context,
   extensionWorker

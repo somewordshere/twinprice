@@ -1,5 +1,6 @@
 (function initializeOnboarding(global) {
   const ONBOARDING_PAGE = "onboarding/onboarding.html";
+  const UNINSTALL_PAGE = "https://twinprice.com/goodbye/";
 
   function createOnboardingService({
     api,
@@ -15,6 +16,13 @@
       if (details?.reason !== "install") return { ok: true, opened: false };
       await api.tabs.create({ url: api.runtime.getURL(ONBOARDING_PAGE) });
       return { ok: true, opened: true };
+    }
+
+    // Uninstalling opens a plain thank-you page with ways to say what went wrong.
+    // The address is fixed and carries nothing about the user or their browsing.
+    async function setUninstallPage() {
+      await api.runtime.setUninstallURL(UNINSTALL_PAGE);
+      return { ok: true };
     }
 
     // Declared content scripts only reach documents loaded after the install, so
@@ -50,7 +58,13 @@
       return { ok: true, activated, skipped };
     }
 
-    return Object.freeze({ ONBOARDING_PAGE, openOnInstall, activateOpenTabs });
+    return Object.freeze({
+      ONBOARDING_PAGE,
+      UNINSTALL_PAGE,
+      openOnInstall,
+      setUninstallPage,
+      activateOpenTabs
+    });
   }
 
   function errorMessage(error) {

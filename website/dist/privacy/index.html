@@ -8,7 +8,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png"><link rel="icon" href="../assets/twinprice-icon.png"><link rel="stylesheet" href="../styles.css"></head>
 <body><a class="skip-link" href="#main">Skip to content</a><header class="site-header wrap"><a class="brand" href="../" aria-label="twinprice.com home"><img src="../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a><nav aria-label="Main navigation"><a href="../#how-it-works">How it works</a><a href="../guide/">Guide</a><a href="./" aria-current="page">Privacy</a><a href="../about/">About</a></nav><a class="button button-small" href="../#install">Get Twinprice <span aria-hidden="true">↗</span></a></header>
-<main class="wrap policy-main" id="main"><p class="eyebrow">YOUR BROWSING STAYS YOURS</p><h1>Privacy, in plain sight.</h1><div class="policy-notice"><p>The full Twinprice extension policy appears below, with its version and effective date. The browser stores may offer different release versions; consult the policy linked from your installed version's store listing for the current release.</p></div><article class="policy-content" aria-label="Extension privacy policy"><p>Effective date: September 10, 2026 (version 2.1.4)</p>
+<main class="wrap policy-main" id="main"><p class="eyebrow">YOUR BROWSING STAYS YOURS</p><h1>Privacy, in plain sight.</h1><div class="policy-notice"><p>The full Twinprice extension policy appears below, with its version and effective date. The browser stores may offer different release versions; consult the policy linked from your installed version's store listing for the current release.</p></div><article class="policy-content" aria-label="Extension privacy policy"><p>Effective date: September 28, 2026 (version 2.2.0)</p>
 <p>Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.</p>
 <h2>Information processed by the extension</h2>
 <p>To provide currency detection and conversion, the extension processes the following information locally in the user's browser:</p>
@@ -27,8 +27,9 @@
 <li>Recently selected currency codes</li>
 <li>A cache of exchange rates, including the rate date and fetch time</li>
 <li>The origins of websites the user chooses for automatic conversion</li>
-<li>A source-currency mode for an automatic-conversion website, including a manual currency or <code>AUTO</code></li></ul>
-<p>Core extension settings use the browser's extension sync storage and may be synchronized by Google or Mozilla according to the user's browser settings and the browser provider's privacy practices. Recent currencies, remembered website origins, their source-currency modes, and exchange-rate data are stored locally in the browser.</p>
+<li>A source-currency mode for an automatic-conversion website, including a manual currency or <code>AUTO</code></li>
+<li>A count of webpages where a conversion succeeded, and whether the user opened or   dismissed the rating reminder, used only to decide when to show that reminder</li></ul>
+<p>Core extension settings use the browser's extension sync storage and may be synchronized by Google or Mozilla according to the user's browser settings and the browser provider's privacy practices. Recent currencies, remembered website origins, their source-currency modes, the rating-reminder count, and exchange-rate data are stored locally in the browser. The rating-reminder count is never transmitted.</p>
 <p>The extension does not store webpage contents, highlighted text, or general browsing history. It stores only the website origins the user deliberately marks for automatic conversion and any source-currency mode associated with those origins, until the user removes that access. Selecting <code>AUTO</code> replaces a manual website source with that website's automatic-detection mode.</p>
 <h2>Exchange-rate service</h2>
 <p>The extension requests reference exchange rates from the public Frankfurter API at:</p>
@@ -49,13 +50,16 @@
 <li><code>contextMenus</code>: provides the “Convert selected currency” right-click action</li>
 <li>Access to ordinary HTTP and HTTPS webpages: loads the local price detector when   pages open so the extension can find supported prices and offer conversion   without requiring a toolbar click. Page contents and URLs are not transmitted</li>
 <li><code>activeTab</code> and <code>scripting</code>: provides a user-triggered fallback on supported   pages where the normal detector was not loaded, including manually allowed local files</li>
-<li>Access to <code>api.frankfurter.dev</code>: retrieves exchange rates</li></ul>
+<li>Access to <code>api.frankfurter.dev</code>: retrieves exchange rates</li>
+<li>Optional HTTP and HTTPS site access: requested by <strong>Activate my open tabs</strong>   to find existing web tabs and start the local detector without reloading them.   You can decline and reload those tabs instead. Tab URLs are not transmitted</li></ul>
 <h2>Limited Use</h2>
 <p>Information received through browser extension APIs is used only to provide Twinprice's disclosed single purpose and is handled in accordance with the Chrome Web Store User Data Policy, including the Limited Use requirements. It is not used for advertising, profiling, credit decisions, sale, or unrelated purposes, and humans are not allowed to read webpage data.</p>
 <h2>Data retention and deletion</h2>
 <p>Webpage information and selected text are processed only while the relevant webpage is open and are not retained.</p>
 <p>Saved settings and automatic-conversion website origins remain until the user changes them, clears extension data, or uninstalls the extension. Turning off the global <strong>Enable converter</strong> switch stops price scanning, prompts, and automatic conversion without deleting a saved automatic-conversion origin or its source-currency mode.</p>
 <p>Turning off <strong>Convert this site automatically</strong> deletes the remembered origin and its source-currency mode. Ordinary local price detection and the on-page prompt remain available while the global converter is enabled. Selecting <code>AUTO</code> for an automatic-conversion website stores automatic detection as that website's source mode. Cached exchange rates are refreshed regularly and remain available as an offline fallback until local extension data is cleared or the extension is uninstalled.</p>
+<h2>Uninstalling</h2>
+<p>When the extension is uninstalled, the browser opens https://twinprice.com/goodbye/, a page with optional links for reporting what went wrong. The address contains no identifiers, settings, or browsing information, and nothing is sent when the page opens.</p>
 <h2>Security</h2>
 <p>All external exchange-rate requests use HTTPS. The extension does not execute remotely hosted code.</p>
 <h2>Children</h2>

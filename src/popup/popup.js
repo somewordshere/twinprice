@@ -53,6 +53,9 @@ const rateSparkLineNode = document.getElementById("rateSparkLine");
 const rateSparkFillNode = document.getElementById("rateSparkFill");
 const rateSparkPointNode = document.getElementById("rateSparkPoint");
 const rateSparkTitleNode = document.getElementById("rateSparkTitle");
+const reviewPromptNode = document.getElementById("reviewPrompt");
+const reviewLinkNode = document.getElementById("reviewLink");
+const dismissReviewButton = document.getElementById("dismissReview");
 const currencyNames = new Intl.DisplayNames([navigator.language || "en"], { type: "currency" });
 const M = CurrencyMessages;
 const ensureContentScripts = CurrencyContentScriptResources.createInjector({
@@ -212,6 +215,25 @@ async function initialize() {
   if (shortcutKeyNode && navigator.userAgent.includes("Mac")) {
     shortcutKeyNode.textContent = "⌘ Cmd";
   }
+
+  showReviewPromptIfDue().catch(() => {});
+}
+
+// A quiet footer line, shown only once the extension has helped on a few pages.
+// Either choice is final: after "Rate it" or ×, the line never returns.
+async function showReviewPromptIfDue() {
+  const result = await ExtensionAPI.runtime.sendMessage({ type: M.GET_REVIEW_PROMPT });
+  if (!result?.show || !result.url) return;
+  reviewLinkNode.href = result.url;
+  reviewPromptNode.hidden = false;
+  reviewLinkNode.addEventListener("click", () => {
+    reviewPromptNode.hidden = true;
+    ExtensionAPI.runtime.sendMessage({ type: M.MARK_REVIEW_OPENED }).catch(() => {});
+  });
+  dismissReviewButton.addEventListener("click", () => {
+    reviewPromptNode.hidden = true;
+    ExtensionAPI.runtime.sendMessage({ type: M.DISMISS_REVIEW_PROMPT }).catch(() => {});
+  });
 }
 
 function populateCurrencyLists() {

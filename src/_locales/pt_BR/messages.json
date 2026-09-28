@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - Conversor de moedas para cada preço da página",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Conversor de moedas na web",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Preços das lojas na sua moeda, ao lado do original. Mais de 160 moedas. O conteúdo da página nunca sai do seu navegador.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

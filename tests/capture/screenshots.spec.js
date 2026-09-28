@@ -16,9 +16,9 @@ const SHOP_URL = "https://api.frankfurter.dev/shop/ceramics";
 const SHOP_HTML = fs.readFileSync(path.resolve(__dirname, "../fixtures/capture-shop.html"), "utf8");
 const OUT = path.resolve(__dirname, "../../screenshots");
 
-async function openShop(context) {
+async function openShop(context, viewport = { width: 1180, height: 770 }) {
   const shop = await context.newPage();
-  await shop.setViewportSize({ width: 1180, height: 770 });
+  await shop.setViewportSize(viewport);
   await shop.route(SHOP_URL, (route) => route.fulfill({
     status: 200,
     contentType: "text/html; charset=utf-8",
@@ -96,7 +96,10 @@ test("capture in-page surfaces", async ({ context, extensionWorker }) => {
   await seedExtension(extensionWorker, {
     settings: { fromCurrency: "USD", toCurrency: "EUR", showPagePrompt: true }
   });
-  const shop = await openShop(context);
+  // A narrower page reflows the shop into three columns, so the store tile can
+  // show it close to real size and the converted prices stay readable in the
+  // listing's small preview.
+  const shop = await openShop(context, { width: 800, height: 740 });
   await runPageCommand(extensionWorker, "CONTENT_READY", SHOP_URL);
 
   // Prompt first, on an unconverted page: that is the only state it appears in.
@@ -106,6 +109,10 @@ test("capture in-page surfaces", async ({ context, extensionWorker }) => {
 
   // Then convert, so the badges in the next shot are real conversions.
   await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  // At this width the result toast sits over the last product's price, so
+  // dismiss it the way a shopper would; the converted badges are the point.
+  const dismissToast = shop.locator(".ccp-toast-dismiss");
+  if (await dismissToast.isVisible()) await dismissToast.click();
   await shop.waitForTimeout(600);
   await shop.screenshot({ path: path.join(OUT, "v2-inpage.png") });
 });

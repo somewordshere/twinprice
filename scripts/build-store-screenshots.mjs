@@ -1,10 +1,13 @@
 // Composes Chrome Web Store screenshots (1280x800) from captured product shots.
 //
-// Capture the source images first, then run this:
-//   npx playwright test tests/e2e/shot.spec.js
+// Capture the source images first, then run this (or both at once with
+// `npm run build:store-assets`):
+//   npm run capture
 //   node scripts/build-store-screenshots.mjs
 //
-// Copy lives in TILES below and is meant to be edited.
+// Copy lives in TILES below and is meant to be edited. The order is the order
+// the store shows them: the first tile carries the whole pitch, so it shows a
+// converted page rather than a secondary feature.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -19,28 +22,28 @@ const HEIGHT = 800;
 
 const TILES = [
   {
-    file: "01-live-rate.png",
-    source: "v2-popup-light.png",
-    kicker: "Live rate, front and centre",
-    headline: "See the rate before you convert",
-    body: "Every conversion shows the exact rate, how fresh it is, and the last seven days at a glance.",
-    shotWidth: 420
+    file: "01-converted.png",
+    source: "v2-inpage.png",
+    kicker: "Every price, in your currency",
+    headline: "See what it really costs",
+    body: "Each price on the page gets its converted value right beside it. The original stays, so you see both.",
+    shotWidth: 776
   },
   {
-    file: "02-on-page.png",
+    file: "02-one-click.png",
     source: "v2-inpage-prompt.png",
     kicker: "Works where you shop",
-    headline: "Convert prices where you shop",
-    body: "One click converts every price in view. The original stays beside it, or is replaced — your choice.",
-    shotWidth: 760
+    headline: "One click converts the page",
+    body: "When Twinprice spots prices, it offers to convert them and shows the rate first. Undo restores the page.",
+    shotWidth: 776
   },
   {
-    file: "03-converted.png",
-    source: "v2-inpage.png",
-    kicker: "Readable at a glance",
-    headline: "Converted prices that stand out",
-    body: "Style the converted price however you like. Contrast is checked for you as you pick colours.",
-    shotWidth: 760
+    file: "03-live-rate.png",
+    source: "v2-popup-light.png",
+    kicker: "Private by design",
+    headline: "See the rate before you convert",
+    body: "The exact rate, how fresh it is, and the last seven days. Only a currency code ever leaves your browser.",
+    shotWidth: 420
   },
   {
     file: "04-select-price.png",
@@ -48,7 +51,7 @@ const TILES = [
     kicker: "One price at a time",
     headline: "Highlight a price to convert it",
     body: "Select any price and the converted amount appears right beside it. Nothing else on the page is touched.",
-    shotWidth: 760
+    shotWidth: 776
   }
 ];
 
@@ -64,8 +67,8 @@ function tileMarkup(tile, image) {
   * { box-sizing: border-box; margin: 0; }
   body {
     width: ${WIDTH}px; height: ${HEIGHT}px; display: grid;
-    grid-template-columns: 1fr 1fr; align-items: center; gap: 56px;
-    padding: 0 80px;
+    grid-template-columns: 340px 1fr; align-items: center; gap: 44px;
+    padding: 0 60px;
     background: linear-gradient(152deg, #16327e 0%, #1b3fbf 58%, #2350d8 100%);
     color: #fff;
     font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -75,10 +78,10 @@ function tileMarkup(tile, image) {
     text-transform: uppercase; color: #a9bef5; margin-bottom: 22px;
   }
   h1 {
-    font-size: 52px; line-height: 1.08; letter-spacing: -.025em;
+    font-size: 48px; line-height: 1.08; letter-spacing: -.025em;
     font-weight: 700; margin-bottom: 26px; text-wrap: balance;
   }
-  p { font-size: 22px; line-height: 1.5; color: #d5e0fb; max-width: 30ch; }
+  p { font-size: 21px; line-height: 1.5; color: #d5e0fb; }
   .stage { display: flex; justify-content: center; align-items: center; }
   img {
     width: ${tile.shotWidth}px; height: auto; display: block;

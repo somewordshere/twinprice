@@ -1,5 +1,5 @@
 {
-  "name": "Twinprice - Currency Converter for Every Page",
+  "name": "__MSG_extNameFirefox__",
   "background": {
     "scripts": [
       "shared/browser-api.js",
@@ -17,6 +17,7 @@
       "background/settings-service.js",
       "background/page-actions.js",
       "background/onboarding.js",
+      "background/review-prompt.js",
       "background/main.js"
     ]
   },

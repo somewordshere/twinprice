@@ -31,20 +31,29 @@ const chromeWorker = fs.readFileSync(path.join(root, "src/background/chrome-work
 
 assert.equal(baseManifest.manifest_version, 3);
 assert.equal(baseManifest.version, packageJson.version, "manifest and package versions must match");
-assert.ok(
-  baseManifest.description.length <= 132,
-  "manifest description must not exceed 132 characters"
-);
-// Chrome allows 75 characters in manifest name; AMO rejects anything over 45,
-// so the Firefox override carries a shorter title than the Chrome listing.
-assert.ok(
-  { ...baseManifest, ...chromeManifest }.name.length <= 75,
-  "the composed Chrome manifest name must not exceed 75 characters"
-);
-assert.ok(
-  { ...baseManifest, ...firefoxManifest }.name.length <= 45,
-  "the composed Firefox manifest name must not exceed 45 characters, or AMO rejects the upload"
-);
+// The store name and summary come from src/_locales so each store can list the
+// extension in the shopper's own language. Chrome allows 75 characters in a
+// name; AMO rejects anything over 45, so Firefox reads a shorter message.
+assert.equal(baseManifest.default_locale, "en");
+assert.equal(baseManifest.name, "__MSG_extName__");
+assert.equal(baseManifest.description, "__MSG_extDescription__");
+assert.equal({ ...baseManifest, ...chromeManifest }.name, "__MSG_extName__");
+assert.equal({ ...baseManifest, ...firefoxManifest }.name, "__MSG_extNameFirefox__");
+const localeLimits = { extName: 75, extNameFirefox: 45, extDescription: 132 };
+const locales = fs.readdirSync(path.join(root, "src/_locales"));
+assert.ok(locales.includes(baseManifest.default_locale), "the default locale must have messages");
+for (const locale of locales) {
+  const localeMessages = readJson(`src/_locales/${locale}/messages.json`);
+  for (const [key, limit] of Object.entries(localeLimits)) {
+    const message = localeMessages[key]?.message;
+    assert.ok(typeof message === "string" && message.trim(), `${locale} is missing ${key}`);
+    assert.ok(
+      message.length <= limit,
+      `${locale} ${key} must not exceed ${limit} characters (has ${message.length})`
+    );
+  }
+  assert.ok(localeMessages.extName.message.startsWith("Twinprice"), `${locale} name must lead with Twinprice`);
+}
 assert.ok(
   !Object.hasOwn(baseManifest, "short_name") || baseManifest.short_name.length <= 12,
   "manifest short_name must not exceed 12 characters"
@@ -202,6 +211,8 @@ const runtimeFiles = [
   "src/background/http.js",
   "src/background/catalog-snapshot.js",
   "src/background/onboarding.js",
+  "src/background/review-prompt.js",
+  "src/_locales/en/messages.json",
   "src/onboarding/onboarding.html",
   "src/onboarding/onboarding.css",
   "src/onboarding/onboarding.js",
