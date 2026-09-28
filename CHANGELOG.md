@@ -19,6 +19,22 @@ whose `package.json` declares the release version.
 
 ## Unreleased
 
+## 2.2.0 - 2026-09-28
+
+### Added
+
+- Added the store name and summary in Polish, German, Spanish, Brazilian Portuguese, and French, so each store can list Twinprice in the shopper's language. The extension's own screens remain in English.
+- Added a one-line rating reminder to the popup footer. It appears only after conversions have worked on five different pages, never on webpages, and disappears for good once it is used or dismissed.
+- Uninstalling now opens a goodbye page on twinprice.com with optional links for reporting what went wrong. The address carries no identifiers.
+
+### Changed
+
+- Reordered and enlarged the store screenshots so the first one shows a fully converted page, with prices readable in the store's small preview, and renamed the promo tile from its old name.
+
+### Privacy
+
+- Documented the local rating-reminder count and the uninstall page. Neither sends any data.
+
 ## 2.1.7 - 2026-09-23
 
 ### Changed

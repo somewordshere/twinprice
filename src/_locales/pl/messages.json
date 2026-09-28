@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - przelicznik walut dla cen na każdej stronie",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - przelicznik walut na stronach",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Ceny w sklepach w Twojej walucie, tuż obok oryginału. Ponad 160 walut. Treść stron nigdy nie opuszcza Twojej przeglądarki.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

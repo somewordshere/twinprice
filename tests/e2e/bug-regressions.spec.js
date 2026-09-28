@@ -114,7 +114,9 @@ test("fresh background rates replace rates already loaded by a converted page", 
     const { ratesCache } = await chrome.storage.local.get("ratesCache");
     ratesCache.bases.USD = {
       ...ratesCache.bases.USD,
-      fetchedAt: "2026-09-18T12:00:00.000Z",
+      // Relative to now: a fixed date ages past the seven-day cache limit and
+      // the refreshed rate would be rejected as too old.
+      fetchedAt: new Date().toISOString(),
       rateDate: "2026-09-18",
       rates: { ...ratesCache.bases.USD.rates, EUR: 0.8 }
     };

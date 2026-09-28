@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - Conversor de divisas para cada precio de la página",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Conversor de divisas en la web",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Los precios de las tiendas en tu moneda, junto al original. Más de 160 divisas. El contenido de la página no sale de tu navegador.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

@@ -10,6 +10,7 @@
   let settingsLoadPromise = null;
   let pageCommandGeneration = 0;
   let renderedConversionSettingsKey = null;
+  let successRecorded = false;
   let currentRoute = readRouteKey();
 
   ExtensionAPI.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -267,7 +268,7 @@
       settings,
       runConversion: runSiteConversion,
       clearConversion: clearPromptConversion,
-      convertSelection: CurrencyPageConverter.convertSelectionText
+      convertSelection: convertSelectionText
     });
     return { rateSettingsChanged, presentationSettingsChanged, pagePromptChanged };
   }
@@ -367,6 +368,13 @@
       renderedConversionSettingsKey = null;
     }
     await updateBadge(result?.ok ? result.count : 0);
+    if (result?.ok && result.count > 0) recordSuccess();
+    return result;
+  }
+
+  async function convertSelectionText(text, element) {
+    const result = await CurrencyPageConverter.convertSelectionText(text, element);
+    if (result?.ok) recordSuccess();
     return result;
   }
 
@@ -460,10 +468,7 @@
     }
 
     const text = selection.toString().trim();
-    const result = await CurrencyPageConverter.convertSelectionText(
-      text,
-      selection.anchorNode?.parentElement
-    );
+    const result = await convertSelectionText(text, selection.anchorNode?.parentElement);
     const stale = result?.staleRates
       ? ` Cached rate${result.cacheAgeLabel ? `: ${result.cacheAgeLabel}` : ""}.`
       : "";
@@ -503,5 +508,13 @@
 
   function updateBadge(count) {
     return ExtensionAPI.runtime.sendMessage({ type: M.SET_BADGE, count }).catch(() => {});
+  }
+
+  // One page counts as one use, however often it is converted again, so the
+  // rating reminder waits for pages where the extension actually helped.
+  function recordSuccess() {
+    if (successRecorded) return;
+    successRecorded = true;
+    ExtensionAPI.runtime.sendMessage({ type: M.RECORD_SUCCESS }).catch(() => {});
   }
 })();

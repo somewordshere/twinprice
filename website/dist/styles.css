@@ -1050,6 +1050,8 @@ h1 {
 .guide-main figure img { display: block; width: 100%; border: 1px solid var(--line); border-radius: 12px; }
 .guide-main figcaption { font-size: 13px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
 .guide-main section a, .guide-next a { color: var(--blue); }
+.guide-main section a.button:not(.button-outline) { color: #fff; }
+.guide-main section a.button-outline { color: #214ba9; }
 .guide-answers dt { font-weight: 700; margin-top: 24px; }
 .guide-answers dd { margin: 8px 0 20px; line-height: 1.7; }
 .guide-next { background: var(--pale); border-radius: var(--radius); padding: 28px; margin-top: 44px; }

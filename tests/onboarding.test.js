@@ -120,6 +120,7 @@ test("an existing choice survives the seeding, including one that matches no reg
 function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = false, granted = true } = {}) {
   const created = [];
   const injected = [];
+  const uninstallUrls = [];
   const context = load([
     "shared/messages.js",
     "shared/page-access.js",
@@ -132,7 +133,10 @@ function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = fa
   });
   const service = context.CurrencyOnboardingService.create({
     api: {
-      runtime: { getURL: (page) => `moz-extension://test/${page}` },
+      runtime: {
+        getURL: (page) => `moz-extension://test/${page}`,
+        setUninstallURL: async (url) => uninstallUrls.push(url)
+      },
       permissions: { contains: async () => granted },
       tabs: {
         create: async (options) => created.push(options.url),
@@ -151,8 +155,15 @@ function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = fa
     messages: context.CurrencyMessages,
     pageAccess: context.CurrencyPageAccess
   });
-  return { service, created, injected };
+  return { service, created, injected, uninstallUrls };
 }
+
+test("uninstalling opens the goodbye page, and its address carries nothing about the user", async () => {
+  const { service, uninstallUrls } = createOnboarding();
+  assert.equal((await service.setUninstallPage()).ok, true);
+  assert.deepEqual(uninstallUrls, ["https://twinprice.com/goodbye/"]);
+  assert.equal(new URL(uninstallUrls[0]).search, "");
+});
 
 test("the welcome tab opens on a first install and on nothing else", async () => {
   for (const reason of ["update", "chrome_update", "browser_update", "shared_module_update", undefined]) {

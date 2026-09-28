@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: September 23, 2026 (version 2.1.7)
+Effective date: September 28, 2026 (version 2.2.0)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 
@@ -40,12 +40,15 @@ The extension stores:
 - A cache of exchange rates, including the rate date and fetch time
 - The origins of websites the user chooses for automatic conversion
 - A source-currency mode for an automatic-conversion website, including a manual currency or `AUTO`
+- A count of webpages where a conversion succeeded, and whether the user opened or
+  dismissed the rating reminder, used only to decide when to show that reminder
 
 Core extension settings use the browser's extension sync storage and may be
 synchronized by Google or Mozilla according to the user's browser settings and
 the browser provider's privacy practices. Recent currencies, remembered website
-origins, their source-currency modes, and exchange-rate data are stored locally in
-the browser.
+origins, their source-currency modes, the rating-reminder count, and exchange-rate
+data are stored locally in the browser. The rating-reminder count is never
+transmitted.
 
 The extension does not store webpage contents, highlighted text, or general
 browsing history. It stores only the website origins the user deliberately marks
@@ -117,6 +120,13 @@ automatic-conversion website stores automatic detection as that website's source
 mode.
 Cached exchange rates are refreshed regularly and remain available as an offline
 fallback until local extension data is cleared or the extension is uninstalled.
+
+## Uninstalling
+
+When the extension is uninstalled, the browser opens https://twinprice.com/goodbye/,
+a page with optional links for reporting what went wrong. The address contains
+no identifiers, settings, or browsing information, and nothing is sent when the
+page opens.
 
 ## Security
 
