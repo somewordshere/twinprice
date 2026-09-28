@@ -72,6 +72,7 @@
   <link rel="canonical" href="https://twinprice.com/">
   <link rel="icon" href="assets/twinprice-icon.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
+  <script src="browser-detect.js" defer></script>
   <script src="demo.js" defer></script>
   <script src="selection-demo.js" defer></script>
 </head>
@@ -89,8 +90,8 @@
         <h1 id="hero-title">Shop abroad.<br>See prices in<br><span>your currency.</span></h1>
         <p class="hero-description">Twinprice is a free currency converter extension for Chrome and Firefox. See converted prices beside the originals while you shop, or highlight one price and click “Convert selection.”</p>
         <div class="install-buttons">
-          <a class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk">Get Twinprice for Chrome <span aria-hidden="true">↗</span></a>
-          <a class="text-button" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a>
+          <a data-install="chrome" class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk">Get Twinprice for Chrome <span aria-hidden="true">↗</span></a>
+          <a data-install="firefox" class="text-button" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a>
         </div>
         <p class="free-note">Free to install. No account needed. <a href="guide/">Read the getting started guide</a>.</p>
       </div>
@@ -177,7 +178,7 @@
         <details><summary>Can I restore prices or turn conversion off?<span aria-hidden="true">+</span></summary><p>Yes. Choose “Restore original prices” in the popup after converting. Under Page options, turn off “Convert this site automatically” to forget that site's automatic settings. Turn off “Enable converter” to stop scanning, prompts, and automatic conversion everywhere.</p></details>
       </div>
     </section>
-    <section class="install-section wrap" id="install" aria-labelledby="install-title"><p class="eyebrow">LESS MENTAL MATH. MORE WINDOW SHOPPING.</p><h2 id="install-title">Make yourself at home.<br>In any currency.</h2><p>Add a familiar price to your next find.</p><div class="install-buttons"><a class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk">Get Twinprice for Chrome <span aria-hidden="true">↗</span></a><a class="button button-outline" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a></div><p class="free-note">Free to install. No account needed. <a href="about/">Product facts and publisher details</a>.</p></section>
+    <section class="install-section wrap" id="install" aria-labelledby="install-title"><p class="eyebrow">LESS MENTAL MATH. MORE WINDOW SHOPPING.</p><h2 id="install-title">Make yourself at home.<br>In any currency.</h2><p>Add a familiar price to your next find.</p><div class="install-buttons"><a data-install="chrome" class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk">Get Twinprice for Chrome <span aria-hidden="true">↗</span></a><a data-install="firefox" class="button button-outline" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a></div><p class="free-note">Free to install. No account needed. <a href="about/">Product facts and publisher details</a>.</p></section>
   </main>
   <footer class="site-footer wrap"><a class="brand" href="./"><span>twinprice<span class="brand-period">.</span>com</span></a><span>A familiar price, wherever you shop.</span><a href="guide/">User guide</a><a href="about/">About</a><a href="privacy/">Privacy policy</a><a href="https://github.com/somewordshere/twinprice/issues">Help / Report an issue</a><a href="https://github.com/somewordshere/twinprice">Source code</a></footer>
 </body>
