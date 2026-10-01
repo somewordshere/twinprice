@@ -12,7 +12,11 @@ const DEFAULT_SHOP_URL = "https://api.frankfurter.dev/test-shop";
 // provider is stubbed inside the worker itself. Without this the suite races the
 // live Frankfurter API: any code path that asks for rates overwrites the seeded
 // cache with real market rates and the expected conversions drift.
-async function stubRateProvider(extensionWorker) {
+async function stubRateProvider(extensionWorker, {
+  currencies = PROVIDER_CURRENCIES,
+  ratesByBase = RATES_BY_BASE,
+  rateDate = RATE_DATE
+} = {}) {
   await extensionWorker.evaluate(({ currencies, ratesByBase, rateDate }) => {
     if (globalThis.__ccpProviderStubbed) return;
     globalThis.__ccpProviderStubbed = true;
@@ -46,7 +50,12 @@ async function stubRateProvider(extensionWorker) {
           const quote = (params.get("quotes") || "").split(",")[0];
           const rate = rates[quote];
           if (!Number.isFinite(rate)) return json([]);
-          return json(["2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", rateDate]
+          // Five consecutive days ending on the rate date.
+          const dayMs = 24 * 60 * 60 * 1000;
+          const days = [4, 3, 2, 1, 0].map((back) => (
+            new Date(Date.parse(rateDate) - (back * dayMs)).toISOString().slice(0, 10)
+          ));
+          return json(days
             .map((date, index) => ({
               date,
               base,
@@ -62,16 +71,16 @@ async function stubRateProvider(extensionWorker) {
       return realFetch(input, init);
     };
   }, {
-    currencies: PROVIDER_CURRENCIES.map((currency) => ({ ...currency })),
-    ratesByBase: JSON.parse(JSON.stringify(RATES_BY_BASE)),
-    rateDate: RATE_DATE
+    currencies: currencies.map((currency) => ({ ...currency })),
+    ratesByBase: JSON.parse(JSON.stringify(ratesByBase)),
+    rateDate
   });
 }
 
 async function seedExtension(extensionWorker, options = {}) {
   // Installation loads the currency catalog. Stub its provider before waiting
   // for initialization so a live network retry cannot delay the test fixture.
-  await stubRateProvider(extensionWorker);
+  await stubRateProvider(extensionWorker, options.provider);
   await expect.poll(async () => extensionWorker.evaluate(async () => (
     typeof (await chrome.storage.sync.get("enabled")).enabled === "boolean"
   )), {
@@ -81,6 +90,7 @@ async function seedExtension(extensionWorker, options = {}) {
 
   const state = createSeededExtensionState({
     ...options,
+    ...(options.provider || {}),
     settings: {
       showPagePrompt: false,
       ...(options.settings || {})

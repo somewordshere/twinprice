@@ -71,8 +71,6 @@ const PROVIDER_CURRENCIES = Object.freeze([
   })
 ]);
 
-const CATALOG_SIGNATURE = PROVIDER_CURRENCIES.map((currency) => currency.code).join(",");
-
 // Round rates, so a fixture price converts to a value a reader can check by eye.
 const RATES_BY_BASE = Object.freeze({
   USD: Object.freeze({ USD: 1, EUR: 0.9, CHF: 0.8 }),
@@ -85,8 +83,12 @@ const RATES_BY_BASE = Object.freeze({
 function createSeededExtensionState({
   now = new Date().toISOString(),
   settings = {},
-  local = {}
+  local = {},
+  currencies = PROVIDER_CURRENCIES,
+  ratesByBase = RATES_BY_BASE,
+  rateDate = RATE_DATE
 } = {}) {
+  const catalogSignature = currencies.map((currency) => currency.code).join(",");
   return {
     sync: {
       ...DEFAULT_SETTINGS,
@@ -96,16 +98,16 @@ function createSeededExtensionState({
       providerCurrencyCatalog: {
         version: 1,
         fetchedAt: now,
-        currencies: PROVIDER_CURRENCIES.map((currency) => ({ ...currency }))
+        currencies: currencies.map((currency) => ({ ...currency }))
       },
       ratesCache: {
         version: 3,
-        bases: Object.fromEntries(Object.entries(RATES_BY_BASE).map(([base, rates]) => [
+        bases: Object.fromEntries(Object.entries(ratesByBase).map(([base, rates]) => [
           base,
           {
             fetchedAt: now,
-            rateDate: RATE_DATE,
-            catalogSignature: CATALOG_SIGNATURE,
+            rateDate,
+            catalogSignature,
             rates: { ...rates }
           }
         ]))
