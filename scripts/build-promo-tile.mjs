@@ -5,6 +5,15 @@
 // Colors are the extension's own — the icon gradient and the default converted
 // price badge — so the tile matches what a user actually sees after installing.
 //
+// The tile shows a product card as it looks on a shop page after conversion: the
+// original price with the "≈" badge right beside it. That pairing is what the
+// extension does and what the name means. The tagline is a single line so it
+// stays readable when the store shows the tile at half size.
+//
+// The store shows one promo tile in every language (unlike screenshots, it
+// cannot be localized), so the copy is English. Dollars to yen is used because
+// the converted number is obviously different even at thumbnail size.
+//
 //   node scripts/build-promo-tile.mjs [--out store/chrome/promo]
 
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -33,7 +42,7 @@ const markup = `
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 30px 34px;
+    padding: 26px 30px 24px;
     box-sizing: border-box;
     background:
       radial-gradient(120% 90% at 82% 8%, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 58%),
@@ -50,38 +59,53 @@ const markup = `
     letter-spacing: -.017em;
     line-height: 1;
   }
-  .demo {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 15px 18px 17px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #101725;
+    box-shadow: 0 16px 32px -10px rgba(6, 12, 32, .6), 0 2px 6px rgba(6, 12, 32, .25);
+  }
+  .product {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    color: #5a6b87;
+  }
+  .prices {
     display: flex;
     align-items: center;
-    gap: 13px;
+    gap: 10px;
     font-variant-numeric: tabular-nums;
   }
-  .from {
-    font-size: 41px;
-    font-weight: 650;
-    letter-spacing: -.022em;
+  .price {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -.02em;
     line-height: 1;
+    white-space: nowrap;
   }
-  .arrow { font-size: 27px; opacity: .55; line-height: 1; }
-  .badge {
+  .twin {
     background: ${BADGE_FILL};
     color: ${BADGE_TEXT};
-    font-size: 41px;
+    font-size: 35px;
     font-weight: 700;
-    letter-spacing: -.022em;
+    letter-spacing: -.02em;
     line-height: 1;
-    padding: 9px 16px;
-    border-radius: .35em;
+    padding: 5px 10px;
+    border-radius: .3em;
     white-space: nowrap;
   }
   .tag {
-    font-size: 16.5px;
-    line-height: 1.35;
-    font-weight: 450;
-    color: rgba(255,255,255,.88);
-    max-width: 34ch;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.2;
+    white-space: nowrap;
   }
-  .tag b { font-weight: 660; color: ${GLYPH}; }
 </style>
 
 <div class="brand">
@@ -104,13 +128,15 @@ const markup = `
   <span class="name">Twinprice</span>
 </div>
 
-<div class="demo">
-  <span class="from">$68.00</span>
-  <span class="arrow">&rarr;</span>
-  <span class="badge">￥10,200</span>
+<div class="card">
+  <span class="product">Desk lamp</span>
+  <div class="prices">
+    <span class="price">$68.00</span>
+    <span class="twin">≈ ￥10,200</span>
+  </div>
 </div>
 
-<p class="tag"><b>Every price in your currency.</b> Right beside the original, and private to your browser.</p>
+<p class="tag">Every price in your currency.</p>
 `;
 
 const outDir = (() => {
