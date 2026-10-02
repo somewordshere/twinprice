@@ -1,10 +1,14 @@
 (function initializePageUi(global) {
+  const t = (key, params) => global.CurrencyI18n.t(key, params);
   let settings = null;
   let pageConvertPrompt = null;
   let pageConvertButton = null;
   let pageConvertMessage = null;
   let pageConvertRate = null;
   let pagePromptAction = "convert";
+  let pagePromptIdle = true;
+  let pagePromptRate = null;
+  let pageConvertClose = null;
   let pagePromptPreviousFocus = null;
   let selectionPopup = null;
   let pendingSelectionText = "";
@@ -53,11 +57,14 @@
       pageConvertButton = null;
       pageConvertMessage = null;
       pageConvertRate = null;
+      pageConvertClose = null;
       pagePromptPreviousFocus = null;
     }
     if (pageConvertPrompt || !settings?.enabled || !document.body || window.top !== window) return;
     pagePromptPreviousFocus = getActiveElementForRestore();
     pagePromptAction = "convert";
+    pagePromptIdle = true;
+    pagePromptRate = null;
     pageConvertPrompt = document.createElement("aside");
     isolateControls(pageConvertPrompt);
     pageConvertPrompt.className = "ccp-page-prompt";
@@ -77,8 +84,9 @@
     close.type = "button";
     close.className = "ccp-page-prompt-close";
     close.textContent = "×";
-    close.setAttribute("aria-label", "Dismiss currency converter");
+    close.setAttribute("aria-label", t("page.dismiss"));
     close.addEventListener("click", () => removePageConvertPrompt());
+    pageConvertClose = close;
     header.append(title, close);
 
     pageConvertMessage = document.createElement("span");
@@ -87,7 +95,7 @@
     pageConvertMessage.setAttribute("role", "status");
     pageConvertMessage.setAttribute("aria-live", "polite");
     pageConvertMessage.setAttribute("aria-atomic", "true");
-    pageConvertMessage.textContent = `Convert visible prices on this page to ${settings.toCurrency}.`;
+    pageConvertMessage.textContent = t("page.prompt.message", { currency: settings.toCurrency });
 
     // Shown once the rate is known, so the offer states what you would get
     // before you accept it. Not a live region: the message beside it already is.
@@ -99,7 +107,7 @@
     pageConvertButton = document.createElement("button");
     pageConvertButton.type = "button";
     pageConvertButton.className = "ccp-page-prompt-action";
-    pageConvertButton.textContent = "Convert prices";
+    pageConvertButton.textContent = t("page.prompt.convert");
     pageConvertButton.addEventListener("click", handlePagePromptAction);
 
     pageConvertPrompt.append(header, pageConvertMessage, pageConvertRate, pageConvertButton);
@@ -109,6 +117,7 @@
 
   function setPageConvertPromptRate(descriptor) {
     if (!pageConvertRate) return;
+    pagePromptRate = descriptor || null;
     if (!descriptor || !Number.isFinite(descriptor.rate)) {
       pageConvertRate.textContent = "";
       pageConvertRate.hidden = true;
@@ -116,12 +125,12 @@
     }
     // Deliberately terse: this card is 268px wide and a full freshness phrase
     // wraps to a second line. The popup and toast carry the detail.
-    const freshness = descriptor.stale ? "cached" : descriptor.date || "";
+    const freshness = descriptor.stale ? t("page.rate.cached") : descriptor.date || "";
     pageConvertRate.textContent = `1 ${descriptor.base} = ${
       formatPromptRate(descriptor.rate)
     } ${descriptor.quote}${freshness ? ` · ${freshness}` : ""}`;
     pageConvertRate.title = descriptor.stale && descriptor.cacheAgeLabel
-      ? `Cached rate, ${descriptor.cacheAgeLabel}`
+      ? t("page.rate.cachedTitle", { age: descriptor.cacheAgeLabel })
       : "";
     pageConvertRate.hidden = false;
   }
@@ -135,20 +144,21 @@
   async function handlePagePromptAction() {
     if (!pageConvertPrompt || !pageConvertButton || !pageConvertMessage) return;
     const prompt = pageConvertPrompt;
+    pagePromptIdle = false;
     if (pagePromptAction === "undo") {
       pageConvertButton.disabled = true;
-      pageConvertButton.textContent = "Restoring…";
-      pageConvertMessage.textContent = "Restoring original prices…";
+      pageConvertButton.textContent = t("page.prompt.restoring");
+      pageConvertMessage.textContent = t("page.prompt.restoringMessage");
       let result;
       try {
         result = await clearConversion?.();
       } catch (error) {
         if (pageConvertPrompt !== prompt || !pageConvertButton || !pageConvertMessage) return;
         pageConvertButton.disabled = false;
-        pageConvertButton.textContent = "Try undo again";
+        pageConvertButton.textContent = t("page.prompt.tryUndo");
         pageConvertMessage.textContent = formatActionFailure(
           error,
-          "Original prices could not be restored"
+          t("page.prompt.undoFailed")
         );
         pageConvertPrompt.dataset.state = "error";
         return;
@@ -156,21 +166,21 @@
       if (pageConvertPrompt !== prompt || !pageConvertButton || !pageConvertMessage) return;
       pageConvertButton.disabled = false;
       if (result?.ok === false) {
-        pageConvertButton.textContent = "Try undo again";
-        pageConvertMessage.textContent = result.error || "Original prices could not be restored.";
+        pageConvertButton.textContent = t("page.prompt.tryUndo");
+        pageConvertMessage.textContent = result.error || t("page.prompt.undoFailedFull");
         pageConvertPrompt.dataset.state = "error";
         return;
       }
       pagePromptAction = "convert";
-      pageConvertButton.textContent = "Convert again";
-      pageConvertMessage.textContent = "Original prices restored.";
+      pageConvertButton.textContent = t("page.prompt.convertAgain");
+      pageConvertMessage.textContent = t("page.prompt.restored");
       delete pageConvertPrompt.dataset.state;
       return;
     }
 
     pageConvertButton.disabled = true;
-    pageConvertButton.textContent = "Converting…";
-    pageConvertMessage.textContent = "Scanning visible prices…";
+    pageConvertButton.textContent = t("page.prompt.converting");
+    pageConvertMessage.textContent = t("page.prompt.scanning");
     delete pageConvertPrompt.dataset.state;
     let result;
     try {
@@ -179,10 +189,10 @@
       if (pageConvertPrompt !== prompt || !pageConvertButton || !pageConvertMessage) return;
       pagePromptAction = "convert";
       pageConvertButton.disabled = false;
-      pageConvertButton.textContent = "Try again";
+      pageConvertButton.textContent = t("page.prompt.tryAgain");
       pageConvertMessage.textContent = formatActionFailure(
         error,
-        "Prices could not be converted"
+        t("page.prompt.convertFailed")
       );
       pageConvertPrompt.dataset.state = "error";
       return;
@@ -190,23 +200,36 @@
     if (pageConvertPrompt !== prompt) return;
 
     if (result?.ok) {
-      const source = result.detectedCurrency || result.detectedCurrencies || "the detected currency";
+      const source = result.detectedCurrency || result.detectedCurrencies ||
+        t("page.prompt.detectedFallback");
       pagePromptAction = "undo";
       pageConvertButton.disabled = false;
-      pageConvertButton.textContent = "Undo";
-      pageConvertMessage.textContent = `Converted ${result.count} price${
-        result.count === 1 ? "" : "s"
-      } from ${source} to ${settings.toCurrency}.`;
+      pageConvertButton.textContent = t("page.prompt.undo");
+      pageConvertMessage.textContent = t("page.prompt.success", {
+        count: result.count,
+        source,
+        target: settings.toCurrency
+      });
       pageConvertPrompt.dataset.state = "success";
     } else {
       pagePromptAction = "convert";
       pageConvertButton.disabled = false;
-      pageConvertButton.textContent = "Try again";
+      pageConvertButton.textContent = t("page.prompt.tryAgain");
       pageConvertMessage.textContent = result?.detectionConfidence === "low"
-        ? "We could not detect the source currency. Choose one in the extension, then try again."
-        : result?.error || "Prices could not be converted on this page. Try again.";
+        ? t("page.prompt.lowConfidence")
+        : result?.error || t("page.prompt.genericError");
       pageConvertPrompt.dataset.state = "error";
     }
+  }
+
+  // Re-renders the offer in place after the language changes. A prompt that is
+  // mid-conversion or showing a result is left alone; it is already on screen.
+  function refreshLanguage() {
+    if (!pageConvertPrompt || !pagePromptIdle || !settings) return;
+    pageConvertClose?.setAttribute("aria-label", t("page.dismiss"));
+    pageConvertMessage.textContent = t("page.prompt.message", { currency: settings.toCurrency });
+    pageConvertButton.textContent = t("page.prompt.convert");
+    if (pagePromptRate) setPageConvertPromptRate(pagePromptRate);
   }
 
   function handlePagePromptKeydown(event) {
@@ -225,7 +248,10 @@
     pageConvertButton = null;
     pageConvertMessage = null;
     pageConvertRate = null;
+    pageConvertClose = null;
+    pagePromptRate = null;
     pagePromptAction = "convert";
+    pagePromptIdle = true;
     if (shouldRestoreFocus) restoreFocusTo(pagePromptPreviousFocus);
     pagePromptPreviousFocus = null;
   }
@@ -290,8 +316,8 @@
     selectionPopup.setAttribute("aria-live", "polite");
     selectionPopup.setAttribute("aria-atomic", "true");
     updateSelectionPopup(
-      "Convert selection",
-      `Convert selected ${match.currency} price to ${settings.toCurrency}`
+      t("page.selection.convert"),
+      t("page.selection.convertLabel", { source: match.currency, target: settings.toCurrency })
     );
     selectionPopup.addEventListener("mousedown", (event) => {
       event.preventDefault();
@@ -322,8 +348,11 @@
     const popup = selectionPopup;
     popup.disabled = true;
     updateSelectionPopup(
-      "Converting…",
-      `Converting selected ${pendingSelectionSourceCurrency || "currency"} price to ${settings.toCurrency}`,
+      t("page.prompt.converting"),
+      t("page.selection.convertingLabel", {
+        source: pendingSelectionSourceCurrency || t("page.selection.currencyFallback"),
+        target: settings.toCurrency
+      }),
       { busy: true }
     );
     const selection = window.getSelection();
@@ -336,25 +365,26 @@
     } catch (error) {
       result = {
         ok: false,
-        error: formatActionFailure(error, "Selection could not be converted")
+        error: formatActionFailure(error, t("page.selection.failedSummary"))
       };
     }
     if (selectionPopup !== popup) return;
 
     popup.disabled = false;
     if (result?.ok) {
-      const source = result.sourceCurrency || pendingSelectionSourceCurrency || "currency";
+      const source = result.sourceCurrency || pendingSelectionSourceCurrency ||
+        t("page.selection.currencyFallback");
       const converted = result.converted || settings.toCurrency;
       updateSelectionPopup(
         `${source} → ${converted}`,
-        `Converted selected ${source} price to ${converted}`,
+        t("page.selection.doneLabel", { source, target: converted }),
         { state: "success" }
       );
     } else {
-      const errorMessage = result?.error || "Selection could not be converted. Try again.";
+      const errorMessage = result?.error || t("page.selection.failed");
       updateSelectionPopup(
         errorMessage,
-        `Selection conversion failed: ${errorMessage}`,
+        t("page.selection.failedLabel", { message: errorMessage }),
         { state: "error" }
       );
     }
@@ -421,7 +451,7 @@
 
     if (options.actionLabel && typeof options.onAction === "function") {
       toast.setAttribute("role", "group");
-      toast.setAttribute("aria-label", "Currency conversion result");
+      toast.setAttribute("aria-label", t("page.toast.group"));
       const action = document.createElement("button");
       action.type = "button";
       action.className = "ccp-toast-action";
@@ -432,7 +462,9 @@
         try {
           const result = await options.onAction();
           if (result?.ok === false) {
-            throw new Error(result.error || `${options.actionLabel} could not be completed.`);
+            throw new Error(
+              result.error || t("page.toast.actionIncomplete", { action: options.actionLabel })
+            );
           }
           if (toastNode === toast) removeToast();
         } catch (error) {
@@ -440,7 +472,10 @@
           action.disabled = false;
           action.removeAttribute("aria-busy");
           toast.dataset.state = "error";
-          text.textContent = formatActionFailure(error, `${options.actionLabel} failed`);
+          text.textContent = formatActionFailure(
+            error,
+            t("page.toast.actionFailed", { action: options.actionLabel })
+          );
         }
       });
       toast.appendChild(action);
@@ -449,7 +484,7 @@
       dismiss.type = "button";
       dismiss.className = "ccp-toast-dismiss";
       dismiss.textContent = "×";
-      dismiss.setAttribute("aria-label", "Dismiss conversion result");
+      dismiss.setAttribute("aria-label", t("page.toast.dismiss"));
       dismiss.addEventListener("click", () => removeToast());
       toast.appendChild(dismiss);
     }
@@ -499,7 +534,7 @@
 
   function formatActionFailure(error, summary) {
     const detail = typeof error?.message === "string" ? error.message.trim() : "";
-    return detail ? `${summary}. ${detail}` : `${summary}. Try again.`;
+    return detail ? `${summary}. ${detail}` : `${summary}. ${t("page.failure.tryAgain")}`;
   }
 
   global.CurrencyPageUi = Object.freeze({
@@ -507,6 +542,7 @@
     installSelectionListeners,
     showPageConvertPrompt,
     setPageConvertPromptRate,
+    refreshLanguage,
     removePageConvertPrompt,
     showToast,
     clearTransientUi

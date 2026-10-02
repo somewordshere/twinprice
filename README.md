@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
 
-**Current version:** 2.2.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.2.2 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.2.0/twinprice-2.2.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.2.0/twinprice-2.2.0-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.2.2/twinprice-2.2.2-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.2.2/twinprice-2.2.2-firefox.zip)
 
 **[View the complete changelog →](CHANGELOG.md)**
 
@@ -46,6 +46,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 - Show converted prices beside the originals or replace them, with exact undo support.
 - Customize converted-price text, background, and corner shape with a live before-and-after preview and contrast guidance.
 - Choose whether the popup follows the system theme or always uses light or dark mode.
+- Use the popup, the welcome page, and the on-page prompts in ten languages (English, German, Spanish, French, Italian, Dutch, Polish, Brazilian Portuguese, Turkish, and Ukrainian), following the browser's language or chosen from **Page options**.
 - Keep the popup focused on the current site, currency pair, and one adaptive page-conversion action, with less-used controls in closed disclosures.
 - Scan ordinary webpages locally as they open and show the on-page conversion prompt only after a supported price is found.
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
@@ -54,7 +55,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.2.0/twinprice-2.2.0-chrome.zip) or [Firefox build](release/2.2.0/twinprice-2.2.0-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.2.2/twinprice-2.2.2-chrome.zip) or [Firefox build](release/2.2.2/twinprice-2.2.2-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -73,6 +74,8 @@ The global **Enable converter** switch is under **Page options**. Turning it off
 Open **Page options** and use **Converted price appearance** to choose text and background colors plus a square, rounded, or pill shape. The **Before** sample keeps the original converter style while **After** updates as you edit. The contrast message reports whether the selected colors meet WCAG AA for normal text, and **Reset appearance** restores the accessible green default.
 
 Use **App theme** in the same panel to match the browser's system theme or keep the popup in light or dark mode. The choice is synchronized with the rest of the extension settings.
+
+Use **Language** in the same panel to pick the interface language. **Automatic** follows the browser's language and falls back to English; the other entries are named in their own language so they can be found from any starting point. The choice applies to the popup, the welcome page, and the on-page prompt, button, and messages. Messages that come from the exchange-rate provider, such as a rate being unavailable, stay in English.
 
 ### Convert a custom amount
 
@@ -208,6 +211,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.2.2 | A language menu with ten interface languages, including Ukrainian, and store listings in all ten | [Chrome](release/2.2.2/twinprice-2.2.2-chrome.zip) · [Firefox](release/2.2.2/twinprice-2.2.2-firefox.zip) |
 | 2.2.0 | Store listing in six languages, a popup rating reminder after five helped pages, and an uninstall goodbye page | [Chrome](release/2.2.0/twinprice-2.2.0-chrome.zip) · [Firefox](release/2.2.0/twinprice-2.2.0-firefox.zip) |
 | 2.1.7 | Refreshed release packages, documentation, and restored legacy screenshots | [Chrome](release/2.1.7/twinprice-2.1.7-chrome.zip) · [Firefox](release/2.1.7/twinprice-2.1.7-firefox.zip) |
 | 2.1.6 | User-selectable system, light, and dark popup themes | [Chrome](release/2.1.6/twinprice-2.1.6-chrome.zip) · [Firefox](release/2.1.6/twinprice-2.1.6-firefox.zip) |

@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - Valutaomrekenaar voor elke prijs op een pagina",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Valutaomrekenaar voor elke pagina",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Winkelprijzen in je eigen valuta, naast het origineel. Meer dan 160 valuta's. Pagina-inhoud verlaat je browser nooit.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

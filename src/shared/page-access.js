@@ -14,19 +14,33 @@
     "sync.services.mozilla.com"
   ]);
 
+  // The popup loads the translator; the background does not, and keeps English.
+  function text(key, fallback, params) {
+    return global.CurrencyI18n ? global.CurrencyI18n.t(key, params) : fallback;
+  }
+
   function unsupportedPageMessage(urlValue) {
     const url = parseUrl(urlValue);
-    if (!url) return "This tab does not have a webpage that can be converted.";
+    if (!url) return text("access.noWebpage", "This tab does not have a webpage that can be converted.");
 
     if (["file:", "http:", "https:"].includes(url.protocol) && hasPdfPath(url)) {
-      return "Extensions cannot run inside the browser's PDF viewer. Open a regular webpage and try again.";
+      return text(
+        "access.pdf",
+        "Extensions cannot run inside the browser's PDF viewer. Open a regular webpage and try again."
+      );
     }
     if (url.protocol === "file:") return null;
     if (url.protocol !== "http:" && url.protocol !== "https:") {
-      return "Extensions cannot run on browser pages, Reader View, PDFs, or other extension pages.";
+      return text(
+        "access.browserPage",
+        "Extensions cannot run on browser pages, Reader View, PDFs, or other extension pages."
+      );
     }
     if (isFirefoxBuild() && FIREFOX_RESTRICTED_HOSTS.has(url.hostname.toLowerCase())) {
-      return "Firefox protects this Mozilla page from extensions. Open a regular shopping page and try again.";
+      return text(
+        "access.firefoxProtected",
+        "Firefox protects this Mozilla page from extensions. Open a regular shopping page and try again."
+      );
     }
     return null;
   }
@@ -36,8 +50,13 @@
     if (unsupported) return unsupported;
 
     const detail = normalizeError(error);
-    if (detail) return `Could not start conversion on this page. ${detail}`;
-    return "Could not start conversion on this page. Reload it once and try again.";
+    if (detail) {
+      return text("access.startFailed", `Could not start conversion on this page. ${detail}`, { detail });
+    }
+    return text(
+      "access.startFailedReload",
+      "Could not start conversion on this page. Reload it once and try again."
+    );
   }
 
   function normalizeError(error) {

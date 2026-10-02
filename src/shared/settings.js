@@ -4,6 +4,7 @@
     fromCurrency: "AUTO",
     toCurrency: "EUR",
     theme: "system",
+    language: "auto",
     displayMode: "beside",
     convertedTextColor: "#166534",
     convertedBackgroundColor: "#dcfce7",
@@ -13,6 +14,12 @@
   const KEYS = Object.freeze(Object.keys(DEFAULTS));
   const DISPLAY_MODES = Object.freeze(["beside", "replace"]);
   const THEMES = Object.freeze(["system", "light", "dark"]);
+  // "auto" follows the language of the browser, and the rest are the interface
+  // languages that ship translations (see shared/translations-*.js). A test keeps
+  // the two in step.
+  const LANGUAGES = Object.freeze([
+    "auto", "en", "de", "es", "fr", "it", "nl", "pl", "pt-BR", "tr", "uk"
+  ]);
   const CONVERTED_SHAPES = Object.freeze(["square", "rounded", "pill"]);
   const SHAPE_RADII = Object.freeze({
     square: "0",
@@ -40,6 +47,7 @@
         ? value.toCurrency
         : DEFAULTS.toCurrency,
       theme: THEMES.includes(value?.theme) ? value.theme : DEFAULTS.theme,
+      language: LANGUAGES.includes(value?.language) ? value.language : DEFAULTS.language,
       displayMode: DISPLAY_MODES.includes(value?.displayMode)
         ? value.displayMode
         : DEFAULTS.displayMode,
@@ -62,6 +70,7 @@
         typeof value.fromCurrency !== "string" ||
         typeof value.toCurrency !== "string" ||
         !THEMES.includes(value.theme) ||
+        !LANGUAGES.includes(value.language) ||
         !DISPLAY_MODES.includes(value.displayMode) ||
         !normalizeHexColor(value.convertedTextColor) ||
         !normalizeHexColor(value.convertedBackgroundColor) ||
@@ -83,6 +92,7 @@
       fromCurrency: value.fromCurrency,
       toCurrency: value.toCurrency,
       theme: value.theme,
+      language: value.language,
       displayMode: value.displayMode,
       convertedTextColor: normalizeHexColor(value.convertedTextColor),
       convertedBackgroundColor: normalizeHexColor(value.convertedBackgroundColor),
@@ -127,6 +137,7 @@
     DEFAULTS,
     KEYS,
     THEMES,
+    LANGUAGES,
     CONVERTED_SHAPES,
     SHAPE_RADII,
     RATE_AFFECTING_KEYS,

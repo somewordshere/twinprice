@@ -8,6 +8,9 @@ const fromCurrencyList = document.getElementById("fromCurrencyList");
 const toCurrencyList = document.getElementById("toCurrencyList");
 const swapButton = document.getElementById("swapCurrencies");
 const themeSelect = document.getElementById("theme");
+const languageSelect = document.getElementById("language");
+const hintNode = document.getElementById("hint");
+const shortcutNode = document.getElementById("shortcut");
 const displayModeSelect = document.getElementById("displayMode");
 const convertedTextColorInput = document.getElementById("convertedTextColor");
 const convertedTextColorHexInput = document.getElementById("convertedTextColorHex");
@@ -56,8 +59,10 @@ const rateSparkTitleNode = document.getElementById("rateSparkTitle");
 const reviewPromptNode = document.getElementById("reviewPrompt");
 const reviewLinkNode = document.getElementById("reviewLink");
 const dismissReviewButton = document.getElementById("dismissReview");
-const currencyNames = new Intl.DisplayNames([navigator.language || "en"], { type: "currency" });
 const M = CurrencyMessages;
+const I18n = CurrencyI18n;
+const t = I18n.t;
+let currencyNames = createCurrencyNames();
 const ensureContentScripts = CurrencyContentScriptResources.createInjector({
   api: ExtensionAPI,
   messages: M
@@ -81,7 +86,6 @@ let pageConversionError = null;
 let primaryActionBusy = false;
 let popupReady = false;
 let popupLocked = false;
-const defaultRememberSiteHelp = rememberSiteHelpNode.textContent;
 const settingsController = CurrencyPopupSettingsController.create({
   normalize: CurrencySettings.normalizeSnapshot,
   matches: CurrencySettings.snapshotEquals,
@@ -95,12 +99,21 @@ const settingsController = CurrencyPopupSettingsController.create({
     const action = phase === "persist" ? "confirm the settings update" : "reload the current settings";
     console.error(`Twinprice could not ${action}.`, error);
   },
-  describeError: errorMessage
+  describeError: errorMessage,
+  translate: (key, _fallback, params) => t(key, params)
 });
 const currencyComboboxes = [
   createCurrencyCombobox(fromCurrencySelect, fromCurrencySearch, fromCurrencyList),
   createCurrencyCombobox(toCurrencySelect, toCurrencySearch, toCurrencyList)
 ];
+
+// Show the browser's language straight away; the saved choice replaces it once
+// the settings arrive, so nobody sees a flash of English first.
+applyLanguage("auto");
+rateMetaTextNode.textContent = t("popup.rateLoading");
+rememberSiteHelpNode.textContent = t("popup.rememberHelp");
+siteStateNode.textContent = t("popup.currentPage");
+quickOutputLabelNode.textContent = t("popup.result");
 
 initialize().then(() => {
   popupReady = true;
@@ -113,7 +126,7 @@ async function initialize() {
   const activePageUrl = activeTab?.url || origin;
   pageConversionError = activeTab?.id
     ? CurrencyPageAccess.unsupportedPageMessage(activePageUrl)
-    : "No active webpage is available.";
+    : t("popup.noActivePage");
   const [currenciesResult, settingsResult, statusResult, localPreferences] = await Promise.all([
     ExtensionAPI.runtime.sendMessage({ type: M.GET_CURRENCIES }),
     ExtensionAPI.runtime.sendMessage({ type: M.GET_SETTINGS, origin: activePageUrl }),
@@ -123,15 +136,16 @@ async function initialize() {
     ExtensionAPI.storage.local.get(["recentCurrencies", "recentPairs"])
   ]);
 
-  if (!currenciesResult?.ok || !settingsResult?.ok) throw new Error("Could not load extension settings.");
+  if (!currenciesResult?.ok || !settingsResult?.ok) throw new Error(t("popup.settingsLoadFailed"));
   currencies = currenciesResult.currencies;
   currencyDetails = new Map((currenciesResult.details || []).map((currency) => [currency.code, currency]));
   catalogWarning = currenciesResult.warning || null;
   recentCurrencies = localPreferences.recentCurrencies || [];
   recentPairs = normalizeRecentPairs(localPreferences.recentPairs);
-  populateCurrencyLists();
   const settings = settingsController.initialize(settingsResult.settings);
-  if (!settings) throw new Error("The extension returned invalid settings.");
+  if (!settings) throw new Error(t("popup.invalidSettings"));
+  applyLanguage(settings.language);
+  populateCurrencyLists();
   enabledInput.checked = settings.enabled;
   fromCurrencySelect.value = settings.fromCurrency;
   toCurrencySelect.value = settings.toCurrency;
@@ -145,13 +159,8 @@ async function initialize() {
   rememberSiteInput.disabled = true;
   rememberSiteInput.title = statusResult?.ok
     ? ""
-    : statusResult?.error || "This page cannot be remembered.";
-  const activeHostname = safeUrl(activePageUrl)?.hostname;
-  rememberSiteHelpNode.textContent = statusResult?.ok
-    ? activeHostname
-      ? `Converts prices automatically on ${activeHostname}. Price scanning stays on this device.`
-      : defaultRememberSiteHelp
-    : statusResult?.error || "This page cannot be remembered.";
+    : statusResult?.error || t("popup.cannotRemember");
+  updateRememberSiteHelp();
   // Leftover site data is only ever discovered by a failed remember/forget in
   // this popup session; a freshly opened popup never has cleanup pending.
   clearSiteButton.hidden = true;
@@ -167,15 +176,17 @@ async function initialize() {
   clearPageButton.disabled = true;
   updateSecondaryActions();
   updateSiteState();
-  siteStateNode.title = `${currencies.length} provider currencies available${
-    currenciesResult.stale ? " from cached catalog" : ""
+  siteStateNode.title = `${
+    t(currenciesResult.stale ? "popup.catalogCached" : "popup.catalogAvailable", {
+      count: currencies.length
+    })
   }${catalogWarning ? `. ${catalogWarning}` : ""}`;
   updateSwapState();
   updateCurrencyDiscs();
   renderRecentPairs();
   updatePrimaryActionLabel();
   if (pageConversionError) {
-    setStatus(`${pageConversionError} You can still convert a custom amount.`, "warning");
+    setStatus(t("popup.pageUnavailableStatus", { message: pageConversionError }), "warning");
   }
 
   enabledInput.addEventListener("change", () => {
@@ -192,6 +203,10 @@ async function initialize() {
   });
   themeSelect.addEventListener("change", () => {
     applyTheme(themeSelect.value);
+    saveSettings({ syncPage: false });
+  });
+  languageSelect.addEventListener("change", () => {
+    applyLanguage(languageSelect.value);
     saveSettings({ syncPage: false });
   });
   displayModeSelect.addEventListener("change", () => saveSettings());
@@ -215,6 +230,7 @@ async function initialize() {
   if (shortcutKeyNode && navigator.userAgent.includes("Mac")) {
     shortcutKeyNode.textContent = "⌘ Cmd";
   }
+  renderShortcutHint();
 
   showReviewPromptIfDue().catch(() => {});
 }
@@ -234,6 +250,46 @@ async function showReviewPromptIfDue() {
     reviewPromptNode.hidden = true;
     ExtensionAPI.runtime.sendMessage({ type: M.DISMISS_REVIEW_PROMPT }).catch(() => {});
   });
+}
+
+function createCurrencyNames() {
+  try {
+    return new Intl.DisplayNames([I18n.language()], { type: "currency" });
+  } catch (_error) {
+    return null;
+  }
+}
+
+// Switches the whole popup to `preference` ("auto" or a language code) and redraws
+// every piece of text that was built from script rather than from the markup.
+function applyLanguage(preference) {
+  I18n.setLanguage(preference);
+  currencyNames = createCurrencyNames();
+  I18n.apply();
+  languageSelect.replaceChildren(...I18n.languageOptions().map(({ value, label }) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    return option;
+  }));
+  languageSelect.value = preference;
+  renderShortcutHint();
+  if (!popupReady) return;
+  populateCurrencyLists();
+  renderRecentPairs();
+  updateSiteState();
+  updateRememberSiteHelp();
+  updateSwapState();
+  updatePrimaryActionLabel();
+  updateAppearancePreview({ announce: false });
+  renderedHistoryPair = null;
+  scheduleQuickConversion({ immediate: true });
+}
+
+// The hint wraps the shortcut keys in markup, and word order differs between
+// languages, so the translation holds a {shortcut} slot for the existing node.
+function renderShortcutHint() {
+  hintNode.replaceChildren(...I18n.nodes("popup.hint", { shortcut: shortcutNode }));
 }
 
 function populateCurrencyLists() {
@@ -268,11 +324,20 @@ function populateCurrencyList(list, options) {
 }
 
 function getCurrencyName(currency) {
+  // The rate provider names currencies in English only, so another language
+  // asks the browser for a native name first and keeps the provider's as backup.
+  const localized = I18n.language() === "en" ? null : displayName(currency);
+  if (localized) return localized;
   if (currencyDetails.get(currency)?.name) return currencyDetails.get(currency).name;
+  return displayName(currency) || currency;
+}
+
+function displayName(currency) {
   try {
-    return currencyNames.of(currency) || currency;
+    const name = currencyNames?.of(currency);
+    return name && name !== currency ? name : null;
   } catch (_error) {
-    return currency;
+    return null;
   }
 }
 
@@ -375,9 +440,12 @@ function renderSparkline(history, baseCurrency, quoteCurrency) {
 
   const percent = history.changeRatio * 100;
   const direction = percent > 0.05 ? "up" : percent < -0.05 ? "down" : "flat";
-  rateSparkTitleNode.textContent = direction === "flat"
-    ? `${baseCurrency} to ${quoteCurrency} is flat over the last ${points.length} trading days.`
-    : `${baseCurrency} to ${quoteCurrency} is ${direction} ${Math.abs(percent).toFixed(1)}% over the last ${points.length} trading days.`;
+  rateSparkTitleNode.textContent = t(`popup.spark.${direction}`, {
+    base: baseCurrency,
+    quote: quoteCurrency,
+    percent: Math.abs(percent).toFixed(1),
+    span: t("popup.spark.span", { count: points.length })
+  });
   rateSparkNode.removeAttribute("hidden");
 }
 
@@ -399,7 +467,7 @@ function renderRecentPairs() {
 
   const label = document.createElement("span");
   label.className = "recent-pairs-label";
-  label.textContent = "Recent";
+  label.textContent = t("popup.recent");
   recentPairsNode.appendChild(label);
 
   for (const pair of pairs) {
@@ -407,7 +475,7 @@ function renderRecentPairs() {
     chip.type = "button";
     chip.className = "pair-chip";
     chip.textContent = `${pair.from}→${pair.to}`;
-    chip.title = `Switch to ${pair.from} to ${pair.to}`;
+    chip.title = t("popup.switchPair", { from: pair.from, to: pair.to });
     chip.disabled = !popupReady || popupLocked;
     chip.addEventListener("click", () => applyRecentPair(pair));
     recentPairsNode.appendChild(chip);
@@ -419,7 +487,7 @@ function applyRecentPair(pair) {
   const hasSource = [...fromCurrencySelect.options].some((option) => option.value === pair.from);
   const hasTarget = [...toCurrencySelect.options].some((option) => option.value === pair.to);
   if (!hasSource || !hasTarget) {
-    setStatus("That currency pair is no longer available from the rate provider.", "warning");
+    setStatus(t("popup.pairUnavailable"), "warning");
     return;
   }
   fromCurrencySelect.value = pair.from;
@@ -469,7 +537,7 @@ function renderCurrencyOptions(state) {
   if (!state.matches.length) {
     const empty = document.createElement("span");
     empty.className = "currency-list-empty";
-    empty.textContent = "No currencies found";
+    empty.textContent = t("popup.noCurrencies");
     state.listbox.appendChild(empty);
     state.input.removeAttribute("aria-activedescendant");
     return;
@@ -489,7 +557,7 @@ function renderCurrencyOptions(state) {
     option.appendChild(code);
     const name = document.createElement("span");
     name.textContent = sourceOption.value === "AUTO"
-      ? "Detect automatically"
+      ? t("popup.autoDetect")
       : getCurrencyName(sourceOption.value);
     option.appendChild(name);
     state.listbox.appendChild(option);
@@ -604,8 +672,8 @@ function bindColorControl(colorInput, hexInput) {
     const color = CurrencySettings.normalizeHexColor(hexInput.value.trim());
     if (!color) {
       hexInput.setAttribute("aria-invalid", "true");
-      hexInput.setCustomValidity("Enter a six-digit hex color, for example #166534.");
-      setStatus("Use a six-digit hex color such as #166534.", "error");
+      hexInput.setCustomValidity(t("popup.hexInvalid"));
+      setStatus(t("popup.hexInvalidStatus"), "error");
       return;
     }
     clearHexColorError(hexInput);
@@ -658,10 +726,10 @@ function updateAppearancePreview({ announce = true } = {}) {
   appearancePreviewNode.style.color = textColor;
   appearancePreviewNode.style.backgroundColor = backgroundColor;
   appearancePreviewNode.style.borderRadius = radius;
-  appearancePreviewNode.setAttribute(
-    "aria-label",
-    `After preview: approximately 90 euros, with ${textColor.toUpperCase()} text on a ${backgroundColor.toUpperCase()} background and ${shape} corners.`
-  );
+  appearancePreviewNode.setAttribute("aria-label", t("popup.previewAfterAria", {
+    text: textColor.toUpperCase(),
+    background: backgroundColor.toUpperCase()
+  }));
 
   const contrast = colorContrastRatio(textColor, backgroundColor);
   const result = describeContrast(contrast);
@@ -669,30 +737,26 @@ function updateAppearancePreview({ announce = true } = {}) {
   appearanceContrastNode.textContent = result.text;
   updateAppearanceResetState();
   if (announce) {
-    scheduleAppearanceAnnouncement(
-      `Preview updated to ${shape} corners with ${textColor.toUpperCase()} text and ${backgroundColor.toUpperCase()} background. ${result.text}`
-    );
+    scheduleAppearanceAnnouncement(t("popup.previewAnnouncement", {
+      text: textColor.toUpperCase(),
+      background: backgroundColor.toUpperCase(),
+      contrast: result.text
+    }));
   }
 }
 
 function describeContrast(contrast) {
   const ratio = contrast.toFixed(2);
   if (contrast >= 7) {
-    return { kind: "pass", text: `Contrast ${ratio}:1 — passes WCAG AAA for normal text.` };
+    return { kind: "pass", text: t("popup.contrastAAA", { ratio }) };
   }
   if (contrast >= 4.5) {
-    return { kind: "pass", text: `Contrast ${ratio}:1 — passes WCAG AA for normal text.` };
+    return { kind: "pass", text: t("popup.contrastAA", { ratio }) };
   }
   if (contrast >= 3) {
-    return {
-      kind: "warning",
-      text: `Contrast ${ratio}:1 — too low for normal text; aim for at least 4.5:1.`
-    };
+    return { kind: "warning", text: t("popup.contrastLow", { ratio }) };
   }
-  return {
-    kind: "fail",
-    text: `Contrast ${ratio}:1 — fails WCAG AA; choose colors with more separation.`
-  };
+  return { kind: "fail", text: t("popup.contrastFail", { ratio }) };
 }
 
 function colorContrastRatio(first, second) {
@@ -732,13 +796,10 @@ function saveSettings({ syncPage = true } = {}) {
 
 function handleInitializationFailure(error) {
   popupLocked = true;
-  siteStateNode.textContent = "Popup unavailable";
-  setRateHeroMessage("The rate service could not be reached.", "offline");
+  siteStateNode.textContent = t("popup.unavailable");
+  setRateHeroMessage(t("popup.rateServiceDown"), "offline");
   setPopupInteractivity(false);
-  setStatus(
-    `Twinprice could not start. ${errorMessage(error)} Close and reopen the popup to try again.`,
-    "error"
-  );
+  setStatus(t("popup.startFailed", { error: errorMessage(error) }), "error");
 }
 
 function lockPopupInteractions(message) {
@@ -760,6 +821,7 @@ function setPopupInteractivity(enabled) {
     toCurrencySearch,
     swapButton,
     themeSelect,
+    languageSelect,
     displayModeSelect,
     convertedTextColorInput,
     convertedTextColorHexInput,
@@ -795,6 +857,7 @@ function readSettingsFromControls() {
     fromCurrency: fromCurrencySelect.value,
     toCurrency: toCurrencySelect.value,
     theme: themeSelect.value,
+    language: languageSelect.value,
     displayMode: displayModeSelect.value,
     convertedTextColor: convertedTextColorInput.value,
     convertedBackgroundColor: convertedBackgroundColorInput.value,
@@ -806,18 +869,21 @@ function readSettingsFromControls() {
 function validateSettingsPayload(payload) {
   if (!["AUTO", ...currencies].includes(payload.fromCurrency) ||
       !currencies.includes(payload.toCurrency)) {
-    return "Choose a currency from the suggestion list.";
+    return t("popup.validateCurrency");
   }
-  if (payload.fromCurrency === payload.toCurrency) return "Choose two different currencies.";
+  if (payload.fromCurrency === payload.toCurrency) return t("popup.validateDifferent");
   if (!CurrencySettings.THEMES.includes(payload.theme)) {
-    return "Choose a supported app theme.";
+    return t("popup.validateTheme");
+  }
+  if (!CurrencySettings.LANGUAGES.includes(payload.language)) {
+    return t("popup.validateLanguage");
   }
   if (!CurrencySettings.normalizeHexColor(payload.convertedTextColor) ||
       !CurrencySettings.normalizeHexColor(payload.convertedBackgroundColor)) {
-    return "Use six-digit hex colors such as #166534.";
+    return t("popup.validateColors");
   }
   if (!CurrencySettings.CONVERTED_SHAPES.includes(payload.convertedShape)) {
-    return "Choose a supported converted-price shape.";
+    return t("popup.validateShape");
   }
   return null;
 }
@@ -849,10 +915,10 @@ async function finalizeSavedSettings(settings, { syncPage, isCurrent }) {
   scheduleQuickConversion({ immediate: true });
   setStatus(
     settings.enabled
-      ? "Webpage conversion is ready."
+      ? t("popup.status.ready")
       : siteStatus?.remembered
-        ? "Converter is off. Automatic conversion is paused; the site choice remains."
-        : "Converter is off.",
+        ? t("popup.status.offPaused")
+        : t("popup.status.off"),
     "success"
   );
   if (syncPage) {
@@ -861,7 +927,7 @@ async function finalizeSavedSettings(settings, { syncPage, isCurrent }) {
       settings.enabled ? {} : { suppressPrompt: true }
     );
     if (!isCurrent()) return;
-    if (!pageResult?.ok) setStatus(pageResult?.error || "This page cannot be accessed.", "error");
+    if (!pageResult?.ok) setStatus(pageResult?.error || t("popup.cannotAccess"), "error");
     else if (!settings.enabled) {
       clearPageButton.disabled = true;
       clearPageButton.hidden = true;
@@ -877,6 +943,7 @@ function applySettingsToControls(settings) {
   fromCurrencySelect.value = settings.fromCurrency;
   toCurrencySelect.value = settings.toCurrency;
   applyTheme(settings.theme);
+  if (languageSelect.value !== settings.language) applyLanguage(settings.language);
   displayModeSelect.value = settings.displayMode;
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
@@ -900,7 +967,7 @@ function applyTheme(theme) {
 function swapCurrencies() {
   const source = fromCurrencySelect.value === "AUTO" ? lastDetectedCurrency : fromCurrencySelect.value;
   if (!source) {
-    setStatus("Convert once so AUTO can identify the source currency.", "error");
+    setStatus(t("popup.needsConvertOnce"), "error");
     return;
   }
   const target = toCurrencySelect.value;
@@ -914,15 +981,15 @@ function swapCurrencies() {
 
 function updateSwapState() {
   swapButton.title = fromCurrencySelect.value === "AUTO" && !lastDetectedCurrency
-    ? "Convert once before swapping an automatically detected source"
-    : "Swap currencies";
+    ? t("popup.swapNeedsConvert")
+    : t("popup.swap");
 }
 
 async function handleRememberSiteChange() {
   const origin = getActiveOrigin();
   if (!origin || !siteStatus?.ok) {
     rememberSiteInput.checked = false;
-    setStatus("This page cannot be remembered.", "error");
+    setStatus(t("popup.cannotRemember"), "error");
     return;
   }
 
@@ -935,13 +1002,13 @@ async function handleRememberSiteChange() {
         setupFailureState = result;
         siteStatus.remembered = Boolean(result?.remembered);
         siteStatus.cleanupRequired = Boolean(result?.dataRemaining);
-        throw new Error(result?.error || "Could not remember this site.");
+        throw new Error(result?.error || t("popup.rememberFailed"));
       }
       siteStatus.remembered = true;
       siteStatus.cleanupRequired = false;
       clearSiteButton.hidden = true;
       updateSecondaryActions();
-      setStatus(`Automatic conversion is on for ${safeUrl(origin)?.hostname || "this site"}.`, "success");
+      setStatus(t("popup.autoOn", { host: safeUrl(origin)?.hostname || t("popup.thisSite") }), "success");
     } else {
       const pageClearResult = await sendToActivePage(M.CLEAR_SITE_CONVERSION, {
         forgetSite: false,
@@ -953,7 +1020,7 @@ async function handleRememberSiteChange() {
         siteStatus.remembered = Boolean(result?.remembered);
         siteStatus.cleanupRequired = Boolean(result?.dataRemaining);
         clearSiteButton.hidden = false;
-        throw new Error(result?.error || "Could not disable automatic conversion for this site.");
+        throw new Error(result?.error || t("popup.forgetFailed"));
       }
       siteStatus.remembered = false;
       siteStatus.cleanupRequired = false;
@@ -965,8 +1032,8 @@ async function handleRememberSiteChange() {
       updateSecondaryActions();
       setStatus(
         pageClearResult?.ok
-          ? `Automatic conversion is off for ${safeUrl(origin)?.hostname || "this site"}. Price detection remains available.`
-          : "Automatic conversion is off. Reload this page if an existing conversion remains visible.",
+          ? t("popup.autoOff", { host: safeUrl(origin)?.hostname || t("popup.thisSite") })
+          : t("popup.autoOffReload"),
         pageClearResult?.ok ? "success" : "warning"
       );
     }
@@ -985,7 +1052,7 @@ async function handleRememberSiteChange() {
 
 async function convertWholeSite() {
   if (pageConversionError) {
-    setStatus(`${pageConversionError} You can still convert a custom amount.`, "warning");
+    setStatus(t("popup.pageUnavailableStatus", { message: pageConversionError }), "warning");
     return;
   }
   const turningOn = !enabledInput.checked;
@@ -1001,7 +1068,7 @@ async function convertWholeSite() {
   } else {
     setBusy(true);
   }
-  setStatus("Scanning prices…");
+  setStatus(t("popup.scanning"));
   const result = await sendToActivePage(M.RUN_SITE_CONVERSION);
   setBusy(false);
   if (result?.cancelled) {
@@ -1009,10 +1076,10 @@ async function convertWholeSite() {
     updateSecondaryActions();
     setStatus(
       enabledInput.checked
-        ? "Conversion cancelled."
+        ? t("popup.cancelled")
         : siteStatus?.remembered
-          ? "Converter is off. Automatic conversion is paused; the site choice remains."
-          : "Converter is off.",
+          ? t("popup.status.offPaused")
+          : t("popup.status.off"),
       enabledInput.checked ? "warning" : "success"
     );
     return;
@@ -1020,10 +1087,8 @@ async function convertWholeSite() {
   if (!result?.ok && !Number.isFinite(result?.count)) {
     setStatus(
       turningOn
-        ? `The converter is on, but this page could not be converted. ${
-          result?.error || "Try again."
-        }`
-        : result?.error || "Could not convert this page.",
+        ? t("popup.turnedOnFailed", { detail: result?.error || t("popup.tryAgain") })
+        : result?.error || t("popup.convertFailed"),
       "error"
     );
     return;
@@ -1038,19 +1103,27 @@ async function convertWholeSite() {
   updateSecondaryActions();
   setStatus(
     hasConversions
-      ? `Converted ${result.count} price${result.count === 1 ? "" : "s"}.${
-        result.scanLimited ? " Large-page scan limit reached." : ""
+      ? `${t("popup.converted", { count: result.count })}${
+        result.scanLimited ? ` ${t("popup.scanLimit")}` : ""
       }`
-      : `No supported prices found on this page.${result?.error ? ` ${result.error}` : ""}`,
+      : `${t("popup.noPrices")}${result?.error ? ` ${result.error}` : ""}`,
     hasConversions ? "success" : "warning"
   );
+  const cachedPart = result.staleRates
+    ? t(result.cacheAgeLabel ? "popup.cachedAge" : "popup.cached", { age: result.cacheAgeLabel })
+    : "";
   const fullRateInfo = result.rateDate
-    ? `Rate date: ${result.rateDate}${result.rateProvider ? ` · ${result.rateProvider}` : ""}${
-      result.staleRates ? ` · cached${result.cacheAgeLabel ? `, ${result.cacheAgeLabel}` : ""}` : ""
-    }${result.rateWarning ? ` · Warning: ${result.rateWarning}` : ""}`
+    ? [
+      t("popup.rateDateFull", { date: result.rateDate }),
+      result.rateProvider || null,
+      cachedPart || null,
+      result.rateWarning ? t("popup.warning", { warning: result.rateWarning }) : null
+    ].filter(Boolean).join(" · ")
     : "";
   rateInfoNode.textContent = result.rateDate
-    ? `Rate ${result.rateDate}${result.staleRates ? ` · Cached${result.cacheAgeLabel ? `, ${result.cacheAgeLabel}` : ""}` : ""}`
+    ? [t("popup.rateShort", { date: result.rateDate }), cachedPart || null]
+      .filter(Boolean)
+      .join(" · ")
     : "";
   rateInfoNode.title = fullRateInfo;
   if (result.rateWarning) rateInfoNode.dataset.kind = "warning";
@@ -1066,7 +1139,7 @@ async function clearWholeSite() {
     clearSiteButton.hidden = false;
     updateSecondaryActions();
     updateSiteState();
-    setStatus(result?.error || "Could not clear this page.", "error");
+    setStatus(result?.error || t("popup.clearFailed"), "error");
     return;
   }
   siteStatus.remembered = false;
@@ -1076,7 +1149,7 @@ async function clearWholeSite() {
   clearSiteButton.hidden = true;
   updateSecondaryActions();
   updateSiteState();
-  setStatus("Original prices restored and the automatic-site setting was cleared.", "success");
+  setStatus(t("popup.siteCleared"), "success");
 }
 
 async function clearCurrentPage() {
@@ -1085,7 +1158,7 @@ async function clearCurrentPage() {
     suppressPrompt: true
   });
   setStatus(
-    result?.ok ? "Conversion undone on this page." : result?.error || "Could not undo conversion.",
+    result?.ok ? t("popup.undone") : result?.error || t("popup.undoFailed"),
     result?.ok ? "success" : "error"
   );
   if (result?.ok) {
@@ -1101,8 +1174,8 @@ function setBusy(busy, { turningOn = false } = {}) {
   convertSiteButton.disabled = busy || Boolean(pageConversionError);
   if (busy) {
     convertSiteButton.textContent = turningOn
-      ? "Turning on and converting…"
-      : "Converting page…";
+      ? t("popup.busyTurningOn")
+      : t("popup.busyConverting");
   } else {
     updatePrimaryActionLabel();
   }
@@ -1116,13 +1189,13 @@ function updatePrimaryActionLabel() {
   }
   if (pageConversionError) {
     convertSiteButton.disabled = true;
-    convertSiteButton.textContent = "Page conversion unavailable";
+    convertSiteButton.textContent = t("popup.convertUnavailable");
     return;
   }
   convertSiteButton.disabled = false;
   convertSiteButton.textContent = enabledInput.checked
-    ? "Convert page prices"
-    : "Turn on and convert page";
+    ? t("popup.convertPage")
+    : t("popup.turnOnConvert");
 }
 
 function updateSecondaryActions() {
@@ -1190,20 +1263,20 @@ async function calculateQuickConversion() {
     populateCurrencyLists();
     quickSourceRequiredNode.hidden = false;
     quickConverterFieldsNode.hidden = true;
-    setRateHeroMessage("Convert once so AUTO can identify the source currency.", "stale");
-    setQuickConversionState("Choose source", "Select a source currency above.", "empty");
+    setRateHeroMessage(t("popup.needsConvertOnce"), "stale");
+    setQuickConversionState(t("popup.chooseSourceShort"), t("popup.chooseSourceDetail"), "empty");
     return;
   }
   quickSourceRequiredNode.hidden = true;
   quickConverterFieldsNode.hidden = false;
   if (!currencies.includes(sourceCurrency) || !currencies.includes(targetCurrency)) {
-    setRateHeroMessage("Select supported source and target currencies.", "offline");
-    setQuickConversionState("Choose currencies", "Select supported source and target currencies.", "error");
+    setRateHeroMessage(t("popup.chooseSupported"), "offline");
+    setQuickConversionState(t("popup.chooseCurrencies"), t("popup.chooseSupported"), "error");
     return;
   }
   if (sourceCurrency === targetCurrency) {
-    setRateHeroMessage("Source and target must differ.", "offline");
-    setQuickConversionState("Choose different currencies", "Source and target must differ.", "error");
+    setRateHeroMessage(t("popup.mustDiffer"), "offline");
+    setQuickConversionState(t("popup.chooseDifferent"), t("popup.mustDiffer"), "error");
     return;
   }
   // The rate is fetched even when the amount is unusable so the header hero stays
@@ -1212,14 +1285,14 @@ async function calculateQuickConversion() {
     allowThreeDecimals: CurrencyCatalog.currencyFractionDigits(sourceCurrency) === 3
   }) : NaN;
   const amountProblem = !amountText
-    ? { result: "Enter an amount", detail: "" }
+    ? { result: t("popup.enterAmount"), detail: "" }
     : !Number.isFinite(amount)
-      ? { result: "Invalid amount", detail: "Use a number such as 100 or 1,234.56." }
+      ? { result: t("popup.invalidAmount"), detail: t("popup.invalidAmountDetail") }
       : null;
 
   quickOutputLabelNode.textContent = getCurrencyName(targetCurrency);
   if (amountProblem) setQuickConversionState(amountProblem.result, amountProblem.detail, "error");
-  else setQuickConversionState("Converting…", "", "loading");
+  else setQuickConversionState(t("popup.convertingShort"), "", "loading");
   if (availableRatesSource !== sourceCurrency) {
     availableQuoteCurrencies = null;
     availableRatesSource = sourceCurrency;
@@ -1233,9 +1306,10 @@ async function calculateQuickConversion() {
   }
   const rate = result?.rates?.[targetCurrency];
   if (!result?.ok || !Number.isFinite(rate)) {
-    const unavailable = result?.error || `No ${sourceCurrency} to ${targetCurrency} rate is available.`;
+    const unavailable = result?.error ||
+      t("popup.noRate", { from: sourceCurrency, to: targetCurrency });
     setRateHeroMessage(unavailable, "offline");
-    setQuickConversionState("Rate unavailable", unavailable, "error");
+    setQuickConversionState(t("popup.rateUnavailable"), unavailable, "error");
     return;
   }
 
@@ -1250,18 +1324,21 @@ async function calculateQuickConversion() {
   if (amountProblem) return;
 
   const converted = CurrencyCatalog.formatCurrencyAmount(amount * rate, targetCurrency);
+  const cached = result.stale
+    ? t(result.cacheAgeLabel ? "popup.cachedAge" : "popup.cached", { age: result.cacheAgeLabel })
+    : null;
   const details = [
     `1 ${sourceCurrency} = ${rate} ${targetCurrency}`,
-    result.date ? `Rate date: ${result.date}` : null,
+    result.date ? t("popup.rateDateFull", { date: result.date }) : null,
     result.provider || null,
-    result.stale ? `Cached${result.cacheAgeLabel ? `, ${result.cacheAgeLabel}` : ""}` : null,
+    cached,
     result.warning || null,
-    catalogWarning ? `Currency catalog: ${catalogWarning}` : null
+    catalogWarning ? t("popup.catalogWarning", { warning: catalogWarning }) : null
   ].filter(Boolean).join(" · ");
   const summary = [
     `1 ${sourceCurrency} = ${rate} ${targetCurrency}`,
     result.date || null,
-    result.stale ? `Cached${result.cacheAgeLabel ? `, ${result.cacheAgeLabel}` : ""}` : null
+    cached
   ].filter(Boolean).join(" · ");
   setQuickConversionState(converted, summary, result.warning ? "warning" : "success", details);
 }
@@ -1276,13 +1353,22 @@ function setQuickConversionState(result, details, kind, fullDetails = details) {
   if (kind !== "loading") replayAnimation(quickResultNode, "is-updated");
 }
 
+function updateRememberSiteHelp() {
+  const host = safeUrl(activeTab?.url)?.hostname;
+  rememberSiteHelpNode.textContent = siteStatus?.ok
+    ? host
+      ? t("popup.rememberHelpHost", { host })
+      : t("popup.rememberHelp")
+    : siteStatus?.error || t("popup.cannotRemember");
+}
+
 function updateSiteState() {
   const hostname = activeTab?.url ? safeUrl(activeTab.url)?.hostname : "";
   siteStateNode.textContent = siteStatus?.remembered
-    ? `${hostname || "Current site"} · automatic conversion ${
-      enabledInput.checked ? "on" : "paused"
-    }`
-    : hostname || "Current page";
+    ? t(enabledInput.checked ? "popup.siteAutoOn" : "popup.siteAutoPaused", {
+      host: hostname || t("popup.currentSite")
+    })
+    : hostname || t("popup.currentPage");
 }
 
 function getActiveOrigin() {
@@ -1297,11 +1383,14 @@ function safeUrl(value) {
 function describeRateFreshness(result) {
   if (result.stale) {
     return [
-      `Cached${result.cacheAgeLabel ? `, ${result.cacheAgeLabel}` : ""}`,
+      t(result.cacheAgeLabel ? "popup.cachedAge" : "popup.cached", { age: result.cacheAgeLabel }),
       result.date || null
     ].filter(Boolean).join(" · ");
   }
-  return [result.date ? `Rate ${result.date}` : "Latest rate", result.provider || null]
+  return [
+    result.date ? t("popup.rateShort", { date: result.date }) : t("popup.latestRate"),
+    result.provider || null
+  ]
     .filter(Boolean)
     .join(" · ");
 }
@@ -1334,14 +1423,14 @@ async function storeRecentCurrencies(settings) {
 }
 
 async function sendToActivePage(type, payload = {}) {
-  if (!activeTab?.id) return { ok: false, error: "No active tab found." };
+  if (!activeTab?.id) return { ok: false, error: t("popup.noTab") };
   const unsupportedPage = CurrencyPageAccess.unsupportedPageMessage(activeTab.url);
   if (unsupportedPage) return { ok: false, error: unsupportedPage };
   try {
     await ensureContentScripts(activeTab.id);
     return await ExtensionAPI.tabs.sendMessage(activeTab.id, { type, ...payload }) || {
       ok: false,
-      error: "The page did not respond. Reload it once and try again."
+      error: t("popup.pageNoResponse")
     };
   } catch (error) {
     console.error("Twinprice could not reach the active page.", error);
@@ -1350,5 +1439,5 @@ async function sendToActivePage(type, payload = {}) {
 }
 
 function errorMessage(error) {
-  return error instanceof Error && error.message ? error.message : String(error || "Unknown browser error");
+  return error instanceof Error && error.message ? error.message : String(error || t("popup.unknownError"));
 }

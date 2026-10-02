@@ -18,6 +18,7 @@ test("shared settings schema sanitizes every persisted field", () => {
     fromCurrency: "BTC",
     toCurrency: "DOGE",
     theme: "neon",
+    language: "klingon",
     displayMode: "html",
     convertedTextColor: "#ABCDEF",
     convertedBackgroundColor: "invalid",
@@ -30,6 +31,7 @@ test("shared settings schema sanitizes every persisted field", () => {
     fromCurrency: "AUTO",
     toCurrency: "EUR",
     theme: "system",
+    language: "auto",
     displayMode: "beside",
     convertedTextColor: "#abcdef",
     convertedBackgroundColor: "#dcfce7",
@@ -51,6 +53,8 @@ test("shared settings schema validates and compares complete snapshots", () => {
   assert.equal(settings.snapshotEquals(normalized, { ...normalized }), true);
   assert.equal(settings.normalizeSnapshot({ ...snapshot, convertedShape: "cloud" }), null);
   assert.equal(settings.normalizeSnapshot({ ...snapshot, theme: "neon" }), null);
+  assert.equal(settings.normalizeSnapshot({ ...snapshot, language: "klingon" }), null);
+  assert.equal(settings.normalizeSnapshot({ ...snapshot, language: "uk" }).language, "uk");
   assert.equal(settings.normalizeSnapshot({ ...snapshot, toCurrency: "JPY" }, ["EUR", "USD"]), null);
 });
 
