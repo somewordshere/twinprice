@@ -22,8 +22,9 @@ release/*.zip
 release/*/*/
 !release/*-chrome-store.zip
 
-# Publish only the screenshots used by the README
+# Publish the screenshots folder: the README images (v2-*) and the numbered shots
 screenshots/*
+!screenshots/*.png
 !screenshots/v2-popup-light.png
 !screenshots/v2-popup-dark.png
 !screenshots/v2-popup-options.png
