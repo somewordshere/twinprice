@@ -162,6 +162,9 @@ assert.deepEqual(
     "../shared/browser-api.js",
     "../shared/currencies.js",
     "../shared/settings.js",
+    "../shared/i18n.js",
+    "../shared/translations-page.js",
+    "../shared/translations-app.js",
     "../shared/messages.js",
     "../shared/page-access.js",
     "../shared/content-script-resources.js",
@@ -205,6 +208,9 @@ const runtimeFiles = [
   "src/shared/browser-api.js",
   "src/shared/currencies.js",
   "src/shared/settings.js",
+  "src/shared/i18n.js",
+  "src/shared/translations-page.js",
+  "src/shared/translations-app.js",
   "src/shared/messages.js",
   "src/shared/page-access.js",
   "src/shared/content-script-resources.js",
@@ -238,6 +244,8 @@ for (const directory of ["background", "content", "onboarding", "popup", "shared
 for (const file of walkJavaScript(path.join(root, "src"))) {
   const contents = fs.readFileSync(file, "utf8");
   if (file.endsWith("browser-api.js")) continue;
+  // Translation files are prose, and sentences about "your browser." are not API calls.
+  if (/translations-[a-z]+\.js$/.test(file)) continue;
   assert.doesNotMatch(contents, /\b(?:chrome|browser)\./, `use ExtensionAPI in ${file}`);
 }
 

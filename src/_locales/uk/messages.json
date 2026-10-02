@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - Конвертер валют для кожної ціни на сторінці",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Конвертер валют для сторінок",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Ціни в магазинах у вашій валюті, поруч із початковою. Понад 160 валют. Вміст сторінок ніколи не залишає ваш браузер.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

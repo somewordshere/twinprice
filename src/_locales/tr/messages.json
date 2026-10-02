@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Twinprice - Sayfadaki Her Fiyat İçin Döviz Çevirici",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Her Sayfa İçin Döviz Çevirici",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Mağaza fiyatlarını kendi para biriminde, özgün fiyatın yanında gör. 160'tan fazla para birimi. Sayfa içeriği tarayıcından çıkmaz.",
+    "description": "Store summary. At most 132 characters."
+  }
+}

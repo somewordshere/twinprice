@@ -16,7 +16,7 @@
             <path d="M12 7v10"/>
           </svg>
           <h1><a class="brand-link" href="https://twinprice.com/" target="_blank" rel="noopener noreferrer">twinprice.com</a></h1>
-          <button id="openPageOptions" class="head-button" type="button" title="Page options" aria-label="Page options" disabled>
+          <button id="openPageOptions" class="head-button" type="button" title="Page options" aria-label="Page options" data-i18n-title="popup.pageOptions" data-i18n-aria-label="popup.pageOptions" disabled>
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="3"/>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -39,7 +39,7 @@
             </p>
           </div>
           <svg id="rateSpark" class="rate-spark" width="76" height="30" viewBox="0 0 76 30" fill="none" role="img" aria-labelledby="rateSparkTitle" hidden>
-            <title id="rateSparkTitle">Seven-day rate trend</title>
+            <title id="rateSparkTitle" data-i18n="popup.sparkTitle">Seven-day rate trend</title>
             <path id="rateSparkFill" class="spark-fill" d=""/>
             <path id="rateSparkLine" class="spark-line" d="" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             <circle id="rateSparkPoint" cx="0" cy="0" r="2.6"/>
@@ -48,19 +48,19 @@
       </header>
 
       <div class="body">
-        <section class="currency-panel" aria-label="Currency pair">
+        <section class="currency-panel" aria-label="Currency pair" data-i18n-aria-label="popup.pairGroup">
           <label class="field">
-            <span>From</span>
+            <span data-i18n="popup.from">From</span>
             <span class="field-control">
               <span id="fromCurrencyDisc" class="currency-disc" aria-hidden="true">—</span>
               <span class="currency-combobox">
-                <input id="fromCurrencySearch" type="text" role="combobox" aria-label="Source currency" aria-autocomplete="list" aria-expanded="false" aria-controls="fromCurrencyList" autocomplete="off" spellcheck="false" disabled>
-                <span id="fromCurrencyList" class="currency-listbox" role="listbox" aria-label="Source currencies" hidden></span>
+                <input id="fromCurrencySearch" type="text" role="combobox" aria-label="Source currency" data-i18n-aria-label="popup.sourceCurrency" aria-autocomplete="list" aria-expanded="false" aria-controls="fromCurrencyList" autocomplete="off" spellcheck="false" disabled>
+                <span id="fromCurrencyList" class="currency-listbox" role="listbox" aria-label="Source currencies" data-i18n-aria-label="popup.sourceCurrencies" hidden></span>
                 <select id="fromCurrency" class="currency-select-native" aria-hidden="true" tabindex="-1" disabled></select>
               </span>
             </span>
           </label>
-          <button id="swapCurrencies" class="icon-button" type="button" title="Swap currencies" aria-label="Swap currencies" disabled>
+          <button id="swapCurrencies" class="icon-button" type="button" title="Swap currencies" aria-label="Swap currencies" data-i18n-aria-label="popup.swap" disabled>
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="m17 2 4 4-4 4"/>
               <path d="M3 6h18"/>
@@ -69,33 +69,33 @@
             </svg>
           </button>
           <label class="field">
-            <span>To</span>
+            <span data-i18n="popup.to">To</span>
             <span class="field-control">
               <span id="toCurrencyDisc" class="currency-disc" aria-hidden="true">—</span>
               <span class="currency-combobox">
-                <input id="toCurrencySearch" type="text" role="combobox" aria-label="Target currency" aria-autocomplete="list" aria-expanded="false" aria-controls="toCurrencyList" autocomplete="off" spellcheck="false" disabled>
-                <span id="toCurrencyList" class="currency-listbox" role="listbox" aria-label="Target currencies" hidden></span>
+                <input id="toCurrencySearch" type="text" role="combobox" aria-label="Target currency" data-i18n-aria-label="popup.targetCurrency" aria-autocomplete="list" aria-expanded="false" aria-controls="toCurrencyList" autocomplete="off" spellcheck="false" disabled>
+                <span id="toCurrencyList" class="currency-listbox" role="listbox" aria-label="Target currencies" data-i18n-aria-label="popup.targetCurrencies" hidden></span>
                 <select id="toCurrency" class="currency-select-native" aria-hidden="true" tabindex="-1" disabled></select>
               </span>
             </span>
           </label>
         </section>
 
-        <div id="recentPairs" class="recent-pairs" role="group" aria-label="Recent currency pairs" hidden>
-          <span class="recent-pairs-label">Recent</span>
+        <div id="recentPairs" class="recent-pairs" role="group" aria-label="Recent currency pairs" data-i18n-aria-label="popup.recentGroup" hidden>
+          <span class="recent-pairs-label" data-i18n="popup.recent">Recent</span>
         </div>
 
         <button id="convertSite" class="primary" type="button" disabled>Turn on and convert page</button>
 
         <section id="quickConverter" class="quick-converter" aria-labelledby="quickConverterTitle">
-          <h2 id="quickConverterTitle" class="quick-converter-title">Convert a custom amount</h2>
+          <h2 id="quickConverterTitle" class="quick-converter-title" data-i18n="popup.quickTitle">Convert a custom amount</h2>
           <div id="quickSourceRequired" class="quick-source-required" hidden>
-            <p>Choose a source currency before converting an amount.</p>
-            <button id="chooseQuickSource" class="secondary" type="button" disabled>Choose source currency</button>
+            <p data-i18n="popup.quickNeedsSource">Choose a source currency before converting an amount.</p>
+            <button id="chooseQuickSource" class="secondary" type="button" data-i18n="popup.chooseSource" disabled>Choose source currency</button>
           </div>
           <div id="quickConverterFields" class="quick-converter-grid">
             <label class="field" for="quickAmount">
-              <span>Amount</span>
+              <span data-i18n="popup.amount">Amount</span>
               <input id="quickAmount" type="text" inputmode="decimal" autocomplete="off" value="1" disabled>
             </label>
             <span class="quick-arrow" aria-hidden="true">
@@ -113,8 +113,8 @@
         </section>
 
         <div id="secondaryActions" class="secondary-actions" hidden>
-          <button id="clearPage" class="secondary" type="button" hidden disabled>Restore original prices</button>
-          <button id="clearSite" class="secondary danger" type="button" hidden disabled>Clear site setting</button>
+          <button id="clearPage" class="secondary" type="button" data-i18n="popup.restorePrices" hidden disabled>Restore original prices</button>
+          <button id="clearSite" class="secondary danger" type="button" data-i18n="popup.clearSite" hidden disabled>Clear site setting</button>
         </div>
 
         <div id="statusContainer" class="status-container" data-visible="false" role="status" aria-live="polite" aria-atomic="true">
@@ -124,12 +124,12 @@
         <p id="rateInfo" class="rate-info"></p>
 
         <details id="pageOptions" class="page-options" inert>
-          <summary>Page options</summary>
+          <summary data-i18n="popup.pageOptions">Page options</summary>
           <div class="page-options-content">
             <div class="enable-row">
               <span>
-                <label id="enabledLabel" for="enabled"><strong>Enable converter</strong></label>
-                <small id="enabledHelp">Pause or resume price detection and conversion without changing automatic-site choices.</small>
+                <label id="enabledLabel" for="enabled"><strong data-i18n="popup.enable">Enable converter</strong></label>
+                <small id="enabledHelp" data-i18n="popup.enableHelp">Pause or resume price detection and conversion without changing automatic-site choices.</small>
               </span>
               <span class="switch">
                 <input id="enabled" type="checkbox" aria-labelledby="enabledLabel" aria-describedby="enabledHelp" disabled>
@@ -138,72 +138,77 @@
             </div>
 
             <label class="display-row">
-              <span>App theme</span>
-              <select id="theme" aria-label="App theme" disabled>
-                <option value="system">Match system</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
+              <span data-i18n="popup.language">Language</span>
+              <select id="language" aria-label="Language" data-i18n-aria-label="popup.language" disabled></select>
+            </label>
+
+            <label class="display-row">
+              <span data-i18n="popup.theme">App theme</span>
+              <select id="theme" aria-label="App theme" data-i18n-aria-label="popup.theme" disabled>
+                <option value="system" data-i18n="popup.themeSystem">Match system</option>
+                <option value="light" data-i18n="popup.themeLight">Light</option>
+                <option value="dark" data-i18n="popup.themeDark">Dark</option>
               </select>
             </label>
 
             <label class="display-row">
-              <span>Price display</span>
+              <span data-i18n="popup.displayMode">Price display</span>
               <select id="displayMode" disabled>
-                <option value="beside">Original and converted</option>
-                <option value="replace">Converted only</option>
+                <option value="beside" data-i18n="popup.displayBeside">Original and converted</option>
+                <option value="replace" data-i18n="popup.displayReplace">Converted only</option>
               </select>
             </label>
 
             <fieldset class="appearance-editor" aria-describedby="appearanceHelp">
-              <legend>Converted price appearance</legend>
-              <p id="appearanceHelp" class="appearance-help">Choose colors and a shape, then compare the original converter style with your changes.</p>
+              <legend data-i18n="popup.appearance">Converted price appearance</legend>
+              <p id="appearanceHelp" class="appearance-help" data-i18n="popup.appearanceHelp">Choose colors and a shape, then compare the original converter style with your changes.</p>
 
               <div class="appearance-color-grid">
                 <div class="color-setting" role="group" aria-labelledby="convertedTextColorLabel">
-                  <span id="convertedTextColorLabel" class="setting-label">Text color</span>
+                  <span id="convertedTextColorLabel" class="setting-label" data-i18n="popup.textColor">Text color</span>
                   <div class="color-inputs">
-                    <input id="convertedTextColor" type="color" aria-label="Text color picker" value="#166534" disabled>
-                    <input id="convertedTextColorHex" class="color-hex" type="text" aria-label="Text color hex value" aria-describedby="colorFormatHelp" value="#166534" maxlength="7" pattern="#[0-9A-Fa-f]{6}" autocomplete="off" spellcheck="false" disabled>
+                    <input id="convertedTextColor" type="color" aria-label="Text color picker" data-i18n-aria-label="popup.textColorPicker" value="#166534" disabled>
+                    <input id="convertedTextColorHex" class="color-hex" type="text" aria-label="Text color hex value" data-i18n-aria-label="popup.textColorHex" aria-describedby="colorFormatHelp" value="#166534" maxlength="7" pattern="#[0-9A-Fa-f]{6}" autocomplete="off" spellcheck="false" disabled>
                   </div>
                 </div>
 
                 <div class="color-setting" role="group" aria-labelledby="convertedBackgroundColorLabel">
-                  <span id="convertedBackgroundColorLabel" class="setting-label">Background</span>
+                  <span id="convertedBackgroundColorLabel" class="setting-label" data-i18n="popup.background">Background</span>
                   <div class="color-inputs">
-                    <input id="convertedBackgroundColor" type="color" aria-label="Background color picker" value="#dcfce7" disabled>
-                    <input id="convertedBackgroundColorHex" class="color-hex" type="text" aria-label="Background color hex value" aria-describedby="colorFormatHelp" value="#dcfce7" maxlength="7" pattern="#[0-9A-Fa-f]{6}" autocomplete="off" spellcheck="false" disabled>
+                    <input id="convertedBackgroundColor" type="color" aria-label="Background color picker" data-i18n-aria-label="popup.backgroundPicker" value="#dcfce7" disabled>
+                    <input id="convertedBackgroundColorHex" class="color-hex" type="text" aria-label="Background color hex value" data-i18n-aria-label="popup.backgroundHex" aria-describedby="colorFormatHelp" value="#dcfce7" maxlength="7" pattern="#[0-9A-Fa-f]{6}" autocomplete="off" spellcheck="false" disabled>
                   </div>
                 </div>
               </div>
-              <p id="colorFormatHelp" class="color-format-help">Hex format: #RRGGBB</p>
+              <p id="colorFormatHelp" class="color-format-help" data-i18n="popup.hexFormat">Hex format: #RRGGBB</p>
 
               <fieldset class="shape-picker">
-                <legend>Shape</legend>
+                <legend data-i18n="popup.shape">Shape</legend>
                 <div class="shape-options">
                   <label>
                     <input type="radio" name="convertedShape" value="square" disabled>
-                    <span>Square</span>
+                    <span data-i18n="popup.shapeSquare">Square</span>
                   </label>
                   <label>
                     <input type="radio" name="convertedShape" value="rounded" checked disabled>
-                    <span>Rounded</span>
+                    <span data-i18n="popup.shapeRounded">Rounded</span>
                   </label>
                   <label>
                     <input type="radio" name="convertedShape" value="pill" disabled>
-                    <span>Pill</span>
+                    <span data-i18n="popup.shapePill">Pill</span>
                   </label>
                 </div>
               </fieldset>
 
-              <div class="appearance-comparison" role="group" aria-label="Converted price appearance comparison">
+              <div class="appearance-comparison" role="group" aria-label="Converted price appearance comparison" data-i18n-aria-label="popup.comparison">
                 <div class="preview-card">
-                  <span class="preview-label">Before · Default</span>
+                  <span class="preview-label" data-i18n="popup.previewBefore">Before · Default</span>
                   <div class="preview-stage">
-                    <span>$100.00</span><span class="converted-preview preview-before" aria-label="Before preview: approximately 90 euros in default green text without a background">&asymp; &euro;90.00</span>
+                    <span>$100.00</span><span class="converted-preview preview-before" aria-label="Before preview: approximately 90 euros in default green text without a background" data-i18n-aria-label="popup.previewBeforeAria">&asymp; &euro;90.00</span>
                   </div>
                 </div>
                 <div class="preview-card">
-                  <span class="preview-label">After · Your style</span>
+                  <span class="preview-label" data-i18n="popup.previewAfter">After · Your style</span>
                   <div class="preview-stage">
                     <span>$100.00</span><span id="appearancePreview" class="converted-preview preview-after">&asymp; &euro;90.00</span>
                   </div>
@@ -212,13 +217,13 @@
 
               <p id="appearanceContrast" class="appearance-contrast"></p>
               <span id="appearanceAnnouncement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
-              <button id="resetAppearance" class="reset-appearance" type="button" disabled>Reset appearance</button>
+              <button id="resetAppearance" class="reset-appearance" type="button" data-i18n="popup.resetAppearance" disabled>Reset appearance</button>
             </fieldset>
 
             <div class="remember-row">
               <input id="rememberSite" type="checkbox" aria-labelledby="rememberSiteLabel" aria-describedby="rememberSiteHelp" disabled>
               <span>
-                <label id="rememberSiteLabel" for="rememberSite"><strong>Convert this site automatically</strong></label>
+                <label id="rememberSiteLabel" for="rememberSite"><strong data-i18n="popup.rememberSite">Convert this site automatically</strong></label>
                 <small id="rememberSiteHelp">Uses local price detection to convert this site automatically when you visit it.</small>
               </span>
             </div>
@@ -226,8 +231,8 @@
             <div class="prompt-row">
               <input id="showPagePrompt" type="checkbox" aria-labelledby="showPagePromptLabel" aria-describedby="showPagePromptHelp" disabled>
               <span>
-                <label id="showPagePromptLabel" for="showPagePrompt"><strong>Show the on-page Convert button</strong></label>
-                <small id="showPagePromptHelp">Appears automatically after a supported price is detected on the page.</small>
+                <label id="showPagePromptLabel" for="showPagePrompt"><strong data-i18n="popup.showPrompt">Show the on-page Convert button</strong></label>
+                <small id="showPagePromptHelp" data-i18n="popup.showPromptHelp">Appears automatically after a supported price is detected on the page.</small>
               </span>
             </div>
           </div>
@@ -239,11 +244,11 @@
           <p id="siteState" class="site-state">Current page</p>
           <a class="website-link" href="https://twinprice.com/" target="_blank" rel="noopener noreferrer">twinprice.com</a>
         </div>
-        <p class="hint">Select a price to convert, or press <span class="shortcut"><kbd id="shortcutKey">Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Y</kbd></span>.</p>
+        <p id="hint" class="hint">Select a price to convert, or press <span id="shortcut" class="shortcut"><kbd id="shortcutKey">Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Y</kbd></span>.</p>
         <p id="reviewPrompt" class="review-prompt" hidden>
-          <span>Enjoying Twinprice?</span>
-          <a id="reviewLink" class="review-link" target="_blank" rel="noopener noreferrer">Rate it</a>
-          <button id="dismissReview" class="review-dismiss" type="button" aria-label="Don't ask me to rate Twinprice again" title="Don't ask again">&times;</button>
+          <span data-i18n="popup.enjoying">Enjoying Twinprice?</span>
+          <a id="reviewLink" class="review-link" target="_blank" rel="noopener noreferrer" data-i18n="popup.rateIt">Rate it</a>
+          <button id="dismissReview" class="review-dismiss" type="button" aria-label="Don't ask me to rate Twinprice again" title="Don't ask again" data-i18n-aria-label="popup.dismissReviewLabel" data-i18n-title="popup.dismissReviewTitle">&times;</button>
         </p>
       </footer>
     </main>
@@ -251,6 +256,9 @@
     <script src="../shared/browser-api.js"></script>
     <script src="../shared/currencies.js"></script>
     <script src="../shared/settings.js"></script>
+    <script src="../shared/i18n.js"></script>
+    <script src="../shared/translations-page.js"></script>
+    <script src="../shared/translations-app.js"></script>
     <script src="../shared/messages.js"></script>
     <script src="../shared/page-access.js"></script>
     <script src="../shared/content-script-resources.js"></script>

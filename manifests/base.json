@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "short_name": "Twinprice",
   "homepage_url": "https://twinprice.com/",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "icons": {
@@ -35,6 +35,8 @@
         "shared/browser-api.js",
         "shared/currencies.js",
         "shared/settings.js",
+        "shared/i18n.js",
+        "shared/translations-page.js",
         "shared/messages.js",
         "content/number-parser.js",
         "content/detector.js",

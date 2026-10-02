@@ -3,6 +3,9 @@
   globalThis.__ccpContentInitialized = true;
 
   const M = CurrencyMessages;
+  const t = (key, params) => CurrencyI18n.t(key, params);
+  // Until the saved language arrives, follow the browser's.
+  CurrencyI18n.setLanguage("auto");
   // History routing fires no event of its own, so a slow poll is the portable
   // backstop behind popstate/hashchange and the Navigation API.
   const ROUTE_POLL_INTERVAL_MS = 1000;
@@ -23,7 +26,7 @@
     if (!task) return;
     task.then(sendResponse).catch((error) => sendResponse({
       ok: false,
-      error: error instanceof Error ? error.message : "The page request failed."
+      error: error instanceof Error ? error.message : t("error.pageRequest")
     }));
     return true;
   });
@@ -39,7 +42,7 @@
         CurrencySettings.PRESENTATION_KEYS
       );
       const conversionSettingsChanged = rateSettingsChanged || presentationSettingsChanged;
-      if (conversionSettingsChanged || changes.showPagePrompt) {
+      if (conversionSettingsChanged || changes.showPagePrompt || changes.language) {
         if (rateSettingsChanged) invalidatePendingPageCommands();
         await queueSettingsReload({ failClosed: rateSettingsChanged });
       }
@@ -110,7 +113,7 @@
           if (commandGeneration !== pageCommandGeneration) return cancelledCommandResult();
           const refreshed = await refreshSettingsForCommand();
           if (!refreshed) {
-            return { ok: false, error: "Could not refresh the saved conversion settings." };
+            return { ok: false, error: t("error.refreshSettings") };
           }
           if (commandGeneration !== pageCommandGeneration) return cancelledCommandResult();
           const result = await runSiteConversion();
@@ -172,7 +175,7 @@
       ok: false,
       count: 0,
       cancelled: true,
-      error: "Conversion was cancelled before it could update the page."
+      error: t("error.cancelledBeforeUpdate")
     };
   }
 
@@ -192,6 +195,15 @@
     const hadConversions = CurrencyPageConverter.hasConversions();
     const settingsChanges = adoptSettings(result.settings, previousSettings);
     if (reloadGeneration !== pageCommandGeneration) return;
+    if (
+      settingsChanges.languageChanged &&
+      !settingsChanges.rateSettingsChanged &&
+      !settingsChanges.presentationSettingsChanged &&
+      !settingsChanges.pagePromptChanged
+    ) {
+      CurrencyPageUi.refreshLanguage();
+      return;
+    }
     const renderedSettingsChanged = hadConversions &&
       renderedConversionSettingsKey !== null &&
       renderedConversionSettingsKey !== conversionSettingsKey(settings);
@@ -204,11 +216,9 @@
         if (reloadGeneration !== pageCommandGeneration || conversionResult?.cancelled) return;
         if (conversionResult?.ok) showConversionResult(conversionResult);
         else {
-          CurrencyPageUi.showToast(
-            `Settings changed, but prices could not be reconverted. Original prices were restored. ${
-              conversionResult?.error || "Try converting the page again."
-            }`
-          );
+          CurrencyPageUi.showToast(t("toast.reconvertFailed", {
+            detail: conversionResult?.error || t("toast.tryConvertAgain")
+          }));
         }
       } else {
         CurrencyPageConverter.startWatching();
@@ -250,6 +260,8 @@
 
   function adoptSettings(nextSettings, previousSettings) {
     settings = nextSettings;
+    CurrencyI18n.setLanguage(settings.language);
+    const languageChanged = !previousSettings || previousSettings.language !== settings.language;
     const rateSettingsChanged = !previousSettings || CurrencySettings.RATE_AFFECTING_KEYS.some(
       (key) => previousSettings[key] !== settings[key]
     );
@@ -270,7 +282,7 @@
       clearConversion: clearPromptConversion,
       convertSelection: convertSelectionText
     });
-    return { rateSettingsChanged, presentationSettingsChanged, pagePromptChanged };
+    return { rateSettingsChanged, presentationSettingsChanged, pagePromptChanged, languageChanged };
   }
 
   async function applySitePreference(expectedGeneration = pageCommandGeneration) {
@@ -383,9 +395,9 @@
     CurrencyPageConverter.configure(settings);
     const result = await runSiteConversion();
     if (!result?.ok && !result?.cancelled) {
-      CurrencyPageUi.showToast(
-        `Updated rates arrived, but prices could not be refreshed. ${result?.error || "Try converting the page again."}`
-      );
+      CurrencyPageUi.showToast(t("toast.ratesRefreshFailed", {
+        detail: result?.error || t("toast.tryConvertAgain")
+      }));
     }
   }
 
@@ -399,7 +411,7 @@
         type: M.FORGET_SITE,
         origin: getCurrentOrigin()
       });
-      if (!result?.ok) return result || { ok: false, error: "Site access could not be removed." };
+      if (!result?.ok) return result || { ok: false, error: t("error.siteAccess") };
     }
     if (settings?.enabled && settings.showPagePrompt && !suppressPrompt && !forgetSite) {
       CurrencyPageUi.showPageConvertPrompt();
@@ -458,24 +470,24 @@
 
   async function convertCurrentSelection() {
     if (!settings?.enabled) {
-      CurrencyPageUi.showToast("Turn the extension on first.");
-      return { ok: false, error: "Extension is turned off." };
+      CurrencyPageUi.showToast(t("toast.turnOnFirst"));
+      return { ok: false, error: t("error.off") };
     }
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
-      CurrencyPageUi.showToast("Select a price first.");
-      return { ok: false, error: "No selection found." };
+      CurrencyPageUi.showToast(t("toast.selectPrice"));
+      return { ok: false, error: t("error.noSelection") };
     }
 
     const text = selection.toString().trim();
     const result = await convertSelectionText(text, selection.anchorNode?.parentElement);
     const stale = result?.staleRates
-      ? ` Cached rate${result.cacheAgeLabel ? `: ${result.cacheAgeLabel}` : ""}.`
+      ? ` ${t(result.cacheAgeLabel ? "rate.cachedAge" : "rate.cached", { age: result.cacheAgeLabel })}`
       : "";
     CurrencyPageUi.showToast(
       result?.ok
         ? `${text} (${result.sourceCurrency}) = ${result.converted}.${stale}`
-        : result?.error || "Could not convert selection."
+        : result?.error || t("toast.selectionFailed")
     );
     return result;
   }
@@ -483,26 +495,28 @@
   function showConversionResult(result) {
     if (result?.ok && result.count > 0) {
       const detected = settings.fromCurrency === "AUTO"
-        ? ` Detected: ${result.detectedCurrencies}.`
+        ? ` ${t("toast.detected", { currencies: result.detectedCurrencies })}`
         : "";
-      const rate = result.rateDate
-        ? ` Rate: ${result.rateDate}${result.rateProvider ? ` via ${result.rateProvider}` : ""}${
-          result.staleRates ? ` (cached${result.cacheAgeLabel ? `, ${result.cacheAgeLabel}` : ""})` : ""
-        }.`
+      const rateLine = result.rateProvider
+        ? t("toast.rateVia", { date: result.rateDate, provider: result.rateProvider })
+        : t("toast.rate", { date: result.rateDate });
+      const cached = result.staleRates
+        ? ` (${t(result.cacheAgeLabel ? "toast.cachedSuffixAge" : "toast.cachedSuffix", {
+          age: result.cacheAgeLabel
+        })})`
         : "";
-      const scan = result.scanLimited
-        ? " Large page: prioritized prices were converted; some unstructured text was not scanned."
-        : "";
+      const rate = result.rateDate ? ` ${rateLine}${cached}.` : "";
+      const scan = result.scanLimited ? ` ${t("toast.scanLimited")}` : "";
       CurrencyPageUi.showToast(
-        `Converted ${result.count} price${result.count === 1 ? "" : "s"}.${detected}${rate}${scan}`,
+        `${t("toast.converted", { count: result.count })}${detected}${rate}${scan}`,
         {
-          actionLabel: "Undo",
+          actionLabel: t("page.prompt.undo"),
           onAction: () => clearSiteConversion({ suppressPrompt: true }),
           duration: 8000
         }
       );
     } else {
-      CurrencyPageUi.showToast(result?.error || "No confidently identified prices found.");
+      CurrencyPageUi.showToast(result?.error || t("toast.noPrices"));
     }
   }
 
