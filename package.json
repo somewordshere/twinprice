@@ -1,6 +1,6 @@
 {
   "name": "twinprice-extension",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "private": true,
   "description": "Privacy-focused Manifest V3 currency conversion extension",
   "scripts": {
@@ -21,7 +21,8 @@
     "build:icons": "node scripts/build-icons.mjs",
     "build:promo": "node scripts/build-promo-tile.mjs",
     "capture": "npm run prepare:chrome && playwright test --config playwright.capture.config.js",
-    "build:store-assets": "npm run capture && node scripts/build-store-screenshots.mjs"
+    "build:store-assets": "npm run capture && node scripts/build-store-screenshots.mjs",
+    "build:firefox-screenshots": "node scripts/build-firefox-screenshots.mjs"
   },
   "engines": {
     "node": ">=20"

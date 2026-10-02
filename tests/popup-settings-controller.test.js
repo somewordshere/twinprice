@@ -196,6 +196,7 @@ test("preserves every canonical settings field through ambiguous-write reconcili
     fromCurrency: "USD",
     toCurrency: "PLN",
     theme: "dark",
+    language: "uk",
     displayMode: "replace",
     convertedTextColor: "#123456",
     convertedBackgroundColor: "#abcdef",

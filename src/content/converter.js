@@ -1,4 +1,5 @@
 (function initializePageConverter(global) {
+  const t = (key, params) => global.CurrencyI18n.t(key, params);
   const SKIP_TAGS = new Set([
     "SCRIPT", "STYLE", "NOSCRIPT", "TEXTAREA", "INPUT", "SELECT", "OPTION",
     "CODE", "PRE", "SVG", "CANVAS"
@@ -95,7 +96,7 @@
 
   function runSiteConversion(options = {}) {
     if (!settings?.enabled) {
-      return Promise.resolve({ ok: false, error: "Extension is turned off." });
+      return Promise.resolve({ ok: false, error: t("error.off") });
     }
 
     const request = createConversionRequest(options);
@@ -238,7 +239,7 @@
       scannedTextNodes: textScan.nodes.length,
       inspectedTextNodes: textScan.inspected,
       error: count === 0
-        ? rateError?.error || "Prices were identified, but none could be converted."
+        ? rateError?.error || t("convert.noneConverted")
         : undefined
     };
   }
@@ -255,17 +256,17 @@
       detectionConfidence: detection.confidence,
       detectedCurrencies: CurrencyDetector.describeDetectedCurrencies(textPlans, splitPlans),
       error: sameAsTarget
-        ? `The detected page currency is already ${settings.toCurrency}. Choose a different target currency.`
+        ? t("convert.sameAsTarget", { currency: settings.toCurrency })
         : autoDetectionFailed
-          ? "Currency could not be detected confidently. Select the source currency manually."
+          ? t("convert.lowConfidence")
           : settings.fromCurrency !== "AUTO"
-            ? `Could not find the manually selected currency (${settings.fromCurrency}) on this page.`
-            : "No confidently identified prices found on this page."
+            ? t("convert.manualNotFound", { currency: settings.fromCurrency })
+            : t("convert.noPrices")
     };
   }
 
   async function convertSelectionText(selectedText, element) {
-    if (!settings?.enabled) return { ok: false, error: "Extension is turned off." };
+    if (!settings?.enabled) return { ok: false, error: t("error.off") };
     const generation = conversionGeneration;
     const runSettings = settings;
     const matches = CurrencyDetector.findMatchesForContext(
@@ -275,7 +276,7 @@
       { selection: true }
     );
     if (matches.length > 1) {
-      return { ok: false, error: "Select one price at a time." };
+      return { ok: false, error: t("convert.selectOne") };
     }
     const match = matches[0];
 
@@ -283,14 +284,14 @@
       return {
         ok: false,
         error: settings.fromCurrency === "AUTO"
-          ? "Could not confidently identify the selected currency."
-          : `The selection does not look like ${settings.fromCurrency}.`
+          ? t("convert.selectionUnknown")
+          : t("convert.selectionMismatch", { currency: settings.fromCurrency })
       };
     }
 
     const ratesResult = await ensureRates(match.currency);
     if (!isCurrentRun(generation, runSettings)) {
-      return { ok: false, cancelled: true, error: "Settings changed before the selection was converted." };
+      return { ok: false, cancelled: true, error: t("convert.selectionCancelled") };
     }
     if (!ratesResult?.ok) return ratesResult;
     const meta = activeRateMetaByBase[match.currency] || {};
@@ -644,7 +645,7 @@
         warning: result.warning
       };
     }
-    return result || { ok: false, error: "Could not load exchange rates." };
+    return result || { ok: false, error: t("convert.ratesFailed") };
   }
 
   function ratesCacheChangeAffectsActiveRates(change) {
@@ -694,7 +695,7 @@
       ok: false,
       count: 0,
       cancelled: true,
-      error: "Conversion was cancelled because settings changed or original prices were restored."
+      error: t("convert.cancelled")
     };
   }
 
@@ -845,15 +846,16 @@
   function conversionTitle(baseCurrency) {
     const meta = activeRateMetaByBase[baseCurrency] || {};
     const rate = activeRatesByBase[baseCurrency]?.[settings.toCurrency];
-    const provider = meta.provider ? ` Provider: ${meta.provider}.` : "";
+    const provider = meta.provider ? ` ${t("convert.titleProvider", { provider: meta.provider })}` : "";
     const exchangeRate = Number.isFinite(rate)
-      ? ` Exchange rate: 1 ${baseCurrency} = ${rate} ${settings.toCurrency}.`
+      ? ` ${t("convert.titleRate", { base: baseCurrency, rate, target: settings.toCurrency })}`
       : "";
-    const date = meta.date ? ` Rate date: ${meta.date}.` : "";
+    const date = meta.date ? ` ${t("convert.titleDate", { date: meta.date })}` : "";
     const stale = meta.stale
-      ? ` Cached rate${meta.cacheAgeLabel ? `: ${meta.cacheAgeLabel}` : ""}.`
+      ? ` ${t(meta.cacheAgeLabel ? "rate.cachedAge" : "rate.cached", { age: meta.cacheAgeLabel })}`
       : "";
-    return `Converted from ${baseCurrency} to ${settings.toCurrency}.${exchangeRate}${provider}${date}${stale}`;
+    const base = t("convert.titleBase", { base: baseCurrency, target: settings.toCurrency });
+    return `${base}${exchangeRate}${provider}${date}${stale}`;
   }
 
   function convertAmount(amount, baseCurrency) {

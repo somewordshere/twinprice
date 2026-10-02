@@ -19,6 +19,22 @@ whose `package.json` declares the release version.
 
 ## Unreleased
 
+## 2.2.2 - 2026-10-02
+
+### Added
+
+- Added a **Language** menu to Page options and to the welcome page, with ten interface languages: English, German, Spanish, French, Italian, Dutch, Polish, Brazilian Portuguese, Turkish, and Ukrainian. It translates the popup, the welcome page, and everything the extension shows on a web page. **Automatic**, the default, follows the browser's language.
+- Added the store name and summary in Italian, Dutch, Turkish, and Ukrainian, so every interface language also has a store listing.
+- Currency names now appear in the chosen language.
+
+### Changed
+
+- The language is a new synchronized setting, saved with the other preferences. Messages that originate from the exchange-rate provider, such as a rate being unavailable, are still shown in English.
+
+### Privacy
+
+- The privacy policy now lists the interface language among the stored preferences. It is kept in browser storage like the other preferences and is never sent anywhere.
+
 ## 2.2.0 - 2026-09-28
 
 ### Added

@@ -14,6 +14,11 @@
     const describeError = typeof options.describeError === "function"
       ? options.describeError
       : defaultErrorMessage;
+    // Optional hook so the popup can show these in the shopper's language. Without
+    // it the English fallback passed at each call site is used as written.
+    const text = typeof options.translate === "function"
+      ? options.translate
+      : (_key, fallback) => fallback;
 
     let confirmedSettings = null;
     let writeRevision = 0;
@@ -50,10 +55,12 @@
         return settleOutcome(outcome, payload, { revision, syncPage });
       }).catch((error) => {
         if (isCurrent(revision, savedDraftRevision)) {
-          lock(
+          lock(text(
+            "controller.saveOrReloadFailed",
             `Settings could not be saved or reloaded. ${describeError(error)} ` +
-            "Close and reopen the popup to try again."
-          );
+              "Close and reopen the popup to try again.",
+            { error: describeError(error) }
+          ));
         }
         return false;
       });
@@ -85,7 +92,9 @@
         return {
           ok: false,
           fatal: true,
-          error: `${validationError} ${priorOutcome.error || "Current settings could not be reloaded."}`
+          error: `${validationError} ${
+            priorOutcome.error || text("controller.reloadFailed", "Current settings could not be reloaded.")
+          }`
         };
       }
       return {
@@ -112,7 +121,7 @@
         return {
           ok: false,
           settings: returnedSettings,
-          error: result.error || "Could not save settings."
+          error: result.error || text("controller.saveFailed", "Could not save settings.")
         };
       }
       return reconcileAmbiguousFailure(payload, result?.error);
@@ -124,7 +133,10 @@
         return {
           ok: false,
           fatal: true,
-          error: "The settings update could not be confirmed, and the current settings could not be reloaded. Close and reopen the popup to try again."
+          error: text(
+            "controller.unconfirmedFatal",
+            "The settings update could not be confirmed, and the current settings could not be reloaded. Close and reopen the popup to try again."
+          )
         };
       }
       if (matches(actualSettings, payload)) {
@@ -134,8 +146,11 @@
         ok: false,
         settings: actualSettings,
         error: reportedError
-          ? `${reportedError} The popup reloaded the current settings.`
-          : "The settings update could not be confirmed. The popup reloaded the current settings."
+          ? `${reportedError} ${text("controller.reloaded", "The popup reloaded the current settings.")}`
+          : text(
+            "controller.unconfirmed",
+            "The settings update could not be confirmed. The popup reloaded the current settings."
+          )
       };
     }
 
@@ -156,7 +171,7 @@
           apply(confirmedSettings);
         }
         if (outcome?.fatal) lock(outcome.error);
-        else status(outcome?.error || "Could not save settings.", "error");
+        else status(outcome?.error || text("controller.saveFailed", "Could not save settings."), "error");
         return false;
       }
 

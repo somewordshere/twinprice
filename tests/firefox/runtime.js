@@ -129,6 +129,110 @@ test("Firefox page access and popup handlers convert and undo a real webpage", {
   }
 });
 
+test("Firefox language menu retranslates the popup, the page, and the welcome page", { timeout: 120_000 }, async () => {
+  const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-language-"));
+  let fixture;
+  let driver;
+  let installedAddonId;
+
+  try {
+    const archivePath = buildTemporaryArchive(temporaryDirectory);
+    fixture = await startFixtureServer();
+    driver = await createFirefoxDriver();
+    await driver.manage().setTimeouts({
+      pageLoad: FIREFOX_TIMEOUT_MS,
+      script: FIREFOX_TIMEOUT_MS
+    });
+
+    installedAddonId = await driver.installAddon(archivePath, true);
+    const extensionOrigin = await getExtensionOrigin(driver, installedAddonId);
+    // Start in Polish so the first assertions prove a saved language is honoured.
+    await seedExtensionState(driver, extensionOrigin, fixture.url, { language: "pl" });
+
+    await driver.get(fixture.url);
+    await driver.wait(until.elementLocated(By.id("initial")), FIREFOX_TIMEOUT_MS);
+    const shopWindow = await driver.getWindowHandle();
+    const popupUrl = `${extensionOrigin}/popup/popup.html`;
+
+    await driver.switchTo().newWindow("tab");
+    await driver.get(popupUrl);
+    const bidi = await driver.getBidi();
+    const popupContext = await driver.wait(
+      () => findBidiContextByUrl(bidi, popupUrl),
+      FIREFOX_TIMEOUT_MS
+    );
+    await driver.switchTo().window(shopWindow);
+    await navigateBidiContext(bidi, popupContext.context, popupUrl);
+    const popup = (expression) => evaluatePopup(bidi, popupContext.context, expression);
+
+    await waitForPopup(
+      driver,
+      bidi,
+      popupContext.context,
+      "document.querySelector('#fromCurrency').options.length >= 2 && " +
+        "!document.querySelector('#convertSite').disabled"
+    );
+    assert.equal(await popup("document.documentElement.lang"), "pl");
+    assert.equal(await popup("document.querySelector('#convertSite').textContent"), "Przelicz ceny na stronie");
+    assert.equal(await popup("document.querySelector('#language').options.length"), 11);
+
+    // Switch to Ukrainian through the real menu and watch the whole popup follow.
+    await popup(
+      "(() => { const menu = document.querySelector('#language'); menu.value = 'uk'; " +
+        "menu.dispatchEvent(new Event('change', { bubbles: true })); return true; })()"
+    );
+    await waitForPopup(
+      driver,
+      bidi,
+      popupContext.context,
+      "document.documentElement.lang === 'uk' && " +
+        "document.querySelector('#convertSite').textContent === 'Конвертувати ціни на сторінці'"
+    );
+    assert.equal(await popup("document.querySelector('#quickConverterTitle').textContent"), "Конвертувати довільну суму");
+    assert.equal(await popup("document.querySelector('#language').selectedOptions[0].textContent"), "Українська");
+    assert.match(await popup("document.querySelector('#hint').textContent"), /Виділіть ціну для конвертації/);
+    await driver.wait(async () => (
+      await popup("browser.storage.sync.get('language').then((stored) => stored.language)")
+    ) === "uk", FIREFOX_TIMEOUT_MS);
+
+    // Converting from the popup shows the result on the page in the same language.
+    await popup("document.querySelector('#convertSite').click(); true");
+    const toast = await driver.wait(
+      until.elementLocated(By.css(".ccp-toast-message")),
+      FIREFOX_TIMEOUT_MS
+    );
+    await driver.wait(async () => /^Конвертовано \d+/.test(await toast.getText()), FIREFOX_TIMEOUT_MS);
+    assert.equal(await driver.findElement(By.css(".ccp-toast-action")).getText(), "Скасувати");
+
+    // The welcome page reads the saved language and can change it.
+    await driver.switchTo().newWindow("tab");
+    await driver.get(`${extensionOrigin}/onboarding/onboarding.html`);
+    await driver.wait(async () => (
+      await driver.findElement(By.id("homeCurrency")).isEnabled()
+    ), FIREFOX_TIMEOUT_MS);
+    assert.equal(await driver.findElement(By.css("h1")).getText(), "Два кроки — і готово.");
+    assert.equal(await driver.findElement(By.id("language")).getAttribute("value"), "uk");
+    await driver.executeScript(`
+      const menu = document.getElementById("language");
+      menu.value = "de";
+      menu.dispatchEvent(new Event("change", { bubbles: true }));
+    `);
+    await driver.wait(async () => (
+      await driver.findElement(By.css("h1")).getText()
+    ) === "Zwei Schritte, und du bist fertig.", FIREFOX_TIMEOUT_MS);
+    assert.match(await driver.findElement(By.id("currencyNote")).getText(), /Eingestellt auf/);
+  } finally {
+    if (driver) {
+      if (installedAddonId) {
+        await driver.uninstallAddon(installedAddonId).catch(() => {});
+      }
+      await driver.quit().catch(() => {});
+    }
+    if (fixture) await fixture.close();
+    removeTemporaryDirectory(temporaryDirectory);
+  }
+});
+
 function buildTemporaryArchive(temporaryDirectory) {
   const filename = "twinprice-firefox-runtime.zip";
   const webExtCli = path.join(ROOT, "node_modules", "web-ext", "bin", "web-ext.js");
@@ -227,7 +331,7 @@ async function getExtensionOrigin(driver, addonId) {
   }
 }
 
-async function seedExtensionState(driver, extensionOrigin, fixtureUrl) {
+async function seedExtensionState(driver, extensionOrigin, fixtureUrl, settings = {}) {
   await driver.get(`${extensionOrigin}/popup/popup.html`);
   await driver.wait(until.elementLocated(By.id("convertSite")), FIREFOX_TIMEOUT_MS);
   await driver.wait(async () => driver.executeAsyncScript(`
@@ -239,7 +343,7 @@ async function seedExtensionState(driver, extensionOrigin, fixtureUrl) {
   `), FIREFOX_TIMEOUT_MS);
 
   const state = createSeededExtensionState({
-    settings: { showPagePrompt: false },
+    settings: { showPagePrompt: false, ...settings },
     local: {
       siteSourceCurrencies: {
         [new URL(fixtureUrl).origin]: "USD"
