@@ -31,7 +31,10 @@
     return pageCurrencyDetection;
   }
 
-  function findMatchesForContext(text, element, settings, { selection = false } = {}) {
+  // keepTarget keeps prices already in the target currency, which are normally dropped
+  // because there is nothing to convert. Selection uses it to tell "not a price" apart
+  // from "already in your currency".
+  function findMatchesForContext(text, element, settings, { selection = false, keepTarget = false } = {}) {
     const detection = getPageCurrencyDetection();
     const manualCurrency = settings.fromCurrency !== "AUTO"
       ? settings.fromCurrency
@@ -53,7 +56,7 @@
       allowBare,
       pageDetection: detection
     }).filter((match) =>
-      match.currency !== settings.toCurrency &&
+      (keepTarget || match.currency !== settings.toCurrency) &&
       (selection || !isLikelyLinkedTitle(text, element, match)) &&
       (
         match.strength !== "code" ||

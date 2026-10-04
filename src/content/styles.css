@@ -233,6 +233,10 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 .ccp-selection-popup[data-state="error"] {
   background: #b3261e;
 }
+.ccp-selection-popup[data-state="info"] {
+  background: #334155;
+  cursor: default;
+}
 
 .ccp-page-prompt-close:focus-visible,
 .ccp-page-prompt-action:focus-visible,
