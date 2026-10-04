@@ -378,4 +378,30 @@ for (const testCase of DETECTION_CASES) {
   }
 }
 
+// A price already in the target currency is dropped from conversion, but a selection can
+// still ask for it, so the UI can say "already in EUR" instead of staying silent.
+{
+  const euroPrice = element("price", "€89.00");
+  const toEuro = { fromCurrency: "AUTO", toCurrency: "EUR" };
+  assert.equal(
+    detector.findMatchesForContext("€89.00", euroPrice, toEuro, { selection: true }).length,
+    0,
+    "a selected price in the target currency has nothing to convert"
+  );
+  const kept = detector.findMatchesForContext("€89.00", euroPrice, toEuro, {
+    selection: true,
+    keepTarget: true
+  });
+  assert.equal(kept.length, 1, "keepTarget must report the price in the target currency");
+  assert.equal(kept[0].currency, "EUR");
+  assert.equal(
+    detector.findMatchesForContext("€89.00", euroPrice, { fromCurrency: "AUTO", toCurrency: "USD" }, {
+      selection: true,
+      keepTarget: true
+    }).length,
+    1,
+    "keepTarget must not change prices that already convert"
+  );
+}
+
 console.log("detector tests passed");

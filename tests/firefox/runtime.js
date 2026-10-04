@@ -20,6 +20,9 @@ const ADDON_ID = "currency-converter-pro@somewordshere";
 const ADDON_NAME = "Twinprice";
 const SHOP_HTML = fs.readFileSync(path.join(ROOT, "tests", "fixtures", "shop.html"), "utf8");
 const FIREFOX_TIMEOUT_MS = 30_000;
+const SELECTION_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Selection</title></head>
+<body style="font: 28px sans-serif"><p>Folding bike <span id="usd">$100.00</span></p>
+<p>Helmet <span id="eur">€89.00</span></p><p>Bell <span id="pln">PLN 49.90</span></p></body></html>`;
 
 test("Firefox page access and popup handlers convert and undo a real webpage", { timeout: 120_000 }, async () => {
   const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-runtime-"));
@@ -233,6 +236,142 @@ test("Firefox language menu retranslates the popup, the page, and the welcome pa
   }
 });
 
+test("Firefox selection button, right-click action, and same-currency notice work with a real mouse", { timeout: 180_000 }, async () => {
+  const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-selection-"));
+  let fixture;
+  let driver;
+  let installedAddonId;
+
+  try {
+    const archivePath = buildTemporaryArchive(temporaryDirectory);
+    fixture = await startFixtureServer();
+    driver = await createFirefoxDriver();
+    await driver.manage().setTimeouts({
+      pageLoad: FIREFOX_TIMEOUT_MS,
+      script: FIREFOX_TIMEOUT_MS
+    });
+
+    installedAddonId = await driver.installAddon(archivePath, true);
+    const extensionOrigin = await getExtensionOrigin(driver, installedAddonId);
+    await seedExtensionState(driver, extensionOrigin, fixture.url, {
+      showPagePrompt: false,
+      fromCurrency: "USD",
+      toCurrency: "EUR"
+    });
+    // The seeding page is an extension page: it can write settings and send the same
+    // message the right-click menu sends.
+    const extensionTab = await driver.getWindowHandle();
+    await driver.switchTo().newWindow("tab");
+    const shopTab = await driver.getWindowHandle();
+    await driver.get(fixture.selectionUrl);
+    await driver.wait(until.elementLocated(By.id("usd")), FIREFOX_TIMEOUT_MS);
+
+    const setSettings = async (settings) => {
+      await driver.switchTo().window(extensionTab);
+      const error = await driver.executeAsyncScript(`
+        const done = arguments[arguments.length - 1];
+        browser.storage.sync.set(arguments[0]).then(() => done(null), (e) => done(String(e.message)));
+      `, settings);
+      assert.equal(error, null, `Could not change settings: ${error}`);
+      await driver.switchTo().window(shopTab);
+      // The page reloads its settings when storage changes.
+      await driver.sleep(1500);
+    };
+    // The message the right-click menu sends, preceded by the same script check it makes.
+    const rightClickAction = async () => {
+      await driver.switchTo().window(extensionTab);
+      const reply = await driver.executeAsyncScript(`
+        const done = arguments[arguments.length - 1];
+        (async () => {
+          // Match patterns take a host but no port.
+          const [tab] = await browser.tabs.query({ url: "http://" + arguments[0] + "/*" });
+          const ensure = CurrencyContentScriptResources.createInjector({
+            api: ExtensionAPI,
+            messages: CurrencyMessages
+          });
+          await ensure(tab.id);
+          return browser.tabs.sendMessage(tab.id, { type: CurrencyMessages.CONVERT_SELECTION });
+        })().then(done, (e) => done({ failed: String(e.message) }));
+      `, new URL(fixture.selectionUrl).hostname);
+      await driver.switchTo().window(shopTab);
+      return reply;
+    };
+    // A real drag across the price, the way a person selects it.
+    const dragSelect = async (id) => {
+      const box = await driver.executeScript(`
+        window.getSelection().removeAllRanges();
+        const element = document.getElementById(arguments[0]);
+        element.scrollIntoView({ block: "center" });
+        const rect = element.getBoundingClientRect();
+        return { x: rect.left, y: rect.top, w: rect.width, h: rect.height };
+      `, id);
+      const y = Math.round(box.y + box.h / 2);
+      await driver.actions({ async: true })
+        .move({ x: Math.round(box.x + 1), y })
+        .press()
+        .move({ x: Math.round(box.x + box.w - 1), y, duration: 200 })
+        .release()
+        .perform();
+    };
+    const popup = async () => (await driver.findElements(By.css(".ccp-selection-popup")))[0];
+    // The page script loads its settings asynchronously, so keep selecting until it answers.
+    const waitForPopup = (id, matches) => driver.wait(async () => {
+      await dragSelect(id);
+      await driver.sleep(700);
+      const control = await popup();
+      return Boolean(control) && matches(control);
+    }, 30_000);
+    const isButton = async (control) => (await control.getText()) === "Convert selection";
+    const isNotice = async (control, currency) => (
+      await control.getAttribute("data-state") === "info" &&
+      await control.getText() === `This price is already in ${currency}`
+    );
+
+    // 1. A price that converts: the button appears for a mouse selection, and clicking it converts.
+    await waitForPopup("usd", async (control) => await isButton(control));
+    await (await popup()).click();
+    await driver.wait(async () => /^USD → /.test(await (await popup())?.getText() ?? ""), FIREFOX_TIMEOUT_MS);
+
+    // 2. The right-click action converts the same selection instead of doing nothing.
+    await dragSelect("usd");
+    await driver.sleep(500);
+    const converted = await rightClickAction();
+    assert.equal(converted.ok, true, JSON.stringify(converted));
+    assert.equal(converted.sourceCurrency, "USD");
+    assert.match(converted.converted, /90/);
+
+    // 3. A price already in the target currency explains itself instead of staying silent.
+    await setSettings({ fromCurrency: "AUTO", toCurrency: "EUR" });
+    await waitForPopup("eur", async (control) => await isNotice(control, "EUR"));
+    assert.equal(await (await popup()).getAttribute("aria-disabled"), "true");
+    const sameAsTarget = await rightClickAction();
+    assert.equal(sameAsTarget.ok, false);
+    assert.equal(
+      sameAsTarget.error,
+      "This price is already in EUR. Change the target currency to convert it."
+    );
+
+    // 4. The same price converts as soon as the target is a different currency.
+    await setSettings({ fromCurrency: "AUTO", toCurrency: "USD" });
+    await waitForPopup("eur", async (control) => await isButton(control));
+
+    // 5. The same two cases for a price written the way Allegro writes it, with the code first.
+    await setSettings({ fromCurrency: "AUTO", toCurrency: "PLN" });
+    await waitForPopup("pln", async (control) => await isNotice(control, "PLN"));
+    await setSettings({ fromCurrency: "AUTO", toCurrency: "EUR" });
+    await waitForPopup("pln", async (control) => await isButton(control));
+  } finally {
+    if (driver) {
+      if (installedAddonId) {
+        await driver.uninstallAddon(installedAddonId).catch(() => {});
+      }
+      await driver.quit().catch(() => {});
+    }
+    if (fixture) await fixture.close();
+    removeTemporaryDirectory(temporaryDirectory);
+  }
+});
+
 function buildTemporaryArchive(temporaryDirectory) {
   const filename = "twinprice-firefox-runtime.zip";
   const webExtCli = path.join(ROOT, "node_modules", "web-ext", "bin", "web-ext.js");
@@ -266,6 +405,11 @@ async function startFixtureServer() {
       response.end(SHOP_HTML);
       return;
     }
+    if (request.url === "/selection") {
+      response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      response.end(SELECTION_HTML);
+      return;
+    }
     response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
     response.end("Not found");
   });
@@ -279,6 +423,7 @@ async function startFixtureServer() {
 
   return {
     url: `http://127.0.0.1:${address.port}/test-shop`,
+    selectionUrl: `http://127.0.0.1:${address.port}/selection`,
     close: () => new Promise((resolve, reject) => {
       server.close((error) => error ? reject(error) : resolve());
     })
