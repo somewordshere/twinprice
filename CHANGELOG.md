@@ -19,7 +19,7 @@ whose `package.json` declares the release version.
 
 ## Unreleased
 
-## 2.2.3 - 2026-10-02
+## 2.2.3 - 2026-10-04
 
 ### Fixed
 

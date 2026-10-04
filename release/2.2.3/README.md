@@ -1,6 +1,6 @@
 # Release version 2.2.3
 
-Release prepared 2026-10-02.
+Release prepared 2026-10-04.
 
 ### Fixed
 
