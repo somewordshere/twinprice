@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
 
-**Current version:** 2.2.2 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.2.3 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.2.2/twinprice-2.2.2-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.2.2/twinprice-2.2.2-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.2.3/twinprice-2.2.3-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.2.3/twinprice-2.2.3-firefox.zip)
 
 **[View the complete changelog →](CHANGELOG.md)**
 
@@ -55,7 +55,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.2.2/twinprice-2.2.2-chrome.zip) or [Firefox build](release/2.2.2/twinprice-2.2.2-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.2.3/twinprice-2.2.3-chrome.zip) or [Firefox build](release/2.2.3/twinprice-2.2.3-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -211,6 +211,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.2.3 | A clear message when a selected price is already in the target currency, instead of a missing Convert selection button | [Chrome](release/2.2.3/twinprice-2.2.3-chrome.zip) · [Firefox](release/2.2.3/twinprice-2.2.3-firefox.zip) |
 | 2.2.2 | A language menu with ten interface languages, including Ukrainian, and store listings in all ten | [Chrome](release/2.2.2/twinprice-2.2.2-chrome.zip) · [Firefox](release/2.2.2/twinprice-2.2.2-firefox.zip) |
 | 2.2.0 | Store listing in six languages, a popup rating reminder after five helped pages, and an uninstall goodbye page | [Chrome](release/2.2.0/twinprice-2.2.0-chrome.zip) · [Firefox](release/2.2.0/twinprice-2.2.0-firefox.zip) |
 | 2.1.7 | Refreshed release packages, documentation, and restored legacy screenshots | [Chrome](release/2.1.7/twinprice-2.1.7-chrome.zip) · [Firefox](release/2.1.7/twinprice-2.1.7-firefox.zip) |

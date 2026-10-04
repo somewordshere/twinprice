@@ -281,6 +281,19 @@
     const match = matches[0];
 
     if (!match) {
+      // A price that is already in the target currency is not "unidentified": say so.
+      const alreadyTarget = CurrencyDetector.findMatchesForContext(
+        selectedText,
+        element,
+        runSettings,
+        { selection: true, keepTarget: true }
+      );
+      if (alreadyTarget.length === 1 && alreadyTarget[0].currency === runSettings.toCurrency) {
+        return {
+          ok: false,
+          error: t("convert.selectionSameAsTarget", { currency: runSettings.toCurrency })
+        };
+      }
       return {
         ok: false,
         error: settings.fromCurrency === "AUTO"

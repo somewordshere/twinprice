@@ -290,7 +290,19 @@
       settings,
       { selection: true }
     );
-    if (matches.length !== 1) {
+    // A price already in the target currency has nothing to convert, but staying
+    // silent looks like the feature is broken, so a short notice says why.
+    let alreadyInTarget = false;
+    if (matches.length === 0) {
+      const inTarget = CurrencyDetector.findMatchesForContext(
+        selectedText,
+        selection.anchorNode?.parentElement,
+        settings,
+        { selection: true, keepTarget: true }
+      );
+      alreadyInTarget = inTarget.length === 1 && inTarget[0].currency === settings.toCurrency;
+    }
+    if (matches.length !== 1 && !alreadyInTarget) {
       if (focus && popupHadFocus) restoreFocusTo(previousFocus);
       selectionPreviousFocus = null;
       return;
@@ -304,7 +316,7 @@
       return;
     }
     pendingSelectionText = selectedText;
-    pendingSelectionSourceCurrency = match.currency;
+    pendingSelectionSourceCurrency = match ? match.currency : "";
     selectionWasKeyboardTriggered = focus;
     selectionPreviousFocus = focus
       ? previousFocus || (popupHadFocus ? null : activeBeforeRefresh)
@@ -315,15 +327,25 @@
     selectionPopup.className = "ccp-selection-popup";
     selectionPopup.setAttribute("aria-live", "polite");
     selectionPopup.setAttribute("aria-atomic", "true");
-    updateSelectionPopup(
-      t("page.selection.convert"),
-      t("page.selection.convertLabel", { source: match.currency, target: settings.toCurrency })
-    );
+    if (alreadyInTarget) {
+      const notice = t("page.selection.alreadyTarget", { currency: settings.toCurrency });
+      updateSelectionPopup(notice, notice, { state: "info" });
+      selectionPopup.setAttribute("aria-disabled", "true");
+      selectionDismissTimer = window.setTimeout(
+        () => removeSelectionPopup({ restoreFocus: false }),
+        4000
+      );
+    } else {
+      updateSelectionPopup(
+        t("page.selection.convert"),
+        t("page.selection.convertLabel", { source: match.currency, target: settings.toCurrency })
+      );
+      selectionPopup.addEventListener("click", handleConvertSelectionClick);
+    }
     selectionPopup.addEventListener("mousedown", (event) => {
       event.preventDefault();
       event.stopPropagation();
     });
-    selectionPopup.addEventListener("click", handleConvertSelectionClick);
     selectionPopup.addEventListener("keydown", handleSelectionPopupKeydown);
     document.body.appendChild(selectionPopup);
 
