@@ -8,12 +8,8 @@
   if (browser === 'chrome') return;
 
   // Edge and Opera both install extensions from the Chrome Web Store.
-  // Replace with dedicated store URLs once those listings exist.
-  var LABELS = {
-    edge: 'Download for Edge',
-    opera: 'Download for Opera',
-    other: 'Other browsers'
-  };
+  // Replace with dedicated store URLs once those listings exist. The button
+  // carries its own label for each browser, so translated pages stay translated.
 
   var groups = document.querySelectorAll('.install-buttons');
   for (var i = 0; i < groups.length; i++) {
@@ -28,7 +24,7 @@
       firefox.className = chromeClass;
       groups[i].insertBefore(firefox, chrome);
     } else {
-      chrome.firstChild.nodeValue = LABELS[browser] + ' ';
+      chrome.firstChild.nodeValue = chrome.getAttribute('data-text-' + browser) + ' ';
     }
   }
 })();

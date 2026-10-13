@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#245bea">
+  <meta name="msvalidate.01" content="AE92D5C834F76CAC6E97EE5A3156F3B8">
+  <title>Twinprice — розширення-конвертер валют для Chrome і Firefox</title>
+  <meta name="description" content="Під час покупок бачте конвертовані ціни поруч із початковими. Twinprice — безкоштовне розширення для Chrome і Firefox з локальним розпізнаванням цін і без рекламних трекерів.">
+  <meta property="og:title" content="Twinprice — розширення-конвертер валют для Chrome і Firefox">
+  <meta property="og:description" content="Купуйте за кордоном. Бачте ціни у своїй валюті. Знайомтеся: безкоштовне розширення для конвертації валют у Chrome і Firefox.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://twinprice.com/uk/">
+
+  <meta property="og:site_name" content="Twinprice">
+  <meta property="og:image" content="https://twinprice.com/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Twinprice: безкоштовне розширення-конвертер валют для Chrome і Firefox. Купуйте за кордоном. Бачте ціни у своїй валюті.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://twinprice.com/#website",
+      "url": "https://twinprice.com/",
+      "name": "Twinprice",
+      "alternateName": "twinprice.com",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://twinprice.com/#extension",
+      "name": "Twinprice",
+      "url": "https://twinprice.com/",
+      "description": "Безкоштовне розширення-конвертер валют для Chrome і Firefox. Конвертуйте ціни на сторінці магазину або одну виділену ціну — з локальним розпізнаванням цін і без облікового запису.",
+      "applicationCategory": "BrowserApplication",
+      "softwareRequirements": "Google Chrome or Mozilla Firefox",
+      "isAccessibleForFree": true,
+      "license": "https://github.com/somewordshere/twinprice/blob/main/LICENSE",
+      "subjectOf": {
+        "@id": "https://twinprice.com/about/#webpage"
+      },
+      "image": "https://twinprice.com/assets/social-preview.png",
+      "featureList": [
+        "Конвертація цін на вебсторінках",
+        "Конвертація виділеної ціни",
+        "Вибір вихідної та цільової валют",
+        "Запам'ятовування автоматичної конвертації для вибраних сайтів",
+        "Відновлення початкових цін"
+      ],
+      "installUrl": [
+        "https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk",
+        "https://addons.mozilla.org/en-US/firefox/addon/twinprice/"
+      ],
+      "sameAs": [
+        "https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk",
+        "https://addons.mozilla.org/en-US/firefox/addon/twinprice/",
+        "https://github.com/somewordshere/twinprice"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "url": "https://twinprice.com/#install"
+      }
+    }
+  ]
+}
+  </script>
+  <link rel="canonical" href="https://twinprice.com/uk/"><!-- i18n:alternates --><link rel="alternate" hreflang="en" href="https://twinprice.com/"><link rel="alternate" hreflang="de" href="https://twinprice.com/de/"><link rel="alternate" hreflang="es" href="https://twinprice.com/es/"><link rel="alternate" hreflang="fr" href="https://twinprice.com/fr/"><link rel="alternate" hreflang="it" href="https://twinprice.com/it/"><link rel="alternate" hreflang="nl" href="https://twinprice.com/nl/"><link rel="alternate" hreflang="pl" href="https://twinprice.com/pl/"><link rel="alternate" hreflang="pt-BR" href="https://twinprice.com/pt-BR/"><link rel="alternate" hreflang="tr" href="https://twinprice.com/tr/"><link rel="alternate" hreflang="uk" href="https://twinprice.com/uk/"><link rel="alternate" hreflang="x-default" href="https://twinprice.com/"><!-- /i18n:alternates -->
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" href="../assets/favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="icon" href="../assets/favicon-96.png" type="image/png" sizes="96x96">
+  <link rel="icon" href="../assets/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../browser-detect.js" defer></script>
+  <script src="../demo.js" defer></script>
+  <script src="../selection-demo.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти до вмісту</a>
+  <header class="site-header wrap">
+    <a class="brand" href="./" aria-label="Головна сторінка twinprice.com"><img src="../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
+    <nav aria-label="Головна навігація"><a href="#how-it-works">Як працює</a><a href="guide/">Посібник</a><a href="#privacy">Приватність</a><a href="about/">Про нас</a></nav>
+    <a class="button button-small" href="#install">Встановити <span aria-hidden="true">↗</span></a><!-- i18n:languages --><details class="language-menu" translate="no"><summary aria-label="Мова: Українська"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c2 2 2 11 0 13M8 1.5c-2 2-2 11 0 13"/></svg><span>UK</span></summary><ul><li><a href="../" hreflang="en" lang="en">English</a></li><li><a href="../de/" hreflang="de" lang="de">Deutsch</a></li><li><a href="../es/" hreflang="es" lang="es">Español</a></li><li><a href="../fr/" hreflang="fr" lang="fr">Français</a></li><li><a href="../it/" hreflang="it" lang="it">Italiano</a></li><li><a href="../nl/" hreflang="nl" lang="nl">Nederlands</a></li><li><a href="../pl/" hreflang="pl" lang="pl">Polski</a></li><li><a href="../pt-BR/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li><li><a href="../tr/" hreflang="tr" lang="tr">Türkçe</a></li><li><a href="../uk/" hreflang="uk" lang="uk" aria-current="true">Українська</a></li></ul></details><!-- /i18n:languages -->
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="mini-rule"></span> ТРОХИ ЯСНОСТІ ДЛЯ ВАШОГО КОШИКА</p>
+        <h1 id="hero-title">Купуйте за кордоном.<br>Бачте ціни<br><span>у своїй валюті.</span></h1>
+        <p class="hero-description">Twinprice — безкоштовне розширення-конвертер валют для Chrome і Firefox. Під час покупок бачте конвертовані ціни поруч із початковими або виділіть одну ціну й натисніть «Конвертувати виділене».</p>
+        <div class="install-buttons">
+          <a data-install="chrome" data-text-edge="Завантажити для Edge" data-text-opera="Завантажити для Opera" data-text-other="Інші браузери" class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=uk">Отримати Twinprice для Chrome <span aria-hidden="true">↗</span></a>
+          <a data-install="firefox" class="text-button" href="https://addons.mozilla.org/uk/firefox/addon/twinprice/">Отримати Twinprice для Firefox <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="free-note">Встановлення безкоштовне. Обліковий запис не потрібен. <a href="guide/">Прочитайте посібник для початку роботи</a>.</p>
+      </div>
+      <div class="demo-stage" id="demo">
+        <div class="demo-topline"><span>ОДНА ЦІНА. ДВА ПОГЛЯДИ.</span><span class="demo-tag">Інтерактивне демо</span></div>
+        <div class="demo-browser">
+          <div class="browser-bar"><div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>ваш улюблений магазин / речі на щодень</span></div>
+          <div class="shop-content">
+            <div class="shop-heading"><span class="shop-name">Everyday Objects</span><span class="shop-edition">ДОБІРКА ДНЯ / 01</span></div>
+            <p class="product-category">ДІМ І ЗАТИШОК</p>
+            <h2>Настільна лампа<br>на щодень.</h2>
+            <p class="product-description">Трохи світла. Краще робоче місце.</p>
+            <div class="price-display"><span class="original-price">€89.00</span><span class="converted-price" id="converted-price"><span class="price-value">≈ 382,70 zł</span></span></div>
+            <div class="price-annotations"><span>Початкова ціна</span><span id="conversion-caption">Ваша валюта, просто тут</span></div>
+            <div class="shop-divider"></div>
+            <div class="demo-control-row"><span class="demo-brand"><img src="../assets/twinprice-icon.png" width="24" height="24" alt="">Twinprice</span><label class="switch"><span id="toggle-label" data-text-on="Увімк." data-text-off="Вимк.">Увімк.</span><input type="checkbox" id="demo-toggle" role="switch" aria-label="Показувати конвертовану ціну" checked><span class="switch-track" aria-hidden="true"></span></label></div>
+            <div class="currency-control"><label for="demo-currency">Показувати ціни в</label><select id="demo-currency"><option value="PLN">PLN · польський злотий</option><option value="USD">USD · долар США</option><option value="JPY">JPY · японська єна</option><option value="UAH">UAH · українська гривня</option><option value="GBP">GBP · англійський фунт</option><option value="MXN">MXN · мексиканський песо</option><option value="ZAR">ZAR · південноафриканський ранд</option><option value="KRW">KRW · південнокорейський вон</option><option value="KZT">KZT · казахстанський тенге</option><option value="INR">INR · індійська рупія</option><option value="DZD">DZD · алжирський динар</option><option value="BRL">BRL · бразильський реал</option><option value="TRY">TRY · турецька ліра</option><option value="THB">THB · таїландський бат</option></select></div>
+            <button class="animation-control" id="demo-playback" type="button" data-text-pause="Призупинити анімацію" data-text-play="Відтворити анімацію" aria-label="Автоматична анімація валют" aria-pressed="true" hidden>Призупинити анімацію</button>
+          </div>
+        </div>
+        <div class="demo-footnote"><span>Спробуйте перемикач. Побачте різницю.</span><span id="demo-rate" data-text-rate="Приклад курсу: 1 € = {rate} {code}">Приклад курсу: 1 € = 4,30 PLN</span></div>
+        <p class="sr-only" id="demo-status" data-text-on="Twinprice увімкнено. Початкова ціна — 89 євро, приблизно {amount} ({currency}). Це фіксований приклад курсу." data-text-off="Twinprice вимкнено. Показано лише початкову ціну — 89 євро." role="status" aria-live="polite"></p>
+        <noscript><p class="noscript-note">Це приклад із фіксованим курсом. Увімкніть JavaScript, щоб спробувати перемикач і вибір валюти.</p></noscript>
+      </div>
+    </section>
+    <div class="benefit-strip"><div class="wrap"><span>Дві ціни. Одне легке рішення.</span><span>Chrome і Firefox</span><span>Локальне розпізнавання цін</span><span>Безкоштовно й з відкритим кодом</span></div></div>
+    <section class="section wrap selection-demo" id="selection-demo" aria-labelledby="selection-title">
+      <div class="selection-copy">
+        <p class="eyebrow">ДОСИТЬ ОДНІЄЇ ЦІНИ</p>
+        <h2 id="selection-title">Лише одна ціна?<br>Виділіть її.</h2>
+        <p>Виділіть ціну й натисніть синю кнопку <strong>Конвертувати виділене</strong>, що з'явиться під нею. Та сама кнопка стане зеленою й покаже результат.</p>
+        <p class="selection-example-label">Анімована демонстрація · Приклад курсу: 1 € = 1,10 $.</p>
+        <button class="animation-control" id="selection-playback" type="button" data-text-pause="Призупинити анімацію" data-text-play="Відтворити анімацію" aria-label="Анімація виділеної ціни" aria-pressed="false" hidden>Відтворити анімацію</button>
+      </div>
+      <div class="selection-scene" role="img" aria-label="Демонстрація: курсор виділяє €89.00. Просто під ціною з'являється синя кнопка «Конвертувати виділене». Після натискання на мить видно «Конвертація…», потім те саме віконце стає зеленим і показує EUR → $97.90.">
+        <div class="selection-browser-bar" aria-hidden="true"><span class="browser-dots"><i></i><i></i><i></i></span><span>ваш улюблений магазин</span></div>
+        <div class="selection-example" aria-hidden="true">
+          <span class="selection-product">Настільна лампа на щодень</span>
+          <div class="selection-anchor">
+            <span class="selection-price"><span class="selection-highlight"></span><span>€89.00</span></span>
+            <div class="selection-popup"><span class="selection-action">Конвертувати виділене</span><span class="selection-loading">Конвертація…</span><span class="selection-success">EUR → $97.90</span></div>
+            <svg class="selection-cursor" width="24" height="30" viewBox="0 0 24 30" fill="none"><path d="M2 2L21 17L12 18L8 27L2 2Z" fill="#142038" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section wrap" id="how-it-works">
+      <div class="section-heading"><div><p class="eyebrow">01 / ВЛАШТОВУЙТЕСЯ ЗРУЧНІШЕ</p><h2>Знайома ціна.<br>Хоч би де ви купували.</h2></div><p>Налаштуйте свою валюту один раз.<br>І рахуйте подумки трохи менше під час наступних покупок.</p></div>
+      <div class="steps">
+        <article><span class="step-number">01</span><h3>Додайте Twinprice.</h3><p>Установіть безкоштовне розширення з Chrome Web Store або Firefox Add-ons.</p></article>
+        <article><span class="step-number">02</span><h3>Виберіть свою валюту.</h3><p>Виберіть валюту, яку знаєте. Дозвольте AUTO визначити початкову валюту або виберіть її самі.</p></article>
+        <article><span class="step-number">03</span><h3>Переглядайте. Конвертуйте. Порівнюйте.</h3><p>Відкрийте сторінку магазину й конвертуйте її ціни. Увімкніть автоматичну конвертацію для вибраних сайтів.</p></article>
+      </div>
+    </section>
+    <section class="features-background">
+      <div class="section wrap">
+        <div class="section-heading"><div><p class="eyebrow">02 / ВАШ БРАУЗЕР, ТІЛЬКИ ТРОХИ КРАЩИЙ</p><h2>Маленьке доповнення.<br>Щоденна різниця.</h2></div><p>Увесь потрібний контекст.<br>Просто поруч із ціною, на яку ви дивитеся.</p></div>
+        <div class="feature-grid">
+          <article class="feature feature-primary"><span class="feature-index">01 / ПОРІВНЮЙТЕ</span><h3>Порівнюйте з одного погляду.</h3><p>Тримайте початкову ціну та її конвертацію разом. Орієнтуйтеся, не відкриваючи калькулятор чи ще одну вкладку.</p><div class="price-sample" aria-label="Приклад: 89 євро, приблизно 97 доларів 90 центів"><span>€89.00</span><span>≈ $97.90</span></div><span class="feature-caption">Той самий товар. Зрозуміла ціна. Лише приклад.</span></article>
+          <article class="feature"><span class="feature-index">02 / ЗАПАМ'ЯТОВУЙТЕ</span><h3>Ваші магазини. Ваші налаштування.</h3><p>Увімкніть автоматичну конвертацію для вибраних сайтів. Twinprice запам'ятовує для кожного з них вихідну валюту або режим AUTO.</p><div class="feature-detail"><span>Улюблений магазин</span><span class="setting-badge">Автоконвертацію ввімкнено</span></div></article>
+          <article class="feature"><span class="feature-index">03 / НАЛАШТУЙТЕ ПІД СЕБЕ</span><h3>Приємно для очей.</h3><p>Вибирайте кольори та форми конвертованих цін із попереднім переглядом наживо. Залишайте початкові ціни поруч або показуйте конвертовані замість них.</p><div class="appearance-samples" aria-label="Приклади вигляду конвертованої ціни"><span>≈ $97.90</span><span>≈ $97.90</span><span>≈ $97.90</span></div></article>
+          <article class="feature"><span class="feature-index">04 / ЛИШЕ ОДНА ЦІНА</span><h3>Виділіть. Натисніть. Конвертуйте.</h3><p>Виділіть ціну разом із валютою й натисніть під нею <strong>Конвертувати виділене</strong>. Отримайте конвертацію лише тієї ціни, яка вам потрібна. Також можна конвертувати всю сторінку або ввести суму в розширенні.</p><div class="mode-examples" aria-label="Три кроки, щоб конвертувати виділену ціну"><span>1. Виділіть ціну</span><span>2. Натисніть «Конвертувати виділене»</span><span>3. Перегляньте результат</span></div></article>
+        </div>
+        <details class="screenshot-disclosure"><summary>Подивіться на Twinprice на справжній сторінці магазину <span aria-hidden="true">+</span></summary><figure><a href="../assets/page-conversion.png" aria-label="Відкрити в повному розмірі знімок екрана розширення на сторінці магазину"><img src="../assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="Справжня сторінка магазину, де поруч із початковими цінами додано зелені конвертовані суми."></a><figcaption>Справжній знімок екрана розширення. Показані курси взято зі знімка, вони не актуальні.</figcaption></figure></details>
+      </div>
+    </section>
+    <section class="section wrap privacy-section" id="privacy">
+      <div><p class="eyebrow">03 / СТВОРЕНО З ДУМКОЮ ПРО ПРИВАТНІСТЬ</p><h2>Ваш перегляд<br>залишається вашим.</h2><p class="privacy-intro">Twinprice читає ціни там, де вони є: у вашому браузері. Сторінкам, на яких ви купуєте, не потрібно потрапляти кудись іще.</p><a class="text-button" href="privacy/">Прочитати повну політику приватності <span aria-hidden="true">↗</span></a></div>
+      <div class="privacy-facts">
+        <article><span class="fact-number">01</span><div><h3>Сторінка обробляється локально.</h3><p>Розпізнавання цін і зміни на сторінці відбуваються на вашому пристрої. Вміст сторінок, значення цін і відвідані URL-адреси не надсилаються постачальнику курсів.</p></div></article>
+        <article><span class="fact-number">02</span><div><h3>Коди валют, а не ваш кошик.</h3><p>Запити курсів валют до Frankfurter містять коди валют. Як і під час інших інтернет-запитів, сервіс може отримувати мережеві дані, як-от вашу IP-адресу.</p></div></article>
+        <article><span class="fact-number">03</span><div><h3>Дозволи, що мають мету.</h3><p>Доступ до вебсторінок дає розширенню змогу знаходити підтримувані ціни й пропонувати конвертацію. Вимкніть конвертер, щоб зупинити сканування, підказки й автоматичну конвертацію.</p></div></article>
+      </div>
+    </section>
+    <section class="faq-section section wrap" id="faq">
+      <div><p class="eyebrow">04 / КОРИСНО ЗНАТИ</p><h2>Кілька речей,<br>про які ви можете запитати.</h2><p>Маєте інше запитання?<br><a href="https://github.com/somewordshere/twinprice/issues">Отримайте допомогу або повідомте про проблему</a>.</p></div>
+      <div class="faq-list">
+        <details><summary>Де дізнатися, як користуватися Twinprice?<span aria-hidden="true">+</span></summary><p>Скористайтеся <a href="guide/">покроковим посібником користувача</a> з конвертації сторінок і виділеного тексту. Його <a href="guide/#shopping-examples">приклади покупок</a> пояснюють конвертацію євро в злоті, неоднозначні знаки долара та розбіжності під час оплати.</p></details>
+        <details><summary>Чи Twinprice безкоштовний?<span aria-hidden="true">+</span></summary><p>Так. Установлення й користування Twinprice безкоштовні, обліковий запис не потрібен. Розширення має відкритий код і не містить рекламних чи аналітичних трекерів.</p></details>
+        <details><summary>Які браузери й валюти підтримуються?<span aria-hidden="true">+</span></summary><p>Twinprice доступний для Chrome і Firefox. У розширенні валюти можна шукати за назвою або кодом. Ручна конвертація використовує каталог активних валют Frankfurter; розпізнавання AUTO використовує менший, відібраний набір. Доступні валютні пари залежать від постачальника курсів.</p></details>
+        <details><summary>Чи можна конвертувати лише одну ціну?<span aria-hidden="true">+</span></summary><p>Так. Виділіть підтримувану ціну разом із символом або кодом валюти (наприклад, €89), а потім натисніть під нею синю кнопку «Конвертувати виділене». Кнопка стане зеленою й покаже результат у бажаній валюті. Також можна клацнути виділену ціну правою кнопкою миші й вибрати «Convert selected currency».</p></details>
+        <details><summary>Чи працює це на кожному сайті?<span aria-hidden="true">+</span></summary><p>Розширення працює з підтримуваним текстом цін на звичайних вебсторінках, зокрема з багатьма цінами, що додаються під час перегляду. Ціни на зображеннях, у недоступних фреймах і в деяких незвичних макетах конвертувати неможливо. Сторінки налаштувань браузера та магазини розширень мають обмеження. Якщо вихідна валюта незрозуміла, виберіть її вручну у спливному вікні.</p></details>
+        <details><summary>Наскільки точні конвертовані ціни?<span aria-hidden="true">+</span></summary><p>Twinprice використовує довідкові курси Frankfurter для зручного порівняння. Ваш банк, емітент картки або платіжний сервіс можуть застосувати інший курс і додати комісії. Коли свіжі курси недоступні, можуть використовуватися нещодавно збережені в кеші; розширення попереджає через 48 годин і не використовує курси, старші за сім днів. Демо на цьому сайті використовує фіксовані приклади курсів.</p></details>
+        <details><summary>Чи можна відновити ціни або вимкнути конвертацію?<span aria-hidden="true">+</span></summary><p>Так. Після конвертації виберіть у спливному вікні «Відновити початкові ціни». У розділі «Параметри сторінки» вимкніть «Конвертувати цей сайт автоматично», щоб розширення забуло автоматичні налаштування цього сайту. Вимкніть «Увімкнути конвертер», щоб усюди зупинити сканування, підказки й автоматичну конвертацію.</p></details>
+      </div>
+    </section>
+    <section class="install-section wrap" id="install" aria-labelledby="install-title"><p class="eyebrow">МЕНШЕ РАХУНКІВ ПОДУМКИ. БІЛЬШЕ ПРОГУЛЯНОК ВІТРИНАМИ.</p><h2 id="install-title">Почувайтеся як удома.<br>У будь-якій валюті.</h2><p>Додайте знайому ціну до своєї наступної знахідки.</p><div class="install-buttons"><a data-install="chrome" data-text-edge="Завантажити для Edge" data-text-opera="Завантажити для Opera" data-text-other="Інші браузери" class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=uk">Отримати Twinprice для Chrome <span aria-hidden="true">↗</span></a><a data-install="firefox" class="button button-outline" href="https://addons.mozilla.org/uk/firefox/addon/twinprice/">Отримати Twinprice для Firefox <span aria-hidden="true">↗</span></a></div><p class="free-note">Встановлення безкоштовне. Обліковий запис не потрібен. <a href="about/">Відомості про продукт і видавця</a>.</p></section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="./"><span>twinprice<span class="brand-period">.</span>com</span></a><span>Знайома ціна, хоч би де ви купували.</span><a href="guide/">Посібник користувача</a><a href="about/">Про нас</a><a href="privacy/">Політика приватності</a><a href="https://github.com/somewordshere/twinprice/issues">Допомога / Повідомити про проблему</a><a href="https://github.com/somewordshere/twinprice">Вихідний код</a></footer>
+</body>
+</html>
