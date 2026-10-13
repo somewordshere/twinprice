@@ -1069,3 +1069,36 @@ h1 {
   .guide-main { padding-top: 26px; }
   .guide-contents, .guide-next { padding: 20px; }
 }
+.language-menu { position: relative; flex-shrink: 0; font-size: 13px; }
+.language-menu summary { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; color: #475265; font-weight: 600; cursor: pointer; list-style: none; }
+.language-menu summary:hover, .language-menu[open] summary { color: var(--blue); border-color: var(--blue); }
+.language-menu ul { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; margin: 0; padding: 6px; min-width: 190px; list-style: none; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 14px 36px rgba(20, 32, 56, .14); }
+.language-menu a { display: block; padding: 9px 12px; border-radius: 7px; color: var(--ink); font-size: 14px; text-decoration: none; }
+.language-menu a:hover { background: var(--pale); color: var(--blue); }
+.language-menu a[aria-current] { color: var(--blue); font-weight: 650; }
+@media (max-width: 760px) {
+  .site-header .brand { margin-right: auto; }
+}
+@media (max-width: 380px) {
+  .language-menu summary { padding: 0 8px; gap: 4px; min-height: 40px; }
+}
+.site-header nav { margin-inline: auto; }
+.site-header nav a { white-space: nowrap; }
+@media (max-width: 480px) {
+  .site-header > .button span[aria-hidden] { display: none; }
+  .language-menu summary span { display: none; }
+  .language-menu summary { padding: 0 9px; }
+}
+@media (min-width: 381px) and (max-width: 480px) {
+  .site-header .brand { font-size: 22px; }
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  .site-header > .button span[aria-hidden] { display: none; }
+}
+@media (max-width: 340px) {
+  .site-header { gap: 6px; }
+  .site-header .brand { font-size: 18px; }
+}
+/* Longer translations must not widen the hero past the screen. */
+.hero > * { min-width: 0; }
+.currency-control select { min-width: 0; }

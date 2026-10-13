@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#245bea">
+  <title>Jak przeliczać ceny na stronach w Chrome i Firefoksie – Twinprice</title>
+  <meta name="description" content="Dowiedz się, jak za pomocą Twinprice przeliczać ceny na stronie sklepu, przeliczyć zaznaczoną cenę, wybierać waluty, włączyć automatyczne przeliczanie i przywracać oryginalne ceny.">
+  <link rel="canonical" href="https://twinprice.com/pl/guide/"><!-- i18n:alternates --><link rel="alternate" hreflang="en" href="https://twinprice.com/guide/"><link rel="alternate" hreflang="de" href="https://twinprice.com/de/guide/"><link rel="alternate" hreflang="es" href="https://twinprice.com/es/guide/"><link rel="alternate" hreflang="fr" href="https://twinprice.com/fr/guide/"><link rel="alternate" hreflang="it" href="https://twinprice.com/it/guide/"><link rel="alternate" hreflang="nl" href="https://twinprice.com/nl/guide/"><link rel="alternate" hreflang="pl" href="https://twinprice.com/pl/guide/"><link rel="alternate" hreflang="pt-BR" href="https://twinprice.com/pt-BR/guide/"><link rel="alternate" hreflang="tr" href="https://twinprice.com/tr/guide/"><link rel="alternate" hreflang="uk" href="https://twinprice.com/uk/guide/"><link rel="alternate" hreflang="x-default" href="https://twinprice.com/guide/"><!-- /i18n:alternates -->
+  <meta property="og:title" content="Jak przeliczać ceny na stronach za pomocą Twinprice">
+  <meta property="og:description" content="Poradnik krok po kroku: przeliczanie całej strony lub jednej zaznaczonej ceny w Chrome i Firefoksie.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://twinprice.com/pl/guide/">
+  <meta property="og:site_name" content="Twinprice">
+  <meta property="og:image" content="https://twinprice.com/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Twinprice: bezpłatne rozszerzenie do przeliczania walut dla Chrome i Firefoksa. Kupuj za granicą. Zobacz ceny w swojej walucie.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png">
+  <link rel="icon" href="../../favicon.ico" sizes="48x48">
+  <link rel="icon" href="../../assets/favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="icon" href="../../assets/favicon-96.png" type="image/png" sizes="96x96">
+  <link rel="icon" href="../../assets/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://twinprice.com/pl/guide/#webpage",
+  "url": "https://twinprice.com/pl/guide/",
+  "name": "Jak przeliczać ceny na stronach za pomocą Twinprice",
+  "description": "Poradnik przeliczania cen na stronach sklepów i zaznaczonych cen w Chrome i Firefoksie.",
+  "inLanguage": "pl",
+  "isPartOf": {
+    "@id": "https://twinprice.com/#website"
+  },
+  "about": {
+    "@id": "https://twinprice.com/#extension"
+  },
+  "dateModified": "2026-09-14"
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header wrap">
+    <a class="brand" href="../" aria-label="Strona główna twinprice.com"><img src="../../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
+    <nav aria-label="Nawigacja główna"><a href="../#how-it-works">Jak to działa</a><a href="./" aria-current="page">Poradnik</a><a href="../privacy/">Prywatność</a><a href="../about/">O Twinprice</a></nav>
+    <a class="button button-small" href="../#install">Zainstaluj <span aria-hidden="true">↗</span></a><!-- i18n:languages --><details class="language-menu" translate="no"><summary aria-label="Język: Polski"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c2 2 2 11 0 13M8 1.5c-2 2-2 11 0 13"/></svg><span>PL</span></summary><ul><li><a href="../../guide/" hreflang="en" lang="en">English</a></li><li><a href="../../de/guide/" hreflang="de" lang="de">Deutsch</a></li><li><a href="../../es/guide/" hreflang="es" lang="es">Español</a></li><li><a href="../../fr/guide/" hreflang="fr" lang="fr">Français</a></li><li><a href="../../it/guide/" hreflang="it" lang="it">Italiano</a></li><li><a href="../../nl/guide/" hreflang="nl" lang="nl">Nederlands</a></li><li><a href="../../pl/guide/" hreflang="pl" lang="pl" aria-current="true">Polski</a></li><li><a href="../../pt-BR/guide/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li><li><a href="../../tr/guide/" hreflang="tr" lang="tr">Türkçe</a></li><li><a href="../../uk/guide/" hreflang="uk" lang="uk">Українська</a></li></ul></details><!-- /i18n:languages -->
+  </header>
+  <main class="wrap guide-main" id="main">
+    <article>
+      <header class="guide-intro">
+        <p class="eyebrow">PORADNIK UŻYTKOWNIKA TWINPRICE</p>
+        <h1>Jak przeliczać ceny na stronach w Chrome i Firefoksie</h1>
+        <p>Twinprice to bezpłatne rozszerzenie przeglądarki, które przelicza ceny na stronach sklepów na preferowaną walutę. Zainstaluj je, wybierz waluty i kliknij <strong>Przelicz ceny na stronie</strong>. Aby przeliczyć tylko jedną cenę, zaznacz ją razem z walutą i kliknij <strong>Przelicz zaznaczenie</strong>.</p>
+        <p class="guide-updated">Zaktualizowano <time datetime="2026-09-14">14 września 2026</time></p>
+      </header>
+      <nav class="guide-contents" aria-label="W tym poradniku"><strong>W tym poradniku</strong><a href="#install">Instalacja Twinprice</a><a href="#whole-page">Przeliczanie całej strony</a><a href="#one-price">Przeliczanie jednej ceny</a><a href="#automatic">Zapamiętywanie ustawień</a><a href="#restore">Przywracanie oryginalnych cen</a><a href="#shopping-examples">Przykłady zakupowe</a><a href="#troubleshooting">Gdy cena się nie przelicza</a></nav>
+      <section id="install">
+        <h2>1. Zainstaluj Twinprice w przeglądarce</h2>
+        <p>Otwórz <a href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=pl">stronę Twinprice w Chrome Web Store</a> lub <a href="https://addons.mozilla.org/pl/firefox/addon/twinprice/">stronę Twinprice w Firefox Add-ons</a> i postępuj zgodnie z instrukcją instalacji w swojej przeglądarce. Nie trzeba zakładać żadnego konta Twinprice.</p>
+        <p>Otwórz zwykłą stronę sklepu. Uruchom Twinprice z menu rozszerzeń przeglądarki; przypnij je do paska narzędzi, jeśli chcesz mieć je szybciej pod ręką. Dostęp do stron internetowych pozwala rozszerzeniu znajdować obsługiwane ceny i wyświetlać przeliczenia. W <a href="../privacy/">polityce prywatności</a> przeczytasz, jak działają uprawnienia i zapytania o kursy walut.</p>
+      </section>
+      <section id="whole-page">
+        <h2>2. Przelicz ceny na stronie sklepu</h2>
+        <ol>
+          <li>Otwórz Twinprice z paska narzędzi przeglądarki.</li>
+          <li>W polu <strong>Z</strong> zostaw zaznaczone <strong>AUTO</strong>, aby wykryć walutę źródłową, albo wybierz ją samodzielnie. Jeśli symbol jest niejednoznaczny, ręcznie wskaż właściwą walutę.</li>
+          <li>W polu <strong>NA</strong> wybierz walutę, którą chcesz widzieć. Szukaj po nazwie lub kodzie waluty, na przykład EUR albo USD.</li>
+          <li>Kliknij <strong>Przelicz ceny na stronie</strong>. Jeśli przelicznik jest wyłączony, przycisk może mieć nazwę <strong>Włącz i przelicz stronę</strong>.</li>
+        </ol>
+        <p>Możesz też użyć przycisku <strong>Przelicz ceny</strong> w podpowiedzi na stronie, gdy Twinprice znajdzie obsługiwaną cenę. W widoku obok siebie oryginalna kwota pozostaje widoczna przy swoim przeliczeniu.</p>
+        <figure><a href="../../assets/guide-page-conversion.png"><img src="../../assets/guide-page-conversion.png" width="1180" height="770" loading="lazy" alt="Twinprice w przykładowym sklepie: oryginalne ceny w dolarach pozostają widoczne obok zielonych przeliczeń na euro, a na dole znajduje się akcja „Cofnij”."></a><figcaption>Zrzut ekranu rozszerzenia na przykładowej stronie sklepu. Kwoty i kursy to przykłady ze zrzutu, a nie aktualne kursy. Otwórz obraz, aby zobaczyć go w pełnym rozmiarze.</figcaption></figure>
+      </section>
+      <section id="one-price">
+        <h2>3. Przelicz jedną zaznaczoną cenę</h2>
+        <p>Najpierw ustaw walutę docelową w okienku Twinprice. Następnie zaznacz cenę na stronie razem z symbolem lub kodem waluty – na przykład <strong>USD 115.00</strong>. Kliknij niebieski przycisk <strong>Przelicz zaznaczenie</strong> pod zaznaczeniem. Wynik pojawi się w zielonym dymku.</p>
+        <p>Możesz też kliknąć zaznaczony tekst prawym przyciskiem myszy i wybrać <strong>Convert selected currency</strong>. Przeliczanie zaznaczenia przydaje się, gdy potrzebujesz tylko jednej kwoty i nie chcesz przeliczać reszty strony.</p>
+        <figure><a href="../../assets/guide-selection.png"><img src="../../assets/guide-selection.png" width="840" height="317" loading="lazy" alt="Zaznaczona cena $115.00 z zielonym dymkiem Twinprice pokazującym wynik: USD na 103,50 euro."></a><figcaption>Przeliczenie pojedynczej ceny przez rozszerzenie. Ten zrzut ekranu korzysta z przykładowego kursu.</figcaption></figure>
+      </section>
+      <section id="automatic">
+        <h2>4. Zapamiętaj ustawienia ulubionego sklepu</h2>
+        <p>Otwórz <strong>Opcje strony</strong> w wyskakującym okienku i włącz <strong>Przeliczaj tę witrynę automatycznie</strong>. Twinprice zapamiętuje automatyczne przeliczanie dla tej witryny, łącznie z ręcznie wybraną walutą źródłową lub ustawieniem AUTO.</p>
+        <p>W ustawieniach wyglądu w okienku możesz wybrać kolory i kształt przeliczonych cen. Możesz też wyświetlać przeliczone ceny obok oryginalnych albo w ich miejscu.</p>
+      </section>
+      <section id="restore">
+        <h2>5. Przywróć ceny lub wyłącz przeliczanie</h2>
+        <p>Po przeliczeniu strony otwórz okienko i wybierz <strong>Przywróć oryginalne ceny</strong>, aby cofnąć przeliczenia. Aby zatrzymać automatyczne przeliczanie w tym sklepie, wyłącz <strong>Przeliczaj tę witrynę automatycznie</strong> w opcjach strony.</p>
+        <p>Aby wszędzie zatrzymać skanowanie cen, podpowiedzi i automatyczne przeliczanie, wyłącz <strong>Włącz przelicznik</strong>.</p>
+      </section>
+      <section id="shopping-examples">
+        <h2>Praktyczne przykłady zakupów za granicą</h2>
+        <p>Te przykłady pokazują, jak wybierać waluty i jak rozumieć przeliczenie. Wszystkie kursy poniżej są wymyślone dla ilustracji; rozszerzenie korzysta z kursu udostępnianego przez dostawcę.</p>
+        <h3 id="euros-to-zloty">Jak zobaczyć cenę w euro w polskich złotych?</h3>
+        <p>Dla sklepu, który sprzedaje w euro, wybierz <strong>Z: EUR</strong> i <strong>NA: PLN</strong>, a potem kliknij <strong>Przelicz ceny na stronie</strong>. Jeśli lampka kosztuje 89 €, a przykładowy kurs to 4,30 PLN za 1 EUR, jej przeliczona cena wynosi <strong>382,70 PLN</strong> (89 × 4,30). Zostaw widoczną cenę oryginalną, aby porównać kwotę ze sklepu z szacunkiem w swojej walucie.</p>
+        <p>Aby przeliczyć tylko cenę tej lampki, ustaw PLN jako walutę docelową, zaznacz cenę razem z € lub EUR i kliknij <strong>Przelicz zaznaczenie</strong>.</p>
+        <h3 id="dollar-currencies">Czy znak dolara zawsze oznacza dolary amerykańskie?</h3>
+        <p>Nie. Znaku dolara używają USD, CAD, AUD i inne waluty. Sprawdź walutę w ustawieniach waluty sklepu lub w informacjach o płatności. Dla oferty w dolarach kanadyjskich wybierz <strong>Z: CAD</strong>, nawet jeśli wyświetlana cena to po prostu $100. Wybranie USD oznaczałoby inną parę walut.</p>
+        <p>AUTO korzysta z kontekstu walutowego strony. Jeśli wynik jest niejasny, wybierz walutę źródłową ręcznie. Gdy sklep pozwala zmienić wyświetlaną walutę, ustaw w Twinprice jako źródłową tę walutę, która jest aktualnie widoczna na stronie.</p>
+        <h3 id="checkout-differences">Dlaczego pobrana kwota różni się od przeliczenia Twinprice?</h3>
+        <p>Twinprice szacuje cenę na potrzeby porównania, korzystając z referencyjnego kursu wymiany. Nie zmienia ceny w sklepie ani nie ustala kursu stosowanego przez twój bank, wydawcę karty lub operatora płatności. Koszty wysyłki, podatki, marże przewalutowania i inne opłaty mogą zmienić końcową sumę.</p>
+        <p>Przykład: przy wymyślonym kursie 0,90 EUR za 1 USD produkt za 100 USD kosztuje 90 EUR. Hipotetyczna opłata za przewalutowanie w wysokości 3% od tej kwoty to dodatkowe 2,70 EUR, czyli razem 92,70 EUR przed innymi opłatami. Przeliczenie ceny przez Twinprice nie uwzględnia tej opłaty. Sprawdź końcową sumę w sklepie i warunki swojego operatora płatności, aby wiedzieć, ile zapłacisz.</p>
+        <h3 id="compare-shops">Jak porównać ceny z dwóch sklepów?</h3>
+        <p>Użyj tej samej waluty docelowej w obu witrynach, ale dla każdego sklepu wybierz właściwą walutę źródłową. Przelicz ceny produktów, a potem porównaj końcowe sumy z wysyłką i podatkami. Produkt z niższą przeliczoną ceną może w sumie kosztować więcej.</p>
+        <p>Jeśli chcesz tylko porównać kwoty, które już znasz, otwórz w okienku <strong>Przelicz dowolną kwotę</strong> i wpisz kwotę. Najpierw wybierz konkretną walutę źródłową, jeśli AUTO jeszcze żadnej nie rozpoznało.</p>
+        <h3 id="offline-rates">Czy mogę przeliczać ceny bez świeżego połączenia z internetem?</h3>
+        <p>Niedawno zapisane kursy z pamięci podręcznej umożliwiają przeliczenie, gdy świeży kurs jest niedostępny. Wymaga to użytecznego zapisanego kursu dla wybranych walut; nie ma gwarancji, że Twinprice będzie w pełni działać offline. Rozszerzenie ostrzega, gdy zapisane kursy mają ponad 48 godzin, i nie używa kursów starszych niż siedem dni.</p>
+        <p>Zobacz, <a href="../about/#rates">skąd pochodzą kursy</a> oraz <a href="../about/#product-facts">jakie ograniczenia ma produkt w zakresie przeglądarek i walut</a>.</p>
+      </section>
+      <section id="troubleshooting">
+        <h2>Gdy cena się nie przelicza</h2>
+        <dl class="guide-answers">
+          <dt>AUTO nie może rozpoznać waluty</dt><dd>Symbol taki jak $ może oznaczać kilka walut. Wybierz walutę sklepu w polu Z i spróbuj ponownie. Przy zaznaczonej cenie uwzględnij kod waluty, jeśli występuje w tekście strony.</dd>
+          <dt>Nic się nie dzieje na stronie ustawień przeglądarki lub w sklepie z rozszerzeniami</dt><dd>Przeglądarki ograniczają dostęp rozszerzeń do takich stron. Spróbuj na zwykłej stronie sklepu i sprawdź, czy Twinprice jest włączony i ma dostęp do tej witryny.</dd>
+          <dt>Niektóre ceny pozostają bez zmian</dt><dd>Twinprice działa z obsługiwanym tekstem stron internetowych. Ceny na obrazach, w niedostępnych ramkach lub w nietypowych układach mogą nie zostać wykryte. Spróbuj zaznaczyć cenę zapisaną tekstem albo wpisać kwotę w okienku.</dd>
+          <dt>Para walut lub świeży kurs są niedostępne</dt><dd>Dostępne pary zależą od dostawcy kursów walut. Sprawdź połączenie i wybrane waluty, a potem spróbuj ponownie. Twinprice może użyć niedawno zapisanych kursów; ostrzega po 48 godzinach i nie używa kursów starszych niż siedem dni.</dd>
+          <dt>Suma przy płatności różni się od przeliczenia</dt><dd>Twinprice korzysta z kursów referencyjnych Frankfurter, aby ułatwić porównywanie cen. Bank, wydawca karty lub operator płatności może zastosować inny kurs i doliczyć opłaty. Przeliczona kwota nie zmienia tego, ile pobiera sklep.</dd>
+        </dl>
+        <p>Nadal nie działa? <a href="https://github.com/somewordshere/twinprice/issues">Zgłoś problem na GitHubie</a>, podając przeglądarkę, wersję Twinprice i powtarzalny przykład. Nie podawaj prywatnych danych zamówienia ani płatności.</p>
+      </section>
+      <aside class="guide-next"><h2>Gotowe na kolejne znalezisko?</h2><p><a href="../#install">Pobierz Twinprice dla Chrome lub Firefoksa</a> albo przed instalacją <a href="../#demo">wypróbuj demo na stronie</a>.</p></aside>
+    </article>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="../"><span>twinprice<span class="brand-period">.</span>com</span></a><span>Znajoma cena, gdziekolwiek kupujesz.</span><a href="./" aria-current="page">Poradnik</a><a href="../about/">O Twinprice</a><a href="../privacy/">Polityka prywatności</a><a href="https://github.com/somewordshere/twinprice/issues">Pomoc / Zgłoś problem</a><a href="https://github.com/somewordshere/twinprice">Kod źródłowy</a></footer>
+</body>
+</html>

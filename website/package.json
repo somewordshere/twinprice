@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "node serve.mjs",
-    "check": "node --check dist/demo.js && node --check dist/selection-demo.js && node --check serve.mjs"
+    "i18n": "node build-i18n.mjs",
+    "check": "node --check dist/demo.js && node --check dist/selection-demo.js && node --check serve.mjs && node --check build-i18n.mjs"
   }
 }
