@@ -5,7 +5,7 @@ A buildless, responsive landing page and privacy page for the existing Chrome an
 ## Preview
 
 From this directory, run `npm run dev` and open `http://127.0.0.1:4173`.
-Run `npm run check` to check JavaScript syntax. No installation or build is required.
+Run `npm run check` to check JavaScript syntax. No installation is required; the only build step is `npm run i18n`, which regenerates the translated pages after an English page or a translation changes.
 
 ## Content
 
@@ -17,9 +17,21 @@ Run `npm run check` to check JavaScript syntax. No installation or build is requ
 - `dist/about/index.html`: public product facts, publisher attribution, sources, rate and privacy details, and an invitation for honest reviews. Publisher attribution was checked against both official store listings on 2026-09-14; avoid presenting an invented personal biography or a common store version.
 - `dist/sitemap.xml` and `dist/robots.txt`: canonical page discovery for search crawlers. Update `lastmod` only when that page changes substantially; omit verification and asset URLs.
 - `dist/assets/social-preview.png`: 1200 × 630 sharing card. Rebuild with `node social-preview.mjs` using the repository's Playwright dependency; deployment uses the committed image without a build step.
-- `sync-policy.mjs`: run `node sync-policy.mjs` from this directory to refresh the privacy page from the parent extension's `privacy-policy.md`.
+- `sync-policy.mjs`: run `node sync-policy.mjs` from this directory to refresh the privacy page from the parent extension's `privacy-policy.md`, then run `npm run i18n` so the translated privacy pages and the language menu follow.
 
-Example rates are illustrative, not live financial data. The demo loops through PLN, USD, JPY, UAH, GBP, MXN, ZAR, KRW, KZT, INR and DZD at 2.8-second intervals with a 420ms upward slide. The badge reserves space for the widest example; only text transforms and opacity animate, avoiding per-frame width layout. Formatted example amounts are cached once. These choices are not the full extension currency catalog. Selecting a currency pauses the loop; Play animation resumes it. Turning conversion off, focusing the currency picker, leaving the demo out of view, or hiding the tab suspends cycling. Reduced-motion preferences disable automatic playback by default and remove slide transitions. Automatic changes do not trigger screen-reader announcements. There is no standalone calculator, analytics, tracking, or account system.
+## Languages
+
+The site is published in the extension's ten interface languages: English at the root and German, Spanish, French, Italian, Dutch, Polish, Brazilian Portuguese, Turkish and Ukrainian under `dist/<language>/`. The English pages in `dist/` remain the authored source. `npm run i18n` (`build-i18n.mjs`) reads them and writes every translated page, the language menu in each header, the `hreflang` links, and the translated entries in `sitemap.xml`. Commit the generated pages; deployment still has no build step.
+
+- `i18n/en.json`: every piece of English text, keyed by a short hash of its wording. Generated; do not edit.
+- `i18n/<language>.json`: the translation for each key. Inline markup is written as numbered tags (`<1>…</1>`, `<2/>`) that must match the English entry.
+- `i18n/keep.json`: text that is deliberately the same in every language, such as the wordmark and the fictional shop name.
+
+Changing an English sentence changes its key. The build then lists the sentence as missing in every language, lists the old translation as unused, and exits with an error until each language file is updated. Text read by the scripts lives in `data-text-*` attributes so it is translated with the page. Currency names in the demo come from the browser's own `Intl.DisplayNames`. Button and menu names quoted in the guide match the extension's own translations in `src/shared/translations-app.js` and `translations-page.js`; the right-click menu entry stays in English because the extension does not translate it.
+
+The extension policy text on the privacy page stays in English in every language, marked `lang="en" translate="no"`, because it is synced verbatim from `privacy-policy.md`; the surrounding page and the "This website" section are translated. The store links on translated pages open the matching store language. To add a language, add it to `LANGUAGES` in `build-i18n.mjs` and create its JSON file.
+
+Example rates are illustrative, not live financial data. The demo loops through PLN, USD, JPY, UAH, GBP, MXN, ZAR, KRW, KZT, INR, DZD, BRL, TRY and THB at 2.8-second intervals with a 420ms upward slide. The badge reserves space for the widest example; only text transforms and opacity animate, avoiding per-frame width layout. Formatted example amounts are cached once. These choices are not the full extension currency catalog. Selecting a currency pauses the loop; Play animation resumes it. Turning conversion off, focusing the currency picker, leaving the demo out of view, or hiding the tab suspends cycling. Reduced-motion preferences disable automatic playback by default and remove slide transitions. Automatic changes do not trigger screen-reader announcements. There is no standalone calculator, analytics, tracking, or account system.
 
 ## Launch notes
 

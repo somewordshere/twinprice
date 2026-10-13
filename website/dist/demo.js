@@ -4,6 +4,12 @@ const converted = document.querySelector('#converted-price');
 const caption = document.querySelector('#conversion-caption');
 const status = document.querySelector('#demo-status');
 const playback = document.querySelector('#demo-playback');
+const toggleLabel = document.querySelector('#toggle-label');
+const rateNote = document.querySelector('#demo-rate');
+// The page's own language supplies every sentence; translated pages carry translated attributes.
+const language = document.documentElement.lang || 'en';
+const currencyNames = language !== 'en' && Intl.DisplayNames ? new Intl.DisplayNames([language], { type: 'currency' }) : null;
+const fill = (text, values) => text.replace(/\{(\w+)\}/g, (match, key) => values[key] ?? match);
 // Fixed demonstration rates, never live quotes.
 const examples = {
   PLN: { rate: 4.30, locale: 'pl-PL', label: 'Polish złoty' },
@@ -17,6 +23,9 @@ const examples = {
   KZT: { rate: 570, locale: 'kk-KZ', label: 'Kazakh tenge' },
   INR: { rate: 92.50, locale: 'en-IN', label: 'Indian rupees' },
   DZD: { rate: 145, locale: 'en-GB', label: 'Algerian dinars' },
+  BRL: { rate: 5.60, locale: 'pt-BR', label: 'Brazilian reais' },
+  TRY: { rate: 55, locale: 'tr-TR', label: 'Turkish lira' },
+  THB: { rate: 37.50, locale: 'th-TH', label: 'Thai baht' },
 };
 const sequence = Object.keys(examples);
 // Format once and reserve enough room for every example without measuring layout.
@@ -73,17 +82,18 @@ function updateDemo({ announce = false, slide = false } = {}) {
   displayPrice(`≈ ${amount}`, slide && toggle.checked);
   converted.hidden = !toggle.checked;
   caption.hidden = !toggle.checked;
-  document.querySelector('#toggle-label').textContent = toggle.checked ? 'On' : 'Off';
-  document.querySelector('#demo-rate').textContent = `Example rate: €1 = ${example.rate.toFixed(Number.isInteger(example.rate) ? 0 : 2)} ${currency.value}`;
+  toggleLabel.textContent = toggle.checked ? toggleLabel.dataset.textOn : toggleLabel.dataset.textOff;
+  const rate = example.rate.toLocaleString(language, { useGrouping: false, minimumFractionDigits: Number.isInteger(example.rate) ? 0 : 2 });
+  rateNote.textContent = fill(rateNote.dataset.textRate, { rate, code: currency.value });
   // Automatic changes stay quiet for screen readers; announce deliberate actions.
   if (announce) status.textContent = toggle.checked
-    ? `Twinprice on. Original price 89 euros, approximately ${amount} in ${example.label}. This is a fixed example rate.`
-    : 'Twinprice off. Only the original price, 89 euros, is shown.';
+    ? fill(status.dataset.textOn, { amount, currency: currencyNames ? currencyNames.of(currency.value) : example.label })
+    : status.dataset.textOff;
 }
 
 function schedule() {
   clearTimeout(timer);
-  playback.textContent = playing ? 'Pause animation' : 'Play animation';
+  playback.textContent = playing ? playback.dataset.textPause : playback.dataset.textPlay;
   playback.setAttribute('aria-pressed', String(playing));
   playback.disabled = !toggle.checked;
   if (!playing || !toggle.checked || !visible || document.hidden || document.activeElement === currency) return;

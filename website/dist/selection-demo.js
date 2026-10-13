@@ -11,7 +11,7 @@
     demo.classList.toggle('is-animated', !reducedMotion.matches);
     demo.dataset.running = String(playing && visible && !document.hidden && !reducedMotion.matches);
     control.hidden = reducedMotion.matches;
-    control.textContent = playing ? 'Pause animation' : 'Play animation';
+    control.textContent = playing ? control.dataset.textPause : control.dataset.textPlay;
     control.setAttribute('aria-pressed', String(playing));
   }
 
