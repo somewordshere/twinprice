@@ -1102,3 +1102,8 @@ h1 {
 /* Longer translations must not widen the hero past the screen. */
 .hero > * { min-width: 0; }
 .currency-control select { min-width: 0; }
+/* The shared rule that turns the FAQ "+" into a "×" must not tilt the language code. */
+.language-menu[open] > summary > span { transform: none; }
+.language-menu[open] ul { animation: language-menu-in .16s ease-out; }
+@keyframes language-menu-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .language-menu[open] ul { animation: none; } }
