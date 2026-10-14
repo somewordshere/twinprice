@@ -85,6 +85,11 @@ assert.ok(
   fs.readFileSync(path.join(root, "WHATS-NEW.md"), "utf8").includes(`## ${packageJson.version} · `),
   "WHATS-NEW.md (the user changelog) must include the package version"
 );
+assert.ok(
+  fs.readFileSync(path.join(root, "website/dist/whats-new/index.html"), "utf8")
+    .includes(`id="v${packageJson.version.replaceAll(".", "-")}"`),
+  "the website's What's new page is stale; run node sync-whats-new.mjs and npm run i18n in website/"
+);
 assert.deepEqual(
   baseManifest.host_permissions,
   ["https://api.frankfurter.dev/*"],

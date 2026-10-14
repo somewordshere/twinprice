@@ -17,6 +17,8 @@ Run `npm run check` to check JavaScript syntax. No installation is required; the
 - `dist/about/index.html`: public product facts, publisher attribution, sources, rate and privacy details, and an invitation for honest reviews. Publisher attribution was checked against both official store listings on 2026-09-14; avoid presenting an invented personal biography or a common store version.
 - `dist/sitemap.xml` and `dist/robots.txt`: canonical page discovery for search crawlers. Update `lastmod` only when that page changes substantially; omit verification and asset URLs.
 - `dist/assets/social-preview.png`: 1200 × 630 sharing card. Rebuild with `node social-preview.mjs` using the repository's Playwright dependency; deployment uses the committed image without a build step.
+- `dist/whats-new/index.html`: every release, newest first, linked from the footer of every page. Generated; do not edit.
+- `sync-whats-new.mjs`: run `node sync-whats-new.mjs` from this directory to rebuild the What's new page from the repository's `WHATS-NEW.md`, then run `npm run i18n`. As on the privacy page, the release notes stay in English (`lang="en" translate="no"`); only the page around them is translated.
 - `sync-policy.mjs`: run `node sync-policy.mjs` from this directory to refresh the privacy page from the parent extension's `privacy-policy.md`, then run `npm run i18n` so the translated privacy pages and the language menu follow.
 
 ## Languages
