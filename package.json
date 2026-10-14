@@ -10,6 +10,7 @@
     "build": "node scripts/build.mjs all",
     "build:chrome": "node scripts/build.mjs chrome",
     "build:firefox": "node scripts/build.mjs firefox",
+    "release": "npm run verify && npm run lint:firefox && npm run build && npm run check",
     "lint:firefox": "npm run prepare:firefox && web-ext lint --source-dir dist/firefox",
     "run:firefox": "npm run prepare:firefox && web-ext run --source-dir dist/firefox",
     "test:browser": "npm run prepare:chrome && playwright test",
@@ -22,7 +23,8 @@
     "build:promo": "node scripts/build-promo-tile.mjs",
     "capture": "npm run prepare:chrome && playwright test --config playwright.capture.config.js",
     "build:store-assets": "npm run capture && node scripts/build-store-screenshots.mjs",
-    "build:firefox-screenshots": "node scripts/build-firefox-screenshots.mjs"
+    "build:firefox-screenshots": "node scripts/build-firefox-screenshots.mjs",
+    "build:video": "npm run prepare:chrome && node scripts/build-demo-video.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -7,14 +7,15 @@ playwright-report/
 test-results/
 dist/
 web-ext-artifacts/
-downloaded websites/
-websites/
+local/
+.wrangler/
+.claude/settings.local.json
 *.log
 
-# Internal review material and generated references
-audit/
-structure.txt
-store/
+# Store: commit listing text and final upload images; keep raw inputs local
+store/source/
+store/video/*.mp4
+store/growth.md
 
 # Keep generated unpacked builds out of the repository
 release/unpacked/
