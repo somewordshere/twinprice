@@ -1,6 +1,6 @@
 // Temporary trial of a new screenshot set; delete this file after the decision.
 // TRIAL_PAIR picks the currencies: usd-eur (English, the default) or eur-pln
-// (Polish). Writes v3-*.png to store/chrome/captures/<pair>/.
+// (Polish). Writes v3-*.png to store/source/captures/<pair>/.
 const path = require("node:path");
 const fs = require("node:fs");
 const { test } = require("../e2e/fixtures");
@@ -24,7 +24,7 @@ const PAIRS = {
 };
 const PAIR_ID = process.env.TRIAL_PAIR || "usd-eur";
 const PAIR = PAIRS[PAIR_ID];
-const OUT = path.resolve(__dirname, "../../store/chrome/captures", PAIR_ID);
+const OUT = path.resolve(__dirname, "../../store/source/captures", PAIR_ID);
 const EXTENSION = path.resolve(__dirname, "../../dist/chrome");
 
 // The most recent working day, so the rate shown never looks months old.
