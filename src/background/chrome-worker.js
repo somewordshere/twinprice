@@ -2,6 +2,7 @@ importScripts(
   "../shared/browser-api.js",
   "../shared/currencies.js",
   "../shared/settings.js",
+  "../shared/i18n.js",
   "../shared/messages.js",
   "../shared/page-access.js",
   "../shared/content-script-resources.js",

@@ -106,6 +106,7 @@ const currencyComboboxes = [
   createCurrencyCombobox(fromCurrencySelect, fromCurrencySearch, fromCurrencyList),
   createCurrencyCombobox(toCurrencySelect, toCurrencySearch, toCurrencyList)
 ];
+const selectMenus = [languageSelect, themeSelect, displayModeSelect].map(createSelectMenu);
 
 // Show the browser's language straight away; the saved choice replaces it once
 // the settings arrive, so nobody sees a flash of English first.
@@ -152,6 +153,7 @@ async function initialize() {
   syncCurrencyComboboxes();
   applyTheme(settings.theme);
   displayModeSelect.value = settings.displayMode;
+  syncSelectMenus();
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
   siteStatus = statusResult;
@@ -273,6 +275,7 @@ function applyLanguage(preference) {
     return option;
   }));
   languageSelect.value = preference;
+  syncSelectMenus();
   renderShortcutHint();
   if (!popupReady) return;
   populateCurrencyLists();
@@ -634,6 +637,140 @@ function syncCurrencyComboboxes() {
   currencyComboboxes.forEach(syncCurrencyCombobox);
 }
 
+// Language, theme and price display open the same list as the currency fields, minus
+// the search box: a button shows the current choice, and the hidden select beside it
+// still holds the value, so saving and restoring settings work as they did.
+function createSelectMenu(select) {
+  const button = document.getElementById(`${select.id}Button`);
+  const listbox = document.getElementById(`${select.id}List`);
+  const state = { select, button, listbox, activeIndex: -1, typed: "", typedAt: 0 };
+
+  button.addEventListener("click", () => {
+    if (isSelectMenuOpen(state)) closeSelectMenu(state);
+    else openSelectMenu(state);
+  });
+  button.addEventListener("keydown", (event) => handleSelectMenuKeydown(event, state));
+  // Space would otherwise click the button again on release and reopen the list.
+  button.addEventListener("keyup", (event) => {
+    if (event.key === " ") event.preventDefault();
+  });
+  button.addEventListener("blur", () => window.setTimeout(() => closeSelectMenu(state), 100));
+  listbox.addEventListener("mousedown", (event) => event.preventDefault());
+  listbox.addEventListener("click", (event) => {
+    const option = event.target.closest("[role='option']");
+    if (option) chooseSelectMenuOption(state, option.dataset.value);
+  });
+  select.addEventListener("change", () => syncSelectMenu(state));
+  return state;
+}
+
+function isSelectMenuOpen(state) {
+  return state.button.getAttribute("aria-expanded") === "true";
+}
+
+function openSelectMenu(state) {
+  for (const menu of selectMenus) {
+    if (menu !== state) closeSelectMenu(menu);
+  }
+  state.activeIndex = Math.max(0, state.select.selectedIndex);
+  state.listbox.replaceChildren(...[...state.select.options].map((sourceOption) => {
+    const option = document.createElement("span");
+    option.id = `${state.listbox.id}-option-${sourceOption.value}`;
+    option.className = "select-menu-option";
+    option.setAttribute("role", "option");
+    option.dataset.value = sourceOption.value;
+    option.setAttribute("aria-selected", String(sourceOption.selected));
+    option.textContent = sourceOption.textContent;
+    return option;
+  }));
+  state.listbox.hidden = false;
+  state.button.setAttribute("aria-expanded", "true");
+  updateActiveSelectMenuOption(state);
+}
+
+function handleSelectMenuKeydown(event, state) {
+  const open = isSelectMenuOpen(state);
+  if (event.key === "Escape") {
+    if (open) event.preventDefault();
+    closeSelectMenu(state);
+    return;
+  }
+  if (event.key === "Tab") {
+    closeSelectMenu(state);
+    return;
+  }
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    const active = state.select.options[state.activeIndex];
+    if (open && active) chooseSelectMenuOption(state, active.value);
+    else openSelectMenu(state);
+    return;
+  }
+
+  const last = state.select.options.length - 1;
+  let next = null;
+  if (event.key === "ArrowDown") next = open ? Math.min(last, state.activeIndex + 1) : null;
+  else if (event.key === "ArrowUp") next = open ? Math.max(0, state.activeIndex - 1) : null;
+  else if (event.key === "Home") next = 0;
+  else if (event.key === "End") next = last;
+  else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    // Typing jumps to the first choice that starts with the typed letters.
+    const now = Date.now();
+    state.typed = (now - state.typedAt > 600 ? "" : state.typed) + event.key.toLocaleLowerCase();
+    state.typedAt = now;
+    const match = [...state.select.options].findIndex((option) =>
+      option.textContent.trim().toLocaleLowerCase().startsWith(state.typed)
+    );
+    if (match < 0) return;
+    next = match;
+  } else {
+    return;
+  }
+
+  event.preventDefault();
+  if (!open) openSelectMenu(state);
+  if (next !== null) state.activeIndex = next;
+  updateActiveSelectMenuOption(state);
+}
+
+function updateActiveSelectMenuOption(state) {
+  const options = [...state.listbox.querySelectorAll("[role='option']")];
+  options.forEach((option, index) => {
+    if (index === state.activeIndex) option.dataset.active = "true";
+    else delete option.dataset.active;
+  });
+  const active = options[state.activeIndex];
+  if (active) {
+    state.button.setAttribute("aria-activedescendant", active.id);
+    active.scrollIntoView({ block: "nearest" });
+  } else {
+    state.button.removeAttribute("aria-activedescendant");
+  }
+}
+
+function chooseSelectMenuOption(state, value) {
+  const changed = state.select.value !== value;
+  state.select.value = value;
+  closeSelectMenu(state);
+  syncSelectMenu(state);
+  state.button.focus();
+  if (changed) state.select.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function closeSelectMenu(state) {
+  state.listbox.hidden = true;
+  state.button.setAttribute("aria-expanded", "false");
+  state.button.removeAttribute("aria-activedescendant");
+}
+
+function syncSelectMenu(state) {
+  state.button.textContent = state.select.selectedOptions[0]?.textContent.trim() || "";
+}
+
+function syncSelectMenus() {
+  selectMenus.forEach(syncSelectMenu);
+}
+
 function bindAppearanceControls() {
   bindColorControl(convertedTextColorInput, convertedTextColorHexInput);
   bindColorControl(convertedBackgroundColorInput, convertedBackgroundColorHexInput);
@@ -823,6 +960,7 @@ function setPopupInteractivity(enabled) {
     themeSelect,
     languageSelect,
     displayModeSelect,
+    ...selectMenus.map((menu) => menu.button),
     convertedTextColorInput,
     convertedTextColorHexInput,
     convertedBackgroundColorInput,
@@ -948,6 +1086,7 @@ function applySettingsToControls(settings) {
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
   syncCurrencyComboboxes();
+  syncSelectMenus();
   updateCurrencyDiscs();
   renderRecentPairs();
   updatePrimaryActionLabel();
@@ -961,6 +1100,7 @@ function applyTheme(theme) {
     ? theme
     : CurrencySettings.DEFAULTS.theme;
   themeSelect.value = normalizedTheme;
+  syncSelectMenus();
   document.documentElement.dataset.theme = normalizedTheme;
 }
 

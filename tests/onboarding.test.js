@@ -117,11 +117,14 @@ test("an existing choice survives the seeding, including one that matches no reg
   assert.equal(syncStore.toCurrency, "JPY");
 });
 
-function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = false, granted = true } = {}) {
+function createOnboarding({
+  tabs = [], injectFails = new Set(), queryThrows = false, granted = true, browserLanguage = "en-US"
+} = {}) {
   const created = [];
   const injected = [];
   const uninstallUrls = [];
   const context = load([
+    "shared/i18n.js",
     "shared/messages.js",
     "shared/page-access.js",
     "shared/content-script-resources.js",
@@ -129,7 +132,10 @@ function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = fa
   ], {
     // The real background load order puts these before onboarding.js, so the
     // module-level singleton can resolve them the same way it does at runtime.
-    ExtensionAPI: { runtime: { getManifest: () => ({ content_scripts: [] }) } }
+    ExtensionAPI: {
+      runtime: { getManifest: () => ({ content_scripts: [] }) },
+      i18n: { getUILanguage: () => browserLanguage }
+    }
   });
   const service = context.CurrencyOnboardingService.create({
     api: {
@@ -158,11 +164,51 @@ function createOnboarding({ tabs = [], injectFails = new Set(), queryThrows = fa
   return { service, created, injected, uninstallUrls };
 }
 
-test("uninstalling opens the goodbye page, and its address carries nothing about the user", async () => {
+test("uninstalling opens the goodbye page in the chosen language, and its address carries nothing else", async () => {
   const { service, uninstallUrls } = createOnboarding();
-  assert.equal((await service.setUninstallPage()).ok, true);
-  assert.deepEqual(uninstallUrls, ["https://twinprice.com/goodbye/"]);
-  assert.equal(new URL(uninstallUrls[0]).search, "");
+  assert.equal((await service.setUninstallPage("en")).ok, true);
+  await service.setUninstallPage("de");
+  await service.setUninstallPage("pt-BR");
+  await service.setUninstallPage("uk");
+  assert.deepEqual(uninstallUrls, [
+    "https://twinprice.com/goodbye/",
+    "https://twinprice.com/de/goodbye/",
+    "https://twinprice.com/pt-BR/goodbye/",
+    "https://twinprice.com/uk/goodbye/"
+  ]);
+  for (const url of uninstallUrls) {
+    assert.equal(new URL(url).search, "");
+    assert.equal(new URL(url).hash, "");
+  }
+});
+
+test("with the language left on automatic, the goodbye page follows the browser's language", async () => {
+  for (const [browserLanguage, expected] of [
+    ["pl", "https://twinprice.com/pl/goodbye/"],
+    ["de-CH", "https://twinprice.com/de/goodbye/"],
+    ["pt-PT", "https://twinprice.com/pt-BR/goodbye/"],
+    ["en-GB", "https://twinprice.com/goodbye/"],
+    // A language the site has no page for falls back to English.
+    ["ja", "https://twinprice.com/goodbye/"]
+  ]) {
+    for (const preference of ["auto", undefined, "not-a-language"]) {
+      const { service, uninstallUrls } = createOnboarding({ browserLanguage });
+      await service.setUninstallPage(preference);
+      assert.deepEqual(uninstallUrls, [expected], `${browserLanguage} with ${preference}`);
+    }
+  }
+});
+
+test("every language the add-on offers has a goodbye page on the website", () => {
+  const { service } = createOnboarding();
+  const i18nContext = load(["shared/i18n.js"]);
+  for (const language of i18nContext.CurrencyI18n.SUPPORTED) {
+    const page = new URL(service.uninstallPage(language)).pathname;
+    assert.ok(
+      fs.existsSync(path.join(root, "website/dist", page, "index.html")),
+      `website is missing ${page}`
+    );
+  }
 });
 
 test("the welcome tab opens on a first install and on nothing else", async () => {

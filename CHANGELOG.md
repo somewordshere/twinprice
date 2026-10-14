@@ -19,6 +19,21 @@ whose `package.json` declares the release version.
 
 ## Unreleased
 
+## 2.2.4 - 2026-10-14
+
+### Changed
+
+- Language, App theme and Price display under Page options now open the same dropdown as the currency fields, in place of the browser's plain menu. The list matches the popup in light and dark themes, marks the current choice, and works with the arrow keys, Home, End, Enter, Escape and typing the first letters of a choice.
+- Uninstalling now opens the goodbye page in the extension's language instead of always in English. With the language left on Automatic it follows the browser's language, and it changes as soon as you pick another language in the popup. A language the website has no page for falls back to English.
+
+### Privacy
+
+- The Uninstalling section now says the goodbye page opens in the extension's interface language, so its address shows that language (for example `/de/goodbye/`). It still carries no identifiers, no other settings and no browsing information, and nothing is sent when the page opens.
+
+### Tests
+
+- Chrome browser tests now open the three dropdowns and pick from them with the mouse and the keyboard. Added unit tests for the goodbye page address in each language, for following the browser's language, and for updating when the language setting changes. A new test fails if the add-on offers a language the website has no goodbye page for.
+
 ## 2.2.3 - 2026-10-04
 
 ### Fixed

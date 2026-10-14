@@ -14,9 +14,12 @@
     "sync.services.mozilla.com"
   ]);
 
-  // The popup loads the translator; the background does not, and keeps English.
+  // The popup loads the translations. The background loads the translator only to
+  // work out a language, without any dictionaries, so it keeps English: a missing
+  // entry comes back as its own key.
   function text(key, fallback, params) {
-    return global.CurrencyI18n ? global.CurrencyI18n.t(key, params) : fallback;
+    const translated = global.CurrencyI18n ? global.CurrencyI18n.t(key, params) : key;
+    return translated === key ? fallback : translated;
   }
 
   function unsupportedPageMessage(urlValue) {

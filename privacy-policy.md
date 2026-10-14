@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: October 4, 2026 (version 2.2.3)
+Effective date: October 14, 2026 (version 2.2.4)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 
@@ -123,10 +123,12 @@ fallback until local extension data is cleared or the extension is uninstalled.
 
 ## Uninstalling
 
-When the extension is uninstalled, the browser opens https://twinprice.com/goodbye/,
-a page with optional links for reporting what went wrong. The address contains
-no identifiers, settings, or browsing information, and nothing is sent when the
-page opens.
+When the extension is uninstalled, the browser opens the goodbye page on
+twinprice.com, a page with optional links for reporting what went wrong. It opens
+in the extension's interface language: https://twinprice.com/goodbye/ for English,
+or the same page in that language's folder, such as https://twinprice.com/de/goodbye/.
+The language is the only thing the address reveals. It contains no identifiers, no
+other settings, and no browsing information, and nothing is sent when the page opens.
 
 ## Security
 

@@ -7,10 +7,23 @@
   const onboarding = global.CurrencyOnboardingService;
   const reviewPrompt = global.CurrencyReviewPrompt;
 
-  api.runtime.onInstalled.addListener(async (details) => {
-    onboarding.setUninstallPage().catch((error) => {
+  // The goodbye page follows the popup's language, so its address is set again on
+  // install, on browser start and whenever the language setting changes.
+  async function refreshUninstallPage() {
+    try {
+      const { language } = await settings.getGlobalSettings();
+      await onboarding.setUninstallPage(language);
+    } catch (error) {
       console.error("Could not set the uninstall page.", error);
-    });
+    }
+  }
+
+  api.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === "sync" && changes.language) refreshUninstallPage();
+  });
+
+  api.runtime.onInstalled.addListener(async (details) => {
+    refreshUninstallPage();
     try {
       const supportedCodes = await settings.initializeDefaults();
       await pageActions.initializeContextMenu();
@@ -22,6 +35,7 @@
   });
 
   api.runtime.onStartup.addListener(() => {
+    refreshUninstallPage();
     sites.reconcile().catch((error) => {
       console.error("Could not restore remembered-site preferences.", error);
     });

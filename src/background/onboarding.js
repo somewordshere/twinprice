@@ -1,10 +1,11 @@
 (function initializeOnboarding(global) {
   const ONBOARDING_PAGE = "onboarding/onboarding.html";
-  const UNINSTALL_PAGE = "https://twinprice.com/goodbye/";
+  const WEBSITE = "https://twinprice.com/";
 
   function createOnboardingService({
     api,
     contentScriptResources = global.CurrencyContentScriptResources,
+    i18n = global.CurrencyI18n,
     messages = global.CurrencyMessages,
     pageAccess = global.CurrencyPageAccess
   }) {
@@ -18,10 +19,17 @@
       return { ok: true, opened: true };
     }
 
-    // Uninstalling opens a plain thank-you page with ways to say what went wrong.
-    // The address is fixed and carries nothing about the user or their browsing.
-    async function setUninstallPage() {
-      await api.runtime.setUninstallURL(UNINSTALL_PAGE);
+    // Uninstalling opens a plain thank-you page with ways to say what went wrong,
+    // in the language the popup uses. English sits at the website's root and every
+    // other language in its own folder. The language is all the address carries:
+    // nothing else about the user or their browsing.
+    function uninstallPage(languagePreference) {
+      const language = i18n.resolve(languagePreference);
+      return `${WEBSITE}${language === i18n.FALLBACK ? "" : `${language}/`}goodbye/`;
+    }
+
+    async function setUninstallPage(languagePreference) {
+      await api.runtime.setUninstallURL(uninstallPage(languagePreference));
       return { ok: true };
     }
 
@@ -60,7 +68,7 @@
 
     return Object.freeze({
       ONBOARDING_PAGE,
-      UNINSTALL_PAGE,
+      uninstallPage,
       openOnInstall,
       setUninstallPage,
       activateOpenTabs

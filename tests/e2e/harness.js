@@ -253,8 +253,17 @@ async function runContentUiScenario(extensionWorker, scenario, url = DEFAULT_SHO
   }, { scenario, url, settings });
 }
 
+// Language, theme and price display are custom dropdowns: open the one with this
+// label and click the choice, the way a person would.
+async function chooseSetting(popup, label, value) {
+  const menu = popup.getByRole("combobox", { name: label, exact: true });
+  await menu.click();
+  await popup.locator(`[role='listbox']:visible [role='option'][data-value='${value}']`).click();
+}
+
 module.exports = {
   DEFAULT_SHOP_URL,
+  chooseSetting,
   evaluateRealActionPopup,
   openPopupForPage,
   runContentUiScenario,
