@@ -81,6 +81,10 @@ assert.ok(
   changelog.includes(`## ${packageJson.version} -`),
   "changelog must include the package version"
 );
+assert.ok(
+  fs.readFileSync(path.join(root, "WHATS-NEW.md"), "utf8").includes(`## ${packageJson.version} · `),
+  "WHATS-NEW.md (the user changelog) must include the package version"
+);
 assert.deepEqual(
   baseManifest.host_permissions,
   ["https://api.frankfurter.dev/*"],
