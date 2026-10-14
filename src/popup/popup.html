@@ -137,27 +137,39 @@
               </span>
             </div>
 
-            <label class="display-row">
+            <div class="display-row">
               <span data-i18n="popup.language">Language</span>
-              <select id="language" aria-label="Language" data-i18n-aria-label="popup.language" disabled></select>
-            </label>
+              <span class="select-menu">
+                <button id="languageButton" type="button" role="combobox" aria-haspopup="listbox" aria-label="Language" data-i18n-aria-label="popup.language" aria-expanded="false" aria-controls="languageList" disabled></button>
+                <span id="languageList" class="select-menu-list" role="listbox" aria-label="Language" data-i18n-aria-label="popup.language" hidden></span>
+                <select id="language" aria-hidden="true" tabindex="-1" disabled></select>
+              </span>
+            </div>
 
-            <label class="display-row">
+            <div class="display-row">
               <span data-i18n="popup.theme">App theme</span>
-              <select id="theme" aria-label="App theme" data-i18n-aria-label="popup.theme" disabled>
-                <option value="system" data-i18n="popup.themeSystem">Match system</option>
-                <option value="light" data-i18n="popup.themeLight">Light</option>
-                <option value="dark" data-i18n="popup.themeDark">Dark</option>
-              </select>
-            </label>
+              <span class="select-menu">
+                <button id="themeButton" type="button" role="combobox" aria-haspopup="listbox" aria-label="App theme" data-i18n-aria-label="popup.theme" aria-expanded="false" aria-controls="themeList" disabled></button>
+                <span id="themeList" class="select-menu-list" role="listbox" aria-label="App theme" data-i18n-aria-label="popup.theme" hidden></span>
+                <select id="theme" aria-hidden="true" tabindex="-1" disabled>
+                  <option value="system" data-i18n="popup.themeSystem">Match system</option>
+                  <option value="light" data-i18n="popup.themeLight">Light</option>
+                  <option value="dark" data-i18n="popup.themeDark">Dark</option>
+                </select>
+              </span>
+            </div>
 
-            <label class="display-row">
+            <div class="display-row">
               <span data-i18n="popup.displayMode">Price display</span>
-              <select id="displayMode" disabled>
-                <option value="beside" data-i18n="popup.displayBeside">Original and converted</option>
-                <option value="replace" data-i18n="popup.displayReplace">Converted only</option>
-              </select>
-            </label>
+              <span class="select-menu">
+                <button id="displayModeButton" type="button" role="combobox" aria-haspopup="listbox" aria-label="Price display" data-i18n-aria-label="popup.displayMode" aria-expanded="false" aria-controls="displayModeList" disabled></button>
+                <span id="displayModeList" class="select-menu-list" role="listbox" aria-label="Price display" data-i18n-aria-label="popup.displayMode" hidden></span>
+                <select id="displayMode" aria-hidden="true" tabindex="-1" disabled>
+                  <option value="beside" data-i18n="popup.displayBeside">Original and converted</option>
+                  <option value="replace" data-i18n="popup.displayReplace">Converted only</option>
+                </select>
+              </span>
+            </div>
 
             <fieldset class="appearance-editor" aria-describedby="appearanceHelp">
               <legend data-i18n="popup.appearance">Converted price appearance</legend>

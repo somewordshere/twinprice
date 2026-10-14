@@ -65,13 +65,21 @@ function selectStoredValues(store, keys) {
   ]));
 }
 
-function createStorageArea(store) {
+// onChange mirrors the browser's storage.onChanged: it hears only keys whose value changed.
+function createStorageArea(store, onChange = () => {}) {
   return {
     async get(keys) {
       return selectStoredValues(store, keys);
     },
     async set(values) {
-      for (const [key, value] of Object.entries(clone(values))) store[key] = value;
+      const changes = {};
+      for (const [key, value] of Object.entries(clone(values))) {
+        if (JSON.stringify(store[key]) !== JSON.stringify(value)) {
+          changes[key] = { oldValue: store[key], newValue: value };
+        }
+        store[key] = value;
+      }
+      if (Object.keys(changes).length) onChange(changes);
     },
     async remove(keys) {
       for (const key of Array.isArray(keys) ? keys : [keys]) delete store[key];
@@ -89,9 +97,11 @@ function createBackground({
   const localStore = clone(local);
   let registeredScripts = clone(registered);
   const injected = { css: [], js: [] };
+  const uninstallUrls = [];
   const events = {
     installed: createEvent(),
     startup: createEvent(),
+    storageChanged: createEvent(),
     message: createEvent(),
     contextMenu: createEvent(),
     command: createEvent()
@@ -101,8 +111,12 @@ function createBackground({
       onInstalled: events.installed,
       onStartup: events.startup,
       onMessage: events.message,
-      getManifest: () => firefoxManifest
+      getManifest: () => firefoxManifest,
+      async setUninstallURL(url) {
+        uninstallUrls.push(url);
+      }
     },
+    i18n: { getUILanguage: () => "en-US" },
     contextMenus: {
       onClicked: events.contextMenu,
       async removeAll() {},
@@ -110,8 +124,9 @@ function createBackground({
     },
     commands: { onCommand: events.command },
     storage: {
-      sync: createStorageArea(syncStore),
-      local: createStorageArea(localStore)
+      sync: createStorageArea(syncStore, (changes) => events.storageChanged.emit(changes, "sync")),
+      local: createStorageArea(localStore, (changes) => events.storageChanged.emit(changes, "local")),
+      onChanged: events.storageChanged
     },
     tabs: {
       async query() { return []; },
@@ -195,6 +210,7 @@ function createBackground({
     injected,
     localStore,
     syncStore,
+    uninstallUrls,
     loadedScripts,
     get registeredScripts() {
       return clone(registeredScripts);
@@ -259,6 +275,38 @@ test("Chrome worker executes the same classic-script graph and listener bootstra
       firefoxBackground.events[name].listenerCount,
       `${name} listener count differs between Chrome and Firefox`
     );
+  }
+});
+
+test("the goodbye page follows the popup's language from install onwards", async () => {
+  for (const entrypoint of ["firefox", "chrome"]) {
+    const background = createBackground({
+      sync: { ...DEFAULT_SYNC_SETTINGS, language: "pl" },
+      entrypoint
+    });
+    const { context, events, uninstallUrls } = background;
+    stubCatalog(context);
+    const settled = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    await emitAndWait(events.installed, { reason: "update" });
+    await settled();
+    assert.equal(uninstallUrls.at(-1), "https://twinprice.com/pl/goodbye/", entrypoint);
+
+    // Choosing another language in the popup saves it, and the address follows.
+    await context.ExtensionAPI.storage.sync.set({ language: "uk" });
+    await settled();
+    assert.equal(uninstallUrls.at(-1), "https://twinprice.com/uk/goodbye/", entrypoint);
+
+    await context.ExtensionAPI.storage.sync.set({ language: "auto" });
+    await settled();
+    assert.equal(uninstallUrls.at(-1), "https://twinprice.com/goodbye/", entrypoint);
+
+    // Unrelated settings leave it alone.
+    const before = uninstallUrls.length;
+    await context.ExtensionAPI.storage.sync.set({ displayMode: "replace" });
+    await context.ExtensionAPI.storage.local.set({ language: "de" });
+    await settled();
+    assert.equal(uninstallUrls.length, before, entrypoint);
   }
 });
 
