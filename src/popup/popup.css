@@ -365,8 +365,9 @@ h1 {
 
 /* Combobox --------------------------------------------------------------- */
 
-.currency-combobox { position: relative; display: block; flex: 1; min-width: 0; }
-.currency-combobox::after {
+.currency-combobox, .select-menu { position: relative; display: block; min-width: 0; }
+.currency-combobox { flex: 1; }
+.currency-combobox::after, .select-menu::after {
   content: "";
   position: absolute;
   z-index: 1;
@@ -381,10 +382,12 @@ h1 {
   transition: top 140ms ease, transform 140ms ease;
 }
 .currency-combobox:has(input[aria-expanded="true"])::after { top: 16px; transform: rotate(225deg); }
+.select-menu::after { top: 11px; }
+.select-menu:has(button[aria-expanded="true"])::after { top: 14px; transform: rotate(225deg); }
 .currency-combobox > input { padding-right: 30px; cursor: text; text-overflow: ellipsis; }
-.currency-select-native { display: none; }
+.currency-select-native, .select-menu > select { display: none; }
 
-.currency-listbox {
+.currency-listbox, .select-menu-list {
   position: absolute;
   z-index: 20;
   top: calc(100% + 5px);
@@ -402,15 +405,20 @@ h1 {
   font-weight: var(--fw-regular);
 }
 .currency-panel .field:last-of-type .currency-listbox { right: 0; left: auto; }
+/* Wide enough for the longest choice, and anchored to the right edge it opens under. */
+.select-menu-list { right: 0; left: auto; width: max-content; min-width: 100%; max-width: 260px; }
+.currency-list-option, .select-menu-option {
+  padding: var(--sp-3) 9px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
 .currency-list-option {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
   gap: var(--sp-2);
   align-items: baseline;
-  padding: var(--sp-3) 9px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
 }
+.select-menu-option { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .currency-list-option strong {
   color: var(--text-primary);
   font-family: var(--font-mono);
@@ -424,8 +432,11 @@ h1 {
   white-space: nowrap;
 }
 .currency-list-option:hover,
-.currency-list-option[data-active="true"] { background: var(--tint); }
+.currency-list-option[data-active="true"],
+.select-menu-option:hover,
+.select-menu-option[data-active="true"] { background: var(--tint); }
 .currency-list-option[aria-selected="true"] strong { color: var(--primary-bg); }
+.select-menu-option[aria-selected="true"] { color: var(--primary-bg); font-weight: var(--fw-semibold); }
 .currency-list-empty {
   display: block;
   padding: var(--sp-5) 9px;
@@ -738,7 +749,18 @@ button:disabled, select:disabled, input:disabled { cursor: not-allowed; opacity:
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
 }
-.display-row select { min-height: 32px; font-size: var(--fs-sm); }
+.select-menu > button {
+  width: 100%;
+  min-height: 32px;
+  padding: var(--sp-3) 30px var(--sp-3) 9px;
+  overflow: hidden;
+  font-size: var(--fs-sm);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+.select-menu > button:hover:not(:disabled) { border-color: var(--select-arrow); background-color: var(--input-hover); }
 
 .enable-row, .remember-row, .prompt-row {
   display: flex;

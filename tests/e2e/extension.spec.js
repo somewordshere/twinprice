@@ -3,6 +3,7 @@ const path = require("node:path");
 const { test, expect } = require("./fixtures");
 const {
   DEFAULT_SHOP_URL: SHOP_URL,
+  chooseSetting,
   evaluateRealActionPopup,
   openPopupForPage,
   runContentUiScenario,
@@ -1411,7 +1412,8 @@ test("rapid popup changes remain consistent across close and validation races", 
       "combobox",
       { name: "Source currency", exact: true }
     )).toHaveValue(/^CHF/);
-    await expect(reopenedPopup.getByLabel("Price display")).toHaveValue("replace");
+    await expect(reopenedPopup.locator("#displayMode")).toHaveValue("replace");
+    await expect(reopenedPopup.locator("#displayModeButton")).toHaveText("Converted only");
 
     await extensionWorker.evaluate(() => {
       globalThis.__ccpSecondDelayedRateRequested = false;
@@ -1500,12 +1502,21 @@ test("popup theme follows the system and persists explicit choices", async ({
   const popup = await openPopupForPage(context, extensionId, shop);
   await popup.emulateMedia({ colorScheme: "dark" });
   await popup.getByText("Page options", { exact: true }).click();
-  const theme = popup.getByLabel("App theme");
+  const theme = popup.getByRole("combobox", { name: "App theme", exact: true });
 
-  await expect(theme).toHaveValue("system");
+  await expect(theme).toHaveText("Match system");
+  await expect(popup.locator("#theme")).toHaveValue("system");
   await expect(popup.locator("html")).toHaveCSS("background-color", "rgb(15, 22, 34)");
 
-  await theme.selectOption("light");
+  // The dropdown opens the same styled list as the currency fields and closes on a choice.
+  await theme.click();
+  await expect(theme).toHaveAttribute("aria-expanded", "true");
+  await expect(popup.locator("#themeList [role='option']")).toHaveText(["Match system", "Light", "Dark"]);
+  await expect(popup.locator("#themeList [aria-selected='true']")).toHaveText("Match system");
+  await popup.locator("#themeList [data-value='light']").click();
+  await expect(theme).toHaveAttribute("aria-expanded", "false");
+  await expect(popup.locator("#themeList")).toBeHidden();
+  await expect(theme).toHaveText("Light");
   await expect(popup.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(popup.locator("html")).toHaveCSS("background-color", "rgb(246, 248, 252)");
   await expect.poll(() => extensionWorker.evaluate(async () =>
@@ -1516,9 +1527,18 @@ test("popup theme follows the system and persists explicit choices", async ({
   const reopenedPopup = await openPopupForPage(context, extensionId, shop);
   await reopenedPopup.emulateMedia({ colorScheme: "light" });
   await reopenedPopup.getByText("Page options", { exact: true }).click();
-  await expect(reopenedPopup.getByLabel("App theme")).toHaveValue("light");
+  const reopenedTheme = reopenedPopup.getByRole("combobox", { name: "App theme", exact: true });
+  await expect(reopenedTheme).toHaveText("Light");
+  await expect(reopenedPopup.locator("#theme")).toHaveValue("light");
 
-  await reopenedPopup.getByLabel("App theme").selectOption("dark");
+  // The keyboard works too: open, move down one choice, confirm.
+  await reopenedTheme.focus();
+  await reopenedPopup.keyboard.press("ArrowDown");
+  await expect(reopenedTheme).toHaveAttribute("aria-expanded", "true");
+  await reopenedPopup.keyboard.press("ArrowDown");
+  await reopenedPopup.keyboard.press("Enter");
+  await expect(reopenedTheme).toHaveAttribute("aria-expanded", "false");
+  await expect(reopenedTheme).toHaveText("Dark");
   await expect(reopenedPopup.locator("html")).toHaveCSS("background-color", "rgb(15, 22, 34)");
   await expect.poll(() => extensionWorker.evaluate(async () =>
     (await chrome.storage.sync.get("theme")).theme
@@ -1624,7 +1644,7 @@ test("converted price appearance previews live, persists, and styles the page", 
     "same-conversion"
   );
 
-  await reopenedPopup.getByLabel("Price display").selectOption("replace");
+  await chooseSetting(reopenedPopup, "Price display", "replace");
   await expect(shop.locator("#shadow-price .ccp-original")).toHaveCSS("display", "none");
 
   await reopenedPopup.getByRole("button", { name: "Reset appearance" }).click();
@@ -1705,7 +1725,8 @@ test("real extension popup, injection, dynamic conversion, and undo work togethe
   await popup.getByText("Page options", { exact: true }).click();
   await expect(popup.locator("#pageOptions")).toHaveAttribute("open", "");
   await expect(popup.getByText("Enable converter", { exact: true })).toBeVisible();
-  await popup.getByLabel("Price display").selectOption("replace");
+  await chooseSetting(popup, "Price display", "replace");
+  await expect(popup.getByRole("combobox", { name: "Price display", exact: true })).toHaveText("Converted only");
   await expect.poll(() => extensionWorker.evaluate(async () =>
     (await chrome.storage.sync.get("displayMode")).displayMode
   )).toBe("replace");

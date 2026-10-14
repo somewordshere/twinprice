@@ -3,6 +3,7 @@ const path = require("node:path");
 const { test, expect } = require("./fixtures");
 const {
   DEFAULT_SHOP_URL: SHOP_URL,
+  chooseSetting,
   openPopupForPage,
   seedExtension
 } = require("./harness");
@@ -37,18 +38,20 @@ test("the language menu offers ten languages and retranslates the popup and the 
   await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
   await popup.getByText("Page options", { exact: true }).click();
 
-  const language = popup.getByLabel("Language", { exact: true });
-  await expect(language).toHaveValue("auto");
+  const language = popup.getByRole("combobox", { name: "Language", exact: true });
+  await expect(popup.locator("#language")).toHaveValue("auto");
   // Automatic plus ten languages, each named in its own tongue.
-  await expect(language.locator("option")).toHaveCount(11);
-  await expect(language.locator("option[value='uk']")).toHaveText("Українська");
+  await language.click();
+  await expect(popup.locator("#languageList [role='option']")).toHaveCount(11);
+  await expect(popup.locator("#languageList [data-value='uk']")).toHaveText("Українська");
   await expect(popup.locator("#convertSite")).toHaveText("Convert page prices");
 
-  await language.selectOption("uk");
+  await popup.locator("#languageList [data-value='uk']").click();
   await expect(popup.locator("html")).toHaveAttribute("lang", "uk");
   await expect(popup.locator("#convertSite")).toHaveText("Конвертувати ціни на сторінці");
   await expect(popup.locator("summary")).toHaveText("Параметри сторінки");
-  await expect(popup.getByLabel("Мова", { exact: true })).toHaveValue("uk");
+  await expect(popup.getByRole("combobox", { name: "Мова", exact: true })).toHaveText("Українська");
+  await expect(popup.locator("#language")).toHaveValue("uk");
   await expect(popup.locator("#quickConverterTitle")).toHaveText("Конвертувати довільну суму");
   await expect(popup.locator("#hint")).toContainText("Виділіть ціну для конвертації або натисніть");
   await expect(popup.locator("#hint kbd").first()).toBeVisible();
@@ -69,11 +72,11 @@ test("the language menu offers ten languages and retranslates the popup and the 
   await expect(reopened.locator("#convertSite")).toHaveText("Конвертувати ціни на сторінці");
 
   await reopened.getByText("Параметри сторінки", { exact: true }).click();
-  await reopened.getByLabel("Мова", { exact: true }).selectOption("de");
+  await chooseSetting(reopened, "Мова", "de");
   await expect(reopened.locator("#convertSite")).toHaveText("Preise der Seite umrechnen");
   await expect(reopened.locator("#hint")).toContainText("Wähle einen Preis zum Umrechnen aus");
 
-  await reopened.getByLabel("Sprache", { exact: true }).selectOption("auto");
+  await chooseSetting(reopened, "Sprache", "auto");
   await expect(reopened.locator("#convertSite")).toHaveText("Convert page prices");
   await expect.poll(() => storedLanguage(extensionWorker)).toBe("auto");
 });
