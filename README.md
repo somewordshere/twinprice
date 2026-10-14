@@ -10,7 +10,7 @@ Detection, conversion, and rendering all happen inside your browser. The only th
 
 [![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.2.4/twinprice-2.2.4-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.2.4/twinprice-2.2.4-firefox.zip)
 
-**[View the complete changelog →](CHANGELOG.md)**
+**[What’s new →](WHATS-NEW.md)**
 
 [Screenshots](#-screenshots) · [Features](#features) · [Install](#installation) · [Use](#-how-to-use-it) · [How it works](#️-how-it-works) · [Detection](#-currency-detection-confidence) · [Privacy](#-privacy-and-permissions) · [Limitations](#️-limitations) · [Build](#️-building-a-release) · [Development](#-development)
 
@@ -235,7 +235,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 | 1.9.0 | Custom converted-price colors and shapes, live before-and-after preview, WCAG contrast guidance, and one-click reset | [Chrome](release/1.9.0/currency-converter-pro-1.9.0-chrome.zip) · [Firefox](release/1.9.0/currency-converter-pro-1.9.0-firefox.zip) |
 | 1.8.0 | Always-on local price detection, price-gated on-page prompts, background rate prefetching, and instant stale-cache use while rates refresh | [Chrome](release/1.8.0/currency-converter-pro-1.8.0-chrome.zip) · [Firefox](release/1.8.0/currency-converter-pro-1.8.0-firefox.zip) |
 
-See [CHANGELOG.md](CHANGELOG.md) for the complete release history.
+See [What’s new](WHATS-NEW.md) for every release.
 
 ## 🗂️ Project structure
 
