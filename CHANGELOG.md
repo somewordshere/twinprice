@@ -1,6 +1,8 @@
 # Changelog
 
-All notable changes to Twinprice are documented here. Dates reflect the release preparation date for each version.
+All notable changes to Twinprice are documented here, including tests, tooling and
+repository changes. Dates reflect the release preparation date for each version.
+The plain-language version for users is [WHATS-NEW.md](WHATS-NEW.md).
 
 Release packages are preserved under `release/<version>/` and published on
 [GitHub Releases](https://github.com/somewordshere/twinprice/releases).

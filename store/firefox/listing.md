@@ -61,14 +61,8 @@ screenshots are rebuilt.
 
 ## Version details (per upload)
 
-Keep the release notes short and lead with what users will notice. Use the
-"Changed" and "Fixed" bullets from `release/<version>/README.md`, without the
-test and validation sections. For 2.2.4:
-
-```text
-- Language, App theme and Price display now open the same dropdown as the currency fields, in light and dark themes, and work with the keyboard.
-- The goodbye page after uninstalling now opens in the extension's language.
-```
+Paste the bullets under that version in `WHATS-NEW.md` (the user changelog).
+Leave out the `##` version line, because AMO does not show headings.
 
 ## Translations
 
