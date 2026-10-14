@@ -24,8 +24,8 @@ const HEIGHT = 800;
 // Where tests/capture/screenshots.spec.js writes each currency pair.
 const CAPTURES = {
   "usd-eur": resolve(ROOT, "screenshots"),
-  "eur-pln": resolve(ROOT, "store/chrome/captures/eur-pln"),
-  "usd-brl": resolve(ROOT, "store/chrome/captures/usd-brl")
+  "eur-pln": resolve(ROOT, "store/source/captures/eur-pln"),
+  "usd-brl": resolve(ROOT, "store/source/captures/usd-brl")
 };
 
 const LAYOUT = [

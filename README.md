@@ -182,6 +182,9 @@ npm run build
 `package-lock.json`. `npm run build` creates both browser packages. The
 upload-ready ZIP files are written to `release/<version>/`, while unpacked
 development builds are written to `dist/chrome/` and `dist/firefox/`.
+[release/README.md](release/README.md) describes the folder layout and the
+release-notes template, and `npm run release` runs the checks, Firefox lint and
+build in one go.
 
 Or build only one browser target:
 
@@ -246,10 +249,13 @@ src/          Shared extension runtime used by both browsers
   shared/     Browser adapter, currency catalog, canonical settings schema, messages, page-access rules, and manifest-derived content-script injection
 manifests/    Common manifest plus Chrome and Firefox overrides
 dist/         Generated unpacked browser builds (not committed)
-release/      Versioned Chrome and Firefox release archives
-screenshots/  Current screenshots and an old/ archive of the previous interface
-scripts/      Manifest composition, validation, icon, screenshot, and release utilities
+release/      One folder per version: release notes plus the Chrome and Firefox ZIPs
+store/        Store listing text in ten languages, dashboard answers, screenshots, and promo art
+screenshots/  README screenshots and an old/ archive of the previous interface
+scripts/      Manifest composition, validation, icon, screenshot, video, and release utilities
 tests/        Unit, integration, fixture, Chrome Playwright, and Firefox runtime tests
+website/      twinprice.com, deployed separately with Wrangler
+CLAUDE.md     Project rules and the release checklist
 ```
 
 ## 📄 License

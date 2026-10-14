@@ -74,6 +74,9 @@ assert.ok(
     readme.includes(`release/${packageJson.version}/twinprice-${packageJson.version}-firefox.zip`),
   "README release links must match the package version"
 );
+for (const match of readme.matchAll(/(?:Chrome|Firefox)-Build[^)]*\)\]\(release\/([^/]+)\//g)) {
+  assert.equal(match[1], packageJson.version, "README build badges must link the current release");
+}
 assert.ok(
   changelog.includes(`## ${packageJson.version} -`),
   "changelog must include the package version"
@@ -266,10 +269,44 @@ assert.ok(
   "privacy-policy.md must record the version it describes, or it silently goes stale"
 );
 
+// release/<version>/ holds the notes and the two store ZIPs, nothing else. Folders
+// before 2.1.0 keep their original Currency Converter file names.
+for (const entry of fs.readdirSync(path.join(root, "release"), { withFileTypes: true })) {
+  if (!entry.isDirectory()) continue;
+  const version = entry.name;
+  assert.match(version, /^\d+\.\d+\.\d+$/, `release/${version} must be named after a version`);
+  const contents = fs.readdirSync(path.join(root, "release", version), { withFileTypes: true });
+  assert.ok(
+    contents.some((item) => item.isFile() && item.name === "README.md"),
+    `release/${version} must include README.md release notes`
+  );
+  assert.ok(
+    !contents.some((item) => item.isDirectory()),
+    `release/${version} must not contain folders; unpacked builds belong in dist/`
+  );
+  if (compareVersions(version, "2.1.0") >= 0) {
+    for (const browser of ["chrome", "firefox"]) {
+      assert.ok(
+        contents.some((item) => item.name === `twinprice-${version}-${browser}.zip`),
+        `release/${version} is missing twinprice-${version}-${browser}.zip`
+      );
+    }
+  }
+}
+
 console.log("project checks passed");
 
 function readJson(relativePath) {
   return JSON.parse(fs.readFileSync(path.join(root, relativePath), "utf8"));
+}
+
+function compareVersions(left, right) {
+  const a = left.split(".").map(Number);
+  const b = right.split(".").map(Number);
+  for (let index = 0; index < 3; index += 1) {
+    if (a[index] !== b[index]) return a[index] - b[index];
+  }
+  return 0;
 }
 
 function walkJavaScript(directory) {

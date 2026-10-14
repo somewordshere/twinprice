@@ -19,6 +19,14 @@ whose `package.json` declares the release version.
 
 ## Unreleased
 
+### Repository
+
+- Each `release/<version>/` folder now holds only its release notes and the Chrome and Firefox ZIPs. Notes were added for the nine versions that had none, and `release/README.md` documents the layout and a notes template.
+- `npm run check` fails when a release folder lacks notes or a ZIP, contains an unpacked build, or when the README build badges point to an older release.
+- Added `npm run release` (checks, Firefox lint, build and a final check) and `npm run build:video`. CI now uploads only the current version's ZIPs.
+- Committed `store/`: listing text in ten languages, Chrome and Firefox dashboard answers, an AMO-formatted Firefox description, screenshots and the promo tile. Raw captures, the demo video file and the growth checklist stay local.
+- Added `CLAUDE.md` with the project rules and the release checklist.
+
 ## 2.2.4 - 2026-10-14
 
 ### Changed

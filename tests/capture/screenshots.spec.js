@@ -34,9 +34,9 @@ const PAIRS = [
   // English and the euro-zone listings. These also illustrate the README.
   { from: "USD", to: "EUR", out: path.join(ROOT, "screenshots") },
   // Polish shoppers buying from euro shops.
-  { from: "EUR", to: "PLN", out: path.join(ROOT, "store/chrome/captures/eur-pln") },
+  { from: "EUR", to: "PLN", out: path.join(ROOT, "store/source/captures/eur-pln") },
   // Brazilian shoppers buying from US shops.
-  { from: "USD", to: "BRL", out: path.join(ROOT, "store/chrome/captures/usd-brl") }
+  { from: "USD", to: "BRL", out: path.join(ROOT, "store/source/captures/usd-brl") }
 ];
 
 // The fixture is a US-dollar shop; a euro shop writes its prices the way a
