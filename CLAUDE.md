@@ -36,7 +36,7 @@ Node 22 (`.nvmrc`). Store-image scripts: `build:store-assets`, `build:firefox-sc
 ## Release checklist
 
 1. Bump the version in `package.json`, `package-lock.json` (both version fields) and `manifests/base.json`.
-2. Move `CHANGELOG.md`'s "Unreleased" notes under `## X.Y.Z - YYYY-MM-DD` (developer changelog: everything, including tests and tooling). Add `## X.Y.Z · Month D, YYYY` to `WHATS-NEW.md` (user changelog: only what users can see, plain language, no tests, code or file names).
+2. Move `CHANGELOG.md`'s "Unreleased" notes under `## X.Y.Z - YYYY-MM-DD` (developer changelog: everything, including tests and tooling). Add `## X.Y.Z · Month D, YYYY` to `WHATS-NEW.md` (user changelog: only what users can see, plain language, no tests, code or file names). Then, from `website/`, run `node sync-whats-new.mjs` and `npm run i18n` to rebuild twinprice.com/whats-new/.
 3. README: update `**Current version:**`, the Chrome/Firefox build badges, the manual-install links and the release-table row.
 4. Write `release/X.Y.Z/README.md` from the template in `release/README.md`.
 5. If stored data, permissions or network use changed: update `privacy-policy.md` (it must say `(version X.Y.Z)`), then from `website/` run `node sync-policy.mjs` and `npm run i18n`. Then update the privacy answers in `store/chrome/listing.md`.

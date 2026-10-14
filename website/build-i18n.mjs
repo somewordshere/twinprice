@@ -12,7 +12,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 
 const SITE = 'https://twinprice.com/';
-const PAGES = ['', 'guide/', 'about/', 'privacy/', 'goodbye/'];
+const PAGES = ['', 'guide/', 'about/', 'privacy/', 'whats-new/', 'goodbye/'];
 // Each language's own name, the menu's accessible label, and the store locales.
 const LANGUAGES = {
   en: { name: 'English', label: 'Language' },
