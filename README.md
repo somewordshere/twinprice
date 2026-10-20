@@ -255,7 +255,6 @@ screenshots/  README screenshots and an old/ archive of the previous interface
 scripts/      Manifest composition, validation, icon, screenshot, video, and release utilities
 tests/        Unit, integration, fixture, Chrome Playwright, and Firefox runtime tests
 website/      twinprice.com, deployed separately with Wrangler
-CLAUDE.md     Project rules and the release checklist
 ```
 
 ## 📄 License

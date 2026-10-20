@@ -8,6 +8,7 @@ test-results/
 dist/
 web-ext-artifacts/
 local/
+CLAUDE.md
 .wrangler/
 .claude/settings.local.json
 *.log
