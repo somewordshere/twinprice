@@ -47,6 +47,7 @@ Node 22 (`.nvmrc`). Store-image scripts: `build:store-assets`, `build:firefox-sc
 ## Conventions
 
 - Commit messages are one imperative sentence that says what changed for the user.
+- No `Co-Authored-By` or other AI attribution lines in commits, tags, release notes or PR descriptions. The owner is the only contributor.
 - Write dates as absolute dates (2026-10-14), never "today" or "last week".
 - The UI ships in ten languages (`src/_locales`, `src/shared/translations-*.js`, `store/listings`, `store/firefox/descriptions`, `website/i18n`). A change to user-facing text needs all ten. Native speakers have not reviewed the translations, and release notes say so.
 - Release notes and changelog entries describe what the user sees first, then tests and validation. Report test results exactly, including failures and anything skipped.
