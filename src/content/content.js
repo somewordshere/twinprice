@@ -13,6 +13,9 @@
   let settingsLoadPromise = null;
   let pageCommandGeneration = 0;
   let renderedConversionSettingsKey = null;
+  // Set while the page holds conversions that "Convert all websites automatically"
+  // made, so turning that setting off can take them back.
+  let convertedForAllSites = false;
   let successRecorded = false;
   let currentRoute = readRouteKey();
 
@@ -42,7 +45,12 @@
         CurrencySettings.PRESENTATION_KEYS
       );
       const conversionSettingsChanged = rateSettingsChanged || presentationSettingsChanged;
-      if (conversionSettingsChanged || changes.showPagePrompt || changes.language) {
+      if (
+        conversionSettingsChanged ||
+        changes.showPagePrompt ||
+        changes.autoConvertAllSites ||
+        changes.language
+      ) {
         if (rateSettingsChanged) invalidatePendingPageCommands();
         await queueSettingsReload({ failClosed: rateSettingsChanged });
       }
@@ -116,6 +124,7 @@
             return { ok: false, error: t("error.refreshSettings") };
           }
           if (commandGeneration !== pageCommandGeneration) return cancelledCommandResult();
+          convertedForAllSites = false;
           const result = await runSiteConversion();
           if (commandGeneration !== pageCommandGeneration) return cancelledCommandResult();
           CurrencyPageUi.removePageConvertPrompt();
@@ -199,7 +208,8 @@
       settingsChanges.languageChanged &&
       !settingsChanges.rateSettingsChanged &&
       !settingsChanges.presentationSettingsChanged &&
-      !settingsChanges.pagePromptChanged
+      !settingsChanges.pagePromptChanged &&
+      !settingsChanges.autoConvertAllChanged
     ) {
       CurrencyPageUi.refreshLanguage();
       return;
@@ -208,7 +218,11 @@
       renderedConversionSettingsKey !== null &&
       renderedConversionSettingsKey !== conversionSettingsKey(settings);
 
-    if (hadConversions && settings.enabled) {
+    const allSitesTurnedOff = settingsChanges.autoConvertAllChanged &&
+      !settings.autoConvertAllSites &&
+      convertedForAllSites;
+
+    if (hadConversions && settings.enabled && !allSitesTurnedOff) {
       if (settingsChanges.rateSettingsChanged || renderedSettingsChanged) {
         CurrencyPageUi.clearTransientUi();
         CurrencyPageUi.removePageConvertPrompt();
@@ -230,7 +244,8 @@
     if (
       !settingsChanges.rateSettingsChanged &&
       settingsChanges.presentationSettingsChanged &&
-      !settingsChanges.pagePromptChanged
+      !settingsChanges.pagePromptChanged &&
+      !settingsChanges.autoConvertAllChanged
     ) return;
 
     clearRenderedConversions();
@@ -270,6 +285,8 @@
     );
     const pagePromptChanged = !previousSettings ||
       previousSettings.showPagePrompt !== settings.showPagePrompt;
+    const autoConvertAllChanged = !previousSettings ||
+      previousSettings.autoConvertAllSites !== settings.autoConvertAllSites;
     if (rateSettingsChanged) {
       CurrencyDetector.resetPageCurrencyDetection();
       CurrencyPageConverter.configure(settings);
@@ -282,7 +299,13 @@
       clearConversion: clearPromptConversion,
       convertSelection: convertSelectionText
     });
-    return { rateSettingsChanged, presentationSettingsChanged, pagePromptChanged, languageChanged };
+    return {
+      rateSettingsChanged,
+      presentationSettingsChanged,
+      pagePromptChanged,
+      autoConvertAllChanged,
+      languageChanged
+    };
   }
 
   async function applySitePreference(expectedGeneration = pageCommandGeneration) {
@@ -312,6 +335,12 @@
         if (settings.showPagePrompt) CurrencyPageUi.showPageConvertPrompt();
         if (result?.detectionConfidence !== "low") showConversionResult(result);
       }
+    } else if (settings.autoConvertAllSites) {
+      CurrencyPageConverter.stopWatching();
+      CurrencyPageUi.removePageConvertPrompt();
+      await updateBadge(0);
+      if (expectedGeneration !== pageCommandGeneration) return;
+      await convertPageWhenPricesAppear(expectedGeneration);
     } else if (settings.showPagePrompt) {
       CurrencyPageConverter.stopWatching();
       await updateBadge(0);
@@ -366,6 +395,33 @@
       CurrencyPageUi.showPageConvertPrompt();
       showPromptRateWhenReady(nextDetection.currencies, expectedGeneration);
     });
+  }
+
+  // "Convert all websites automatically" converts as soon as prices are detected,
+  // where the prompt would otherwise appear, and says nothing when it succeeds.
+  async function convertPageWhenPricesAppear(expectedGeneration = pageCommandGeneration) {
+    if (!automaticConversionWanted(expectedGeneration)) return;
+    if (CurrencyPageConverter.detectPagePrices().found) {
+      await convertAllSitesPage(expectedGeneration);
+      return;
+    }
+    CurrencyPageConverter.startDiscovering(() => {
+      queueSettingsTask(() => convertAllSitesPage(expectedGeneration));
+    });
+  }
+
+  async function convertAllSitesPage(expectedGeneration) {
+    if (!automaticConversionWanted(expectedGeneration)) return;
+    const result = await runSiteConversion();
+    if (expectedGeneration !== pageCommandGeneration || result?.cancelled) return;
+    convertedForAllSites = CurrencyPageConverter.hasConversions();
+    if (!result?.ok && settings.showPagePrompt) CurrencyPageUi.showPageConvertPrompt();
+  }
+
+  function automaticConversionWanted(expectedGeneration) {
+    return expectedGeneration === pageCommandGeneration &&
+      Boolean(settings?.enabled && settings.autoConvertAllSites) &&
+      !CurrencyPageConverter.hasConversions();
   }
 
   async function runSiteConversion() {
@@ -429,6 +485,7 @@
   function clearRenderedConversions() {
     CurrencyPageConverter.clearConversions();
     renderedConversionSettingsKey = null;
+    convertedForAllSites = false;
   }
 
   function conversionSettingsKey(value) {

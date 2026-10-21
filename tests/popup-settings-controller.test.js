@@ -201,7 +201,8 @@ test("preserves every canonical settings field through ambiguous-write reconcili
     convertedTextColor: "#123456",
     convertedBackgroundColor: "#abcdef",
     convertedShape: "pill",
-    showPagePrompt: false
+    showPagePrompt: false,
+    autoConvertAllSites: true
   };
   const applied = [];
   const saved = [];

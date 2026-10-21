@@ -35,7 +35,7 @@
     ) {
       refreshRatesInBackground(baseCurrency, supportedCodes);
       return {
-        ...buildSuccess(cachedBase, true, true),
+        ...buildSuccess(cachedBase, true, true, cacheAgeMs),
         warning: `Using cached rates that are ${describeAge(cacheAgeMs)} while fresh rates load in the background.`,
         warningKey: "rate.warnRefreshing",
         warningParams: { ageMs: cacheAgeMs }
@@ -59,7 +59,7 @@
         const liveError = error instanceof Error ? error.message : "Live rates are unavailable.";
         const warnAboutAge = cacheAgeMs >= WARN_STALE_AFTER_MS;
         return {
-          ...buildSuccess(cachedBase, true, true),
+          ...buildSuccess(cachedBase, true, true, cacheAgeMs),
           warning: warnAboutAge ? `${liveError} Using cached rates that are ${cacheAgeLabel}.` : liveError,
           warningKey: warnAboutAge ? "rate.warnLiveUnavailableAge" : "rate.warnLiveUnavailable",
           warningParams: { ageMs: cacheAgeMs }
@@ -133,8 +133,9 @@
     return `${days} day${days === 1 ? "" : "s"} old`;
   }
 
-  function buildSuccess(entry, cached, stale) {
-    const cacheAgeMs = cached ? getCacheAgeMs(entry) : 0;
+  // A caller that already measured the age passes it in, so the age it words in a
+  // warning and the cacheAgeMs it returns come from the same clock reading.
+  function buildSuccess(entry, cached, stale, cacheAgeMs = cached ? getCacheAgeMs(entry) : 0) {
     return {
       ok: true,
       rates: entry.rates,

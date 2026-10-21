@@ -17,8 +17,8 @@ package and text are used for Microsoft Edge Add-ons once it is listed there.
 
 ## Privacy practices tab
 
-These answers are written to match Twinprice version 2.2.4 and the privacy policy
-dated October 4, 2026. If the permissions, stored data, or network requests change,
+These answers are written to match Twinprice version 2.3.0 and the privacy policy
+dated October 21, 2026. If the permissions, stored data, or network requests change,
 update this file and the policy together.
 
 ### Single purpose
@@ -30,7 +30,8 @@ Twinprice detects monetary prices on webpages and converts them into a currency 
 #### `storage`
 
 Stores the user's enabled state, source and target currency preferences, display
-mode, converted-price appearance, interface language, and page-prompt preference.
+mode, converted-price appearance, interface language, page-prompt preference, and
+whether to convert all websites automatically.
 It also stores recent currency codes, the website origins the user chose to convert
 automatically (with their source-currency mode), the latest successful exchange-rate
 data so the extension can keep working temporarily while offline, and a count of
@@ -54,13 +55,18 @@ extension can scan for supported prices and show the conversion prompt without a
 toolbar click. The prompt appears only after a likely price is found. Page text,
 prices, URLs, and browsing history are not transmitted. A saved origin is used
 only to decide whether detected prices should convert automatically on that site.
+If the user turns on **Convert all websites automatically**, detected prices convert
+on every ordinary website without the prompt, still entirely on the device.
 
 #### Optional site access: `http://*/*` and `https://*/*`
 
-Requested only when the user presses **Activate my open tabs** on the welcome page.
-It lets the extension find tabs that were already open at install time and start the
+Requested when the user presses **Activate my open tabs** on the welcome page, or
+turns on **Convert all websites automatically** in the popup while the browser has
+not granted website access. It lets the extension find tabs that were already open at install time and start the
 local detector in them without a reload. The user can decline and reload those tabs
-instead. Tab URLs are not transmitted.
+instead. For **Convert all websites automatically** it makes sure the local detector
+can run on every website; declining leaves that setting off. Tab URLs are not
+transmitted.
 
 #### Host access: `https://api.frankfurter.dev/*`
 
@@ -119,7 +125,7 @@ Use the policy on the website, which is rebuilt from `privacy-policy.md` by
 
 `https://twinprice.com/privacy/`
 
-Deploy the website before submitting, so the page shows version 2.2.4. The same
+Deploy the website before submitting, so the page shows version 2.3.0. The same
 policy is also published in the repository, if a URL on GitHub is ever needed:
 
 `https://github.com/somewordshere/twinprice/blob/main/privacy-policy.md`

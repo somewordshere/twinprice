@@ -24,6 +24,7 @@ const resetAppearanceButton = document.getElementById("resetAppearance");
 const showPagePromptInput = document.getElementById("showPagePrompt");
 const rememberSiteInput = document.getElementById("rememberSite");
 const rememberSiteHelpNode = document.getElementById("rememberSiteHelp");
+const autoConvertAllSitesInput = document.getElementById("autoConvertAllSites");
 const convertSiteButton = document.getElementById("convertSite");
 const clearPageButton = document.getElementById("clearPage");
 const clearSiteButton = document.getElementById("clearSite");
@@ -157,6 +158,7 @@ async function initialize() {
   syncSelectMenus();
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
+  autoConvertAllSitesInput.checked = settings.autoConvertAllSites;
   siteStatus = statusResult;
   rememberSiteInput.checked = Boolean(statusResult?.remembered);
   rememberSiteInput.disabled = true;
@@ -217,6 +219,7 @@ async function initialize() {
   showPagePromptInput.addEventListener("change", () => saveSettings());
   swapButton.addEventListener("click", swapCurrencies);
   rememberSiteInput.addEventListener("change", handleRememberSiteChange);
+  autoConvertAllSitesInput.addEventListener("change", handleAutoConvertAllSitesChange);
   convertSiteButton.addEventListener("click", convertWholeSite);
   clearPageButton.addEventListener("click", clearCurrentPage);
   clearSiteButton.addEventListener("click", clearWholeSite);
@@ -965,6 +968,7 @@ function setPopupInteractivity(enabled) {
     ...convertedShapeInputs,
     resetAppearanceButton,
     showPagePromptInput,
+    autoConvertAllSitesInput,
     enabledInput,
     quickAmountInput,
     chooseQuickSourceButton,
@@ -997,7 +1001,8 @@ function readSettingsFromControls() {
     convertedTextColor: convertedTextColorInput.value,
     convertedBackgroundColor: convertedBackgroundColorInput.value,
     convertedShape: selectedConvertedShape(),
-    showPagePrompt: showPagePromptInput.checked
+    showPagePrompt: showPagePromptInput.checked,
+    autoConvertAllSites: autoConvertAllSitesInput.checked
   };
 }
 
@@ -1082,6 +1087,7 @@ function applySettingsToControls(settings) {
   displayModeSelect.value = settings.displayMode;
   applyAppearanceSettings(settings, { announce: false });
   showPagePromptInput.checked = settings.showPagePrompt;
+  autoConvertAllSitesInput.checked = settings.autoConvertAllSites;
   syncCurrencyComboboxes();
   syncSelectMenus();
   updateCurrencyDiscs();
@@ -1185,6 +1191,27 @@ async function handleRememberSiteChange() {
     updateSiteState();
     updateSecondaryActions();
   }
+}
+
+async function handleAutoConvertAllSitesChange() {
+  const turningOn = autoConvertAllSitesInput.checked;
+  if (turningOn) {
+    let granted = false;
+    try {
+      // Keep the permission request directly in the checkbox's user gesture.
+      granted = await ExtensionAPI.permissions.request({ origins: ["http://*/*", "https://*/*"] });
+    } catch (_error) {
+      granted = false;
+    }
+    if (!granted) {
+      autoConvertAllSitesInput.checked = false;
+      setStatus(t("popup.autoAllNeedsAccess"), "error");
+      return;
+    }
+  }
+  const saved = await saveSettings();
+  if (!saved) return;
+  setStatus(t(turningOn ? "popup.autoAllOn" : "popup.autoAllOff"), "success");
 }
 
 async function convertWholeSite() {
@@ -1501,7 +1528,8 @@ function updateRememberSiteHelp() {
 
 function updateSiteState() {
   const hostname = activeTab?.url ? safeUrl(activeTab.url)?.hostname : "";
-  siteStateNode.textContent = siteStatus?.remembered
+  const automatic = siteStatus?.remembered || (autoConvertAllSitesInput.checked && siteStatus?.ok);
+  siteStateNode.textContent = automatic
     ? t(enabledInput.checked ? "popup.siteAutoOn" : "popup.siteAutoPaused", {
       host: hostname || t("popup.currentSite")
     })

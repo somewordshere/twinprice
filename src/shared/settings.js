@@ -9,7 +9,8 @@
     convertedTextColor: "#166534",
     convertedBackgroundColor: "#dcfce7",
     convertedShape: "rounded",
-    showPagePrompt: true
+    showPagePrompt: true,
+    autoConvertAllSites: false
   });
   const KEYS = Object.freeze(Object.keys(DEFAULTS));
   const DISPLAY_MODES = Object.freeze(["beside", "replace"]);
@@ -60,7 +61,10 @@
         : DEFAULTS.convertedShape,
       showPagePrompt: typeof value?.showPagePrompt === "boolean"
         ? value.showPagePrompt
-        : DEFAULTS.showPagePrompt
+        : DEFAULTS.showPagePrompt,
+      autoConvertAllSites: typeof value?.autoConvertAllSites === "boolean"
+        ? value.autoConvertAllSites
+        : DEFAULTS.autoConvertAllSites
     };
   }
 
@@ -75,7 +79,8 @@
         !normalizeHexColor(value.convertedTextColor) ||
         !normalizeHexColor(value.convertedBackgroundColor) ||
         !CONVERTED_SHAPES.includes(value.convertedShape) ||
-        typeof value.showPagePrompt !== "boolean") {
+        typeof value.showPagePrompt !== "boolean" ||
+        typeof value.autoConvertAllSites !== "boolean") {
       return null;
     }
 
@@ -97,7 +102,8 @@
       convertedTextColor: normalizeHexColor(value.convertedTextColor),
       convertedBackgroundColor: normalizeHexColor(value.convertedBackgroundColor),
       convertedShape: value.convertedShape,
-      showPagePrompt: value.showPagePrompt
+      showPagePrompt: value.showPagePrompt,
+      autoConvertAllSites: value.autoConvertAllSites
     };
   }
 

@@ -19,6 +19,23 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.3.0 - 2026-10-21
+
+### Added
+
+- Added **Convert all websites automatically** under **Page options** in the popup. When it is on, every website converts its prices as soon as they are detected, without the on-page prompt and without the "Converted N prices" notice. Prices that a page adds later, and pages reached by in-page navigation, convert the same way. It is off by default. Turning it on asks for access to all websites when the browser has not granted it, and stays off if that is declined. Turning it off restores the original prices on pages it converted and brings back the prompt there; websites chosen with **Convert this site automatically** keep converting. If an automatic conversion fails, the prompt appears instead (when it is turned on), so the page can still be converted by hand. The setting is stored with the other settings in sync storage (`autoConvertAllSites`, default `false`). The label, help text and status messages are translated into all thirteen languages.
+
+### Privacy
+
+- Policy version 2.3.0 describes the new setting: it is stored with the other preferences, it converts prices on every ordinary website without the prompt, and turning it on can request the same optional site access as **Activate my open tabs**. Nothing new leaves the device. Website policy pages regenerated, and the Chrome store privacy answers updated to match.
+
+### Tests
+
+- Unit tests for sanitizing and validating the new setting.
+- New Chrome tests: with the setting on, a shop converts on load and a price added later converts, with no prompt and no notice; the popup switch stays off when site access is declined, then turns on, converts the open page silently, and when turned off restores the page and shows the prompt again.
+- New Firefox runtime test: with the setting on, a real page converts on load with no prompt and no notice.
+- The rate service passes the cache age it already measured to `buildSuccess`, so `cacheAgeMs` and the warning's `ageMs` come from one clock reading. `tests/rates.test.js` failed once when the two were read 1 millisecond apart.
+
 ## 2.2.6 - 2026-10-21
 
 ### Fixed

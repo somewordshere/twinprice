@@ -132,6 +132,52 @@ test("Firefox page access and popup handlers convert and undo a real webpage", {
   }
 });
 
+test("Firefox converts every website automatically without a prompt or a message", { timeout: 120_000 }, async () => {
+  const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-runtime-"));
+  let fixture;
+  let driver;
+  let installedAddonId;
+
+  try {
+    const archivePath = buildTemporaryArchive(temporaryDirectory);
+    fixture = await startFixtureServer();
+    driver = await createFirefoxDriver();
+    await driver.manage().setTimeouts({
+      pageLoad: FIREFOX_TIMEOUT_MS,
+      script: FIREFOX_TIMEOUT_MS
+    });
+
+    installedAddonId = await driver.installAddon(archivePath, true);
+    assert.equal(installedAddonId, ADDON_ID);
+
+    const extensionOrigin = await getExtensionOrigin(driver, ADDON_ID);
+    await seedExtensionState(driver, extensionOrigin, fixture.url, {
+      fromCurrency: "USD",
+      showPagePrompt: true,
+      autoConvertAllSites: true
+    });
+
+    await driver.get(fixture.url);
+    await driver.wait(async () => (
+      await driver.findElements(By.css("ccp-conversion[data-ccp-owned='true']"))
+    ).length === 1, FIREFOX_TIMEOUT_MS);
+    await driver.wait(async () => (
+      /90[.,]00/.test(await driver.findElement(By.id("initial")).getText())
+    ), FIREFOX_TIMEOUT_MS);
+    assert.equal((await driver.findElements(By.css(".ccp-page-prompt"))).length, 0);
+    assert.equal((await driver.findElements(By.css(".ccp-toast"))).length, 0);
+  } finally {
+    if (driver) {
+      if (installedAddonId) {
+        await driver.uninstallAddon(installedAddonId).catch(() => {});
+      }
+      await driver.quit().catch(() => {});
+    }
+    if (fixture) await fixture.close();
+    removeTemporaryDirectory(temporaryDirectory);
+  }
+});
+
 test("Firefox language menu retranslates the popup, the page, and the welcome page", { timeout: 120_000 }, async () => {
   const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-language-"));
   let fixture;

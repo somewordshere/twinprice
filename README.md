@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
 
-**Current version:** 2.2.6 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.3.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.2.6/twinprice-2.2.6-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.2.6/twinprice-2.2.6-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.3.0/twinprice-2.3.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.3.0/twinprice-2.3.0-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -55,7 +55,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.2.6/twinprice-2.2.6-chrome.zip) or [Firefox build](release/2.2.6/twinprice-2.2.6-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.3.0/twinprice-2.3.0-chrome.zip) or [Firefox build](release/2.3.0/twinprice-2.3.0-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -88,6 +88,10 @@ Highlight a supported price and use the **Convert selected currency** right-clic
 ### Remember a website
 
 Open **Page options** and enable **Convert this site automatically**. The selected manual source or `AUTO` mode is remembered for that origin, and supported prices are converted when the site is visited. Turning this option off deletes the saved origin and source mode; ordinary local price detection and the conversion prompt remain available.
+
+### Convert every website
+
+Open **Page options** and enable **Convert all websites automatically**. Every website then converts its supported prices as soon as they are detected, without the on-page prompt or a notice. It is off by default. Turning it off restores the original prices on pages it converted; websites chosen with **Convert this site automatically** keep converting.
 
 ## ⚙️ How it works
 
@@ -139,7 +143,7 @@ The only external requests retrieve the currency catalog and reference rates fro
 | HTTP and HTTPS webpage access | Loads the local detector as pages open so it can find supported prices and offer conversion without a toolbar click. Page contents and URLs are not transmitted. |
 | `activeTab` and `scripting` | Provides a user-triggered fallback on supported pages where the normal detector was not loaded, including manually allowed local files. |
 | `api.frankfurter.dev` | Retrieves reference exchange rates using ISO currency codes. |
-| Optional HTTP and HTTPS site access | Requested when you click **Activate my open tabs**, allowing the detector to start in existing tabs without reloading them. You can decline and reload those tabs instead. |
+| Optional HTTP and HTTPS site access | Requested when you click **Activate my open tabs**, allowing the detector to start in existing tabs without reloading them. You can decline and reload those tabs instead. Turning on **Convert all websites automatically** asks for the same access if the browser has not granted it. |
 | Firefox `websiteContent` data declaration | Discloses that a source ISO currency code detected from the page can be transmitted to the rate provider; raw page text, prices, and URLs are not transmitted. |
 
 Read the complete [privacy policy](privacy-policy.md) for retention, deletion, and provider details.
@@ -214,6 +218,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.3.0 | Convert all websites automatically, without the prompt or a message | [Chrome](release/2.3.0/twinprice-2.3.0-chrome.zip) · [Firefox](release/2.3.0/twinprice-2.3.0-firefox.zip) |
 | 2.2.6 | Rate ages, background messages, numbers and website links in the chosen language; welcome page fixes for phones; Korean line breaks | [Chrome](release/2.2.6/twinprice-2.2.6-chrome.zip) · [Firefox](release/2.2.6/twinprice-2.2.6-firefox.zip) |
 | 2.2.5 | Japanese, Korean and Simplified Chinese in the extension, the store listings and the website | [Chrome](release/2.2.5/twinprice-2.2.5-chrome.zip) · [Firefox](release/2.2.5/twinprice-2.2.5-firefox.zip) |
 | 2.2.4 | Language, theme and price display dropdowns that match the currency dropdown, and an uninstall page in the extension's language | [Chrome](release/2.2.4/twinprice-2.2.4-chrome.zip) · [Firefox](release/2.2.4/twinprice-2.2.4-firefox.zip) |

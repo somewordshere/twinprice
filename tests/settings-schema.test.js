@@ -23,7 +23,8 @@ test("shared settings schema sanitizes every persisted field", () => {
     convertedTextColor: "#ABCDEF",
     convertedBackgroundColor: "invalid",
     convertedShape: "cloud",
-    showPagePrompt: "yes"
+    showPagePrompt: "yes",
+    autoConvertAllSites: "yes"
   }, ["EUR", "USD"]);
 
   assert.deepEqual(JSON.parse(JSON.stringify(actual)), {
@@ -36,7 +37,8 @@ test("shared settings schema sanitizes every persisted field", () => {
     convertedTextColor: "#abcdef",
     convertedBackgroundColor: "#dcfce7",
     convertedShape: "rounded",
-    showPagePrompt: true
+    showPagePrompt: true,
+    autoConvertAllSites: false
   });
 });
 
@@ -54,6 +56,11 @@ test("shared settings schema validates and compares complete snapshots", () => {
   assert.equal(settings.normalizeSnapshot({ ...snapshot, convertedShape: "cloud" }), null);
   assert.equal(settings.normalizeSnapshot({ ...snapshot, theme: "neon" }), null);
   assert.equal(settings.normalizeSnapshot({ ...snapshot, language: "klingon" }), null);
+  assert.equal(settings.normalizeSnapshot({ ...snapshot, autoConvertAllSites: "yes" }), null);
+  assert.equal(
+    settings.normalizeSnapshot({ ...snapshot, autoConvertAllSites: true }).autoConvertAllSites,
+    true
+  );
   assert.equal(settings.normalizeSnapshot({ ...snapshot, language: "uk" }).language, "uk");
   assert.equal(settings.normalizeSnapshot({ ...snapshot, toCurrency: "JPY" }, ["EUR", "USD"]), null);
 });
