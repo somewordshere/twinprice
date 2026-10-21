@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Winkelprijzen in je eigen valuta, naast het origineel. Meer dan 160 valuta's. Pagina-inhoud verlaat je browser nooit.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Prijzen op de huidige pagina omrekenen",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

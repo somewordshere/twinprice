@@ -36,7 +36,9 @@
       refreshRatesInBackground(baseCurrency, supportedCodes);
       return {
         ...buildSuccess(cachedBase, true, true),
-        warning: `Using cached rates that are ${describeAge(cacheAgeMs)} while fresh rates load in the background.`
+        warning: `Using cached rates that are ${describeAge(cacheAgeMs)} while fresh rates load in the background.`,
+        warningKey: "rate.warnRefreshing",
+        warningParams: { ageMs: cacheAgeMs }
       };
     }
 
@@ -49,20 +51,24 @@
         if (!Number.isFinite(cacheAgeMs) || cacheAgeMs > MAX_STALE_AGE_MS) {
           return {
             ok: false,
-            error: `Live rates are unavailable and the cached rates are ${cacheAgeLabel}. Refusing to use rates older than 7 days.`
+            error: `Live rates are unavailable and the cached rates are ${cacheAgeLabel}. Refusing to use rates older than 7 days.`,
+            errorKey: "rate.errorTooOld",
+            errorParams: { ageMs: cacheAgeMs }
           };
         }
         const liveError = error instanceof Error ? error.message : "Live rates are unavailable.";
+        const warnAboutAge = cacheAgeMs >= WARN_STALE_AFTER_MS;
         return {
           ...buildSuccess(cachedBase, true, true),
-          warning: cacheAgeMs >= WARN_STALE_AFTER_MS
-            ? `${liveError} Using cached rates that are ${cacheAgeLabel}.`
-            : liveError
+          warning: warnAboutAge ? `${liveError} Using cached rates that are ${cacheAgeLabel}.` : liveError,
+          warningKey: warnAboutAge ? "rate.warnLiveUnavailableAge" : "rate.warnLiveUnavailable",
+          warningParams: { ageMs: cacheAgeMs }
         };
       }
       return {
         ok: false,
-        error: error instanceof Error ? error.message : "Could not load exchange rates."
+        error: error instanceof Error ? error.message : "Could not load exchange rates.",
+        errorKey: "convert.ratesFailed"
       };
     }
   }
@@ -114,6 +120,8 @@
     return Number.isFinite(fetchedAt) ? Math.max(0, Date.now() - fetchedAt) : Infinity;
   }
 
+  // English only, for the error and warning text above. Pages word the age in their
+  // own language from cacheAgeMs or the ageMs parameter (CurrencyI18n.age).
   function describeAge(ageMs) {
     if (!Number.isFinite(ageMs)) return "of unknown age";
     const minutes = Math.floor(ageMs / (60 * 1000));
@@ -135,8 +143,7 @@
       provider: RATE_PROVIDER,
       cached,
       stale,
-      cacheAgeMs,
-      cacheAgeLabel: cached ? describeAge(cacheAgeMs) : null
+      cacheAgeMs
     };
   }
 

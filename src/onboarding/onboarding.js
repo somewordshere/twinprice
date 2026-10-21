@@ -49,6 +49,7 @@
       code: Object.assign(document.createElement("code"), { textContent: "USD" })
     }));
     const link = helpLink.cloneNode(false);
+    link.href = I18n.websiteUrl(I18n.language(), "#faq");
     link.textContent = t("onboarding.helpLink");
     helpNote.replaceChildren(...I18n.nodes("onboarding.helpNote", { link }));
     renderCurrencyOptions();
@@ -75,7 +76,7 @@
     languageSelect.disabled = !settings?.ok;
 
     if (!catalog?.ok || !Array.isArray(catalog.currencies) || !catalog.currencies.length) {
-      setNoteText(currencyNote, catalog?.error || t("onboarding.currenciesFailed"), "error");
+      setNoteText(currencyNote, I18n.localize(catalog)?.error || t("onboarding.currenciesFailed"), "error");
       return;
     }
 
@@ -112,7 +113,7 @@
     const result = await send({ type: messages.UPDATE_SETTINGS, payload: { language } });
     languageSelect.disabled = false;
     if (!result?.ok) {
-      setNoteText(currencyNote, result?.error || t("onboarding.languageFailed"), "error");
+      setNoteText(currencyNote, I18n.localize(result)?.error || t("onboarding.languageFailed"), "error");
     }
   }
 
@@ -123,7 +124,7 @@
     currencySelect.disabled = false;
 
     if (!result?.ok) {
-      setNoteText(currencyNote, result?.error || t("onboarding.currencyFailed"), "error");
+      setNoteText(currencyNote, I18n.localize(result)?.error || t("onboarding.currencyFailed"), "error");
       if (result?.settings?.toCurrency) {
         selectedCurrency = result.settings.toCurrency;
         currencySelect.value = selectedCurrency;
@@ -147,7 +148,7 @@
       setNote(tabsNote, "onboarding.tabsSwitching");
       const result = await send({ type: messages.ACTIVATE_OPEN_TABS });
       if (!result?.ok) {
-        setNoteText(tabsNote, result?.error || t("onboarding.tabsFailed"), "error");
+        setNoteText(tabsNote, I18n.localize(result)?.error || t("onboarding.tabsFailed"), "error");
         return;
       }
       summarizeActivation(result);

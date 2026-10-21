@@ -76,7 +76,8 @@ let recentPairs = [];
 let currencyDetails = new Map();
 let availableQuoteCurrencies = null;
 let availableRatesSource = null;
-let catalogWarning = null;
+// Kept as sent; worded in the current language when shown (see catalogWarningText).
+let catalogResult = null;
 let quickConversionTimer = null;
 let appearanceAnnouncementTimer = null;
 let quickConversionRequestId = 0;
@@ -140,7 +141,7 @@ async function initialize() {
   if (!currenciesResult?.ok || !settingsResult?.ok) throw new Error(t("popup.settingsLoadFailed"));
   currencies = currenciesResult.currencies;
   currencyDetails = new Map((currenciesResult.details || []).map((currency) => [currency.code, currency]));
-  catalogWarning = currenciesResult.warning || null;
+  catalogResult = currenciesResult;
   recentCurrencies = localPreferences.recentCurrencies || [];
   recentPairs = normalizeRecentPairs(localPreferences.recentPairs);
   const settings = settingsController.initialize(settingsResult.settings);
@@ -161,7 +162,7 @@ async function initialize() {
   rememberSiteInput.disabled = true;
   rememberSiteInput.title = statusResult?.ok
     ? ""
-    : statusResult?.error || t("popup.cannotRemember");
+    : I18n.localize(statusResult)?.error || t("popup.cannotRemember");
   updateRememberSiteHelp();
   // Leftover site data is only ever discovered by a failed remember/forget in
   // this popup session; a freshly opened popup never has cleanup pending.
@@ -182,7 +183,7 @@ async function initialize() {
     t(currenciesResult.stale ? "popup.catalogCached" : "popup.catalogAvailable", {
       count: currencies.length
     })
-  }${catalogWarning ? `. ${catalogWarning}` : ""}`;
+  }${catalogWarningText() ? `. ${catalogWarningText()}` : ""}`;
   updateSwapState();
   updateCurrencyDiscs();
   renderRecentPairs();
@@ -275,6 +276,9 @@ function applyLanguage(preference) {
     return option;
   }));
   languageSelect.value = preference;
+  for (const link of document.querySelectorAll(".brand-link, .website-link")) {
+    link.href = I18n.websiteUrl();
+  }
   syncSelectMenus();
   renderShortcutHint();
   if (!popupReady) return;
@@ -370,7 +374,7 @@ function updateCurrencyDiscs() {
 function setRateHero({ from, to, rate, meta, kind = "fresh" }) {
   rateFromNode.textContent = from;
   rateToNode.textContent = to;
-  rateValueNode.textContent = formatRateValue(rate);
+  rateValueNode.textContent = I18n.formatRate(rate);
   rateMetaTextNode.textContent = meta;
   rateMetaNode.dataset.kind = kind;
   replayAnimation(rateLineNode, "is-updated");
@@ -446,17 +450,10 @@ function renderSparkline(history, baseCurrency, quoteCurrency) {
   rateSparkTitleNode.textContent = t(`popup.spark.${direction}`, {
     base: baseCurrency,
     quote: quoteCurrency,
-    percent: Math.abs(percent).toFixed(1),
+    percent: I18n.formatNumber(Math.abs(percent), { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
     span: t("popup.spark.span", { count: points.length })
   });
   rateSparkNode.removeAttribute("hidden");
-}
-
-function formatRateValue(rate) {
-  if (!Number.isFinite(rate)) return "—";
-  if (rate >= 1000) return rate.toFixed(1);
-  if (rate >= 0.001) return rate.toFixed(4);
-  return rate.toPrecision(3);
 }
 
 function renderRecentPairs() {
@@ -883,7 +880,7 @@ function updateAppearancePreview({ announce = true } = {}) {
 }
 
 function describeContrast(contrast) {
-  const ratio = contrast.toFixed(2);
+  const ratio = I18n.formatNumber(contrast, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   if (contrast >= 7) {
     return { kind: "pass", text: t("popup.contrastAAA", { ratio }) };
   }
@@ -1026,12 +1023,12 @@ function validateSettingsPayload(payload) {
   return null;
 }
 
-function dispatchSettingsUpdate(payload) {
-  return ExtensionAPI.runtime.sendMessage({
+async function dispatchSettingsUpdate(payload) {
+  return I18n.localize(await ExtensionAPI.runtime.sendMessage({
     type: M.UPDATE_SETTINGS,
     origin: activeTab?.url,
     payload
-  });
+  }));
 }
 
 async function fetchActualSettings() {
@@ -1137,7 +1134,7 @@ async function handleRememberSiteChange() {
   let setupFailureState = null;
   try {
     if (rememberSiteInput.checked) {
-      const result = await ExtensionAPI.runtime.sendMessage({ type: M.REMEMBER_SITE, origin });
+      const result = I18n.localize(await ExtensionAPI.runtime.sendMessage({ type: M.REMEMBER_SITE, origin }));
       if (!result?.ok) {
         setupFailureState = result;
         siteStatus.remembered = Boolean(result?.remembered);
@@ -1154,7 +1151,7 @@ async function handleRememberSiteChange() {
         forgetSite: false,
         suppressPrompt: true
       });
-      const result = await ExtensionAPI.runtime.sendMessage({ type: M.FORGET_SITE, origin });
+      const result = I18n.localize(await ExtensionAPI.runtime.sendMessage({ type: M.FORGET_SITE, origin }));
       if (!result?.ok) {
         setupFailureState = result;
         siteStatus.remembered = Boolean(result?.remembered);
@@ -1437,7 +1434,9 @@ async function calculateQuickConversion() {
     availableQuoteCurrencies = null;
     availableRatesSource = sourceCurrency;
   }
-  const result = await ExtensionAPI.runtime.sendMessage({ type: M.GET_RATES, baseCurrency: sourceCurrency });
+  const result = I18n.localize(
+    await ExtensionAPI.runtime.sendMessage({ type: M.GET_RATES, baseCurrency: sourceCurrency })
+  );
   if (requestId !== quickConversionRequestId) return;
   if (result?.ok) {
     availableQuoteCurrencies = new Set(Object.keys(result.rates || {}));
@@ -1464,19 +1463,17 @@ async function calculateQuickConversion() {
   if (amountProblem) return;
 
   const converted = CurrencyCatalog.formatCurrencyAmount(amount * rate, targetCurrency);
-  const cached = result.stale
-    ? t(result.cacheAgeLabel ? "popup.cachedAge" : "popup.cached", { age: result.cacheAgeLabel })
-    : null;
+  const cached = result.stale ? describeCachedRate(result) : null;
   const details = [
-    `1 ${sourceCurrency} = ${rate} ${targetCurrency}`,
+    `1 ${sourceCurrency} = ${I18n.formatRate(rate)} ${targetCurrency}`,
     result.date ? t("popup.rateDateFull", { date: result.date }) : null,
     result.provider || null,
     cached,
     result.warning || null,
-    catalogWarning ? t("popup.catalogWarning", { warning: catalogWarning }) : null
+    catalogWarningText() ? t("popup.catalogWarning", { warning: catalogWarningText() }) : null
   ].filter(Boolean).join(" · ");
   const summary = [
-    `1 ${sourceCurrency} = ${rate} ${targetCurrency}`,
+    `1 ${sourceCurrency} = ${I18n.formatRate(rate)} ${targetCurrency}`,
     result.date || null,
     cached
   ].filter(Boolean).join(" · ");
@@ -1499,7 +1496,7 @@ function updateRememberSiteHelp() {
     ? host
       ? t("popup.rememberHelpHost", { host })
       : t("popup.rememberHelp")
-    : siteStatus?.error || t("popup.cannotRemember");
+    : I18n.localize(siteStatus)?.error || t("popup.cannotRemember");
 }
 
 function updateSiteState() {
@@ -1520,12 +1517,19 @@ function safeUrl(value) {
   try { return new URL(value); } catch (_error) { return null; }
 }
 
+function catalogWarningText() {
+  return I18n.localize(catalogResult)?.warning || null;
+}
+
+// For a rate reply from the background, which sends the age in milliseconds.
+function describeCachedRate(result) {
+  const age = result.cached ? I18n.age(result.cacheAgeMs) : null;
+  return t(age ? "popup.cachedAge" : "popup.cached", { age });
+}
+
 function describeRateFreshness(result) {
   if (result.stale) {
-    return [
-      t(result.cacheAgeLabel ? "popup.cachedAge" : "popup.cached", { age: result.cacheAgeLabel }),
-      result.date || null
-    ].filter(Boolean).join(" · ");
+    return [describeCachedRate(result), result.date || null].filter(Boolean).join(" · ");
   }
   return [
     result.date ? t("popup.rateShort", { date: result.date }) : t("popup.latestRate"),
@@ -1568,7 +1572,9 @@ async function sendToActivePage(type, payload = {}) {
   if (unsupportedPage) return { ok: false, error: unsupportedPage };
   try {
     await ensureContentScripts(activeTab.id);
-    return await ExtensionAPI.tabs.sendMessage(activeTab.id, { type, ...payload }) || {
+    // A page reply can relay a background failure (forgetting a site), whose key
+    // only the popup's dictionaries cover.
+    return I18n.localize(await ExtensionAPI.tabs.sendMessage(activeTab.id, { type, ...payload })) || {
       ok: false,
       error: t("popup.pageNoResponse")
     };

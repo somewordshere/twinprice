@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "See shop prices in your own currency, right beside the original. 160+ currencies. Page content never leaves your browser.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Convert prices on the current page",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

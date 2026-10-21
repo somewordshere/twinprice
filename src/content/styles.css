@@ -283,3 +283,15 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
     animation: none;
   }
 }
+
+/* Korean wraps between words, not inside them. The prompt, button and toast carry
+   the interface language, so this follows it rather than the shop's language. Their
+   parts reset inheritance (all: initial), so each part is matched too. */
+.ccp-page-prompt:lang(ko),
+.ccp-page-prompt :lang(ko),
+.ccp-selection-popup:lang(ko),
+.ccp-toast:lang(ko),
+.ccp-toast :lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}

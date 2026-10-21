@@ -68,6 +68,7 @@
     pageConvertPrompt = document.createElement("aside");
     isolateControls(pageConvertPrompt);
     pageConvertPrompt.className = "ccp-page-prompt";
+    pageConvertPrompt.lang = global.CurrencyI18n.language();
     pageConvertPrompt.setAttribute("aria-labelledby", "ccp-page-prompt-title");
     pageConvertPrompt.setAttribute(
       "aria-describedby",
@@ -127,18 +128,12 @@
     // wraps to a second line. The popup and toast carry the detail.
     const freshness = descriptor.stale ? t("page.rate.cached") : descriptor.date || "";
     pageConvertRate.textContent = `1 ${descriptor.base} = ${
-      formatPromptRate(descriptor.rate)
+      global.CurrencyI18n.formatRate(descriptor.rate)
     } ${descriptor.quote}${freshness ? ` · ${freshness}` : ""}`;
     pageConvertRate.title = descriptor.stale && descriptor.cacheAgeLabel
       ? t("page.rate.cachedTitle", { age: descriptor.cacheAgeLabel })
       : "";
     pageConvertRate.hidden = false;
-  }
-
-  function formatPromptRate(rate) {
-    if (rate >= 1000) return rate.toFixed(1);
-    if (rate >= 0.001) return rate.toFixed(4);
-    return rate.toPrecision(3);
   }
 
   async function handlePagePromptAction() {
@@ -226,6 +221,7 @@
   // mid-conversion or showing a result is left alone; it is already on screen.
   function refreshLanguage() {
     if (!pageConvertPrompt || !pagePromptIdle || !settings) return;
+    pageConvertPrompt.lang = global.CurrencyI18n.language();
     pageConvertClose?.setAttribute("aria-label", t("page.dismiss"));
     pageConvertMessage.textContent = t("page.prompt.message", { currency: settings.toCurrency });
     pageConvertButton.textContent = t("page.prompt.convert");
@@ -325,6 +321,7 @@
     isolateControls(selectionPopup);
     selectionPopup.type = "button";
     selectionPopup.className = "ccp-selection-popup";
+    selectionPopup.lang = global.CurrencyI18n.language();
     selectionPopup.setAttribute("aria-live", "polite");
     selectionPopup.setAttribute("aria-atomic", "true");
     if (alreadyInTarget) {
@@ -464,6 +461,7 @@
     const toast = document.createElement("div");
     isolateControls(toast);
     toast.className = "ccp-toast";
+    toast.lang = global.CurrencyI18n.language();
     const text = document.createElement("span");
     text.className = "ccp-toast-message";
     text.setAttribute("role", "status");

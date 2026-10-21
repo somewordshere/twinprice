@@ -187,7 +187,7 @@
   "2aaed9": "For example, at an invented rate of 0.90 EUR per USD, a USD 100 item is EUR 90. A hypothetical 3% conversion fee on that amount would add EUR 2.70, making EUR 92.70 before any other charges. Twinprice’s price conversion does not calculate that fee. Check the shop’s final total and your payment provider’s terms for the amount you will pay.",
   "1f319b": "How can I compare prices from two shops?",
   "d66267": "Use the same target currency on both sites, but choose the correct source currency for each shop. Convert the product prices, then compare the final totals including shipping and taxes. An item with a lower converted price can still cost more overall.",
-  "6b7323": "If you only want to compare amounts you already know, open <1>Convert custom amount</1> in the popup and type an amount. Choose an explicit source currency first if AUTO has not identified one.",
+  "9a6b2e": "If you only want to compare amounts you already know, type one into the <1>Amount</1> field in the popup. Choose an explicit source currency first if AUTO has not identified one.",
   "e78261": "Can I convert prices without a fresh internet connection?",
   "10b13d": "Recent cached rates can support a conversion when a fresh rate is unavailable. This depends on having a usable cached rate for the requested currencies; Twinprice is not guaranteed to work fully offline. It warns when cached rates pass 48 hours and will not use rates older than seven days.",
   "78c09d": "See <1>where the rates come from</1> and <2>the product’s browser and currency limitations</2>.",

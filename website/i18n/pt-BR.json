@@ -186,7 +186,7 @@
   "2aaed9": "Por exemplo, a uma taxa inventada de 0,90 EUR por USD, um item de USD 100 sai por EUR 90. Uma tarifa de conversão hipotética de 3% sobre esse valor acrescentaria EUR 2,70, chegando a EUR 92,70 antes de quaisquer outras cobranças. A conversão de preços do Twinprice não calcula essa tarifa. Confira o total final da loja e as condições do seu provedor de pagamento para saber quanto você vai pagar.",
   "1f319b": "Como comparo os preços de duas lojas?",
   "d66267": "Use a mesma moeda de destino nos dois sites, mas escolha a moeda de origem correta para cada loja. Converta os preços dos produtos e depois compare os totais finais, com frete e impostos. Um item com preço convertido menor ainda pode custar mais no total.",
-  "6b7323": "Se você só quer comparar valores que já conhece, abra <1>Converter um valor qualquer</1> no pop-up e digite um valor. Escolha antes uma moeda de origem específica se o AUTO ainda não tiver identificado nenhuma.",
+  "9a6b2e": "Se você só quer comparar valores que já conhece, digite um deles no campo <1>Valor</1> do pop-up. Escolha antes uma moeda de origem específica se o AUTO ainda não tiver identificado nenhuma.",
   "e78261": "Posso converter preços sem uma conexão recente com a internet?",
   "10b13d": "Taxas recentes em cache podem permitir a conversão quando não há uma taxa nova disponível. Isso depende de haver uma taxa em cache utilizável para as moedas solicitadas; não há garantia de que o Twinprice funcione totalmente offline. Ele avisa quando as taxas em cache passam de 48 horas e não usa taxas com mais de sete dias.",
   "78c09d": "Veja <1>de onde vêm as taxas</1> e <2>as limitações do produto quanto a navegadores e moedas</2>.",

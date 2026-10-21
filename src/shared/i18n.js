@@ -1,5 +1,6 @@
 (function initializeI18n(global) {
   const FALLBACK = "en";
+  const WEBSITE = "https://twinprice.com/";
   // Each language names itself in its own tongue so someone who landed on the
   // wrong one can still find theirs. These never need translating.
   const NATIVE_NAMES = Object.freeze({
@@ -111,6 +112,62 @@
     return result;
   }
 
+  function has(key) {
+    return lookup(key) !== key;
+  }
+
+  // How old a cached rate is ("3 hours old"), in the active language.
+  function age(ageMs) {
+    if (!Number.isFinite(ageMs) || ageMs < 0) return t("age.unknown");
+    const minutes = Math.floor(ageMs / (60 * 1000));
+    if (minutes < 1) return t("age.underMinute");
+    if (minutes < 120) return t("age.minutes", { count: minutes });
+    const hours = Math.floor(ageMs / (60 * 60 * 1000));
+    if (hours < 48) return t("age.hours", { count: hours });
+    return t("age.days", { count: Math.floor(ageMs / (24 * 60 * 60 * 1000)) });
+  }
+
+  // The background cannot know which language a page shows, so next to its English
+  // error or warning it sends a key and parameters (an age travels as ageMs). Pages
+  // pass each reply through here before showing anything from it.
+  function describe(key, params, fallback) {
+    if (!key || !has(key)) return fallback;
+    const values = { ...params };
+    if (Object.hasOwn(values, "ageMs")) values.age = age(values.ageMs);
+    return t(key, values);
+  }
+
+  function localize(result) {
+    if (!result || typeof result !== "object") return result;
+    const localized = { ...result };
+    if (result.errorKey) localized.error = describe(result.errorKey, result.errorParams, result.error);
+    if (result.warningKey) localized.warning = describe(result.warningKey, result.warningParams, result.warning);
+    return localized;
+  }
+
+  function formatNumber(value, options) {
+    try {
+      return new Intl.NumberFormat(activeLanguage, options).format(value);
+    } catch (_error) {
+      return new Intl.NumberFormat(FALLBACK, options).format(value);
+    }
+  }
+
+  // Exchange rates keep a fixed precision (4 decimals, 1 above 1000, 3 significant
+  // digits below 0.001) and no grouping, with the active language's decimal mark.
+  function formatRate(rate) {
+    if (!Number.isFinite(rate)) return "—";
+    if (rate >= 1000) return formatNumber(rate, { useGrouping: false, minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    if (rate >= 0.001) return formatNumber(rate, { useGrouping: false, minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    return formatNumber(rate, { useGrouping: false, minimumSignificantDigits: 3, maximumSignificantDigits: 3 });
+  }
+
+  // twinprice.com keeps English at the root and every other language in its own folder.
+  function websiteUrl(language = activeLanguage, path = "") {
+    const code = matchLanguage(language) || FALLBACK;
+    return `${WEBSITE}${code === FALLBACK ? "" : `${code}/`}${path}`;
+  }
+
   function apply(root = global.document) {
     if (!root?.querySelectorAll) return;
     for (const node of root.querySelectorAll("[data-i18n]")) {
@@ -146,6 +203,12 @@
     dictionary: (language) => ({ ...dictionaries.get(language) }),
     t,
     nodes,
+    age,
+    describe,
+    localize,
+    formatNumber,
+    formatRate,
+    websiteUrl,
     apply,
     languageOptions
   });

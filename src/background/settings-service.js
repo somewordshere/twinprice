@@ -53,13 +53,14 @@
         details: catalog.currencies,
         cached: catalog.cached,
         stale: catalog.stale,
-        warning: catalog.warning
+        warning: catalog.warning,
+        ...(catalog.warningKey ? { warningKey: catalog.warningKey } : {})
       };
     }
 
     async function updateSettings(payload, originValue) {
       if (!payload || typeof payload !== "object") {
-        return { ok: false, error: "Invalid settings." };
+        return { ok: false, error: "Invalid settings.", errorKey: "error.invalidSettings" };
       }
       return sitePreferences.runMutation(() => updateSettingsWithinMutation(payload, originValue));
     }
@@ -79,7 +80,7 @@
       );
 
       if (settings.fromCurrency === settings.toCurrency) {
-        return { ok: false, error: "Choose two different currencies." };
+        return { ok: false, error: "Choose two different currencies.", errorKey: "popup.validateDifferent" };
       }
 
       const pairChanged = settings.fromCurrency !== currentSettings.fromCurrency ||
@@ -90,14 +91,18 @@
           return {
             ok: false,
             settings: currentSettings,
-            error: rates?.error || "Could not verify this currency pair."
+            error: rates?.error || "Could not verify this currency pair.",
+            errorKey: rates?.errorKey || "error.verifyPair",
+            ...(rates?.errorParams ? { errorParams: rates.errorParams } : {})
           };
         }
         if (!Number.isFinite(rates.rates?.[settings.toCurrency])) {
           return {
             ok: false,
             settings: currentSettings,
-            error: `No ${settings.fromCurrency} to ${settings.toCurrency} rate is currently available.`
+            error: `No ${settings.fromCurrency} to ${settings.toCurrency} rate is currently available.`,
+            errorKey: "popup.noRate",
+            errorParams: { from: settings.fromCurrency, to: settings.toCurrency }
           };
         }
       }
@@ -111,7 +116,7 @@
           site
         );
         if (conflict) {
-          return { ok: false, settings: currentSettings, error: conflict };
+          return { ok: false, settings: currentSettings, ...conflict };
         }
       }
       if (remembered) {

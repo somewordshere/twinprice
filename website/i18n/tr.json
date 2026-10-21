@@ -186,7 +186,7 @@
   "2aaed9": "Örneğin, 1 USD = 0,90 EUR şeklindeki uydurma bir kurla 100 USD'lik bir ürün 90 EUR eder. Bu tutar üzerinden varsayımsal %3'lük bir çevirme ücreti 2,70 EUR ekler ve diğer masraflardan önce toplam 92,70 EUR olur. Twinprice'ın fiyat çevirisi bu ücreti hesaplamaz. Ödeyeceğin tutar için mağazanın nihai toplamına ve ödeme sağlayıcının koşullarına bak.",
   "1f319b": "İki mağazanın fiyatlarını nasıl karşılaştırırım?",
   "d66267": "İki sitede de aynı hedef para birimini kullan, ancak her mağaza için doğru kaynak para birimini seç. Ürün fiyatlarını çevir, ardından kargo ve vergiler dahil nihai toplamları karşılaştır. Çevrilmiş fiyatı daha düşük olan bir ürün toplamda yine de daha pahalıya gelebilir.",
-  "6b7323": "Yalnızca zaten bildiğin tutarları karşılaştırmak istiyorsan açılır pencerede <1>İstediğin tutarı çevir</1>'i aç ve bir tutar yaz. AUTO henüz bir para birimi belirlemediyse önce açıkça bir kaynak para birimi seç.",
+  "9a6b2e": "Yalnızca zaten bildiğin tutarları karşılaştırmak istiyorsan açılır penceredeki <1>Tutar</1> alanına birini yaz. AUTO henüz bir para birimi belirlemediyse önce açıkça bir kaynak para birimi seç.",
   "e78261": "Güncel bir internet bağlantısı olmadan fiyat çevirebilir miyim?",
   "10b13d": "Güncel bir kur alınamadığında, yakın zamanda önbelleğe alınmış kurlarla çevirme yapılabilir. Bu, istenen para birimleri için kullanılabilir bir önbellek kuru bulunmasına bağlıdır; Twinprice'ın tamamen çevrimdışı çalışacağı garanti edilmez. Önbellekteki kurlar 48 saati geçtiğinde uyarır ve yedi günden eski kurları kullanmaz.",
   "78c09d": "<1>Kurların nereden geldiğine</1> ve <2>ürünün tarayıcı ve para birimi sınırlamalarına</2> göz at.",
