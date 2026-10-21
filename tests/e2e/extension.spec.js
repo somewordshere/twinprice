@@ -1710,7 +1710,7 @@ test("real extension popup, injection, dynamic conversion, and undo work togethe
   await expect(popup.locator("#quickResult")).toContainText("0,90");
   await popup.getByRole("textbox", { name: "Amount", exact: true }).fill("25");
   await expect(popup.locator("#quickResult")).toContainText("22,50");
-  await expect(popup.locator("#quickRateInfo")).toContainText("1 USD = 0.9 EUR");
+  await expect(popup.locator("#quickRateInfo")).toContainText("1 USD = 0.9000 EUR");
   await expect(popup.locator("#quickRateInfo")).toHaveAttribute("title", /Frankfurter/);
   await expect(popup.locator("#fromCurrency option[value='AFN']")).toHaveCount(1);
   await expect(popup.locator("#toCurrency option[value='AFN']")).toHaveCount(0);
@@ -1746,7 +1746,7 @@ test("real extension popup, injection, dynamic conversion, and undo work togethe
   await expect(shop.locator("#initial")).toContainText("90,00");
   await expect(shop.locator("#large-price")).toContainText("36,00");
   await expect(shop.locator("#hidden-price ccp-conversion")).toHaveCount(0);
-  await expect(shop.locator(".ccp-badge").first()).toHaveAttribute("title", /1 USD = 0\.9 EUR.*Frankfurter/);
+  await expect(shop.locator(".ccp-badge").first()).toHaveAttribute("title", /1 USD = 0\.9000 EUR.*Frankfurter/);
 
   const initialConversion = shop.locator("#initial ccp-conversion");
   await initialConversion.evaluate((element) => {

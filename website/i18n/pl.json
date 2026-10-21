@@ -186,7 +186,7 @@
   "2aaed9": "Przykład: przy wymyślonym kursie 0,90 EUR za 1 USD produkt za 100 USD kosztuje 90 EUR. Hipotetyczna opłata za przewalutowanie w wysokości 3% od tej kwoty to dodatkowe 2,70 EUR, czyli razem 92,70 EUR przed innymi opłatami. Przeliczenie ceny przez Twinprice nie uwzględnia tej opłaty. Sprawdź końcową sumę w sklepie i warunki swojego operatora płatności, aby wiedzieć, ile zapłacisz.",
   "1f319b": "Jak porównać ceny z dwóch sklepów?",
   "d66267": "Użyj tej samej waluty docelowej w obu witrynach, ale dla każdego sklepu wybierz właściwą walutę źródłową. Przelicz ceny produktów, a potem porównaj końcowe sumy z wysyłką i podatkami. Produkt z niższą przeliczoną ceną może w sumie kosztować więcej.",
-  "6b7323": "Jeśli chcesz tylko porównać kwoty, które już znasz, otwórz w okienku <1>Przelicz dowolną kwotę</1> i wpisz kwotę. Najpierw wybierz konkretną walutę źródłową, jeśli AUTO jeszcze żadnej nie rozpoznało.",
+  "9a6b2e": "Jeśli chcesz tylko porównać kwoty, które już znasz, wpisz jedną z nich w polu <1>Kwota</1> w okienku. Najpierw wybierz konkretną walutę źródłową, jeśli AUTO jeszcze żadnej nie rozpoznało.",
   "e78261": "Czy mogę przeliczać ceny bez świeżego połączenia z internetem?",
   "10b13d": "Niedawno zapisane kursy z pamięci podręcznej umożliwiają przeliczenie, gdy świeży kurs jest niedostępny. Wymaga to użytecznego zapisanego kursu dla wybranych walut; nie ma gwarancji, że Twinprice będzie w pełni działać offline. Rozszerzenie ostrzega, gdy zapisane kursy mają ponad 48 godzin, i nie używa kursów starszych niż siedem dni.",
   "78c09d": "Zobacz, <1>skąd pochodzą kursy</1> oraz <2>jakie ograniczenia ma produkt w zakresie przeglądarek i walut</2>.",

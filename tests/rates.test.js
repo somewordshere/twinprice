@@ -83,8 +83,12 @@ test("uses recent stale rates with an age warning when the provider is unavailab
   assert.equal(result.ok, true);
   assert.equal(result.stale, true);
   assert.equal(result.provider, "Frankfurter");
-  assert.equal(result.cacheAgeLabel, "3 days old");
   assert.match(result.warning, /3 days old/);
+  // Pages word the warning in their own language from the key and the age.
+  assert.equal(result.warningKey, "rate.warnRefreshing");
+  assert.ok(Math.abs(result.warningParams.ageMs - 3 * 24 * 60 * 60 * 1000) < 60 * 1000);
+  assert.equal(result.cacheAgeMs, result.warningParams.ageMs);
+  assert.equal(Object.hasOwn(result, "cacheAgeLabel"), false, "no English age reaches the pages");
   assert.equal(result.rates.USD, 1.1);
 });
 
@@ -96,6 +100,8 @@ test("refuses cached rates older than seven days", async () => {
   const result = await service.getRates("EUR");
   assert.equal(result.ok, false);
   assert.match(result.error, /Refusing to use rates older than 7 days/);
+  assert.equal(result.errorKey, "rate.errorTooOld");
+  assert.ok(result.errorParams.ageMs > 7 * 24 * 60 * 60 * 1000);
 });
 
 test("aborts a rate request after its timeout", async () => {

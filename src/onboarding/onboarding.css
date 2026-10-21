@@ -73,6 +73,8 @@ body {
   background: var(--bg-app);
   color: var(--text-primary);
 }
+/* Korean wraps between words, not inside them; a long unbroken string may still break. */
+:lang(ko) { word-break: keep-all; overflow-wrap: break-word; }
 
 .page { max-width: 680px; margin: 0 auto; padding: 0 20px 56px; }
 
@@ -86,8 +88,10 @@ body {
 .hero > * { max-width: 640px; margin-inline: auto; }
 .brand { display: flex; align-items: center; gap: 9px; margin-bottom: 20px; }
 .brand-name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
-.brand-lang { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--on-head-muted); }
-.brand-lang select { font: inherit; color: var(--on-head); background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 5px 8px; }
+.brand-lang { margin-inline-start: auto; min-width: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--on-head-muted); }
+/* The menu is as wide as its longest option ("Automático (idioma del navegador)"), so on a
+   phone it has to be allowed to shrink or it pushes the page sideways. */
+.brand-lang select { min-width: 0; max-width: 100%; font: inherit; color: var(--on-head); background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 5px 8px; }
 .brand-lang select option { color: var(--text-primary); background: var(--bg-card); }
 .brand-lang select:focus-visible { outline: 2px solid var(--on-head); outline-offset: 2px; }
 .brand-lang select:disabled { opacity: 0.6; }
@@ -109,6 +113,8 @@ body {
 
 .step-number {
   flex: 0 0 28px;
+  width: 28px;
+  align-self: flex-start;
   height: 28px;
   display: grid;
   place-items: center;

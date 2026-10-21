@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "short_name": "Twinprice",
   "homepage_url": "https://twinprice.com/",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "icons": {
@@ -73,7 +73,7 @@
         "default": "Ctrl+Shift+Y",
         "mac": "Command+Shift+Y"
       },
-      "description": "Convert prices on the current page"
+      "description": "__MSG_commandConvertPage__"
     }
   }
 }

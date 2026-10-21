@@ -185,6 +185,8 @@
 [hidden] { display: none !important; }
 
 body { width: 420px; margin: 0; }
+/* Korean wraps between words, not inside them; a long unbroken string may still break. */
+:lang(ko) { word-break: keep-all; overflow-wrap: break-word; }
 
 .app {
   max-height: 600px;

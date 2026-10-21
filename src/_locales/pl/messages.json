@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Ceny w sklepach w Twojej walucie, tuż obok oryginału. Ponad 160 walut. Treść stron nigdy nie opuszcza Twojej przeglądarki.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Przelicz ceny na bieżącej stronie",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

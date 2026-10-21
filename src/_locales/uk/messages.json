@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Ціни в магазинах у вашій валюті, поруч із початковою. Понад 160 валют. Вміст сторінок ніколи не залишає ваш браузер.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Конвертувати ціни на поточній сторінці",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

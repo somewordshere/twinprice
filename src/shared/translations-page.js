@@ -81,7 +81,19 @@
     "convert.titleBase": "Converted from {base} to {target}.",
     "convert.titleRate": "Exchange rate: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Provider: {provider}.",
-    "convert.titleDate": "Rate date: {date}."
+    "convert.titleDate": "Rate date: {date}.",
+    "age.unknown": "of unknown age",
+    "age.underMinute": "less than a minute old",
+    "age.minutes_one": "{count} minute old",
+    "age.minutes_other": "{count} minutes old",
+    "age.hours_one": "{count} hour old",
+    "age.hours_other": "{count} hours old",
+    "age.days_one": "{count} day old",
+    "age.days_other": "{count} days old",
+    "rate.warnRefreshing": "Using cached rates that are {age} while fresh rates load in the background.",
+    "rate.warnLiveUnavailable": "Live rates could not be loaded, so recent cached rates are in use.",
+    "rate.warnLiveUnavailableAge": "Live rates could not be loaded. Using cached rates that are {age}.",
+    "rate.errorTooOld": "Live rates are unavailable and the cached rates are {age}. Refusing to use rates older than 7 days."
   });
 
   i18n.register("de", {
@@ -160,7 +172,19 @@
     "convert.titleBase": "Umgerechnet von {base} in {target}.",
     "convert.titleRate": "Wechselkurs: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Anbieter: {provider}.",
-    "convert.titleDate": "Kursdatum: {date}."
+    "convert.titleDate": "Kursdatum: {date}.",
+    "age.unknown": "Alter unbekannt",
+    "age.underMinute": "weniger als eine Minute alt",
+    "age.minutes_one": "{count} Minute alt",
+    "age.minutes_other": "{count} Minuten alt",
+    "age.hours_one": "{count} Stunde alt",
+    "age.hours_other": "{count} Stunden alt",
+    "age.days_one": "{count} Tag alt",
+    "age.days_other": "{count} Tage alt",
+    "rate.warnRefreshing": "Zwischengespeicherte Kurse werden verwendet ({age}), während neue Kurse im Hintergrund geladen werden.",
+    "rate.warnLiveUnavailable": "Aktuelle Kurse konnten nicht geladen werden, daher werden zuletzt gespeicherte Kurse verwendet.",
+    "rate.warnLiveUnavailableAge": "Aktuelle Kurse konnten nicht geladen werden. Zwischengespeicherte Kurse werden verwendet ({age}).",
+    "rate.errorTooOld": "Aktuelle Kurse sind nicht verfügbar, und die zwischengespeicherten Kurse sind zu alt ({age}). Kurse, die älter als 7 Tage sind, werden nicht verwendet."
   });
 
   i18n.register("es", {
@@ -239,7 +263,19 @@
     "convert.titleBase": "Convertido de {base} a {target}.",
     "convert.titleRate": "Tipo de cambio: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Proveedor: {provider}.",
-    "convert.titleDate": "Fecha del tipo de cambio: {date}."
+    "convert.titleDate": "Fecha del tipo de cambio: {date}.",
+    "age.unknown": "antigüedad desconocida",
+    "age.underMinute": "hace menos de un minuto",
+    "age.minutes_one": "hace {count} minuto",
+    "age.minutes_other": "hace {count} minutos",
+    "age.hours_one": "hace {count} hora",
+    "age.hours_other": "hace {count} horas",
+    "age.days_one": "hace {count} día",
+    "age.days_other": "hace {count} días",
+    "rate.warnRefreshing": "Se usan tipos de cambio en caché ({age}) mientras se cargan los nuevos en segundo plano.",
+    "rate.warnLiveUnavailable": "No se pudieron cargar los tipos de cambio actuales, así que se usan los guardados recientemente.",
+    "rate.warnLiveUnavailableAge": "No se pudieron cargar los tipos de cambio actuales. Se usan tipos de cambio en caché ({age}).",
+    "rate.errorTooOld": "Los tipos de cambio actuales no están disponibles y los guardados en caché son demasiado antiguos ({age}). No se usan tipos de cambio de más de 7 días."
   });
 
   i18n.register("fr", {
@@ -318,7 +354,19 @@
     "convert.titleBase": "Converti de {base} en {target}.",
     "convert.titleRate": "Taux de change : 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Fournisseur : {provider}.",
-    "convert.titleDate": "Date du taux : {date}."
+    "convert.titleDate": "Date du taux : {date}.",
+    "age.unknown": "âge inconnu",
+    "age.underMinute": "il y a moins d'une minute",
+    "age.minutes_one": "il y a {count} minute",
+    "age.minutes_other": "il y a {count} minutes",
+    "age.hours_one": "il y a {count} heure",
+    "age.hours_other": "il y a {count} heures",
+    "age.days_one": "il y a {count} jour",
+    "age.days_other": "il y a {count} jours",
+    "rate.warnRefreshing": "Utilisation des taux en cache ({age}) pendant le chargement des nouveaux taux en arrière-plan.",
+    "rate.warnLiveUnavailable": "Impossible de charger les taux actuels : les taux récents en cache sont utilisés.",
+    "rate.warnLiveUnavailableAge": "Impossible de charger les taux actuels. Utilisation des taux en cache ({age}).",
+    "rate.errorTooOld": "Les taux actuels sont indisponibles et les taux en cache sont trop anciens ({age}). Les taux de plus de 7 jours ne sont pas utilisés."
   });
 
   i18n.register("it", {
@@ -397,7 +445,19 @@
     "convert.titleBase": "Convertito da {base} a {target}.",
     "convert.titleRate": "Tasso di cambio: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Fornitore: {provider}.",
-    "convert.titleDate": "Data del tasso: {date}."
+    "convert.titleDate": "Data del tasso: {date}.",
+    "age.unknown": "età sconosciuta",
+    "age.underMinute": "meno di un minuto fa",
+    "age.minutes_one": "{count} minuto fa",
+    "age.minutes_other": "{count} minuti fa",
+    "age.hours_one": "{count} ora fa",
+    "age.hours_other": "{count} ore fa",
+    "age.days_one": "{count} giorno fa",
+    "age.days_other": "{count} giorni fa",
+    "rate.warnRefreshing": "Vengono usati i tassi in cache ({age}) mentre i nuovi tassi si caricano in background.",
+    "rate.warnLiveUnavailable": "Impossibile caricare i tassi aggiornati: vengono usati i tassi recenti in cache.",
+    "rate.warnLiveUnavailableAge": "Impossibile caricare i tassi aggiornati. Vengono usati i tassi in cache ({age}).",
+    "rate.errorTooOld": "I tassi aggiornati non sono disponibili e quelli in cache sono troppo vecchi ({age}). Non vengono usati tassi più vecchi di 7 giorni."
   });
 
   i18n.register("ja", {
@@ -474,7 +534,16 @@
     "convert.titleBase": "{base} から {target} に換算しました。",
     "convert.titleRate": "為替レート: 1 {base} = {rate} {target}。",
     "convert.titleProvider": "提供元: {provider}。",
-    "convert.titleDate": "レートの日付: {date}。"
+    "convert.titleDate": "レートの日付: {date}。",
+    "age.unknown": "取得時刻不明",
+    "age.underMinute": "1 分以内に取得",
+    "age.minutes_other": "{count} 分前に取得",
+    "age.hours_other": "{count} 時間前に取得",
+    "age.days_other": "{count} 日前に取得",
+    "rate.warnRefreshing": "新しいレートをバックグラウンドで読み込む間、キャッシュされたレート（{age}）を使用しています。",
+    "rate.warnLiveUnavailable": "最新のレートを読み込めなかったため、最近キャッシュしたレートを使用しています。",
+    "rate.warnLiveUnavailableAge": "最新のレートを読み込めませんでした。キャッシュされたレート（{age}）を使用しています。",
+    "rate.errorTooOld": "最新のレートを取得できず、キャッシュされたレートも古すぎます（{age}）。7 日より古いレートは使用しません。"
   });
 
   i18n.register("ko", {
@@ -551,7 +620,16 @@
     "convert.titleBase": "{base}에서 {target}(으)로 환산했습니다.",
     "convert.titleRate": "환율: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "제공처: {provider}.",
-    "convert.titleDate": "환율 기준일: {date}."
+    "convert.titleDate": "환율 기준일: {date}.",
+    "age.unknown": "가져온 시각 알 수 없음",
+    "age.underMinute": "1분 이내에 가져옴",
+    "age.minutes_other": "{count}분 전에 가져옴",
+    "age.hours_other": "{count}시간 전에 가져옴",
+    "age.days_other": "{count}일 전에 가져옴",
+    "rate.warnRefreshing": "새 환율을 백그라운드에서 불러오는 동안 캐시된 환율({age})을 사용합니다.",
+    "rate.warnLiveUnavailable": "최신 환율을 불러오지 못해 최근에 캐시된 환율을 사용합니다.",
+    "rate.warnLiveUnavailableAge": "최신 환율을 불러오지 못했습니다. 캐시된 환율({age})을 사용합니다.",
+    "rate.errorTooOld": "최신 환율을 사용할 수 없고 캐시된 환율이 너무 오래되었습니다({age}). 7일보다 오래된 환율은 사용하지 않습니다."
   });
 
   i18n.register("nl", {
@@ -630,7 +708,19 @@
     "convert.titleBase": "Omgerekend van {base} naar {target}.",
     "convert.titleRate": "Wisselkoers: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Aanbieder: {provider}.",
-    "convert.titleDate": "Koersdatum: {date}."
+    "convert.titleDate": "Koersdatum: {date}.",
+    "age.unknown": "onbekende leeftijd",
+    "age.underMinute": "minder dan een minuut oud",
+    "age.minutes_one": "{count} minuut oud",
+    "age.minutes_other": "{count} minuten oud",
+    "age.hours_one": "{count} uur oud",
+    "age.hours_other": "{count} uur oud",
+    "age.days_one": "{count} dag oud",
+    "age.days_other": "{count} dagen oud",
+    "rate.warnRefreshing": "Koersen uit de cache worden gebruikt ({age}) terwijl nieuwe koersen op de achtergrond laden.",
+    "rate.warnLiveUnavailable": "Actuele koersen konden niet worden geladen, dus recente koersen uit de cache worden gebruikt.",
+    "rate.warnLiveUnavailableAge": "Actuele koersen konden niet worden geladen. Koersen uit de cache worden gebruikt ({age}).",
+    "rate.errorTooOld": "Actuele koersen zijn niet beschikbaar en de koersen in de cache zijn te oud ({age}). Koersen ouder dan 7 dagen worden niet gebruikt."
   });
 
   i18n.register("pl", {
@@ -713,7 +803,25 @@
     "convert.titleBase": "Przeliczono z {base} na {target}.",
     "convert.titleRate": "Kurs wymiany: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Dostawca: {provider}.",
-    "convert.titleDate": "Data kursu: {date}."
+    "convert.titleDate": "Data kursu: {date}.",
+    "age.unknown": "wiek nieznany",
+    "age.underMinute": "mniej niż minutę temu",
+    "age.minutes_one": "{count} minutę temu",
+    "age.minutes_few": "{count} minuty temu",
+    "age.minutes_many": "{count} minut temu",
+    "age.minutes_other": "{count} minuty temu",
+    "age.hours_one": "{count} godzinę temu",
+    "age.hours_few": "{count} godziny temu",
+    "age.hours_many": "{count} godzin temu",
+    "age.hours_other": "{count} godziny temu",
+    "age.days_one": "{count} dzień temu",
+    "age.days_few": "{count} dni temu",
+    "age.days_many": "{count} dni temu",
+    "age.days_other": "{count} dnia temu",
+    "rate.warnRefreshing": "Używane są kursy z pamięci podręcznej ({age}), a nowe kursy wczytują się w tle.",
+    "rate.warnLiveUnavailable": "Nie udało się wczytać aktualnych kursów, więc używane są ostatnio zapisane kursy.",
+    "rate.warnLiveUnavailableAge": "Nie udało się wczytać aktualnych kursów. Używane są kursy z pamięci podręcznej ({age}).",
+    "rate.errorTooOld": "Aktualne kursy są niedostępne, a kursy z pamięci podręcznej są zbyt stare ({age}). Kursy starsze niż 7 dni nie są używane."
   });
 
   i18n.register("pt-BR", {
@@ -792,7 +900,19 @@
     "convert.titleBase": "Convertido de {base} para {target}.",
     "convert.titleRate": "Taxa de câmbio: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Fornecedor: {provider}.",
-    "convert.titleDate": "Data da taxa: {date}."
+    "convert.titleDate": "Data da taxa: {date}.",
+    "age.unknown": "idade desconhecida",
+    "age.underMinute": "há menos de um minuto",
+    "age.minutes_one": "há {count} minuto",
+    "age.minutes_other": "há {count} minutos",
+    "age.hours_one": "há {count} hora",
+    "age.hours_other": "há {count} horas",
+    "age.days_one": "há {count} dia",
+    "age.days_other": "há {count} dias",
+    "rate.warnRefreshing": "Usando taxas em cache ({age}) enquanto as novas taxas carregam em segundo plano.",
+    "rate.warnLiveUnavailable": "Não foi possível carregar as taxas atuais, então as taxas recentes em cache estão sendo usadas.",
+    "rate.warnLiveUnavailableAge": "Não foi possível carregar as taxas atuais. Usando taxas em cache ({age}).",
+    "rate.errorTooOld": "As taxas atuais estão indisponíveis e as taxas em cache são antigas demais ({age}). Taxas com mais de 7 dias não são usadas."
   });
 
   i18n.register("tr", {
@@ -869,7 +989,16 @@
     "convert.titleBase": "{base} biriminden {target} birimine çevrildi.",
     "convert.titleRate": "Döviz kuru: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Sağlayıcı: {provider}.",
-    "convert.titleDate": "Kur tarihi: {date}."
+    "convert.titleDate": "Kur tarihi: {date}.",
+    "age.unknown": "yaşı bilinmiyor",
+    "age.underMinute": "bir dakikadan kısa süre önce",
+    "age.minutes_other": "{count} dakika önce",
+    "age.hours_other": "{count} saat önce",
+    "age.days_other": "{count} gün önce",
+    "rate.warnRefreshing": "Yeni kurlar arka planda yüklenirken önbellekteki kurlar ({age}) kullanılıyor.",
+    "rate.warnLiveUnavailable": "Güncel kurlar yüklenemedi, bu yüzden yakın zamanda önbelleğe alınan kurlar kullanılıyor.",
+    "rate.warnLiveUnavailableAge": "Güncel kurlar yüklenemedi. Önbellekteki kurlar ({age}) kullanılıyor.",
+    "rate.errorTooOld": "Güncel kurlar kullanılamıyor ve önbellekteki kurlar çok eski ({age}). 7 günden eski kurlar kullanılmaz."
   });
 
   i18n.register("uk", {
@@ -952,7 +1081,25 @@
     "convert.titleBase": "Конвертовано з {base} у {target}.",
     "convert.titleRate": "Обмінний курс: 1 {base} = {rate} {target}.",
     "convert.titleProvider": "Постачальник: {provider}.",
-    "convert.titleDate": "Дата курсу: {date}."
+    "convert.titleDate": "Дата курсу: {date}.",
+    "age.unknown": "час невідомий",
+    "age.underMinute": "менше хвилини тому",
+    "age.minutes_one": "{count} хвилину тому",
+    "age.minutes_few": "{count} хвилини тому",
+    "age.minutes_many": "{count} хвилин тому",
+    "age.minutes_other": "{count} хвилини тому",
+    "age.hours_one": "{count} годину тому",
+    "age.hours_few": "{count} години тому",
+    "age.hours_many": "{count} годин тому",
+    "age.hours_other": "{count} години тому",
+    "age.days_one": "{count} день тому",
+    "age.days_few": "{count} дні тому",
+    "age.days_many": "{count} днів тому",
+    "age.days_other": "{count} дня тому",
+    "rate.warnRefreshing": "Використовуються курси з кешу ({age}), поки нові курси завантажуються у фоні.",
+    "rate.warnLiveUnavailable": "Не вдалося завантажити актуальні курси, тому використовуються нещодавно збережені.",
+    "rate.warnLiveUnavailableAge": "Не вдалося завантажити актуальні курси. Використовуються курси з кешу ({age}).",
+    "rate.errorTooOld": "Актуальні курси недоступні, а курси в кеші надто старі ({age}). Курси, старші за 7 днів, не використовуються."
   });
 
   i18n.register("zh-CN", {
@@ -1029,6 +1176,15 @@
     "convert.titleBase": "已从 {base} 换算为 {target}。",
     "convert.titleRate": "汇率：1 {base} = {rate} {target}。",
     "convert.titleProvider": "提供方：{provider}。",
-    "convert.titleDate": "汇率日期：{date}。"
+    "convert.titleDate": "汇率日期：{date}。",
+    "age.unknown": "获取时间未知",
+    "age.underMinute": "不到 1 分钟前获取",
+    "age.minutes_other": "{count} 分钟前获取",
+    "age.hours_other": "{count} 小时前获取",
+    "age.days_other": "{count} 天前获取",
+    "rate.warnRefreshing": "正在后台加载最新汇率，暂时使用缓存的汇率（{age}）。",
+    "rate.warnLiveUnavailable": "无法加载最新汇率，正在使用最近缓存的汇率。",
+    "rate.warnLiveUnavailableAge": "无法加载最新汇率。正在使用缓存的汇率（{age}）。",
+    "rate.errorTooOld": "最新汇率不可用，且缓存的汇率太旧（{age}）。不会使用超过 7 天的汇率。"
   });
 })(globalThis);

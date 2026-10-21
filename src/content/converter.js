@@ -231,10 +231,10 @@
       rateDate: usedMeta.map((meta) => meta.date).filter(Boolean).sort().at(-1) || null,
       staleRates: usedMeta.some((meta) => meta.stale),
       rateProvider: [...new Set(usedMeta.map((meta) => meta.provider).filter(Boolean))].join(", ") || null,
-      cacheAgeLabel: usedMeta
+      cacheAgeLabel: cacheAgeLabel(usedMeta
         .filter((meta) => meta.stale && Number.isFinite(meta.cacheAgeMs))
-        .sort((a, b) => b.cacheAgeMs - a.cacheAgeMs)[0]?.cacheAgeLabel || null,
-      rateWarning: [...new Set(usedMeta.map((meta) => meta.warning).filter(Boolean))].join(" ") || null,
+        .sort((a, b) => b.cacheAgeMs - a.cacheAgeMs)[0]),
+      rateWarning: [...new Set(usedMeta.map(rateWarning).filter(Boolean))].join(" ") || null,
       scanLimited: textScan.limited,
       scannedTextNodes: textScan.nodes.length,
       inspectedTextNodes: textScan.inspected,
@@ -316,8 +316,8 @@
       rateDate: meta.date || null,
       staleRates: Boolean(meta.stale),
       rateProvider: meta.provider || null,
-      cacheAgeLabel: meta.cacheAgeLabel || null,
-      rateWarning: meta.warning || null
+      cacheAgeLabel: cacheAgeLabel(meta),
+      rateWarning: rateWarning(meta)
     };
   }
 
@@ -416,8 +416,18 @@
       rate,
       date: meta.date || null,
       stale: Boolean(meta.stale),
-      cacheAgeLabel: meta.cacheAgeLabel || null
+      cacheAgeLabel: cacheAgeLabel(meta)
     };
+  }
+
+  // Rate details are worded when shown, not when fetched, so a language change on
+  // the open page reaches them too.
+  function cacheAgeLabel(meta) {
+    return meta?.cached ? global.CurrencyI18n.age(meta.cacheAgeMs) : null;
+  }
+
+  function rateWarning(meta) {
+    return global.CurrencyI18n.describe(meta.warningKey, meta.warningParams, meta.warning) || null;
   }
 
   function startDiscovering(onFound) {
@@ -652,13 +662,15 @@
         date: result.date,
         fetchedAt: result.fetchedAt,
         stale: Boolean(result.stale),
+        cached: Boolean(result.cached),
         provider: result.provider,
         cacheAgeMs: result.cacheAgeMs,
-        cacheAgeLabel: result.cacheAgeLabel,
-        warning: result.warning
+        warning: result.warning,
+        warningKey: result.warningKey,
+        warningParams: result.warningParams
       };
     }
-    return result || { ok: false, error: t("convert.ratesFailed") };
+    return global.CurrencyI18n.localize(result) || { ok: false, error: t("convert.ratesFailed") };
   }
 
   function ratesCacheChangeAffectsActiveRates(change) {
@@ -861,11 +873,16 @@
     const rate = activeRatesByBase[baseCurrency]?.[settings.toCurrency];
     const provider = meta.provider ? ` ${t("convert.titleProvider", { provider: meta.provider })}` : "";
     const exchangeRate = Number.isFinite(rate)
-      ? ` ${t("convert.titleRate", { base: baseCurrency, rate, target: settings.toCurrency })}`
+      ? ` ${t("convert.titleRate", {
+        base: baseCurrency,
+        rate: global.CurrencyI18n.formatRate(rate),
+        target: settings.toCurrency
+      })}`
       : "";
     const date = meta.date ? ` ${t("convert.titleDate", { date: meta.date })}` : "";
+    const age = cacheAgeLabel(meta);
     const stale = meta.stale
-      ? ` ${t(meta.cacheAgeLabel ? "rate.cachedAge" : "rate.cached", { age: meta.cacheAgeLabel })}`
+      ? ` ${t(age ? "rate.cachedAge" : "rate.cached", { age })}`
       : "";
     const base = t("convert.titleBase", { base: baseCurrency, target: settings.toCurrency });
     return `${base}${exchangeRate}${provider}${date}${stale}`;

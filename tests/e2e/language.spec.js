@@ -65,7 +65,8 @@ test("the language menu offers thirteen languages and retranslates the popup and
     "Конвертувати видимі ціни на цій сторінці"
   );
   await expect(shop.locator(".ccp-page-prompt-action")).toHaveText("Конвертувати ціни");
-  await expect(shop.locator(".ccp-page-prompt-rate")).toHaveText(/^1 USD = 0\.9000 EUR/);
+  // The rate follows the chosen language's decimal mark too.
+  await expect(shop.locator(".ccp-page-prompt-rate")).toHaveText(/^1 USD = 0,9000 EUR/);
 
   // The choice survives closing the popup.
   await popup.close();
@@ -125,7 +126,7 @@ test("the welcome page follows the saved language and can change it", async ({
   await expect(setup.locator("h1")).toHaveText("Два кроки — і готово.");
   await expect(setup.locator("#finish")).toHaveText("Почати покупки");
   await expect(setup.locator("#fact3Body code")).toHaveText("USD");
-  await expect(setup.locator("#helpNote a")).toHaveAttribute("href", /twinprice\.com\/#faq/);
+  await expect(setup.locator("#helpNote a")).toHaveAttribute("href", "https://twinprice.com/uk/#faq");
 
   await setup.locator("#language").selectOption("de");
   await expect(setup.locator("h1")).toHaveText("Zwei Schritte, und du bist fertig.");
@@ -162,3 +163,96 @@ for (const { language, prompt, action, convertPage } of [
     await expect(popup.locator("#convertSite")).toHaveText(convertPage);
   });
 }
+
+test("a cached rate says how old it is in the chosen language", async ({
+  context,
+  extensionWorker,
+  extensionId
+}) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", language: "de" } });
+  // Age the cached USD rates past the 18-hour freshness window and keep the provider
+  // unreachable, so every answer comes from the cache.
+  await extensionWorker.evaluate(async () => {
+    const { ratesCache } = await chrome.storage.local.get("ratesCache");
+    ratesCache.bases.USD.fetchedAt = new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString();
+    await chrome.storage.local.set({ ratesCache });
+    const stubbed = globalThis.fetch;
+    globalThis.fetch = async (input, init) => {
+      const url = typeof input === "string" ? input : input?.url || "";
+      if (url.includes("/v2/rates?") && !url.includes("from=")) throw new TypeError("Failed to fetch");
+      return stubbed(input, init);
+    };
+  });
+  const shop = await openShop(context);
+  const popup = await openPopupForPage(context, extensionId, shop);
+  await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+
+  await expect(popup.locator("#rateMetaText")).toContainText("Zwischengespeichert, 30 Stunden alt");
+  await expect(popup.locator("#quickRateInfo")).toContainText("1 USD = 0,9000 EUR");
+  await expect(popup.locator("#quickRateInfo")).toHaveAttribute(
+    "title",
+    /Zwischengespeicherte Kurse werden verwendet \(30 Stunden alt\)/
+  );
+  await expect(popup.locator("body")).not.toContainText(/hours old|cached rates/i);
+});
+
+test("the popup's own links, its site messages and the page prompt follow the chosen language", async ({
+  context,
+  extensionWorker,
+  extensionId
+}) => {
+  await seedExtension(extensionWorker, {
+    settings: { fromCurrency: "USD", language: "ko", showPagePrompt: true }
+  });
+  const shop = await openShop(context);
+  const prompt = shop.locator(".ccp-page-prompt");
+  await expect(prompt).toHaveAttribute("lang", "ko");
+  // Korean keeps words whole, including inside parts that reset inherited styles.
+  await expect(shop.locator(".ccp-page-prompt-message")).toHaveCSS("word-break", "keep-all");
+
+  const popup = await openPopupForPage(context, extensionId, shop);
+  await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+  await expect(popup.locator(".brand-link")).toHaveAttribute("href", "https://twinprice.com/ko/");
+  await expect(popup.locator(".website-link")).toHaveAttribute("href", "https://twinprice.com/ko/");
+  // The test shop runs on the rate provider's own domain, which can never be an
+  // automatic site; the background's reason now arrives in Korean.
+  await expect(popup.locator("#rememberSiteHelp")).toHaveText(
+    "이 환율 제공처에서는 자동 환산을 켤 수 없습니다."
+  );
+
+  await popup.getByText("페이지 옵션", { exact: true }).click();
+  await chooseSetting(popup, "언어", "en");
+  await expect(popup.locator(".brand-link")).toHaveAttribute("href", "https://twinprice.com/");
+  await expect(popup.locator("#rememberSiteHelp")).toContainText("cannot be enabled");
+});
+
+test("the welcome page fits a phone screen in every language and links to help in that language", async ({
+  context,
+  extensionWorker,
+  extensionId
+}) => {
+  await seedExtension(extensionWorker, { settings: { language: "en" } });
+  const setup = await context.newPage();
+  await setup.setViewportSize({ width: 360, height: 800 });
+  for (const language of ["en", "es", "fr", "pt-BR", "de", "ja", "ko", "zh-CN"]) {
+    await extensionWorker.evaluate((code) => chrome.storage.sync.set({ language: code }), language);
+    await setup.goto(`chrome-extension://${extensionId}/onboarding/onboarding.html`);
+    await expect(setup.locator("#homeCurrency")).toBeEnabled();
+    await expect(setup.locator("html")).toHaveAttribute("lang", language);
+    const layout = await setup.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      steps: [...document.querySelectorAll(".step-number")].map((node) => {
+        const box = node.getBoundingClientRect();
+        return Math.round(box.width) === Math.round(box.height);
+      })
+    }));
+    expect(layout.overflow, `${language} scrolls sideways`).toBeLessThanOrEqual(0);
+    expect(layout.steps, `${language} step numbers are not round`).toEqual([true, true]);
+    const folder = language === "en" ? "" : `${language}/`;
+    await expect(setup.locator("#helpNote a")).toHaveAttribute("href", `https://twinprice.com/${folder}#faq`);
+  }
+  await expect(setup.locator(".lede")).toHaveCSS("word-break", "normal");
+  await extensionWorker.evaluate(() => chrome.storage.sync.set({ language: "ko" }));
+  await setup.goto(`chrome-extension://${extensionId}/onboarding/onboarding.html`);
+  await expect(setup.locator(".lede")).toHaveCSS("word-break", "keep-all");
+});

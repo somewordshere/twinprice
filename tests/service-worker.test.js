@@ -491,10 +491,9 @@ test("always-on site normalization accepts ordinary origins and non-default port
     pattern: "http://localhost:3000/*"
   });
   assert.equal(context.CurrencySitePreferences.normalizeSite("file:///tmp/shop.html"), null);
-  assert.match(
-    context.CurrencySitePreferences.siteMemoryError("file:///tmp/shop.html"),
-    /Only normal HTTP and HTTPS/
-  );
+  const fileError = context.CurrencySitePreferences.siteMemoryError("file:///tmp/shop.html");
+  assert.match(fileError.error, /Only normal HTTP and HTTPS/);
+  assert.equal(fileError.errorKey, "error.siteHttpOnly");
 });
 
 test("fallback injection derives its ordered files from the declarative manifest", async () => {
@@ -1055,6 +1054,8 @@ test("the exchange-rate provider cannot be an automatic-conversion site", async 
   assert.equal(remembered.ok, false);
   assert.equal(remembered.remembered, false);
   assert.match(remembered.error, /exchange-rate provider.*cannot be enabled/i);
+  assert.equal(status.errorKey, "error.providerSite");
+  assert.equal(remembered.errorKey, "error.providerSite");
 });
 
 test("Firefox site status rejects protected pages and PDF viewers", async () => {
@@ -1064,11 +1065,11 @@ test("Firefox site status rejects protected pages and PDF viewers", async () => 
     {
       ok: false,
       remembered: false,
-      error: "Firefox protects this Mozilla page from extensions. Open a regular shopping page and try again."
+      error: "Firefox protects this Mozilla page from extensions. Open a regular shopping page and try again.",
+      errorKey: "access.firefoxProtected"
     }
   );
-  assert.match(
-    (await context.CurrencySitePreferences.getStatus("https://files.example/invoice.pdf")).error,
-    /PDF viewer/
-  );
+  const pdf = await context.CurrencySitePreferences.getStatus("https://files.example/invoice.pdf");
+  assert.match(pdf.error, /PDF viewer/);
+  assert.equal(pdf.errorKey, "access.pdf");
 });

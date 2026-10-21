@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Los precios de las tiendas en tu moneda, junto al original. Más de 160 divisas. El contenido de la página no sale de tu navegador.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Convertir los precios de la página actual",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

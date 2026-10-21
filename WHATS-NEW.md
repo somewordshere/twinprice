@@ -4,6 +4,16 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.2.6 · October 21, 2026
+
+- How old a saved exchange rate is ("3 hours old") now appears in your language instead of in English, and so do the warnings about saved rates.
+- More messages appear in your language, such as why automatic conversion is not available on a page.
+- Exchange rates use your language's decimal mark, for example 0,9000 in German.
+- Links to twinprice.com open the website in your language.
+- On phones, the welcome page no longer scrolls sideways in Spanish, French and Brazilian Portuguese, and its step numbers stay round.
+- Korean text no longer breaks in the middle of words.
+- The keyboard shortcut's name is translated on your browser's shortcuts page.
+
 ## 2.2.5 · October 21, 2026
 
 - Twinprice now speaks Japanese, Korean and Simplified Chinese. Choose one under **Language**, or leave it on **Automatic** to follow your browser. A browser set to Traditional Chinese gets Simplified Chinese.

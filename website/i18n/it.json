@@ -186,7 +186,7 @@
   "2aaed9": "Per esempio, a un tasso inventato di 0,90 EUR per USD, un articolo da 100 USD equivale a 90 EUR. Un'ipotetica commissione di conversione del 3% su quell'importo aggiungerebbe 2,70 EUR, per un totale di 92,70 EUR prima di eventuali altri addebiti. La conversione dei prezzi di Twinprice non calcola quella commissione. Controlla il totale finale del negozio e le condizioni del tuo fornitore di pagamento per sapere quanto pagherai.",
   "1f319b": "Come posso confrontare i prezzi di due negozi?",
   "d66267": "Usa la stessa valuta di destinazione su entrambi i siti, ma scegli la valuta di origine corretta per ciascun negozio. Converti i prezzi dei prodotti, poi confronta i totali finali, spedizione e tasse comprese. Un articolo con un prezzo convertito più basso può comunque costare di più nel complesso.",
-  "6b7323": "Se vuoi solo confrontare importi che conosci già, apri <1>Converti un importo a scelta</1> nel popup e digita un importo. Scegli prima una valuta di origine precisa se AUTO non ne ha identificata una.",
+  "9a6b2e": "Se vuoi solo confrontare importi che conosci già, digitane uno nel campo <1>Importo</1> del popup. Scegli prima una valuta di origine precisa se AUTO non ne ha identificata una.",
   "e78261": "Posso convertire i prezzi senza una connessione internet recente?",
   "10b13d": "I tassi recenti in cache possono consentire una conversione quando non è disponibile un tasso aggiornato. Serve però un tasso in cache utilizzabile per le valute richieste; non è garantito che Twinprice funzioni completamente offline. Avvisa quando i tassi in cache superano le 48 ore e non usa tassi più vecchi di sette giorni.",
   "78c09d": "Scopri <1>da dove provengono i tassi</1> e <2>i limiti del prodotto per browser e valute</2>.",

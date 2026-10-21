@@ -1,6 +1,5 @@
 (function initializeOnboarding(global) {
   const ONBOARDING_PAGE = "onboarding/onboarding.html";
-  const WEBSITE = "https://twinprice.com/";
 
   function createOnboardingService({
     api,
@@ -24,8 +23,7 @@
     // other language in its own folder. The language is all the address carries:
     // nothing else about the user or their browsing.
     function uninstallPage(languagePreference) {
-      const language = i18n.resolve(languagePreference);
-      return `${WEBSITE}${language === i18n.FALLBACK ? "" : `${language}/`}goodbye/`;
+      return i18n.websiteUrl(i18n.resolve(languagePreference), "goodbye/");
     }
 
     async function setUninstallPage(languagePreference) {
@@ -40,7 +38,11 @@
       let tabs;
       try {
         if (!await api.permissions.contains({ origins: ["http://*/*", "https://*/*"] })) {
-          return { ok: false, error: "Allow site access using Activate my open tabs, then try again." };
+          return {
+            ok: false,
+            error: "Allow site access using Activate my open tabs, then try again.",
+            errorKey: "onboarding.tabsNeedAccess"
+          };
         }
         tabs = await api.tabs.query({});
       } catch (error) {

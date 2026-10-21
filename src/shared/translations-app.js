@@ -204,7 +204,25 @@
     "onboarding.tabsActivated_other": "{count} tabs are now watched for prices.",
     "onboarding.tabsSkipped_one": "{count} tab was skipped because access was unavailable.",
     "onboarding.tabsSkipped_other": "{count} tabs were skipped because access was unavailable.",
-    "onboarding.done": "You are set. Close this tab and open a shop."
+    "onboarding.done": "You are set. Close this tab and open a shop.",
+    "error.siteHttpOnly": "Only normal HTTP and HTTPS websites can be remembered.",
+    "error.providerSite": "This exchange-rate provider cannot be enabled for automatic page conversion.",
+    "error.unsupportedSite": "This page is not a supported website.",
+    "error.enableRolledBack": "Could not enable automatic conversion: {detail}. The site setting was rolled back.",
+    "error.enablePartial": "Could not enable automatic conversion: {detail}. Some saved site data remains; try again.",
+    "error.cleanupIncomplete": "Site-access cleanup is incomplete. Try turning automatic conversion off again.",
+    "error.siteStateChanged": "This site's automatic-access state changed. Reopen the popup and try again.",
+    "error.unsupportedSource": "Unsupported source currency.",
+    "error.saveSiteSource": "Could not save this site's source currency: {detail}.",
+    "error.globalNotSaved": "Global settings were not saved: {detail}.",
+    "error.globalNotSavedRollback": "Global settings were not saved, and the site-source rollback failed: {detail}. Reopen the popup to refresh its state.",
+    "error.invalidSettings": "Invalid settings.",
+    "error.verifyPair": "Could not verify this currency pair.",
+    "error.targetMatchesDefault": "The target {currency} matches your default source currency. Change the default source first.",
+    "error.targetMatchesSite": "The target {currency} matches the saved source for {host}. Change that site's source first.",
+    "onboarding.tabsNeedAccess": "Allow site access using Activate my open tabs, then try again.",
+    "popup.catalogRefreshFailed": "Could not refresh the list; showing the saved one.",
+    "popup.catalogBuiltIn": "Using the built-in list while the provider's list loads."
   });
 
   i18n.register("de", {
@@ -407,7 +425,25 @@
     "onboarding.tabsActivated_other": "{count} Tabs werden jetzt auf Preise überwacht.",
     "onboarding.tabsSkipped_one": "{count} Tab wurde übersprungen, weil der Zugriff nicht möglich war.",
     "onboarding.tabsSkipped_other": "{count} Tabs wurden übersprungen, weil der Zugriff nicht möglich war.",
-    "onboarding.done": "Alles bereit. Schließe diesen Tab und öffne einen Shop."
+    "onboarding.done": "Alles bereit. Schließe diesen Tab und öffne einen Shop.",
+    "error.siteHttpOnly": "Nur normale HTTP- und HTTPS-Websites können gespeichert werden.",
+    "error.providerSite": "Für diesen Wechselkursanbieter kann die automatische Umrechnung nicht aktiviert werden.",
+    "error.unsupportedSite": "Diese Seite ist keine unterstützte Website.",
+    "error.enableRolledBack": "Automatische Umrechnung konnte nicht aktiviert werden: {detail}. Die Website-Einstellung wurde zurückgesetzt.",
+    "error.enablePartial": "Automatische Umrechnung konnte nicht aktiviert werden: {detail}. Einige gespeicherte Website-Daten sind noch vorhanden; versuche es erneut.",
+    "error.cleanupIncomplete": "Die Website-Zugriffsdaten wurden nicht vollständig entfernt. Schalte die automatische Umrechnung erneut aus.",
+    "error.siteStateChanged": "Der automatische Zugriff für diese Website hat sich geändert. Öffne das Popup erneut und versuche es noch einmal.",
+    "error.unsupportedSource": "Nicht unterstützte Ausgangswährung.",
+    "error.saveSiteSource": "Die Ausgangswährung dieser Website konnte nicht gespeichert werden: {detail}.",
+    "error.globalNotSaved": "Die allgemeinen Einstellungen wurden nicht gespeichert: {detail}.",
+    "error.globalNotSavedRollback": "Die allgemeinen Einstellungen wurden nicht gespeichert, und das Zurücksetzen der Website-Ausgangswährung ist fehlgeschlagen: {detail}. Öffne das Popup erneut, um den Stand zu aktualisieren.",
+    "error.invalidSettings": "Ungültige Einstellungen.",
+    "error.verifyPair": "Dieses Währungspaar konnte nicht geprüft werden.",
+    "error.targetMatchesDefault": "Die Zielwährung {currency} entspricht deiner Standard-Ausgangswährung. Ändere zuerst die Standard-Ausgangswährung.",
+    "error.targetMatchesSite": "Die Zielwährung {currency} entspricht der gespeicherten Ausgangswährung für {host}. Ändere zuerst die Ausgangswährung dieser Website.",
+    "onboarding.tabsNeedAccess": "Erlaube den Website-Zugriff über „Meine offenen Tabs aktivieren“ und versuche es dann erneut.",
+    "popup.catalogRefreshFailed": "Die Liste konnte nicht aktualisiert werden; die gespeicherte wird angezeigt.",
+    "popup.catalogBuiltIn": "Die integrierte Liste wird verwendet, bis die Liste des Anbieters geladen ist."
   });
 
   i18n.register("es", {
@@ -610,7 +646,25 @@
     "onboarding.tabsActivated_other": "{count} pestañas se vigilan ahora para detectar precios.",
     "onboarding.tabsSkipped_one": "Se omitió {count} pestaña porque el acceso no estaba disponible.",
     "onboarding.tabsSkipped_other": "Se omitieron {count} pestañas porque el acceso no estaba disponible.",
-    "onboarding.done": "Todo listo. Cierra esta pestaña y abre una tienda."
+    "onboarding.done": "Todo listo. Cierra esta pestaña y abre una tienda.",
+    "error.siteHttpOnly": "Solo se pueden recordar sitios web HTTP y HTTPS normales.",
+    "error.providerSite": "No se puede activar la conversión automática para este proveedor de tipos de cambio.",
+    "error.unsupportedSite": "Esta página no es un sitio web compatible.",
+    "error.enableRolledBack": "No se pudo activar la conversión automática: {detail}. Se deshizo el ajuste del sitio.",
+    "error.enablePartial": "No se pudo activar la conversión automática: {detail}. Quedan algunos datos guardados del sitio; inténtalo de nuevo.",
+    "error.cleanupIncomplete": "No se completó la limpieza del acceso al sitio. Vuelve a desactivar la conversión automática.",
+    "error.siteStateChanged": "El estado del acceso automático de este sitio cambió. Vuelve a abrir la ventana emergente e inténtalo de nuevo.",
+    "error.unsupportedSource": "Moneda de origen no compatible.",
+    "error.saveSiteSource": "No se pudo guardar la moneda de origen de este sitio: {detail}.",
+    "error.globalNotSaved": "No se guardaron los ajustes generales: {detail}.",
+    "error.globalNotSavedRollback": "No se guardaron los ajustes generales y falló la restauración de la moneda de origen del sitio: {detail}. Vuelve a abrir la ventana emergente para actualizar su estado.",
+    "error.invalidSettings": "Ajustes no válidos.",
+    "error.verifyPair": "No se pudo verificar este par de monedas.",
+    "error.targetMatchesDefault": "La moneda de destino {currency} coincide con tu moneda de origen predeterminada. Cambia primero la moneda de origen predeterminada.",
+    "error.targetMatchesSite": "La moneda de destino {currency} coincide con la moneda de origen guardada para {host}. Cambia primero la moneda de origen de ese sitio.",
+    "onboarding.tabsNeedAccess": "Permite el acceso a los sitios con «Activar mis pestañas abiertas» y vuelve a intentarlo.",
+    "popup.catalogRefreshFailed": "No se pudo actualizar la lista; se muestra la guardada.",
+    "popup.catalogBuiltIn": "Se usa la lista integrada mientras se carga la del proveedor."
   });
 
   i18n.register("fr", {
@@ -813,7 +867,25 @@
     "onboarding.tabsActivated_other": "{count} onglets sont désormais surveillés pour les prix.",
     "onboarding.tabsSkipped_one": "{count} onglet a été ignoré, car l'accès n'était pas disponible.",
     "onboarding.tabsSkipped_other": "{count} onglets ont été ignorés, car l'accès n'était pas disponible.",
-    "onboarding.done": "Tout est prêt. Fermez cet onglet et ouvrez une boutique."
+    "onboarding.done": "Tout est prêt. Fermez cet onglet et ouvrez une boutique.",
+    "error.siteHttpOnly": "Seuls les sites web HTTP et HTTPS ordinaires peuvent être mémorisés.",
+    "error.providerSite": "La conversion automatique ne peut pas être activée pour ce fournisseur de taux de change.",
+    "error.unsupportedSite": "Cette page n'est pas un site web pris en charge.",
+    "error.enableRolledBack": "Impossible d'activer la conversion automatique : {detail}. Le réglage du site a été annulé.",
+    "error.enablePartial": "Impossible d'activer la conversion automatique : {detail}. Certaines données du site sont encore enregistrées ; réessayez.",
+    "error.cleanupIncomplete": "Le nettoyage de l'accès au site est incomplet. Désactivez de nouveau la conversion automatique.",
+    "error.siteStateChanged": "L'état de l'accès automatique de ce site a changé. Rouvrez la fenêtre et réessayez.",
+    "error.unsupportedSource": "Devise source non prise en charge.",
+    "error.saveSiteSource": "Impossible d'enregistrer la devise source de ce site : {detail}.",
+    "error.globalNotSaved": "Les réglages généraux n'ont pas été enregistrés : {detail}.",
+    "error.globalNotSavedRollback": "Les réglages généraux n'ont pas été enregistrés, et la restauration de la devise source du site a échoué : {detail}. Rouvrez la fenêtre pour actualiser son état.",
+    "error.invalidSettings": "Réglages non valides.",
+    "error.verifyPair": "Impossible de vérifier cette paire de devises.",
+    "error.targetMatchesDefault": "La devise cible {currency} est la même que votre devise source par défaut. Changez d'abord la devise source par défaut.",
+    "error.targetMatchesSite": "La devise cible {currency} est la même que la devise source enregistrée pour {host}. Changez d'abord la devise source de ce site.",
+    "onboarding.tabsNeedAccess": "Autorisez l'accès aux sites avec « Activer mes onglets ouverts », puis réessayez.",
+    "popup.catalogRefreshFailed": "Impossible d'actualiser la liste ; la liste enregistrée est affichée.",
+    "popup.catalogBuiltIn": "La liste intégrée est utilisée pendant le chargement de celle du fournisseur."
   });
 
   i18n.register("it", {
@@ -1016,7 +1088,25 @@
     "onboarding.tabsActivated_other": "{count} schede sono ora monitorate per i prezzi.",
     "onboarding.tabsSkipped_one": "{count} scheda è stata ignorata perché l'accesso non era disponibile.",
     "onboarding.tabsSkipped_other": "{count} schede sono state ignorate perché l'accesso non era disponibile.",
-    "onboarding.done": "Tutto pronto. Chiudi questa scheda e apri un negozio."
+    "onboarding.done": "Tutto pronto. Chiudi questa scheda e apri un negozio.",
+    "error.siteHttpOnly": "Si possono ricordare solo normali siti web HTTP e HTTPS.",
+    "error.providerSite": "Non è possibile attivare la conversione automatica per questo fornitore di tassi di cambio.",
+    "error.unsupportedSite": "Questa pagina non è un sito web supportato.",
+    "error.enableRolledBack": "Impossibile attivare la conversione automatica: {detail}. L'impostazione del sito è stata annullata.",
+    "error.enablePartial": "Impossibile attivare la conversione automatica: {detail}. Restano alcuni dati salvati del sito; riprova.",
+    "error.cleanupIncomplete": "La pulizia dell'accesso al sito è incompleta. Prova di nuovo a disattivare la conversione automatica.",
+    "error.siteStateChanged": "Lo stato dell'accesso automatico di questo sito è cambiato. Riapri il popup e riprova.",
+    "error.unsupportedSource": "Valuta di origine non supportata.",
+    "error.saveSiteSource": "Impossibile salvare la valuta di origine di questo sito: {detail}.",
+    "error.globalNotSaved": "Le impostazioni generali non sono state salvate: {detail}.",
+    "error.globalNotSavedRollback": "Le impostazioni generali non sono state salvate e il ripristino della valuta di origine del sito non è riuscito: {detail}. Riapri il popup per aggiornarne lo stato.",
+    "error.invalidSettings": "Impostazioni non valide.",
+    "error.verifyPair": "Impossibile verificare questa coppia di valute.",
+    "error.targetMatchesDefault": "La valuta di destinazione {currency} coincide con la valuta di origine predefinita. Cambia prima la valuta di origine predefinita.",
+    "error.targetMatchesSite": "La valuta di destinazione {currency} coincide con la valuta di origine salvata per {host}. Cambia prima la valuta di origine di quel sito.",
+    "onboarding.tabsNeedAccess": "Consenti l'accesso ai siti con «Attiva le mie schede aperte», poi riprova.",
+    "popup.catalogRefreshFailed": "Impossibile aggiornare l'elenco; viene mostrato quello salvato.",
+    "popup.catalogBuiltIn": "Viene usato l'elenco integrato mentre si carica quello del fornitore."
   });
 
   i18n.register("ja", {
@@ -1216,7 +1306,25 @@
     "onboarding.tabsNoneActivated": "有効にできたタブはありません。ブラウザーと拡張機能のページは常にスキップされます。",
     "onboarding.tabsActivated_other": "{count} 個のタブで価格の監視を開始しました。",
     "onboarding.tabsSkipped_other": "アクセスできなかったため、{count} 個のタブをスキップしました。",
-    "onboarding.done": "準備完了です。このタブを閉じて、ショップを開いてください。"
+    "onboarding.done": "準備完了です。このタブを閉じて、ショップを開いてください。",
+    "error.siteHttpOnly": "記憶できるのは通常の HTTP と HTTPS のウェブサイトだけです。",
+    "error.providerSite": "この為替レートの提供元では自動換算を有効にできません。",
+    "error.unsupportedSite": "このページは対応しているウェブサイトではありません。",
+    "error.enableRolledBack": "自動換算を有効にできませんでした: {detail}。サイトの設定は元に戻されました。",
+    "error.enablePartial": "自動換算を有効にできませんでした: {detail}。保存されたサイトのデータが一部残っています。もう一度お試しください。",
+    "error.cleanupIncomplete": "サイトへのアクセスの後片付けが完了していません。もう一度自動換算をオフにしてください。",
+    "error.siteStateChanged": "このサイトの自動換算の状態が変わりました。ポップアップを開き直して、もう一度お試しください。",
+    "error.unsupportedSource": "対応していない換算元の通貨です。",
+    "error.saveSiteSource": "このサイトの換算元の通貨を保存できませんでした: {detail}。",
+    "error.globalNotSaved": "全体の設定を保存できませんでした: {detail}。",
+    "error.globalNotSavedRollback": "全体の設定を保存できず、サイトの換算元の通貨も元に戻せませんでした: {detail}。ポップアップを開き直して状態を更新してください。",
+    "error.invalidSettings": "無効な設定です。",
+    "error.verifyPair": "この通貨ペアを確認できませんでした。",
+    "error.targetMatchesDefault": "換算先の通貨 {currency} がデフォルトの換算元の通貨と同じです。先にデフォルトの換算元を変更してください。",
+    "error.targetMatchesSite": "換算先の通貨 {currency} が {host} に保存された換算元の通貨と同じです。先にそのサイトの換算元を変更してください。",
+    "onboarding.tabsNeedAccess": "「開いているタブを有効にする」でサイトへのアクセスを許可してから、もう一度お試しください。",
+    "popup.catalogRefreshFailed": "一覧を更新できませんでした。保存されている一覧を表示しています。",
+    "popup.catalogBuiltIn": "提供元の一覧を読み込む間、内蔵の一覧を使用しています。"
   });
 
   i18n.register("ko", {
@@ -1416,7 +1524,25 @@
     "onboarding.tabsNoneActivated": "켤 수 있는 열린 탭이 없습니다. 브라우저 및 확장 프로그램 페이지는 항상 건너뜁니다.",
     "onboarding.tabsActivated_other": "이제 탭 {count}개에서 가격을 감시합니다.",
     "onboarding.tabsSkipped_other": "접근할 수 없어 탭 {count}개를 건너뛰었습니다.",
-    "onboarding.done": "준비가 끝났습니다. 이 탭을 닫고 쇼핑몰을 여세요."
+    "onboarding.done": "준비가 끝났습니다. 이 탭을 닫고 쇼핑몰을 여세요.",
+    "error.siteHttpOnly": "일반 HTTP 및 HTTPS 웹사이트만 기억할 수 있습니다.",
+    "error.providerSite": "이 환율 제공처에서는 자동 환산을 켤 수 없습니다.",
+    "error.unsupportedSite": "이 페이지는 지원되는 웹사이트가 아닙니다.",
+    "error.enableRolledBack": "자동 환산을 켜지 못했습니다: {detail}. 사이트 설정을 되돌렸습니다.",
+    "error.enablePartial": "자동 환산을 켜지 못했습니다: {detail}. 저장된 사이트 데이터가 일부 남아 있습니다. 다시 시도하세요.",
+    "error.cleanupIncomplete": "사이트 접근 정리가 완료되지 않았습니다. 자동 환산을 다시 끄세요.",
+    "error.siteStateChanged": "이 사이트의 자동 환산 상태가 바뀌었습니다. 팝업을 다시 열고 다시 시도하세요.",
+    "error.unsupportedSource": "지원되지 않는 원래 통화입니다.",
+    "error.saveSiteSource": "이 사이트의 원래 통화를 저장하지 못했습니다: {detail}.",
+    "error.globalNotSaved": "전체 설정을 저장하지 못했습니다: {detail}.",
+    "error.globalNotSavedRollback": "전체 설정을 저장하지 못했고 사이트 원래 통화도 되돌리지 못했습니다: {detail}. 팝업을 다시 열어 상태를 새로 고치세요.",
+    "error.invalidSettings": "잘못된 설정입니다.",
+    "error.verifyPair": "이 통화 쌍을 확인하지 못했습니다.",
+    "error.targetMatchesDefault": "대상 통화 {currency}이(가) 기본 원래 통화와 같습니다. 먼저 기본 원래 통화를 바꾸세요.",
+    "error.targetMatchesSite": "대상 통화 {currency}이(가) {host}에 저장된 원래 통화와 같습니다. 먼저 그 사이트의 원래 통화를 바꾸세요.",
+    "onboarding.tabsNeedAccess": "“열린 탭 활성화”로 사이트 접근을 허용한 뒤 다시 시도하세요.",
+    "popup.catalogRefreshFailed": "목록을 새로 고치지 못해 저장된 목록을 표시합니다.",
+    "popup.catalogBuiltIn": "제공처의 목록을 불러오는 동안 내장 목록을 사용합니다."
   });
 
   i18n.register("nl", {
@@ -1619,7 +1745,25 @@
     "onboarding.tabsActivated_other": "{count} tabbladen worden nu op prijzen bewaakt.",
     "onboarding.tabsSkipped_one": "{count} tabblad is overgeslagen omdat er geen toegang was.",
     "onboarding.tabsSkipped_other": "{count} tabbladen zijn overgeslagen omdat er geen toegang was.",
-    "onboarding.done": "Alles is klaar. Sluit dit tabblad en open een winkel."
+    "onboarding.done": "Alles is klaar. Sluit dit tabblad en open een winkel.",
+    "error.siteHttpOnly": "Alleen gewone HTTP- en HTTPS-websites kunnen worden onthouden.",
+    "error.providerSite": "Automatisch omrekenen kan niet worden ingeschakeld voor deze aanbieder van wisselkoersen.",
+    "error.unsupportedSite": "Deze pagina is geen ondersteunde website.",
+    "error.enableRolledBack": "Automatisch omrekenen kon niet worden ingeschakeld: {detail}. De website-instelling is teruggedraaid.",
+    "error.enablePartial": "Automatisch omrekenen kon niet worden ingeschakeld: {detail}. Er staan nog opgeslagen websitegegevens; probeer het opnieuw.",
+    "error.cleanupIncomplete": "Het opruimen van de websitetoegang is niet voltooid. Zet automatisch omrekenen opnieuw uit.",
+    "error.siteStateChanged": "De automatische toegang voor deze website is gewijzigd. Open de pop-up opnieuw en probeer het nog eens.",
+    "error.unsupportedSource": "Niet-ondersteunde bronvaluta.",
+    "error.saveSiteSource": "De bronvaluta van deze website kon niet worden opgeslagen: {detail}.",
+    "error.globalNotSaved": "De algemene instellingen zijn niet opgeslagen: {detail}.",
+    "error.globalNotSavedRollback": "De algemene instellingen zijn niet opgeslagen en het terugzetten van de bronvaluta van de website is mislukt: {detail}. Open de pop-up opnieuw om de status te vernieuwen.",
+    "error.invalidSettings": "Ongeldige instellingen.",
+    "error.verifyPair": "Dit valutapaar kon niet worden gecontroleerd.",
+    "error.targetMatchesDefault": "De doelvaluta {currency} is gelijk aan je standaardbronvaluta. Wijzig eerst de standaardbronvaluta.",
+    "error.targetMatchesSite": "De doelvaluta {currency} is gelijk aan de opgeslagen bronvaluta voor {host}. Wijzig eerst de bronvaluta van die website.",
+    "onboarding.tabsNeedAccess": "Sta websitetoegang toe met ‘Mijn open tabbladen activeren’ en probeer het daarna opnieuw.",
+    "popup.catalogRefreshFailed": "De lijst kon niet worden vernieuwd; de opgeslagen lijst wordt getoond.",
+    "popup.catalogBuiltIn": "De ingebouwde lijst wordt gebruikt terwijl de lijst van de aanbieder laadt."
   });
 
   i18n.register("pl", {
@@ -1828,7 +1972,25 @@
     "onboarding.tabsSkipped_few": "Pominięto {count} karty, ponieważ dostęp był niedostępny.",
     "onboarding.tabsSkipped_many": "Pominięto {count} kart, ponieważ dostęp był niedostępny.",
     "onboarding.tabsSkipped_other": "Pominięto {count} karty, ponieważ dostęp był niedostępny.",
-    "onboarding.done": "Wszystko gotowe. Zamknij tę kartę i otwórz sklep."
+    "onboarding.done": "Wszystko gotowe. Zamknij tę kartę i otwórz sklep.",
+    "error.siteHttpOnly": "Zapamiętać można tylko zwykłe witryny HTTP i HTTPS.",
+    "error.providerSite": "Dla tego dostawcy kursów nie można włączyć automatycznego przeliczania.",
+    "error.unsupportedSite": "Ta strona nie jest obsługiwaną witryną.",
+    "error.enableRolledBack": "Nie udało się włączyć automatycznego przeliczania: {detail}. Ustawienie witryny zostało cofnięte.",
+    "error.enablePartial": "Nie udało się włączyć automatycznego przeliczania: {detail}. Część zapisanych danych witryny pozostała; spróbuj ponownie.",
+    "error.cleanupIncomplete": "Czyszczenie dostępu do witryny nie zostało ukończone. Spróbuj ponownie wyłączyć automatyczne przeliczanie.",
+    "error.siteStateChanged": "Stan automatycznego przeliczania tej witryny się zmienił. Otwórz okienko ponownie i spróbuj jeszcze raz.",
+    "error.unsupportedSource": "Nieobsługiwana waluta źródłowa.",
+    "error.saveSiteSource": "Nie udało się zapisać waluty źródłowej tej witryny: {detail}.",
+    "error.globalNotSaved": "Nie zapisano ustawień ogólnych: {detail}.",
+    "error.globalNotSavedRollback": "Nie zapisano ustawień ogólnych, a przywrócenie waluty źródłowej witryny się nie powiodło: {detail}. Otwórz okienko ponownie, aby odświeżyć jego stan.",
+    "error.invalidSettings": "Nieprawidłowe ustawienia.",
+    "error.verifyPair": "Nie udało się sprawdzić tej pary walut.",
+    "error.targetMatchesDefault": "Waluta docelowa {currency} jest taka sama jak domyślna waluta źródłowa. Najpierw zmień domyślną walutę źródłową.",
+    "error.targetMatchesSite": "Waluta docelowa {currency} jest taka sama jak zapisana waluta źródłowa dla {host}. Najpierw zmień walutę źródłową tej witryny.",
+    "onboarding.tabsNeedAccess": "Zezwól na dostęp do witryn przyciskiem „Aktywuj moje otwarte karty”, a potem spróbuj ponownie.",
+    "popup.catalogRefreshFailed": "Nie udało się odświeżyć listy; wyświetlana jest zapisana lista.",
+    "popup.catalogBuiltIn": "Używana jest wbudowana lista, dopóki nie wczyta się lista dostawcy."
   });
 
   i18n.register("pt-BR", {
@@ -2031,7 +2193,25 @@
     "onboarding.tabsActivated_other": "{count} abas agora estão sendo monitoradas para preços.",
     "onboarding.tabsSkipped_one": "{count} aba foi ignorada porque o acesso não estava disponível.",
     "onboarding.tabsSkipped_other": "{count} abas foram ignoradas porque o acesso não estava disponível.",
-    "onboarding.done": "Tudo pronto. Feche esta aba e abra uma loja."
+    "onboarding.done": "Tudo pronto. Feche esta aba e abra uma loja.",
+    "error.siteHttpOnly": "Só é possível lembrar sites HTTP e HTTPS comuns.",
+    "error.providerSite": "Não é possível ativar a conversão automática para este provedor de taxas de câmbio.",
+    "error.unsupportedSite": "Esta página não é um site compatível.",
+    "error.enableRolledBack": "Não foi possível ativar a conversão automática: {detail}. A configuração do site foi desfeita.",
+    "error.enablePartial": "Não foi possível ativar a conversão automática: {detail}. Alguns dados salvos do site continuam lá; tente de novo.",
+    "error.cleanupIncomplete": "A limpeza do acesso ao site ficou incompleta. Desative a conversão automática de novo.",
+    "error.siteStateChanged": "O estado do acesso automático deste site mudou. Abra o pop-up de novo e tente outra vez.",
+    "error.unsupportedSource": "Moeda de origem não compatível.",
+    "error.saveSiteSource": "Não foi possível salvar a moeda de origem deste site: {detail}.",
+    "error.globalNotSaved": "As configurações gerais não foram salvas: {detail}.",
+    "error.globalNotSavedRollback": "As configurações gerais não foram salvas e não foi possível restaurar a moeda de origem do site: {detail}. Abra o pop-up de novo para atualizar o estado.",
+    "error.invalidSettings": "Configurações inválidas.",
+    "error.verifyPair": "Não foi possível verificar este par de moedas.",
+    "error.targetMatchesDefault": "A moeda de destino {currency} é igual à sua moeda de origem padrão. Altere primeiro a moeda de origem padrão.",
+    "error.targetMatchesSite": "A moeda de destino {currency} é igual à moeda de origem salva para {host}. Altere primeiro a moeda de origem desse site.",
+    "onboarding.tabsNeedAccess": "Permita o acesso aos sites em “Ativar minhas abas abertas” e tente de novo.",
+    "popup.catalogRefreshFailed": "Não foi possível atualizar a lista; a lista salva está sendo exibida.",
+    "popup.catalogBuiltIn": "Usando a lista integrada enquanto a lista do provedor carrega."
   });
 
   i18n.register("tr", {
@@ -2231,7 +2411,25 @@
     "onboarding.tabsNoneActivated": "Hiçbir açık sekme etkinleştirilemedi. Tarayıcı ve eklenti sayfaları her zaman atlanır.",
     "onboarding.tabsActivated_other": "{count} sekme artık fiyatlar için izleniyor.",
     "onboarding.tabsSkipped_other": "Erişim olmadığı için {count} sekme atlandı.",
-    "onboarding.done": "Hazırsın. Bu sekmeyi kapat ve bir mağaza aç."
+    "onboarding.done": "Hazırsın. Bu sekmeyi kapat ve bir mağaza aç.",
+    "error.siteHttpOnly": "Yalnızca normal HTTP ve HTTPS web siteleri hatırlanabilir.",
+    "error.providerSite": "Bu döviz kuru sağlayıcısı için otomatik çevirme açılamaz.",
+    "error.unsupportedSite": "Bu sayfa desteklenen bir web sitesi değil.",
+    "error.enableRolledBack": "Otomatik çevirme açılamadı: {detail}. Site ayarı geri alındı.",
+    "error.enablePartial": "Otomatik çevirme açılamadı: {detail}. Kayıtlı site verilerinin bir kısmı duruyor; tekrar dene.",
+    "error.cleanupIncomplete": "Site erişimi temizliği tamamlanmadı. Otomatik çevirmeyi yeniden kapatmayı dene.",
+    "error.siteStateChanged": "Bu sitenin otomatik erişim durumu değişti. Açılır pencereyi yeniden açıp tekrar dene.",
+    "error.unsupportedSource": "Desteklenmeyen kaynak para birimi.",
+    "error.saveSiteSource": "Bu sitenin kaynak para birimi kaydedilemedi: {detail}.",
+    "error.globalNotSaved": "Genel ayarlar kaydedilmedi: {detail}.",
+    "error.globalNotSavedRollback": "Genel ayarlar kaydedilmedi ve sitenin kaynak para birimi geri alınamadı: {detail}. Durumu yenilemek için açılır pencereyi yeniden aç.",
+    "error.invalidSettings": "Geçersiz ayarlar.",
+    "error.verifyPair": "Bu para birimi çifti doğrulanamadı.",
+    "error.targetMatchesDefault": "Hedef para birimi {currency}, varsayılan kaynak para biriminle aynı. Önce varsayılan kaynak para birimini değiştir.",
+    "error.targetMatchesSite": "Hedef para birimi {currency}, {host} için kayıtlı kaynak para birimiyle aynı. Önce o sitenin kaynak para birimini değiştir.",
+    "onboarding.tabsNeedAccess": "“Açık sekmelerimi etkinleştir” ile site erişimine izin ver, sonra tekrar dene.",
+    "popup.catalogRefreshFailed": "Liste yenilenemedi; kayıtlı liste gösteriliyor.",
+    "popup.catalogBuiltIn": "Sağlayıcının listesi yüklenirken yerleşik liste kullanılıyor."
   });
 
   i18n.register("uk", {
@@ -2443,7 +2641,25 @@
     "onboarding.tabsSkipped_few": "{count} вкладки пропущено, бо доступ був недоступний.",
     "onboarding.tabsSkipped_many": "{count} вкладок пропущено, бо доступ був недоступний.",
     "onboarding.tabsSkipped_other": "{count} вкладки пропущено, бо доступ був недоступний.",
-    "onboarding.done": "Усе готово. Закрийте цю вкладку й відкрийте магазин."
+    "onboarding.done": "Усе готово. Закрийте цю вкладку й відкрийте магазин.",
+    "error.siteHttpOnly": "Запам'ятати можна лише звичайні вебсайти HTTP і HTTPS.",
+    "error.providerSite": "Для цього постачальника курсів не можна ввімкнути автоматичну конвертацію.",
+    "error.unsupportedSite": "Ця сторінка не є підтримуваним вебсайтом.",
+    "error.enableRolledBack": "Не вдалося ввімкнути автоматичну конвертацію: {detail}. Налаштування сайту скасовано.",
+    "error.enablePartial": "Не вдалося ввімкнути автоматичну конвертацію: {detail}. Частина збережених даних сайту залишилася; спробуйте ще раз.",
+    "error.cleanupIncomplete": "Очищення доступу до сайту не завершено. Спробуйте ще раз вимкнути автоматичну конвертацію.",
+    "error.siteStateChanged": "Стан автоматичної конвертації цього сайту змінився. Відкрийте спливне вікно знову й спробуйте ще раз.",
+    "error.unsupportedSource": "Непідтримувана вихідна валюта.",
+    "error.saveSiteSource": "Не вдалося зберегти вихідну валюту цього сайту: {detail}.",
+    "error.globalNotSaved": "Загальні налаштування не збережено: {detail}.",
+    "error.globalNotSavedRollback": "Загальні налаштування не збережено, і не вдалося повернути вихідну валюту сайту: {detail}. Відкрийте спливне вікно знову, щоб оновити його стан.",
+    "error.invalidSettings": "Недійсні налаштування.",
+    "error.verifyPair": "Не вдалося перевірити цю валютну пару.",
+    "error.targetMatchesDefault": "Цільова валюта {currency} збігається з вашою типовою вихідною валютою. Спершу змініть типову вихідну валюту.",
+    "error.targetMatchesSite": "Цільова валюта {currency} збігається зі збереженою вихідною валютою для {host}. Спершу змініть вихідну валюту цього сайту.",
+    "onboarding.tabsNeedAccess": "Дозвольте доступ до сайтів кнопкою «Активувати мої відкриті вкладки», а потім спробуйте ще раз.",
+    "popup.catalogRefreshFailed": "Не вдалося оновити список; показано збережений.",
+    "popup.catalogBuiltIn": "Поки завантажується список постачальника, використовується вбудований список."
   });
 
   i18n.register("zh-CN", {
@@ -2643,6 +2859,24 @@
     "onboarding.tabsNoneActivated": "没有可开启的已打开标签页。浏览器页面和扩展页面始终会被跳过。",
     "onboarding.tabsActivated_other": "已有 {count} 个标签页开始监测价格。",
     "onboarding.tabsSkipped_other": "由于无法访问，已跳过 {count} 个标签页。",
-    "onboarding.done": "一切就绪。关闭此标签页，打开一个商店吧。"
+    "onboarding.done": "一切就绪。关闭此标签页，打开一个商店吧。",
+    "error.siteHttpOnly": "只能记住普通的 HTTP 和 HTTPS 网站。",
+    "error.providerSite": "无法为此汇率提供方开启自动换算。",
+    "error.unsupportedSite": "此页面不是受支持的网站。",
+    "error.enableRolledBack": "无法开启自动换算：{detail}。网站设置已撤回。",
+    "error.enablePartial": "无法开启自动换算：{detail}。部分已保存的网站数据仍然存在，请重试。",
+    "error.cleanupIncomplete": "网站访问权限的清理尚未完成。请再次关闭自动换算。",
+    "error.siteStateChanged": "此网站的自动换算状态已更改。请重新打开弹出窗口后重试。",
+    "error.unsupportedSource": "不支持的原货币。",
+    "error.saveSiteSource": "无法保存此网站的原货币：{detail}。",
+    "error.globalNotSaved": "常规设置未保存：{detail}。",
+    "error.globalNotSavedRollback": "常规设置未保存，且无法恢复此网站的原货币：{detail}。请重新打开弹出窗口以刷新状态。",
+    "error.invalidSettings": "设置无效。",
+    "error.verifyPair": "无法验证此货币对。",
+    "error.targetMatchesDefault": "目标货币 {currency} 与你的默认原货币相同。请先更改默认原货币。",
+    "error.targetMatchesSite": "目标货币 {currency} 与为 {host} 保存的原货币相同。请先更改该网站的原货币。",
+    "onboarding.tabsNeedAccess": "请通过“激活已打开的标签页”允许网站访问权限，然后重试。",
+    "popup.catalogRefreshFailed": "无法刷新列表，正在显示已保存的列表。",
+    "popup.catalogBuiltIn": "正在加载提供方的列表，暂时使用内置列表。"
   });
 })(globalThis);

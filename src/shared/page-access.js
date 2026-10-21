@@ -22,30 +22,30 @@
     return translated === key ? fallback : translated;
   }
 
-  function unsupportedPageMessage(urlValue) {
-    const url = parseUrl(urlValue);
-    if (!url) return text("access.noWebpage", "This tab does not have a webpage that can be converted.");
+  const UNSUPPORTED_PAGE_TEXT = Object.freeze({
+    "access.noWebpage": "This tab does not have a webpage that can be converted.",
+    "access.pdf": "Extensions cannot run inside the browser's PDF viewer. Open a regular webpage and try again.",
+    "access.browserPage": "Extensions cannot run on browser pages, Reader View, PDFs, or other extension pages.",
+    "access.firefoxProtected": "Firefox protects this Mozilla page from extensions. Open a regular shopping page and try again."
+  });
 
-    if (["file:", "http:", "https:"].includes(url.protocol) && hasPdfPath(url)) {
-      return text(
-        "access.pdf",
-        "Extensions cannot run inside the browser's PDF viewer. Open a regular webpage and try again."
-      );
-    }
+  // The translation key for why a page cannot be converted, or null when it can.
+  // The background sends the key along with the English text it can produce itself.
+  function unsupportedPageKey(urlValue) {
+    const url = parseUrl(urlValue);
+    if (!url) return "access.noWebpage";
+    if (["file:", "http:", "https:"].includes(url.protocol) && hasPdfPath(url)) return "access.pdf";
     if (url.protocol === "file:") return null;
-    if (url.protocol !== "http:" && url.protocol !== "https:") {
-      return text(
-        "access.browserPage",
-        "Extensions cannot run on browser pages, Reader View, PDFs, or other extension pages."
-      );
-    }
+    if (url.protocol !== "http:" && url.protocol !== "https:") return "access.browserPage";
     if (isFirefoxBuild() && FIREFOX_RESTRICTED_HOSTS.has(url.hostname.toLowerCase())) {
-      return text(
-        "access.firefoxProtected",
-        "Firefox protects this Mozilla page from extensions. Open a regular shopping page and try again."
-      );
+      return "access.firefoxProtected";
     }
     return null;
+  }
+
+  function unsupportedPageMessage(urlValue) {
+    const key = unsupportedPageKey(urlValue);
+    return key ? text(key, UNSUPPORTED_PAGE_TEXT[key]) : null;
   }
 
   function describeFailure(tab, error) {
@@ -102,6 +102,7 @@
   global.CurrencyPageAccess = Object.freeze({
     describeFailure,
     isFirefoxBuild,
+    unsupportedPageKey,
     unsupportedPageMessage
   });
 })(globalThis);

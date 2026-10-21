@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Shop-Preise in deiner Währung, direkt neben dem Original. Über 160 Währungen. Seiteninhalte verlassen nie deinen Browser.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Preise auf der aktuellen Seite umrechnen",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

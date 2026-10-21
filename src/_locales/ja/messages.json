@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "ショップの価格を、元の価格のすぐ横にあなたの通貨で表示。160 以上の通貨に対応。ページの内容がブラウザーの外に送られることはありません。",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "現在のページの価格を換算",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

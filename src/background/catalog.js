@@ -21,7 +21,7 @@
       return buildResult(cache.currencies, true, !isFresh(cache));
     }
     return buildResult(buildFallbackCurrencies(), true, true,
-      "Using the built-in currency list while the provider catalog refreshes.");
+      "Using the built-in currency list while the provider catalog refreshes.", "popup.catalogBuiltIn");
   }
 
   async function loadCurrencies(forceRefresh) {
@@ -44,8 +44,8 @@
       return buildResult(currencies, false, false);
     } catch (error) {
       const warning = error instanceof Error ? error.message : "Could not refresh currencies.";
-      if (isUsableCache(cache)) return buildResult(cache.currencies, true, true, warning);
-      return buildResult(buildFallbackCurrencies(), true, true, warning);
+      if (isUsableCache(cache)) return buildResult(cache.currencies, true, true, warning, "popup.catalogRefreshFailed");
+      return buildResult(buildFallbackCurrencies(), true, true, warning, "popup.catalogRefreshFailed");
     }
   }
 
@@ -92,8 +92,9 @@
     return Number.isFinite(fetchedAt) && Date.now() - fetchedAt < FRESH_FOR_MS;
   }
 
-  function buildResult(currencies, cached, stale, warning = null) {
-    return { ok: true, currencies, cached, stale, warning };
+  function buildResult(currencies, cached, stale, warning = null, warningKey = null) {
+    const result = { ok: true, currencies, cached, stale, warning };
+    return warningKey ? { ...result, warningKey } : result;
   }
 
   global.CurrencyCatalogService = Object.freeze({

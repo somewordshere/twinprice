@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Preços das lojas na sua moeda, ao lado do original. Mais de 160 moedas. O conteúdo da página nunca sai do seu navegador.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Converter os preços da página atual",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "在原价旁边直接用你的货币显示商店价格。支持 160 多种货币。页面内容绝不会离开你的浏览器。",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "换算当前页面上的价格",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

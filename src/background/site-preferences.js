@@ -24,14 +24,12 @@
     }
 
     async function getStatus(originValue) {
-      const unsupportedPage = pageAccess.unsupportedPageMessage(originValue);
-      if (unsupportedPage) {
-        return { ok: false, remembered: false, error: unsupportedPage };
-      }
+      const unsupportedPage = unsupportedPageFailure(originValue);
+      if (unsupportedPage) return { ok: false, remembered: false, ...unsupportedPage };
       const site = normalizeSite(originValue);
-      if (!site) return { ok: false, remembered: false, error: siteMemoryError(originValue) };
+      if (!site) return { ok: false, remembered: false, ...siteMemoryError(originValue) };
       const providerError = providerSiteMemoryError(site);
-      if (providerError) return { ok: false, remembered: false, error: providerError };
+      if (providerError) return { ok: false, remembered: false, ...providerError };
       await waitForMutations();
 
       const [preferences, siteSources] = await Promise.all([
@@ -52,12 +50,12 @@
     }
 
     async function remember(originValue, resolveSourceCurrency) {
-      const unsupportedPage = pageAccess.unsupportedPageMessage(originValue);
-      if (unsupportedPage) return { ok: false, error: unsupportedPage };
+      const unsupportedPage = unsupportedPageFailure(originValue);
+      if (unsupportedPage) return { ok: false, ...unsupportedPage };
       const site = normalizeSite(originValue);
-      if (!site) return { ok: false, error: siteMemoryError(originValue) };
+      if (!site) return { ok: false, ...siteMemoryError(originValue) };
       const providerError = providerSiteMemoryError(site);
-      if (providerError) return { ok: false, remembered: false, error: providerError };
+      if (providerError) return { ok: false, remembered: false, ...providerError };
 
       return runMutation(() => rememberWithinMutation(site, resolveSourceCurrency));
     }
@@ -84,16 +82,24 @@
           remembered: state.remembered,
           dataRemaining: state.preferenceRemaining || state.sourceRemaining,
           origin: site.origin,
-          error: state.clean
-            ? `Could not enable automatic conversion: ${errorMessage(error)}. The site setting was rolled back.`
-            : `Could not enable automatic conversion: ${errorMessage(error)}. Some saved site data remains; try again.`
+          ...(state.clean
+            ? failure(
+              `Could not enable automatic conversion: ${errorMessage(error)}. The site setting was rolled back.`,
+              "error.enableRolledBack",
+              { detail: errorMessage(error) }
+            )
+            : failure(
+              `Could not enable automatic conversion: ${errorMessage(error)}. Some saved site data remains; try again.`,
+              "error.enablePartial",
+              { detail: errorMessage(error) }
+            ))
         };
       }
     }
 
     async function forget(originValue) {
       const site = normalizeSite(originValue);
-      if (!site) return { ok: false, error: "This page is not a supported website." };
+      if (!site) return { ok: false, ...failure("This page is not a supported website.", "error.unsupportedSite") };
       return runMutation(() => forgetWithinMutation(site));
     }
 
@@ -122,9 +128,12 @@
           remembered: state.remembered,
           dataRemaining: state.preferenceRemaining || state.sourceRemaining,
           origin: site.origin,
-          error: `Site-access cleanup is incomplete${remaining}. Try turning automatic conversion off again.${
-            failures.length ? ` Details: ${[...new Set(failures)].join("; ")}.` : ""
-          }`
+          ...failure(
+            `Site-access cleanup is incomplete${remaining}. Try turning automatic conversion off again.${
+              failures.length ? ` Details: ${[...new Set(failures)].join("; ")}.` : ""
+            }`,
+            "error.cleanupIncomplete"
+          )
         };
       }
       return {
@@ -192,7 +201,11 @@
 
     async function findTargetCurrencyConflict(targetCurrency, globalSourceCurrency, activeSite) {
       if (globalSourceCurrency !== "AUTO" && globalSourceCurrency === targetCurrency) {
-        return `The target ${targetCurrency} matches your default source currency. Change the default source first.`;
+        return failure(
+          `The target ${targetCurrency} matches your default source currency. Change the default source first.`,
+          "error.targetMatchesDefault",
+          { currency: targetCurrency }
+        );
       }
 
       const [preferences, siteSources] = await Promise.all([
@@ -208,7 +221,11 @@
         ) continue;
         const site = normalizeSite(origin);
         if (!site || !(await isRemembered(site))) continue;
-        return `The target ${targetCurrency} matches the saved source for ${site.hostname}. Change that site's source first.`;
+        return failure(
+          `The target ${targetCurrency} matches the saved source for ${site.hostname}. Change that site's source first.`,
+          "error.targetMatchesSite",
+          { currency: targetCurrency, host: site.hostname }
+        );
       }
       return null;
     }
@@ -224,11 +241,18 @@
         return {
           ok: false,
           settings: currentSettings,
-          error: "This site's automatic-access state changed. Reopen the popup and try again."
+          ...failure(
+            "This site's automatic-access state changed. Reopen the popup and try again.",
+            "error.siteStateChanged"
+          )
         };
       }
       if (settings.fromCurrency !== "AUTO" && !supportedCodes.includes(settings.fromCurrency)) {
-        return { ok: false, settings: currentSettings, error: "Unsupported source currency." };
+        return {
+          ok: false,
+          settings: currentSettings,
+          ...failure("Unsupported source currency.", "error.unsupportedSource")
+        };
       }
 
       const previousSources = await getSourceCurrencies();
@@ -250,7 +274,11 @@
         return {
           ok: false,
           settings: currentSettings,
-          error: `Could not save this site's source currency: ${errorMessage(error)}.`
+          ...failure(
+            `Could not save this site's source currency: ${errorMessage(error)}.`,
+            "error.saveSiteSource",
+            { detail: errorMessage(error) }
+          )
         };
       }
 
@@ -271,9 +299,17 @@
             ? await resolveSettingsForOrigin(globalSettings, site.origin, supportedCodes)
             : currentSettings,
           partial: rollbackFailed,
-          error: rollbackFailed
-            ? `Global settings were not saved, and the site-source rollback failed: ${errorMessage(error)}. Reopen the popup to refresh its state.`
-            : `Global settings were not saved: ${errorMessage(error)}.`
+          ...(rollbackFailed
+            ? failure(
+              `Global settings were not saved, and the site-source rollback failed: ${errorMessage(error)}. Reopen the popup to refresh its state.`,
+              "error.globalNotSavedRollback",
+              { detail: errorMessage(error) }
+            )
+            : failure(
+              `Global settings were not saved: ${errorMessage(error)}.`,
+              "error.globalNotSaved",
+              { detail: errorMessage(error) }
+            ))
         };
       }
 
@@ -372,21 +408,35 @@
       }
     }
 
+    // Failures carry English text plus a key and parameters, which the popup and the
+    // welcome page translate (CurrencyI18n.localize); the background has no dictionaries.
+    function failure(error, errorKey, errorParams) {
+      return errorParams ? { error, errorKey, errorParams } : { error, errorKey };
+    }
+
+    function unsupportedPageFailure(value) {
+      const key = pageAccess.unsupportedPageKey(value);
+      return key ? failure(pageAccess.unsupportedPageMessage(value), key) : null;
+    }
+
     function siteMemoryError(value) {
       try {
         const url = new URL(value);
         if (url.protocol !== "http:" && url.protocol !== "https:") {
-          return "Only normal HTTP and HTTPS websites can be remembered.";
+          return failure("Only normal HTTP and HTTPS websites can be remembered.", "error.siteHttpOnly");
         }
       } catch (_error) {
         // Fall through to the generic invalid-page explanation.
       }
-      return "This page cannot be remembered.";
+      return failure("This page cannot be remembered.", "popup.cannotRemember");
     }
 
     function providerSiteMemoryError(site) {
       if (site?.origin !== REQUIRED_PROVIDER_ORIGIN) return null;
-      return "This exchange-rate provider cannot be enabled for automatic page conversion.";
+      return failure(
+        "This exchange-rate provider cannot be enabled for automatic page conversion.",
+        "error.providerSite"
+      );
     }
 
     function errorMessage(error) {

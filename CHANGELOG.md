@@ -19,6 +19,28 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.2.6 - 2026-10-21
+
+### Fixed
+
+- How old a cached exchange rate is ("3 hours old") now appears in the chosen language. Before, it stayed in English in all twelve other languages, in the popup's rate line, the on-page prompt, notices and the tooltip on converted prices. The warnings about cached rates are translated too.
+- Messages the extension's background sends to the popup and the welcome page now appear in the chosen language: why a page cannot use automatic conversion (for example a browser page, a local file or the rate provider's own site), conflicts between a target currency and a saved source currency, settings that could not be saved, and the welcome page's request to allow site access. Each still carries its English text as a fallback.
+- On phones, the welcome page no longer scrolls sideways in Spanish, French and Brazilian Portuguese: the language menu, as wide as its longest option, can now shrink. The step numbers stay round instead of stretching into wide ovals on narrow screens.
+- Korean text in the popup, the welcome page and the on-page prompt now wraps between words instead of breaking inside them. The on-page prompt, selection button and notices now declare the interface language, so screen readers and line breaking follow it rather than the shop's language.
+- The popup's twinprice.com links and the welcome page's help link now open the website in the chosen language instead of always in English.
+- Exchange rates and other numbers in the popup and on the page use the chosen language's decimal mark (1 USD = 0,9000 EUR in German). The rate in the quick converter and in the converted-price tooltip now shows four decimals like the rest of the popup.
+- The keyboard shortcut's name on the browser's shortcuts page is translated.
+- The website guide no longer tells you to open "Convert custom amount", which is not a visible control; it now points to the popup's Amount field, in all thirteen languages.
+
+### Privacy
+
+- Policy version bumped to 2.2.6; the wording is unchanged. Website policy pages regenerated.
+
+### Tests
+
+- Unit tests for the age wording in every language (including Polish and Ukrainian plural forms), for translating background replies with an English fallback, for locale-aware rate formatting, for the website links per language, and for the translated shortcut name. A scan fails if the background sends a key that has no English text, or a rate message the on-page prompt cannot translate. Another test checks that the guide on twinprice.com quotes the extension's own button and field names in every language.
+- New Chrome tests: a 30-hour-old cached rate in German shows its age and warning in German with a German decimal mark; the popup's links, its site message and the on-page prompt follow Korean and switch back to English; the welcome page fits a 360-pixel screen with round step numbers and a help link in the page's language, for eight languages. Rate checks in existing tests now expect the four-decimal, locale-aware format.
+
 ## 2.2.5 - 2026-10-21
 
 ### Added

@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Les prix des boutiques dans votre devise, à côté de l'original. Plus de 160 devises. Le contenu des pages reste sur votre appareil.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Convertir les prix de la page actuelle",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }

@@ -10,5 +10,9 @@
   "extDescription": {
     "message": "Mağaza fiyatlarını kendi para biriminde, özgün fiyatın yanında gör. 160'tan fazla para birimi. Sayfa içeriği tarayıcından çıkmaz.",
     "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Geçerli sayfadaki fiyatları çevir",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
   }
 }
