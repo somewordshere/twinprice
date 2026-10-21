@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#245bea">
+  <title>Chrome・Firefox でウェブサイトの価格を換算する方法 — Twinprice</title>
+  <meta name="description" content="Twinprice でショッピングページの価格や選択した価格を換算し、通貨を選び、自動換算をオンにし、元の価格に戻す方法を説明します。">
+  <link rel="canonical" href="https://twinprice.com/ja/guide/"><!-- i18n:alternates --><link rel="alternate" hreflang="en" href="https://twinprice.com/guide/"><link rel="alternate" hreflang="de" href="https://twinprice.com/de/guide/"><link rel="alternate" hreflang="es" href="https://twinprice.com/es/guide/"><link rel="alternate" hreflang="fr" href="https://twinprice.com/fr/guide/"><link rel="alternate" hreflang="it" href="https://twinprice.com/it/guide/"><link rel="alternate" hreflang="ja" href="https://twinprice.com/ja/guide/"><link rel="alternate" hreflang="ko" href="https://twinprice.com/ko/guide/"><link rel="alternate" hreflang="nl" href="https://twinprice.com/nl/guide/"><link rel="alternate" hreflang="pl" href="https://twinprice.com/pl/guide/"><link rel="alternate" hreflang="pt-BR" href="https://twinprice.com/pt-BR/guide/"><link rel="alternate" hreflang="tr" href="https://twinprice.com/tr/guide/"><link rel="alternate" hreflang="uk" href="https://twinprice.com/uk/guide/"><link rel="alternate" hreflang="zh-CN" href="https://twinprice.com/zh-CN/guide/"><link rel="alternate" hreflang="x-default" href="https://twinprice.com/guide/"><!-- /i18n:alternates -->
+  <meta property="og:title" content="Twinprice でウェブサイトの価格を換算する方法">
+  <meta property="og:description" content="Chrome と Firefox で、ページ全体または選択した 1 つの価格を換算するためのステップごとのガイド。">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://twinprice.com/ja/guide/">
+  <meta property="og:site_name" content="Twinprice">
+  <meta property="og:image" content="https://twinprice.com/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Twinprice: Chrome と Firefox 向けの無料の通貨換算拡張機能。海外のショップでも、価格はあなたの通貨で。">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png">
+  <link rel="icon" href="../../favicon.ico" sizes="48x48">
+  <link rel="icon" href="../../assets/favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="icon" href="../../assets/favicon-96.png" type="image/png" sizes="96x96">
+  <link rel="icon" href="../../assets/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://twinprice.com/ja/guide/#webpage",
+  "url": "https://twinprice.com/ja/guide/",
+  "name": "Twinprice でウェブサイトの価格を換算する方法",
+  "description": "Chrome と Firefox でショッピングページの価格や選択した価格を換算するためのガイド。",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@id": "https://twinprice.com/#website"
+  },
+  "about": {
+    "@id": "https://twinprice.com/#extension"
+  },
+  "dateModified": "2026-09-14"
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">コンテンツへスキップ</a>
+  <header class="site-header wrap">
+    <a class="brand" href="../" aria-label="twinprice.com ホーム"><img src="../../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
+    <nav aria-label="メインナビゲーション"><a href="../#how-it-works">使い方</a><a href="./" aria-current="page">ガイド</a><a href="../privacy/">プライバシー</a><a href="../about/">概要</a></nav>
+    <!-- i18n:languages --><details class="language-menu" translate="no"><summary aria-label="言語: 日本語"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c2 2 2 11 0 13M8 1.5c-2 2-2 11 0 13"/></svg><span>JA</span></summary><ul><li><a href="../../guide/" hreflang="en" lang="en">English</a></li><li><a href="../../de/guide/" hreflang="de" lang="de">Deutsch</a></li><li><a href="../../es/guide/" hreflang="es" lang="es">Español</a></li><li><a href="../../fr/guide/" hreflang="fr" lang="fr">Français</a></li><li><a href="../../it/guide/" hreflang="it" lang="it">Italiano</a></li><li><a href="../../ja/guide/" hreflang="ja" lang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/guide/" hreflang="ko" lang="ko">한국어</a></li><li><a href="../../nl/guide/" hreflang="nl" lang="nl">Nederlands</a></li><li><a href="../../pl/guide/" hreflang="pl" lang="pl">Polski</a></li><li><a href="../../pt-BR/guide/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li><li><a href="../../tr/guide/" hreflang="tr" lang="tr">Türkçe</a></li><li><a href="../../uk/guide/" hreflang="uk" lang="uk">Українська</a></li><li><a href="../../zh-CN/guide/" hreflang="zh-CN" lang="zh-CN">简体中文</a></li></ul></details><!-- /i18n:languages --><a class="button button-small" href="../#install">Twinprice を入手 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="wrap guide-main" id="main">
+    <article>
+      <header class="guide-intro">
+        <p class="eyebrow">TWINPRICE ユーザーガイド</p>
+        <h1>Chrome と Firefox でウェブサイトの価格を換算する方法</h1>
+        <p>Twinprice は、ショッピングページの価格を希望の通貨に換算する無料のブラウザー拡張機能です。インストールして通貨を選び、<strong>ページの価格を換算</strong>を選択します。価格を 1 つだけ換算するときは、通貨ごと選択して<strong>選択範囲を換算</strong>をクリックします。</p>
+        <p class="guide-updated">更新日: <time datetime="2026-09-14">2026年9月14日</time></p>
+      </header>
+      <nav class="guide-contents" aria-label="このガイドの内容"><strong>このガイドの内容</strong><a href="#install">Twinprice をインストール</a><a href="#whole-page">ページ全体を換算</a><a href="#one-price">価格を 1 つ換算</a><a href="#automatic">設定を記憶</a><a href="#restore">元の価格に戻す</a><a href="#shopping-examples">ショッピングの例</a><a href="#troubleshooting">価格が換算されない場合</a></nav>
+      <section id="install">
+        <h2>1. ブラウザーに Twinprice をインストールする</h2>
+        <p><a href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=ja">Chrome ウェブストアの Twinprice のページ</a>または<a href="https://addons.mozilla.org/ja/firefox/addon/twinprice/">Firefox Add-ons の Twinprice のページ</a>を開き、ブラウザーの手順に従ってインストールします。Twinprice のアカウントを作成する必要はありません。</p>
+        <p>通常のショッピングページを開きます。ブラウザーの拡張機能メニューから Twinprice を開きます。すばやく使いたい場合はツールバーに固定してください。ウェブページへのアクセスにより、拡張機能は対応する価格を見つけて換算結果を表示できます。権限と為替レートのリクエストの仕組みについては<a href="../privacy/">プライバシーポリシー</a>をご覧ください。</p>
+      </section>
+      <section id="whole-page">
+        <h2>2. ショッピングページ全体の価格を換算する</h2>
+        <ol>
+          <li>ブラウザーのツールバーから Twinprice を開きます。</li>
+          <li><strong>換算元</strong>では、<strong>AUTO</strong> を選んだままにすると換算元の通貨が検出されます。自分で選ぶこともできます。記号があいまいな場合は、正しい通貨を手動で選んでください。</li>
+          <li><strong>換算先</strong>で、表示したい通貨を選びます。EUR や USD など、通貨の名前やコードで検索できます。</li>
+          <li><strong>ページの価格を換算</strong>をクリックします。換算機能が無効になっている場合、ボタンは<strong>オンにしてページを換算</strong>と表示されることがあります。</li>
+        </ol>
+        <p>Twinprice が対応する価格を見つけたときは、ページ上の案内に表示される<strong>価格を換算</strong>を使うこともできます。並べて表示する設定では、元の金額が換算結果の横に表示されたままになります。</p>
+        <figure><a href="../../assets/guide-page-conversion.png"><img src="../../assets/guide-page-conversion.png" width="1180" height="770" loading="lazy" alt="サンプルショップでの Twinprice: 元のドル価格が緑色のユーロ換算の横に表示され、下部に「元に戻す」の操作があります。"></a><figcaption>サンプルのショッピングページでの拡張機能のスクリーンショット。金額とレートは撮影時の例で、現在のレートではありません。画像を開くと原寸で表示されます。</figcaption></figure>
+      </section>
+      <section id="one-price">
+        <h2>3. 選択した 1 つの価格を換算する</h2>
+        <p>まず Twinprice のポップアップで換算先の通貨を設定します。次に、ウェブページ上の価格を通貨記号やコードごと選択します（例: <strong>USD 115.00</strong>）。選択範囲の下にある青い<strong>選択範囲を換算</strong>ボタンをクリックすると、緑色の吹き出しに結果が表示されます。</p>
+        <p>選択したテキストを右クリックして<strong>Convert selected currency</strong>を選ぶこともできます。選択範囲の換算は、ページのほかの部分を換算せずに 1 つの金額だけ知りたいときに便利です。</p>
+        <figure><a href="../../assets/guide-selection.png"><img src="../../assets/guide-selection.png" width="840" height="317" loading="lazy" alt="選択された $115.00 の価格と、USD から 103.50 ユーロへの換算を示す緑色の Twinprice の結果の吹き出し。"></a><figcaption>拡張機能による 1 つの価格の換算。このスクリーンショットでは例のレートを使っています。</figcaption></figure>
+      </section>
+      <section id="automatic">
+        <h2>4. お気に入りのショップの設定を記憶する</h2>
+        <p>ポップアップで<strong>ページのオプション</strong>を開き、<strong>このサイトを自動で換算</strong>をオンにします。Twinprice はそのサイトの自動換算を、手動で選んだ換算元の通貨や AUTO の選択も含めて記憶します。</p>
+        <p>ポップアップの見た目の設定では、換算後の価格の色と形を選べます。換算後の価格を元の価格の横に表示するか、元の価格の代わりに表示するかも選べます。</p>
+      </section>
+      <section id="restore">
+        <h2>5. 価格を元に戻す、または換算をオフにする</h2>
+        <p>ページを換算した後、ポップアップを開いて<strong>元の価格に戻す</strong>を選ぶと換算が取り消されます。そのショップでの自動換算をやめるには、「ページのオプション」で<strong>このサイトを自動で換算</strong>をオフにします。</p>
+        <p>すべてのサイトで価格のスキャン、案内、自動換算を止めるには、<strong>換算機能を有効にする</strong>をオフにします。</p>
+      </section>
+      <section id="shopping-examples">
+        <h2>海外での買い物に役立つ実例</h2>
+        <p>以下の例では、通貨の選び方と換算結果の読み方を説明します。レートはすべて説明用の架空のもので、拡張機能は提供元から取得できるレートを使います。</p>
+        <h3 id="euros-to-zloty">ユーロの価格をポーランド・ズウォティで見るには？</h3>
+        <p>ユーロで販売しているショップでは、<strong>換算元: EUR</strong> と <strong>換算先: PLN</strong> を選び、<strong>ページの価格を換算</strong>をクリックします。ランプが €89 で、例のレートが 1 EUR = 4.30 PLN なら、換算後の価格は <strong>382.70 PLN</strong>（89 × 4.30）です。元の価格を表示したままにして、ショップの金額とあなたの通貨での目安を比べましょう。</p>
+        <p>そのランプの価格だけを換算するには、換算先の通貨を PLN にし、€ または EUR を含めて価格を選択して、<strong>選択範囲を換算</strong>をクリックします。</p>
+        <h3 id="dollar-currencies">ドル記号は必ず米ドルを意味しますか？</h3>
+        <p>いいえ。USD、CAD、AUD などの通貨もドル記号を使います。ショップの通貨の選択欄や支払い情報で通貨を確認してください。カナダドルの商品なら、表示価格が単に $100 でも<strong>換算元: CAD</strong>を選びます。USD を選ぶと、別の通貨ペアで換算されてしまいます。</p>
+        <p>AUTO はページ上の通貨の手がかりを使います。結果がはっきりしない場合は、換算元を手動で選んでください。ショップで表示通貨を変更できる場合は、Twinprice の換算元を、ページに現在表示されている通貨に合わせてください。</p>
+        <h3 id="checkout-differences">請求額が Twinprice の換算結果と違うのはなぜですか？</h3>
+        <p>Twinprice は参考為替レートを使って、比較のための価格を見積もります。ショップの価格を変えたり、銀行、カード会社、決済サービスが使うレートを決めたりするものではありません。送料、税金、換算のマージン、その他の手数料によって、最終的な合計は変わることがあります。</p>
+        <p>たとえば、架空のレート 1 USD = 0.90 EUR では、100 USD の商品は 90 EUR です。この金額に仮に 3% の換算手数料がかかると 2.70 EUR が加わり、ほかの費用を除いて 92.70 EUR になります。Twinprice の価格換算はこの手数料を計算しません。実際に支払う金額は、ショップの最終合計と決済サービスの規約で確認してください。</p>
+        <h3 id="compare-shops">2 つのショップの価格を比べるには？</h3>
+        <p>両方のサイトで同じ換算先の通貨を使い、ショップごとに正しい換算元の通貨を選びます。商品の価格を換算し、送料や税金を含めた最終的な合計を比べてください。換算後の価格が安い商品でも、全体では高くなることがあります。</p>
+        <p>すでにわかっている金額を比べるだけなら、ポップアップで<strong>任意の金額を換算</strong>を開いて金額を入力します。AUTO が通貨を特定していない場合は、先に換算元の通貨を明示的に選んでください。</p>
+        <h3 id="offline-rates">インターネットに接続できないときも価格を換算できますか？</h3>
+        <p>新しいレートを取得できないときは、最近キャッシュしたレートで換算できることがあります。これは要求した通貨について使えるキャッシュがあるかどうかによるため、Twinprice が完全にオフラインで動作するとは限りません。キャッシュしたレートが 48 時間を過ぎると警告し、7 日より古いレートは使いません。</p>
+        <p><a href="../about/#rates">レートの出どころ</a>と<a href="../about/#product-facts">製品のブラウザーと通貨に関する制限</a>もご覧ください。</p>
+      </section>
+      <section id="troubleshooting">
+        <h2>価格が換算されない場合</h2>
+        <dl class="guide-answers">
+          <dt>AUTO が通貨を特定できない</dt><dd>$ のような記号は複数の通貨を表すことがあります。「換算元」でショップの通貨を選んで、もう一度お試しください。選択した価格の場合は、ページのテキストに通貨コードがあればそれも含めて選択してください。</dd>
+          <dt>ブラウザーの設定ページや拡張機能ストアで何も起こらない</dt><dd>ブラウザーはこれらのページへの拡張機能のアクセスを制限しています。通常のショッピングページで試し、Twinprice が有効になっていて、そのサイトへのアクセス権があるか確認してください。</dd>
+          <dt>一部の価格が変わらない</dt><dd>Twinprice は対応するウェブページのテキストで動作します。画像内、アクセスできないフレーム内、特殊なレイアウトの価格は検出されないことがあります。テキストの価格を選択するか、ポップアップに金額を入力してみてください。</dd>
+          <dt>通貨ペアや新しいレートを利用できない</dt><dd>利用できる通貨ペアは為替レートの提供元によって異なります。接続と通貨の選択を確認して、もう一度お試しください。Twinprice は最近キャッシュしたレートを使えますが、48 時間を過ぎると警告し、7 日より古いレートは使いません。</dd>
+          <dt>決済時の合計が換算結果と違う</dt><dd>Twinprice は価格の比較のために Frankfurter の参考レートを使います。銀行、カード会社、決済サービスは別のレートを適用し、手数料を加えることがあります。換算後の金額によってショップの請求額が変わることはありません。</dd>
+        </dl>
+        <p>まだ解決しませんか？ ブラウザー、Twinprice のバージョン、再現できる例を添えて<a href="https://github.com/somewordshere/twinprice/issues">GitHub で問題を報告</a>してください。購入や支払いに関する個人情報は含めないでください。</p>
+      </section>
+      <aside class="guide-next"><h2>次のお気に入りを探す準備はできましたか？</h2><p><a href="../#install">Chrome または Firefox 用 Twinprice を入手</a>するか、インストールする前に<a href="../#demo">ウェブサイトのデモを試して</a>みてください。</p></aside>
+    </article>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="../"><span>twinprice<span class="brand-period">.</span>com</span></a><span>どこで買い物をしても、なじみのある価格を。</span><a href="./" aria-current="page">ユーザーガイド</a><a href="../about/">概要</a><a href="../privacy/">プライバシーポリシー</a><a href="../whats-new/">更新情報</a><a href="https://github.com/somewordshere/twinprice/issues">ヘルプ / 問題を報告</a><a href="https://github.com/somewordshere/twinprice">ソースコード</a></footer>
+</body>
+</html>

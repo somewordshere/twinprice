@@ -19,14 +19,35 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.2.5 - 2026-10-21
+
+### Added
+
+- Added Japanese, Korean and Simplified Chinese to the **Language** menu, so the interface now comes in thirteen languages. They translate the popup, the welcome page and everything the extension shows on a web page. With the language left on **Automatic**, a Japanese or Korean browser gets its own language, and a browser set to any kind of Chinese, including Traditional Chinese (zh-TW, zh-HK), gets Simplified Chinese, the only Chinese translation.
+- Added the store name, summary and description in Japanese, Korean and Simplified Chinese (`src/_locales/{ja,ko,zh_CN}/messages.json`, `store/listings/{ja,ko,zh_CN}.md`). The Firefox description now lists all thirteen interface languages.
+- twinprice.com is now published in Japanese (`/ja/`), Korean (`/ko/`) and Simplified Chinese (`/zh-CN/`), with the language menu, `hreflang` links and sitemap updated. Uninstalling with one of these languages opens the goodbye page in that language.
+
+### Changed
+
+- Korean text on twinprice.com now wraps between words instead of inside them.
+- The website sitemap dates the new language pages from 2026-10-21, the day they first appear, instead of from the date of the first translations.
+
+### Privacy
+
+- Policy version bumped to 2.2.5; the wording is unchanged. Website policy pages regenerated.
+
+### Tests
+
+- Unit tests cover the new languages: matching ja-JP, ko-KR and every Chinese tag (zh, zh-Hans, zh-SG, zh-TW, zh-HK, zh-Hant-TW), the single plural form, the native names in the menu, and the goodbye page addresses `/ja/`, `/ko/` and `/zh-CN/`. The fallback-to-English cases now use Swedish and Norwegian, which have no translation.
+- The Chrome and Firefox language-menu tests now expect fourteen entries (Automatic plus thirteen languages). A new Chrome test opens the on-page prompt and the popup in each of the three new languages.
 
 ### Repository
 
 - Each `release/<version>/` folder now holds only its release notes and the Chrome and Firefox ZIPs. Notes were added for the nine versions that had none, and `release/README.md` documents the layout and a notes template.
 - `npm run check` fails when a release folder lacks notes or a ZIP, contains an unpacked build, or when the README build badges point to an older release.
 - Added `npm run release` (checks, Firefox lint, build and a final check) and `npm run build:video`. CI now uploads only the current version's ZIPs.
-- Committed `store/`: listing text in ten languages, Chrome and Firefox dashboard answers, an AMO-formatted Firefox description, screenshots and the promo tile. Raw captures, the demo video file and the growth checklist stay local.
+- Committed `store/`: listing text in every interface language, Chrome and Firefox dashboard answers, an AMO-formatted Firefox description, screenshots and the promo tile. Raw captures, the demo video file and the growth checklist stay local.
+- Added `WHATS-NEW.md`, a plain-language changelog for users linked from the README, and a What's new page on twinprice.com linked from every footer. `website/sync-whats-new.mjs` rebuilds the page, and `npm run check` fails if it is missing the current version.
 
 ## 2.2.4 - 2026-10-14
 

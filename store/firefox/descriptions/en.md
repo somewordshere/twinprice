@@ -23,7 +23,7 @@ Works in Firefox on Windows, macOS and Linux, and in **Firefox for Android**.
 - Converts automatically on the shops you choose, and only there
 - Undo puts the page back exactly as it was
 - Keyboard shortcut on desktop: Ctrl+Shift+Y (Command+Shift+Y on Mac)
-- Interface in ten languages: English, German, Spanish, French, Italian, Dutch, Polish, Brazilian Portuguese, Turkish and Ukrainian
+- Interface in thirteen languages: English, German, Spanish, French, Italian, Dutch, Polish, Brazilian Portuguese, Turkish, Ukrainian, Japanese, Korean and Simplified Chinese
 
 **Why Firefox asks for access to all websites and lists website content**
 

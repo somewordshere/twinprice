@@ -25,7 +25,7 @@ async function openShop(context) {
   return shop;
 }
 
-test("the language menu offers ten languages and retranslates the popup and the page prompt", async ({
+test("the language menu offers thirteen languages and retranslates the popup and the page prompt", async ({
   context,
   extensionWorker,
   extensionId
@@ -40,10 +40,13 @@ test("the language menu offers ten languages and retranslates the popup and the 
 
   const language = popup.getByRole("combobox", { name: "Language", exact: true });
   await expect(popup.locator("#language")).toHaveValue("auto");
-  // Automatic plus ten languages, each named in its own tongue.
+  // Automatic plus thirteen languages, each named in its own tongue.
   await language.click();
-  await expect(popup.locator("#languageList [role='option']")).toHaveCount(11);
+  await expect(popup.locator("#languageList [role='option']")).toHaveCount(14);
   await expect(popup.locator("#languageList [data-value='uk']")).toHaveText("Українська");
+  await expect(popup.locator("#languageList [data-value='ja']")).toHaveText("日本語");
+  await expect(popup.locator("#languageList [data-value='ko']")).toHaveText("한국어");
+  await expect(popup.locator("#languageList [data-value='zh-CN']")).toHaveText("简体中文");
   await expect(popup.locator("#convertSite")).toHaveText("Convert page prices");
 
   await popup.locator("#languageList [data-value='uk']").click();
@@ -135,3 +138,27 @@ test("the welcome page follows the saved language and can change it", async ({
   await expect(setup.locator("#currencyNote")).toContainText("guessed from your browser region");
   await expect.poll(() => storedLanguage(extensionWorker)).toBe("en");
 });
+
+for (const { language, prompt, action, convertPage } of [
+  { language: "ja", prompt: "このページに表示されている価格を", action: "価格を換算", convertPage: "ページの価格を換算" },
+  { language: "ko", prompt: "이 페이지에 보이는 가격을", action: "가격 환산", convertPage: "페이지 가격 환산" },
+  { language: "zh-CN", prompt: "将此页面上可见的价格换算为", action: "换算价格", convertPage: "换算页面价格" }
+]) {
+  test(`the popup and the page prompt speak ${language} when it is chosen`, async ({
+    context,
+    extensionWorker,
+    extensionId
+  }) => {
+    await seedExtension(extensionWorker, {
+      settings: { fromCurrency: "USD", language, showPagePrompt: true }
+    });
+    const shop = await openShop(context);
+    await expect(shop.locator(".ccp-page-prompt")).toContainText(prompt);
+    await expect(shop.locator(".ccp-page-prompt-action")).toHaveText(action);
+
+    const popup = await openPopupForPage(context, extensionId, shop);
+    await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+    await expect(popup.locator("html")).toHaveAttribute("lang", language);
+    await expect(popup.locator("#convertSite")).toHaveText(convertPage);
+  });
+}

@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.2.5 · October 21, 2026
+
+- Twinprice now speaks Japanese, Korean and Simplified Chinese. Choose one under **Language**, or leave it on **Automatic** to follow your browser. A browser set to Traditional Chinese gets Simplified Chinese.
+- The store listings and twinprice.com are now available in these three languages too.
+
 ## 2.2.4 · October 14, 2026
 
 - **Language**, **App theme** and **Price display** now open the same dropdown as the currency fields, in light and dark themes. You can choose with the mouse or the keyboard.

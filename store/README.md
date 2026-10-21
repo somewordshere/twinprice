@@ -5,7 +5,7 @@ one place. Text and final upload images are committed. Raw captures, the video
 file and `growth.md` stay on your machine (see `.gitignore`).
 
 ```text
-listings/<locale>.md   Plain-text descriptions (ten languages), pasted into Chrome
+listings/<locale>.md   Plain-text descriptions (thirteen languages), pasted into Chrome
 chrome/listing.md      Chrome dashboard fields and privacy-practices answers
 chrome/screenshots/en/ 1280x800 screenshots, 01–05, used for every language
 chrome/promo/          440x280 small promo tile

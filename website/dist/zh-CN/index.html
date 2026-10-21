@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#245bea">
+  <meta name="msvalidate.01" content="AE92D5C834F76CAC6E97EE5A3156F3B8">
+  <title>Twinprice — 适用于 Chrome 和 Firefox 的货币换算扩展</title>
+  <meta name="description" content="购物时在原价旁边查看换算后的价格。Twinprice 是一款免费的 Chrome 和 Firefox 扩展，在本地检测价格，没有广告跟踪器。">
+  <meta property="og:title" content="Twinprice — 适用于 Chrome 和 Firefox 的货币换算扩展">
+  <meta property="og:description" content="海外购物，用你的货币看价格。来认识这款适用于 Chrome 和 Firefox 的免费货币换算扩展。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://twinprice.com/zh-CN/">
+
+  <meta property="og:site_name" content="Twinprice">
+  <meta property="og:image" content="https://twinprice.com/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Twinprice：一款适用于 Chrome 和 Firefox 的免费货币换算扩展。海外购物，用你的货币看价格。">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://twinprice.com/#website",
+      "url": "https://twinprice.com/",
+      "name": "Twinprice",
+      "alternateName": "twinprice.com",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://twinprice.com/#extension",
+      "name": "Twinprice",
+      "url": "https://twinprice.com/",
+      "description": "一款免费的 Chrome 和 Firefox 货币换算扩展。换算购物页面上的价格或选中的价格，在本地检测价格，无需账户。",
+      "applicationCategory": "BrowserApplication",
+      "softwareRequirements": "Google Chrome or Mozilla Firefox",
+      "isAccessibleForFree": true,
+      "license": "https://github.com/somewordshere/twinprice/blob/main/LICENSE",
+      "subjectOf": {
+        "@id": "https://twinprice.com/about/#webpage"
+      },
+      "image": "https://twinprice.com/assets/social-preview.png",
+      "featureList": [
+        "换算网页上的价格",
+        "换算选中的价格",
+        "选择原货币和目标货币",
+        "为所选网站记住自动换算",
+        "恢复原价"
+      ],
+      "installUrl": [
+        "https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk",
+        "https://addons.mozilla.org/en-US/firefox/addon/twinprice/"
+      ],
+      "sameAs": [
+        "https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk",
+        "https://addons.mozilla.org/en-US/firefox/addon/twinprice/",
+        "https://github.com/somewordshere/twinprice"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "url": "https://twinprice.com/#install"
+      }
+    }
+  ]
+}
+  </script>
+  <link rel="canonical" href="https://twinprice.com/zh-CN/"><!-- i18n:alternates --><link rel="alternate" hreflang="en" href="https://twinprice.com/"><link rel="alternate" hreflang="de" href="https://twinprice.com/de/"><link rel="alternate" hreflang="es" href="https://twinprice.com/es/"><link rel="alternate" hreflang="fr" href="https://twinprice.com/fr/"><link rel="alternate" hreflang="it" href="https://twinprice.com/it/"><link rel="alternate" hreflang="ja" href="https://twinprice.com/ja/"><link rel="alternate" hreflang="ko" href="https://twinprice.com/ko/"><link rel="alternate" hreflang="nl" href="https://twinprice.com/nl/"><link rel="alternate" hreflang="pl" href="https://twinprice.com/pl/"><link rel="alternate" hreflang="pt-BR" href="https://twinprice.com/pt-BR/"><link rel="alternate" hreflang="tr" href="https://twinprice.com/tr/"><link rel="alternate" hreflang="uk" href="https://twinprice.com/uk/"><link rel="alternate" hreflang="zh-CN" href="https://twinprice.com/zh-CN/"><link rel="alternate" hreflang="x-default" href="https://twinprice.com/"><!-- /i18n:alternates -->
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" href="../assets/favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="icon" href="../assets/favicon-96.png" type="image/png" sizes="96x96">
+  <link rel="icon" href="../assets/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../browser-detect.js" defer></script>
+  <script src="../demo.js" defer></script>
+  <script src="../selection-demo.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header wrap">
+    <a class="brand" href="./" aria-label="twinprice.com 首页"><img src="../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
+    <nav aria-label="主导航"><a href="#how-it-works">工作原理</a><a href="guide/">指南</a><a href="#privacy">隐私</a><a href="about/">关于</a></nav>
+    <!-- i18n:languages --><details class="language-menu" translate="no"><summary aria-label="语言: 简体中文"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c2 2 2 11 0 13M8 1.5c-2 2-2 11 0 13"/></svg><span>ZH</span></summary><ul><li><a href="../" hreflang="en" lang="en">English</a></li><li><a href="../de/" hreflang="de" lang="de">Deutsch</a></li><li><a href="../es/" hreflang="es" lang="es">Español</a></li><li><a href="../fr/" hreflang="fr" lang="fr">Français</a></li><li><a href="../it/" hreflang="it" lang="it">Italiano</a></li><li><a href="../ja/" hreflang="ja" lang="ja">日本語</a></li><li><a href="../ko/" hreflang="ko" lang="ko">한국어</a></li><li><a href="../nl/" hreflang="nl" lang="nl">Nederlands</a></li><li><a href="../pl/" hreflang="pl" lang="pl">Polski</a></li><li><a href="../pt-BR/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li><li><a href="../tr/" hreflang="tr" lang="tr">Türkçe</a></li><li><a href="../uk/" hreflang="uk" lang="uk">Українська</a></li><li><a href="../zh-CN/" hreflang="zh-CN" lang="zh-CN" aria-current="true">简体中文</a></li></ul></details><!-- /i18n:languages --><a class="button button-small" href="#install">获取 Twinprice <span aria-hidden="true">↗</span></a>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="mini-rule"></span> 让购物车多一点清晰</p>
+        <h1 id="hero-title">海外购物。<br>价格显示为<br><span>你的货币。</span></h1>
+        <p class="hero-description">Twinprice 是一款免费的 Chrome 和 Firefox 货币换算扩展。购物时在原价旁边查看换算后的价格，或者选中一个价格，然后点击“换算所选内容”。</p>
+        <div class="install-buttons">
+          <a data-install="chrome" data-text-edge="下载 Edge 版" data-text-opera="下载 Opera 版" data-text-other="其他浏览器" class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=zh-CN">获取 Chrome 版 Twinprice <span aria-hidden="true">↗</span></a>
+          <a data-install="firefox" class="text-button" href="https://addons.mozilla.org/zh-CN/firefox/addon/twinprice/">获取 Firefox 版 Twinprice <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="free-note">免费安装，无需账户。<a href="guide/">阅读入门指南</a>。</p>
+      </div>
+      <div class="demo-stage" id="demo">
+        <div class="demo-topline"><span>一个价格，两种视角。</span><span class="demo-tag">互动演示</span></div>
+        <div class="demo-browser">
+          <div class="browser-bar"><div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>你喜欢的商店 / 日常必需品</span></div>
+          <div class="shop-content">
+            <div class="shop-heading"><span class="shop-name">Everyday Objects</span><span class="shop-edition">每日精选 / 01</span></div>
+            <p class="product-category">家居生活</p>
+            <h2>日常<br>台灯。</h2>
+            <p class="product-description">一点光亮，更好的工作空间。</p>
+            <div class="price-display"><span class="original-price">€89.00</span><span class="converted-price" id="converted-price"><span class="price-value">≈ 382,70 zł</span></span></div>
+            <div class="price-annotations"><span>原价</span><span id="conversion-caption">你的货币，就在这里</span></div>
+            <div class="shop-divider"></div>
+            <div class="demo-control-row"><span class="demo-brand"><img src="../assets/twinprice-icon.png" width="24" height="24" alt="">Twinprice</span><label class="switch"><span id="toggle-label" data-text-on="开" data-text-off="关">开</span><input type="checkbox" id="demo-toggle" role="switch" aria-label="显示换算后的价格" checked><span class="switch-track" aria-hidden="true"></span></label></div>
+            <div class="currency-control"><label for="demo-currency">价格显示为</label><select id="demo-currency"><option value="PLN">PLN · 波兰兹罗提</option><option value="USD">USD · 美元</option><option value="JPY">JPY · 日元</option><option value="UAH">UAH · 乌克兰格里夫纳</option><option value="GBP">GBP · 英镑</option><option value="MXN">MXN · 墨西哥比索</option><option value="ZAR">ZAR · 南非兰特</option><option value="KRW">KRW · 韩元</option><option value="KZT">KZT · 哈萨克斯坦坚戈</option><option value="INR">INR · 印度卢比</option><option value="DZD">DZD · 阿尔及利亚第纳尔</option><option value="BRL">BRL · 巴西雷亚尔</option><option value="TRY">TRY · 土耳其里拉</option><option value="THB">THB · 泰铢</option></select></div>
+            <button class="animation-control" id="demo-playback" type="button" data-text-pause="暂停动画" data-text-play="播放动画" aria-label="自动货币动画" aria-pressed="true" hidden>暂停动画</button>
+          </div>
+        </div>
+        <div class="demo-footnote"><span>试试开关，看看区别。</span><span id="demo-rate" data-text-rate="示例汇率：€1 = {rate} {code}">示例汇率：€1 = 4.30 PLN</span></div>
+        <p class="sr-only" id="demo-status" data-text-on="Twinprice 已开启。原价 89 欧元，约合 {amount}（{currency}）。这是固定的示例汇率。" data-text-off="Twinprice 已关闭。仅显示原价 89 欧元。" role="status" aria-live="polite"></p>
+        <noscript><p class="noscript-note">这是一个固定汇率的示例。启用 JavaScript 即可试用开关和货币选择器。</p></noscript>
+      </div>
+    </section>
+    <div class="benefit-strip"><div class="wrap"><span>两个价格，一个轻松的决定。</span><span>Chrome 和 Firefox</span><span>本地价格检测</span><span>免费且开源</span></div></div>
+    <section class="section wrap selection-demo" id="selection-demo" aria-labelledby="selection-title">
+      <div class="selection-copy">
+        <p class="eyebrow">只需一个价格</p>
+        <h2 id="selection-title">只想看一个价格？<br>选中它。</h2>
+        <p>选中一个价格，然后点击下方出现的蓝色<strong>换算所选内容</strong>按钮。同一个按钮会变成绿色并显示结果。</p>
+        <p class="selection-example-label">动画演示 · 示例汇率：€1 = $1.10。</p>
+        <button class="animation-control" id="selection-playback" type="button" data-text-pause="暂停动画" data-text-play="播放动画" aria-label="选中价格的动画" aria-pressed="false" hidden>播放动画</button>
+      </div>
+      <div class="selection-scene" role="img" aria-label="演示：光标选中 €89.00，价格正下方出现蓝色的“换算所选内容”按钮。点击后会短暂显示“正在换算…”，随后同一个弹出框变成绿色并显示 EUR → $97.90。">
+        <div class="selection-browser-bar" aria-hidden="true"><span class="browser-dots"><i></i><i></i><i></i></span><span>你喜欢的商店</span></div>
+        <div class="selection-example" aria-hidden="true">
+          <span class="selection-product">日常台灯</span>
+          <div class="selection-anchor">
+            <span class="selection-price"><span class="selection-highlight"></span><span>€89.00</span></span>
+            <div class="selection-popup"><span class="selection-action">换算所选内容</span><span class="selection-loading">正在换算…</span><span class="selection-success">EUR → $97.90</span></div>
+            <svg class="selection-cursor" width="24" height="30" viewBox="0 0 24 30" fill="none"><path d="M2 2L21 17L12 18L8 27L2 2Z" fill="#142038" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section wrap" id="how-it-works">
+      <div class="section-heading"><div><p class="eyebrow">01 / 轻松上手</p><h2>熟悉的价格。<br>无论你在哪里购物。</h2></div><p>只需设置一次货币。<br>下次逛网店时，少做一点心算。</p></div>
+      <div class="steps">
+        <article><span class="step-number">01</span><h3>添加 Twinprice。</h3><p>从 Chrome 网上应用店或 Firefox 附加组件安装这款免费扩展。</p></article>
+        <article><span class="step-number">02</span><h3>选择你的货币。</h3><p>选择你熟悉的货币。让 AUTO 检测原货币，或者自己选择。</p></article>
+        <article><span class="step-number">03</span><h3>浏览。换算。比较。</h3><p>打开购物页面并换算其中的价格。为你选择的网站开启自动换算。</p></article>
+      </div>
+    </section>
+    <section class="features-background">
+      <div class="section wrap">
+        <div class="section-heading"><div><p class="eyebrow">02 / 让你的浏览器更好用一点</p><h2>小小的补充。<br>每天的不同。</h2></div><p>你需要的所有信息，<br>就在你正在看的价格旁边。</p></div>
+        <div class="feature-grid">
+          <article class="feature feature-primary"><span class="feature-index">01 / 比较</span><h3>一目了然地比较。</h3><p>原价和换算结果放在一起。无需打开计算器或其他标签页，就能心中有数。</p><div class="price-sample" aria-label="示例：89 欧元，约合 97 美元 90 美分"><span>€89.00</span><span>≈ $97.90</span></div><span class="feature-caption">同一件商品，一目了然的价格。仅为示例。</span></article>
+          <article class="feature"><span class="feature-index">02 / 记住</span><h3>你的商店，你的设置。</h3><p>为你选择的网站开启自动换算。Twinprice 会为每个网站记住你的原货币或 AUTO 模式。</p><div class="feature-detail"><span>喜欢的商店</span><span class="setting-badge">自动换算已开启</span></div></article>
+          <article class="feature"><span class="feature-index">03 / 打造你的风格</span><h3>看着舒服。</h3><p>选择换算价的颜色和形状，并实时预览。可以把原价保留在旁边，也可以用换算价代替原价显示。</p><div class="appearance-samples" aria-label="换算价外观示例"><span>≈ $97.90</span><span>≈ $97.90</span><span>≈ $97.90</span></div></article>
+          <article class="feature"><span class="feature-index">04 / 只换算一个价格</span><h3>选中。点击。换算。</h3><p>选中带货币的价格，然后点击其下方的<strong>换算所选内容</strong>。只换算你需要的那个价格。你也可以换算整个页面，或在扩展中输入金额。</p><div class="mode-examples" aria-label="换算选中价格的三个步骤"><span>1. 选中价格</span><span>2. 点击“换算所选内容”</span><span>3. 查看结果</span></div></article>
+        </div>
+        <details class="screenshot-disclosure"><summary>在真实的购物页面上查看 Twinprice <span aria-hidden="true">+</span></summary><figure><a href="../assets/page-conversion.png" aria-label="打开扩展在购物页面上运行的原尺寸截图"><img src="../assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="真实的购物页面，原价旁边添加了绿色的货币换算结果。"></a><figcaption>扩展的真实截图。图中的汇率来自截图当时，并非当前汇率。</figcaption></figure></details>
+      </div>
+    </section>
+    <section class="section wrap privacy-section" id="privacy">
+      <div><p class="eyebrow">03 / 以隐私为本</p><h2>你的浏览，<br>只属于你。</h2><p class="privacy-intro">Twinprice 在价格所在的地方读取价格：你的浏览器里。你的购物页面不需要被发送到任何其他地方。</p><a class="text-button" href="privacy/">阅读完整的隐私政策 <span aria-hidden="true">↗</span></a></div>
+      <div class="privacy-facts">
+        <article><span class="fact-number">01</span><div><h3>页面处理留在本地。</h3><p>价格检测和页面修改都在你的设备上进行。页面内容、价格数值和访问过的网址都不会发送给汇率提供方。</p></div></article>
+        <article><span class="fact-number">02</span><div><h3>发送的是货币代码，不是你的购物车。</h3><p>向 Frankfurter 发出的汇率请求包含货币代码。与其他互联网请求一样，该服务可能会收到你的 IP 地址等网络信息。</p></div></article>
+        <article><span class="fact-number">03</span><div><h3>每项权限都有其用途。</h3><p>网页访问权限让扩展能够找到支持的价格并提供换算。关闭换算器即可停止扫描、提示和自动换算。</p></div></article>
+      </div>
+    </section>
+    <section class="faq-section section wrap" id="faq">
+      <div><p class="eyebrow">04 / 须知</p><h2>你可能会问的<br>几个问题。</h2><p>还有其他问题？<br><a href="https://github.com/somewordshere/twinprice/issues">获取帮助或报告问题</a>。</p></div>
+      <div class="faq-list">
+        <details><summary>在哪里可以学习如何使用 Twinprice？<span aria-hidden="true">+</span></summary><p>请参阅<a href="guide/">分步用户指南</a>，了解页面换算和选中内容换算。其中的<a href="guide/#shopping-examples">购物示例</a>介绍了欧元换算兹罗提、含义不明确的美元符号以及结账时的差异。</p></details>
+        <details><summary>Twinprice 免费吗？<span aria-hidden="true">+</span></summary><p>是的。Twinprice 可以免费安装和使用，无需账户。该扩展是开源的，没有广告或分析跟踪器。</p></details>
+        <details><summary>支持哪些浏览器和货币？<span aria-hidden="true">+</span></summary><p>Twinprice 适用于 Chrome 和 Firefox。在扩展中可以按名称或代码搜索货币。手动换算使用 Frankfurter 的现行货币目录；AUTO 检测使用一组较小的精选货币。可用的货币对取决于汇率提供方。</p></details>
+        <details><summary>可以只换算一个价格吗？<span aria-hidden="true">+</span></summary><p>可以。选中一个支持的价格，包括其货币符号或代码（例如 €89），然后点击下方蓝色的“换算所选内容”按钮。按钮会变成绿色，并以你偏好的货币显示结果。你也可以右键点击选中的价格，然后选择“Convert selected currency”。</p></details>
+        <details><summary>它适用于所有网站吗？<span aria-hidden="true">+</span></summary><p>它适用于普通网页上支持的价格文字，包括许多在浏览过程中新增的价格。图片中的价格、无法访问的框架以及某些不常见布局中的价格无法换算。浏览器设置页面和扩展商店受到限制。如果原货币不明确，请在弹出窗口中手动选择。</p></details>
+        <details><summary>换算后的价格有多准确？<span aria-hidden="true">+</span></summary><p>Twinprice 使用 Frankfurter 的参考汇率，方便你进行比较。你的银行、发卡机构或支付服务可能使用不同的汇率并收取费用。无法获取最新汇率时，可能会使用最近缓存的汇率；超过 48 小时后扩展会发出警告，且不会使用超过七天的汇率。本网站的演示使用固定的示例汇率。</p></details>
+        <details><summary>可以恢复价格或关闭换算吗？<span aria-hidden="true">+</span></summary><p>可以。换算后，在弹出窗口中选择“恢复原价”。在“页面选项”中关闭“自动换算此网站”，即可清除该网站的自动换算设置。关闭“启用换算器”可以在所有网站上停止扫描、提示和自动换算。</p></details>
+      </div>
+    </section>
+    <section class="install-section wrap" id="install" aria-labelledby="install-title"><p class="eyebrow">少一点心算，多一点逛街的乐趣。</p><h2 id="install-title">无论什么货币，<br>都像在家一样自在。</h2><p>为你的下一个发现配上熟悉的价格。</p><div class="install-buttons"><a data-install="chrome" data-text-edge="下载 Edge 版" data-text-opera="下载 Opera 版" data-text-other="其他浏览器" class="button" href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=zh-CN">获取 Chrome 版 Twinprice <span aria-hidden="true">↗</span></a><a data-install="firefox" class="button button-outline" href="https://addons.mozilla.org/zh-CN/firefox/addon/twinprice/">获取 Firefox 版 Twinprice <span aria-hidden="true">↗</span></a></div><p class="free-note">免费安装，无需账户。<a href="about/">产品信息和发布者详情</a>。</p></section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="./"><span>twinprice<span class="brand-period">.</span>com</span></a><span>熟悉的价格，无论你在哪里购物。</span><a href="guide/">用户指南</a><a href="about/">关于</a><a href="privacy/">隐私政策</a><a href="whats-new/">新功能</a><a href="https://github.com/somewordshere/twinprice/issues">帮助 / 报告问题</a><a href="https://github.com/somewordshere/twinprice">源代码</a></footer>
+</body>
+</html>

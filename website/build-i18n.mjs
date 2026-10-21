@@ -13,21 +13,26 @@ import { createHash } from 'node:crypto';
 
 const SITE = 'https://twinprice.com/';
 const PAGES = ['', 'guide/', 'about/', 'privacy/', 'whats-new/', 'goodbye/'];
-// Each language's own name, the menu's accessible label, and the store locales.
+// Each language's own name, the menu's accessible label, the store locales, and the
+// date a language's pages first appeared when it was added after the others.
 const LANGUAGES = {
   en: { name: 'English', label: 'Language' },
   de: { name: 'Deutsch', label: 'Sprache' },
   es: { name: 'Español', label: 'Idioma', amo: 'es-ES' },
   fr: { name: 'Français', label: 'Langue' },
   it: { name: 'Italiano', label: 'Lingua' },
+  ja: { name: '日本語', label: '言語', since: '2026-10-21' },
+  ko: { name: '한국어', label: '언어', since: '2026-10-21' },
   nl: { name: 'Nederlands', label: 'Taal' },
   pl: { name: 'Polski', label: 'Język' },
   'pt-BR': { name: 'Português (Brasil)', label: 'Idioma', short: 'PT' },
   tr: { name: 'Türkçe', label: 'Dil' },
   uk: { name: 'Українська', label: 'Мова' },
+  'zh-CN': { name: '简体中文', label: '语言', short: 'ZH', since: '2026-10-21' },
 };
 // Translated pages first appeared on this date; the sitemap never reports an earlier one.
 const TRANSLATED_SINCE = '2026-10-13';
+const publishedSince = language => LANGUAGES[language].since || TRANSLATED_SINCE;
 
 const VOID = new Set(['meta', 'link', 'img', 'br', 'input', 'hr']);
 const TEXT_ATTRIBUTES = new Set(['alt', 'aria-label', 'title', 'placeholder']);
@@ -272,7 +277,7 @@ if (!extractOnly) {
     .filter(([, address]) => PAGES.includes(address.slice(SITE.length)));
   const lines = entries.flatMap(([, address, modified]) => Object.keys(LANGUAGES).map(language => language === 'en'
     ? `  <url><loc>${address}</loc><lastmod>${modified}</lastmod></url>`
-    : `  <url><loc>${SITE}${language}/${address.slice(SITE.length)}</loc><lastmod>${modified > TRANSLATED_SINCE ? modified : TRANSLATED_SINCE}</lastmod></url>`));
+    : `  <url><loc>${SITE}${language}/${address.slice(SITE.length)}</loc><lastmod>${modified > publishedSince(language) ? modified : publishedSince(language)}</lastmod></url>`));
   await writeFile(file('./dist/sitemap.xml'), sitemap.replace(/(<urlset[^>]*>)[\s\S]*(<\/urlset>)/, `$1\n${lines.join('\n')}\n$2`));
 }
 if (failed) { console.error('Translations are incomplete or out of date.'); process.exit(1); }

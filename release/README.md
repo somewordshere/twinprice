@@ -47,7 +47,7 @@ Release prepared YYYY-MM-DD.
 
 Project checks, N unit tests, all N Chrome browser tests, and all N Firefox runtime tests passed. Firefox package validation reported no errors, warnings, or notices.
 
-The nine non-English translations were written without review by native speakers.
+The twelve non-English translations were written without review by native speakers.
 
 ### Release order
 
