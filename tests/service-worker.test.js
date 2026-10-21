@@ -19,7 +19,8 @@ const DEFAULT_SYNC_SETTINGS = {
   convertedTextColor: "#166534",
   convertedBackgroundColor: "#dcfce7",
   convertedShape: "rounded",
-  showPagePrompt: true
+  showPagePrompt: true,
+  autoConvertAllSites: false
 };
 
 function readJson(relativePath) {
@@ -448,7 +449,8 @@ test("settings are restricted to supported values", () => {
     convertedTextColor: "green",
     convertedBackgroundColor: "#12345g",
     convertedShape: "cloud",
-    showPagePrompt: "yes"
+    showPagePrompt: "yes",
+    autoConvertAllSites: "yes"
   }, ["EUR", "PLN", "USD"]);
   assert.deepEqual(plain(invalid), DEFAULT_SYNC_SETTINGS);
 
@@ -462,7 +464,8 @@ test("settings are restricted to supported values", () => {
     convertedTextColor: "#ABCDEF",
     convertedBackgroundColor: "#123456",
     convertedShape: "pill",
-    showPagePrompt: false
+    showPagePrompt: false,
+    autoConvertAllSites: true
   }, ["EUR", "PLN", "USD"]);
   assert.deepEqual(plain(valid), {
     enabled: false,
@@ -474,7 +477,8 @@ test("settings are restricted to supported values", () => {
     convertedTextColor: "#abcdef",
     convertedBackgroundColor: "#123456",
     convertedShape: "pill",
-    showPagePrompt: false
+    showPagePrompt: false,
+    autoConvertAllSites: true
   });
 });
 

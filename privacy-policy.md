@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: October 21, 2026 (version 2.2.6)
+Effective date: October 21, 2026 (version 2.3.0)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 
@@ -17,7 +17,9 @@ When the converter is enabled, a lightweight detector runs on ordinary HTTP and
 HTTPS webpages as they open. It checks locally for supported prices and shows the
 on-page conversion prompt only after a likely price is found. A website that the
 user marks for automatic conversion may also have its supported prices converted
-when it is visited. Webpage information is processed temporarily on the user's
+when it is visited. If the user turns on **Convert all websites automatically**,
+supported prices on every ordinary HTTP and HTTPS webpage are converted as soon as
+they are found, without the prompt. Webpage information is processed temporarily on the user's
 device. Raw page contents and highlighted text are not collected by the developer,
 retained by the extension, or transmitted to the developer or exchange-rate
 provider. A detected ISO source-currency code may be included in the rate request
@@ -35,7 +37,7 @@ The extension stores:
 - Whether the extension is enabled
 - The selected source-currency mode
 - The selected target currency
-- Price-display, converted-price appearance, interface-language, and page-prompt preferences
+- Price-display, converted-price appearance, interface-language, page-prompt, and convert-all-websites preferences
 - Recently selected currency codes
 - A cache of exchange rates, including the rate date and fetch time
 - The origins of websites the user chooses for automatic conversion
@@ -93,7 +95,10 @@ The extension uses the following browser permissions:
 - Access to `api.frankfurter.dev`: retrieves exchange rates
 - Optional HTTP and HTTPS site access: requested by **Activate my open tabs**
   to find existing web tabs and start the local detector without reloading them.
-  You can decline and reload those tabs instead. Tab URLs are not transmitted
+  You can decline and reload those tabs instead. Turning on **Convert all websites
+  automatically** asks for the same access if the browser has not granted it, so the
+  detector can run on every website; declining leaves that setting off. Tab URLs are
+  not transmitted
 
 ## Limited Use
 
@@ -115,7 +120,10 @@ source-currency mode.
 
 Turning off **Convert this site automatically** deletes the remembered origin and
 its source-currency mode. Ordinary local price detection and the on-page prompt
-remain available while the global converter is enabled. Selecting `AUTO` for an
+remain available while the global converter is enabled. Turning off **Convert all
+websites automatically** stores that preference and restores the original prices on
+pages it converted, without deleting websites the user marked individually.
+Selecting `AUTO` for an
 automatic-conversion website stores automatic detection as that website's source
 mode.
 Cached exchange rates are refreshed regularly and remain available as an offline

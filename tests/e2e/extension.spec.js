@@ -624,6 +624,107 @@ test("offers conversion when a dynamic page adds a price later", async ({
   await expect(shop.locator(".ccp-page-prompt")).toBeVisible();
 });
 
+test("converting all websites automatically converts without a prompt or a message", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, {
+    settings: { fromCurrency: "USD", showPagePrompt: true, autoConvertAllSites: true }
+  });
+  const shop = await context.newPage();
+  await shop.route(UNAPPROVED_SHOP_URL, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/html; charset=utf-8",
+    body: SHOP_HTML
+  }));
+  await shop.goto(UNAPPROVED_SHOP_URL);
+
+  await expect(shop.locator("#initial")).toContainText("90,00");
+  await expect(shop.locator("ccp-conversion[data-ccp-owned='true']")).toHaveCount(1);
+  await expect(shop.locator(".ccp-page-prompt")).toHaveCount(0);
+  await expect(shop.locator(".ccp-toast")).toHaveCount(0);
+
+  // A page whose prices arrive later converts as soon as they appear.
+  const later = await context.newPage();
+  await later.route(UNAPPROVED_SHOP_URL, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/html; charset=utf-8",
+    body: "<!doctype html><main><h1>Dynamic shop</h1><div id='price-slot'></div></main>"
+  }));
+  await later.goto(UNAPPROVED_SHOP_URL);
+  await later.locator("#price-slot").evaluate((element) => {
+    element.className = "product-price";
+    element.textContent = "$125.00";
+  });
+  await expect(later.locator("#price-slot .ccp-badge")).toContainText("112,50");
+  await expect(later.locator(".ccp-page-prompt")).toHaveCount(0);
+  await expect(later.locator(".ccp-toast")).toHaveCount(0);
+});
+
+test("the popup turns converting all websites on and off", async ({
+  context,
+  extensionWorker,
+  extensionId
+}) => {
+  await seedExtension(extensionWorker, {
+    settings: { fromCurrency: "USD", showPagePrompt: true }
+  });
+  const shop = await context.newPage();
+  await shop.route(UNAPPROVED_SHOP_URL, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/html; charset=utf-8",
+    body: SHOP_HTML
+  }));
+  await shop.goto(UNAPPROVED_SHOP_URL);
+  await expect(shop.locator(".ccp-page-prompt")).toBeVisible();
+
+  // Headless Chromium cannot answer the native site-access prompt, so only that
+  // approval is stubbed: declined first, then granted.
+  const popup = await context.newPage();
+  await popup.addInitScript(() => {
+    window.grantAccess = false;
+    chrome.permissions.request = async (request) => {
+      window.requestedAccess = request;
+      return window.grantAccess;
+    };
+  });
+  await shop.bringToFront();
+  await popup.goto(`chrome-extension://${extensionId}/popup/popup.html`);
+  await expect(popup.getByRole("heading", { name: "twinprice.com" })).toBeVisible();
+  await popup.locator("#openPageOptions").click();
+  const allSites = popup.getByRole("checkbox", { name: "Convert all websites automatically" });
+  await expect(allSites).not.toBeChecked();
+
+  await allSites.click();
+  await expect(popup.locator("#status")).toContainText("Twinprice needs access to all websites");
+  await expect(allSites).not.toBeChecked();
+  expect(await popup.evaluate(() => window.requestedAccess)).toEqual({
+    origins: ["http://*/*", "https://*/*"]
+  });
+  expect(await extensionWorker.evaluate(async () =>
+    (await chrome.storage.sync.get("autoConvertAllSites")).autoConvertAllSites
+  )).toBe(false);
+
+  await popup.evaluate(() => { window.grantAccess = true; });
+  await allSites.check();
+  await expect.poll(() => extensionWorker.evaluate(async () =>
+    (await chrome.storage.sync.get("autoConvertAllSites")).autoConvertAllSites
+  )).toBe(true);
+  await expect(popup.locator("#status")).toHaveText("Automatic conversion is on for all websites.");
+  await expect(shop.locator("#initial")).toContainText("90,00");
+  await expect(shop.locator(".ccp-page-prompt")).toHaveCount(0);
+  await expect(shop.locator(".ccp-toast")).toHaveCount(0);
+
+  // Turning it off takes back what it converted and offers the page again.
+  await allSites.uncheck();
+  await expect.poll(() => extensionWorker.evaluate(async () =>
+    (await chrome.storage.sync.get("autoConvertAllSites")).autoConvertAllSites
+  )).toBe(false);
+  await expect(popup.locator("#status")).toContainText("Automatic conversion is off for all websites.");
+  await expect(shop.locator("ccp-conversion[data-ccp-owned='true']")).toHaveCount(0);
+  await expect(shop.locator(".ccp-page-prompt")).toBeVisible();
+});
+
 test("continues converting mutations inside a late-added open shadow root", async ({
   context,
   extensionWorker

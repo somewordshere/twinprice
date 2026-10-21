@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.3.0 · October 21, 2026
+
+- New: **Convert all websites automatically** under **Page options**. Turn it on and prices convert on every website as soon as they appear, without the Convert button or a message. It is off unless you turn it on.
+- Turning it off puts the original prices back on pages it converted. Sites you chose with **Convert this site automatically** keep converting.
+
 ## 2.2.6 · October 21, 2026
 
 - How old a saved exchange rate is ("3 hours old") now appears in your language instead of in English, and so do the warnings about saved rates.
