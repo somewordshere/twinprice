@@ -188,8 +188,11 @@ test("with the language left on automatic, the goodbye page follows the browser'
     ["de-CH", "https://twinprice.com/de/goodbye/"],
     ["pt-PT", "https://twinprice.com/pt-BR/goodbye/"],
     ["en-GB", "https://twinprice.com/goodbye/"],
+    ["ja", "https://twinprice.com/ja/goodbye/"],
+    ["ko-KR", "https://twinprice.com/ko/goodbye/"],
+    ["zh-TW", "https://twinprice.com/zh-CN/goodbye/"],
     // A language the site has no page for falls back to English.
-    ["ja", "https://twinprice.com/goodbye/"]
+    ["sv", "https://twinprice.com/goodbye/"]
   ]) {
     for (const preference of ["auto", undefined, "not-a-language"]) {
       const { service, uninstallUrls } = createOnboarding({ browserLanguage });

@@ -38,8 +38,10 @@ function placeholders(text) {
 
 test("the settings schema offers exactly the languages that ship translations", () => {
   assert.deepEqual([...context.CurrencySettings.LANGUAGES], ["auto", ...languages]);
-  assert.equal(languages.length, 10, "the add-on promises ten interface languages");
-  assert.ok(languages.includes("uk"), "Ukrainian must be one of them");
+  assert.equal(languages.length, 13, "the add-on promises thirteen interface languages");
+  for (const language of ["uk", "ja", "ko", "zh-CN"]) {
+    assert.ok(languages.includes(language), `${language} must be one of them`);
+  }
   for (const language of languages) {
     assert.ok(Object.keys(i18n.dictionary(language)).length > 0, `${language} has no strings`);
   }
@@ -128,11 +130,19 @@ test("an explicit choice wins; automatic follows the browser and falls back to E
   assert.equal(withBrowser("de").resolve("auto"), "de");
   assert.equal(withBrowser("uk-UA").resolve("auto"), "uk");
   assert.equal(withBrowser("pt-PT").resolve("auto"), "pt-BR");
-  assert.equal(withBrowser("xx", ["ja", "it-CH"]).resolve("auto"), "it");
-  assert.equal(withBrowser("xx", ["ja"], "zh").resolve("auto"), "en");
+  assert.equal(withBrowser("xx", ["sv", "it-CH"]).resolve("auto"), "it");
+  assert.equal(withBrowser("xx", ["sv"], "nb").resolve("auto"), "en");
   assert.equal(withBrowser("de").resolve("klingon"), "de");
+  assert.equal(withBrowser("ja-JP").resolve("auto"), "ja");
+  assert.equal(withBrowser("ko-KR").resolve("auto"), "ko");
+  assert.equal(withBrowser("zh-CN").resolve("auto"), "zh-CN");
   assert.equal(i18n.matchLanguage("pt_BR"), "pt-BR");
   assert.equal(i18n.matchLanguage("UK"), "uk");
+  assert.equal(i18n.matchLanguage("zh_CN"), "zh-CN");
+  // Simplified Chinese is the only Chinese translation, so every Chinese tag uses it.
+  for (const tag of ["zh", "zh-Hans", "zh-SG", "zh-TW", "zh-HK", "zh-Hant-TW"]) {
+    assert.equal(i18n.matchLanguage(tag), "zh-CN", tag);
+  }
   assert.equal(i18n.matchLanguage("nb"), null);
   assert.equal(i18n.matchLanguage(""), null);
   assert.equal(i18n.matchLanguage(null), null);
@@ -165,6 +175,18 @@ test("messages fill placeholders and choose the right plural form per language",
   scoped.setLanguage("tr");
   assert.equal(scoped.t("popup.converted", { count: 1 }), "1 fiyat çevrildi.");
   assert.equal(scoped.t("popup.converted", { count: 4 }), "4 fiyat çevrildi.");
+
+  // Japanese, Korean and Chinese have one plural form, so they supply only _other.
+  scoped.setLanguage("ja");
+  assert.equal(scoped.t("popup.converted", { count: 1 }), "1 件の価格を換算しました。");
+  scoped.setLanguage("ko");
+  assert.equal(scoped.t("popup.converted", { count: 3 }), "가격 3개를 환산했습니다.");
+  scoped.setLanguage("zh-CN");
+  assert.equal(scoped.t("popup.converted", { count: 1 }), "已换算 1 个价格。");
+  assert.equal(
+    scoped.t("page.prompt.message", { currency: "CNY" }),
+    "将此页面上可见的价格换算为 CNY。"
+  );
 });
 
 test("a missing translation falls back to English, and an unknown key shows itself", () => {
@@ -201,6 +223,9 @@ test("the language menu lists every language by its own name, plus Automatic", (
   assert.deepEqual([...options.slice(1).map((option) => option.value)], languages);
   assert.equal(options.find((option) => option.value === "uk").label, "Українська");
   assert.equal(options.find((option) => option.value === "pt-BR").label, "Português (Brasil)");
+  assert.equal(options.find((option) => option.value === "ja").label, "日本語");
+  assert.equal(options.find((option) => option.value === "ko").label, "한국어");
+  assert.equal(options.find((option) => option.value === "zh-CN").label, "简体中文");
 });
 
 test("each interface language also has a store listing", () => {

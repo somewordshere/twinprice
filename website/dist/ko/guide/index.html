@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#245bea">
+  <title>Chrome 및 Firefox에서 웹사이트 가격을 환산하는 방법 — Twinprice</title>
+  <meta name="description" content="Twinprice로 쇼핑 페이지의 가격과 선택한 가격을 환산하고, 통화를 고르고, 자동 환산을 켜고, 원래 가격을 복원하는 방법을 알아보세요.">
+  <link rel="canonical" href="https://twinprice.com/ko/guide/"><!-- i18n:alternates --><link rel="alternate" hreflang="en" href="https://twinprice.com/guide/"><link rel="alternate" hreflang="de" href="https://twinprice.com/de/guide/"><link rel="alternate" hreflang="es" href="https://twinprice.com/es/guide/"><link rel="alternate" hreflang="fr" href="https://twinprice.com/fr/guide/"><link rel="alternate" hreflang="it" href="https://twinprice.com/it/guide/"><link rel="alternate" hreflang="ja" href="https://twinprice.com/ja/guide/"><link rel="alternate" hreflang="ko" href="https://twinprice.com/ko/guide/"><link rel="alternate" hreflang="nl" href="https://twinprice.com/nl/guide/"><link rel="alternate" hreflang="pl" href="https://twinprice.com/pl/guide/"><link rel="alternate" hreflang="pt-BR" href="https://twinprice.com/pt-BR/guide/"><link rel="alternate" hreflang="tr" href="https://twinprice.com/tr/guide/"><link rel="alternate" hreflang="uk" href="https://twinprice.com/uk/guide/"><link rel="alternate" hreflang="zh-CN" href="https://twinprice.com/zh-CN/guide/"><link rel="alternate" hreflang="x-default" href="https://twinprice.com/guide/"><!-- /i18n:alternates -->
+  <meta property="og:title" content="Twinprice로 웹사이트 가격을 환산하는 방법">
+  <meta property="og:description" content="Chrome과 Firefox에서 페이지 전체나 선택한 가격 하나를 환산하는 단계별 가이드.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://twinprice.com/ko/guide/">
+  <meta property="og:site_name" content="Twinprice">
+  <meta property="og:image" content="https://twinprice.com/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Twinprice: Chrome과 Firefox용 무료 통화 환산 확장 프로그램. 해외에서 쇼핑하고, 가격은 내 통화로 보세요.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://twinprice.com/assets/social-preview.png">
+  <link rel="icon" href="../../favicon.ico" sizes="48x48">
+  <link rel="icon" href="../../assets/favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="icon" href="../../assets/favicon-96.png" type="image/png" sizes="96x96">
+  <link rel="icon" href="../../assets/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://twinprice.com/ko/guide/#webpage",
+  "url": "https://twinprice.com/ko/guide/",
+  "name": "Twinprice로 웹사이트 가격을 환산하는 방법",
+  "description": "Chrome과 Firefox에서 쇼핑 페이지 가격과 선택한 가격을 환산하는 가이드.",
+  "inLanguage": "ko",
+  "isPartOf": {
+    "@id": "https://twinprice.com/#website"
+  },
+  "about": {
+    "@id": "https://twinprice.com/#extension"
+  },
+  "dateModified": "2026-09-14"
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <header class="site-header wrap">
+    <a class="brand" href="../" aria-label="twinprice.com 홈"><img src="../../assets/twinprice-icon.png" width="32" height="32" alt=""><span>twinprice<span class="brand-period">.</span>com</span></a>
+    <nav aria-label="주 메뉴"><a href="../#how-it-works">사용 방법</a><a href="./" aria-current="page">가이드</a><a href="../privacy/">개인정보 보호</a><a href="../about/">소개</a></nav>
+    <!-- i18n:languages --><details class="language-menu" translate="no"><summary aria-label="언어: 한국어"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c2 2 2 11 0 13M8 1.5c-2 2-2 11 0 13"/></svg><span>KO</span></summary><ul><li><a href="../../guide/" hreflang="en" lang="en">English</a></li><li><a href="../../de/guide/" hreflang="de" lang="de">Deutsch</a></li><li><a href="../../es/guide/" hreflang="es" lang="es">Español</a></li><li><a href="../../fr/guide/" hreflang="fr" lang="fr">Français</a></li><li><a href="../../it/guide/" hreflang="it" lang="it">Italiano</a></li><li><a href="../../ja/guide/" hreflang="ja" lang="ja">日本語</a></li><li><a href="../../ko/guide/" hreflang="ko" lang="ko" aria-current="true">한국어</a></li><li><a href="../../nl/guide/" hreflang="nl" lang="nl">Nederlands</a></li><li><a href="../../pl/guide/" hreflang="pl" lang="pl">Polski</a></li><li><a href="../../pt-BR/guide/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li><li><a href="../../tr/guide/" hreflang="tr" lang="tr">Türkçe</a></li><li><a href="../../uk/guide/" hreflang="uk" lang="uk">Українська</a></li><li><a href="../../zh-CN/guide/" hreflang="zh-CN" lang="zh-CN">简体中文</a></li></ul></details><!-- /i18n:languages --><a class="button button-small" href="../#install">Twinprice 받기 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="wrap guide-main" id="main">
+    <article>
+      <header class="guide-intro">
+        <p class="eyebrow">TWINPRICE 사용자 가이드</p>
+        <h1>Chrome과 Firefox에서 웹사이트 가격을 환산하는 방법</h1>
+        <p>Twinprice는 쇼핑 페이지의 가격을 원하는 통화로 환산해 주는 무료 브라우저 확장 프로그램입니다. 설치하고 통화를 고른 다음 <strong>페이지 가격 환산</strong>을 선택하세요. 가격 하나만 환산하려면 통화와 함께 가격을 선택하고 <strong>선택 영역 환산</strong>을 클릭하세요.</p>
+        <p class="guide-updated">업데이트: <time datetime="2026-09-14">2026년 9월 14일</time></p>
+      </header>
+      <nav class="guide-contents" aria-label="이 가이드의 내용"><strong>이 가이드의 내용</strong><a href="#install">Twinprice 설치</a><a href="#whole-page">페이지 전체 환산</a><a href="#one-price">가격 하나 환산</a><a href="#automatic">설정 기억</a><a href="#restore">원래 가격 복원</a><a href="#shopping-examples">쇼핑 예시</a><a href="#troubleshooting">가격이 환산되지 않을 때</a></nav>
+      <section id="install">
+        <h2>1. 브라우저에 Twinprice 설치하기</h2>
+        <p><a href="https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk?hl=ko">Chrome 웹 스토어의 Twinprice 페이지</a>나 <a href="https://addons.mozilla.org/ko/firefox/addon/twinprice/">Firefox 부가 기능의 Twinprice 페이지</a>를 열고 브라우저의 설치 안내를 따르세요. Twinprice 계정을 만들 필요는 없습니다.</p>
+        <p>일반 쇼핑 웹페이지를 여세요. 브라우저의 확장 프로그램 메뉴에서 Twinprice를 엽니다. 더 빠르게 사용하려면 툴바에 고정하세요. 웹페이지 접근 권한으로 확장 프로그램이 지원되는 가격을 찾고 환산 결과를 표시할 수 있습니다. 권한과 환율 요청이 어떻게 작동하는지는 <a href="../privacy/">개인정보 처리방침</a>을 참고하세요.</p>
+      </section>
+      <section id="whole-page">
+        <h2>2. 쇼핑 페이지 전체의 가격 환산하기</h2>
+        <ol>
+          <li>브라우저 툴바에서 Twinprice를 엽니다.</li>
+          <li><strong>원래 통화</strong>에서 <strong>AUTO</strong>를 선택한 채로 두면 원래 통화를 감지합니다. 직접 선택할 수도 있습니다. 기호가 모호하면 올바른 통화를 직접 선택하세요.</li>
+          <li><strong>대상 통화</strong>에서 보고 싶은 통화를 선택하세요. EUR나 USD처럼 통화 이름이나 코드로 검색할 수 있습니다.</li>
+          <li><strong>페이지 가격 환산</strong>을 클릭하세요. 환산 기능이 꺼져 있으면 버튼에 <strong>켜고 페이지 환산</strong>이라고 표시될 수 있습니다.</li>
+        </ol>
+        <p>Twinprice가 지원되는 가격을 찾으면 페이지에 나타나는 안내의 <strong>가격 환산</strong>을 사용할 수도 있습니다. 나란히 표시하는 방식에서는 원래 금액이 환산 결과 옆에 그대로 보입니다.</p>
+        <figure><a href="../../assets/guide-page-conversion.png"><img src="../../assets/guide-page-conversion.png" width="1180" height="770" loading="lazy" alt="샘플 쇼핑몰에서 실행 중인 Twinprice: 원래 달러 가격이 초록색 유로 환산 옆에 그대로 보이고, 아래쪽에 실행 취소 버튼이 있습니다."></a><figcaption>샘플 쇼핑 페이지에서 찍은 확장 프로그램 스크린샷입니다. 금액과 환율은 스크린샷의 예시이며 현재 환율이 아닙니다. 이미지를 열면 원래 크기로 볼 수 있습니다.</figcaption></figure>
+      </section>
+      <section id="one-price">
+        <h2>3. 선택한 가격 하나 환산하기</h2>
+        <p>먼저 Twinprice 팝업에서 대상 통화를 설정하세요. 그런 다음 웹페이지에서 통화 기호나 코드를 포함해 가격을 선택하세요(예: <strong>USD 115.00</strong>). 선택 영역 아래의 파란색 <strong>선택 영역 환산</strong> 버튼을 클릭하면 초록색 말풍선에 결과가 나타납니다.</p>
+        <p>선택한 텍스트를 마우스 오른쪽 버튼으로 클릭하고 <strong>Convert selected currency</strong>를 선택할 수도 있습니다. 선택 영역 환산은 페이지의 나머지 부분을 환산하지 않고 금액 하나만 필요할 때 유용합니다.</p>
+        <figure><a href="../../assets/guide-selection.png"><img src="../../assets/guide-selection.png" width="840" height="317" loading="lazy" alt="선택된 $115.00 가격과, USD를 103.50유로로 환산한 결과를 보여 주는 초록색 Twinprice 말풍선."></a><figcaption>확장 프로그램으로 가격 하나를 환산한 모습입니다. 이 스크린샷은 예시 환율을 사용합니다.</figcaption></figure>
+      </section>
+      <section id="automatic">
+        <h2>4. 즐겨 찾는 쇼핑몰의 설정 기억하기</h2>
+        <p>팝업에서 <strong>페이지 옵션</strong>을 열고 <strong>이 사이트 자동 환산</strong>을 켜세요. Twinprice는 직접 선택한 원래 통화나 AUTO 선택을 포함해 해당 사이트의 자동 환산을 기억합니다.</p>
+        <p>팝업의 모양 설정에서 환산 가격의 색과 모양을 고를 수 있습니다. 환산 가격을 원래 가격 옆에 표시하거나 원래 가격 대신 표시할 수도 있습니다.</p>
+      </section>
+      <section id="restore">
+        <h2>5. 가격 복원 또는 환산 끄기</h2>
+        <p>페이지를 환산한 뒤 팝업을 열고 <strong>원래 가격 복원</strong>을 선택하면 환산이 취소됩니다. 그 쇼핑몰에서 자동 환산을 멈추려면 페이지 옵션에서 <strong>이 사이트 자동 환산</strong>을 끄세요.</p>
+        <p>모든 곳에서 가격 검색, 안내, 자동 환산을 멈추려면 <strong>환산 기능 사용</strong>을 끄세요.</p>
+      </section>
+      <section id="shopping-examples">
+        <h2>해외 쇼핑을 위한 실용적인 예시</h2>
+        <p>다음 예시는 통화를 고르고 환산 결과를 해석하는 방법을 보여 줍니다. 아래 환율은 모두 설명을 위해 지어낸 것이며, 확장 프로그램은 제공처에서 받을 수 있는 환율을 사용합니다.</p>
+        <h3 id="euros-to-zloty">유로 가격을 폴란드 즐로티로 보려면 어떻게 하나요?</h3>
+        <p>유로로 판매하는 쇼핑몰이라면 <strong>원래 통화: EUR</strong>와 <strong>대상 통화: PLN</strong>을 선택한 뒤 <strong>페이지 가격 환산</strong>을 클릭하세요. 램프가 €89이고 예시 환율이 1 EUR당 4.30 PLN이면, 환산된 가격은 <strong>382.70 PLN</strong>(89 × 4.30)입니다. 원래 가격을 그대로 표시해 쇼핑몰의 금액과 내 통화로 추정한 금액을 비교하세요.</p>
+        <p>그 램프의 가격만 환산하려면 대상 통화를 PLN으로 설정하고, € 또는 EUR를 포함해 가격을 선택한 뒤 <strong>선택 영역 환산</strong>을 클릭하세요.</p>
+        <h3 id="dollar-currencies">달러 기호는 항상 미국 달러를 뜻하나요?</h3>
+        <p>아니요. USD, CAD, AUD 등 여러 통화가 달러 기호를 씁니다. 쇼핑몰의 통화 선택기나 결제 정보에서 통화를 확인하세요. 캐나다 달러 상품이라면 표시된 가격이 단순히 $100이더라도 <strong>원래 통화: CAD</strong>를 선택하세요. USD를 선택하면 다른 통화 쌍이 사용됩니다.</p>
+        <p>AUTO는 페이지의 통화 정보를 사용합니다. 결과가 불분명하면 원래 통화를 직접 선택하세요. 쇼핑몰에서 표시 통화를 바꿀 수 있다면, Twinprice의 원래 통화를 지금 페이지에 표시된 통화와 맞추세요.</p>
+        <h3 id="checkout-differences">청구된 금액이 Twinprice의 환산 결과와 다른 이유는 무엇인가요?</h3>
+        <p>Twinprice는 기준 환율을 사용해 비교용 가격을 추정합니다. 쇼핑몰의 가격을 바꾸거나 은행, 카드사, 결제 서비스가 적용하는 환율을 정하지 않습니다. 배송비, 세금, 환전 마진 및 기타 수수료로 인해 최종 금액이 달라질 수 있습니다.</p>
+        <p>예를 들어 1 USD당 0.90 EUR라는 가상의 환율이라면 100 USD 상품은 90 EUR입니다. 이 금액에 가상의 환전 수수료 3%가 붙으면 2.70 EUR가 더해져, 다른 비용을 빼고 92.70 EUR가 됩니다. Twinprice의 가격 환산은 이 수수료를 계산하지 않습니다. 실제로 낼 금액은 쇼핑몰의 최종 금액과 결제 서비스의 약관에서 확인하세요.</p>
+        <h3 id="compare-shops">두 쇼핑몰의 가격을 어떻게 비교하나요?</h3>
+        <p>두 사이트에서 같은 대상 통화를 사용하되, 쇼핑몰마다 올바른 원래 통화를 선택하세요. 상품 가격을 환산한 다음 배송비와 세금을 포함한 최종 금액을 비교하세요. 환산 가격이 더 낮은 상품도 전체적으로는 더 비쌀 수 있습니다.</p>
+        <p>이미 알고 있는 금액만 비교하려면 팝업에서 <strong>원하는 금액 환산</strong>을 열고 금액을 입력하세요. AUTO가 통화를 알아내지 못했다면 먼저 원래 통화를 직접 선택하세요.</p>
+        <h3 id="offline-rates">인터넷에 연결되어 있지 않아도 가격을 환산할 수 있나요?</h3>
+        <p>새 환율을 받을 수 없을 때는 최근에 캐시된 환율로 환산할 수 있습니다. 이는 요청한 통화에 사용할 수 있는 캐시된 환율이 있는지에 따라 달라지므로, Twinprice가 완전히 오프라인으로 작동한다고 보장할 수는 없습니다. 캐시된 환율이 48시간을 넘으면 경고하며, 7일보다 오래된 환율은 사용하지 않습니다.</p>
+        <p><a href="../about/#rates">환율의 출처</a>와 <a href="../about/#product-facts">제품의 브라우저 및 통화 제한 사항</a>도 참고하세요.</p>
+      </section>
+      <section id="troubleshooting">
+        <h2>가격이 환산되지 않을 때</h2>
+        <dl class="guide-answers">
+          <dt>AUTO가 통화를 알아내지 못함</dt><dd>$ 같은 기호는 여러 통화를 뜻할 수 있습니다. 원래 통화에서 쇼핑몰의 통화를 선택하고 다시 시도하세요. 선택한 가격의 경우, 페이지 텍스트에 통화 코드가 있다면 함께 선택하세요.</dd>
+          <dt>브라우저 설정 페이지나 확장 프로그램 스토어에서 아무 일도 일어나지 않음</dt><dd>브라우저는 이런 페이지에 대한 확장 프로그램의 접근을 제한합니다. 일반 쇼핑 웹페이지에서 시도하고, Twinprice가 켜져 있으며 그 사이트에 접근할 수 있는지 확인하세요.</dd>
+          <dt>일부 가격이 바뀌지 않음</dt><dd>Twinprice는 지원되는 웹페이지 텍스트에서 작동합니다. 이미지 안, 접근할 수 없는 프레임, 특이한 레이아웃의 가격은 감지되지 않을 수 있습니다. 텍스트로 된 가격을 선택하거나 팝업에 금액을 입력해 보세요.</dd>
+          <dt>통화 쌍이나 새 환율을 사용할 수 없음</dt><dd>사용할 수 있는 통화 쌍은 환율 제공처에 따라 다릅니다. 연결 상태와 선택한 통화를 확인한 뒤 다시 시도하세요. Twinprice는 최근에 캐시된 환율을 사용할 수 있으며, 48시간이 지나면 경고하고 7일보다 오래된 환율은 사용하지 않습니다.</dd>
+          <dt>결제 금액이 환산 결과와 다름</dt><dd>Twinprice는 가격 비교를 돕기 위해 Frankfurter의 기준 환율을 사용합니다. 은행, 카드사, 결제 서비스는 다른 환율을 적용하고 수수료를 더할 수 있습니다. 환산된 금액이 쇼핑몰이 청구하는 금액을 바꾸지는 않습니다.</dd>
+        </dl>
+        <p>아직 해결되지 않았나요? 브라우저, Twinprice 버전, 재현할 수 있는 예시와 함께 <a href="https://github.com/somewordshere/twinprice/issues">GitHub에 문제를 신고</a>하세요. 주문이나 결제 관련 개인정보는 포함하지 마세요.</p>
+      </section>
+      <aside class="guide-next"><h2>다음 상품을 찾을 준비가 되셨나요?</h2><p><a href="../#install">Chrome 또는 Firefox용 Twinprice를 받거나</a>, 설치하기 전에 <a href="../#demo">웹사이트 데모를 사용해 보세요</a>.</p></aside>
+    </article>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="../"><span>twinprice<span class="brand-period">.</span>com</span></a><span>어디서 쇼핑하든, 익숙한 가격.</span><a href="./" aria-current="page">사용자 가이드</a><a href="../about/">소개</a><a href="../privacy/">개인정보 처리방침</a><a href="../whats-new/">새로운 기능</a><a href="https://github.com/somewordshere/twinprice/issues">도움말 / 문제 신고</a><a href="https://github.com/somewordshere/twinprice">소스 코드</a></footer>
+</body>
+</html>

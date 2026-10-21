@@ -8,11 +8,14 @@
     es: "Español",
     fr: "Français",
     it: "Italiano",
+    ja: "日本語",
+    ko: "한국어",
     nl: "Nederlands",
     pl: "Polski",
     "pt-BR": "Português (Brasil)",
     tr: "Türkçe",
-    uk: "Українська"
+    uk: "Українська",
+    "zh-CN": "简体中文"
   });
   const SUPPORTED = Object.freeze(Object.keys(NATIVE_NAMES));
   const dictionaries = new Map();
@@ -34,7 +37,8 @@
   }
 
   // Maps any BCP 47 tag ("pt", "uk-UA", "de-CH") to a language that has
-  // translations, or null when none fits.
+  // translations, or null when none fits. Chinese has only the Simplified
+  // translation, so Traditional tags (zh-TW, zh-Hant) use it too.
   function matchLanguage(tag) {
     if (typeof tag !== "string" || !tag.trim()) return null;
     const normalized = tag.trim().replace(/_/g, "-").toLowerCase();
@@ -42,6 +46,7 @@
     if (exact) return exact;
     const primary = normalized.split("-")[0];
     if (primary === "pt") return "pt-BR";
+    if (primary === "zh") return "zh-CN";
     return SUPPORTED.find((code) => code.toLowerCase() === primary) || null;
   }
 

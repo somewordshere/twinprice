@@ -80,6 +80,10 @@ html {
   scroll-padding-top:32px}
 body {
   margin:0}
+/* Korean wraps between words, not inside them; long unbroken strings may still break. */
+:lang(ko) {
+  word-break:keep-all;
+  overflow-wrap:break-word}
 a {
   color:inherit;
   text-underline-offset:4px}
