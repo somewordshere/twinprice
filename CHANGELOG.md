@@ -19,6 +19,20 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.3.2 - 2026-10-22
+
+### Changed
+
+- The on-page Convert prompt and the bottom notice ("Converted N prices") are 10% smaller: width, spacing, corners, text, buttons and close buttons all scale down together. The prompt is now 270 pixels wide instead of 300, and the notice at most 324 instead of 360. The selection button and converted prices are unchanged.
+
+### Privacy
+
+- Policy version bumped to 2.3.2; the wording is unchanged. Website policy pages regenerated.
+
+### Tests
+
+- No test changes. Before and after screenshots in Chrome confirmed both panels at 90% of their previous width and height.
+
 ## 2.3.1 - 2026-10-22
 
 ### Fixed

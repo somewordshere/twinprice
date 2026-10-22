@@ -48,15 +48,15 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 .ccp-page-prompt {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 9px;
   top: 16px;
   right: 16px;
-  width: min(300px, calc(100vw - 32px));
-  padding: 14px;
+  width: min(270px, calc(100vw - 32px));
+  padding: 12.5px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 12px;
+  border-radius: 11px;
   background: linear-gradient(168deg, #16327e, #1b3fbf);
-  font-size: 13px;
+  font-size: 11.7px;
   line-height: 1.35;
   cursor: default;
   animation: ccp-page-prompt-enter 240ms cubic-bezier(.2, .8, .2, 1) both;
@@ -67,7 +67,7 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 11px;
 }
 
 .ccp-page-prompt-title,
@@ -78,7 +78,7 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 }
 
 .ccp-page-prompt-title {
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 750;
   line-height: 1.2;
 }
@@ -86,7 +86,7 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 .ccp-page-prompt-message {
   display: block;
   color: #c3d3fb;
-  font-size: 12px;
+  font-size: 10.8px;
   line-height: 1.4;
 }
 
@@ -94,7 +94,7 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   display: block;
   color: #a9bef5;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono", Consolas, monospace;
-  font-size: 11px;
+  font-size: 9.9px;
   font-variant-numeric: tabular-nums;
   line-height: 1.3;
 }
@@ -110,11 +110,11 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 .ccp-page-prompt-close {
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
+  width: 21.6px;
+  height: 21.6px;
+  border-radius: 5.4px;
   color: #a9bef5;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
 }
 
@@ -126,11 +126,11 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 /* Inverted against the blue panel: a blue button on a blue card reads as flat. */
 .ccp-page-prompt-action {
   display: block;
-  padding: 9px 12px;
-  border-radius: 6px;
+  padding: 8px 11px;
+  border-radius: 5.4px;
   background: #ffffff;
   color: #16327e;
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
@@ -155,14 +155,15 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 .ccp-toast {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   bottom: 16px;
   right: 16px;
-  max-width: min(360px, calc(100vw - 32px));
-  padding: 10px 14px;
+  max-width: min(324px, calc(100vw - 32px));
+  padding: 9px 12.5px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7.2px;
   background: #0f1728;
-  font-size: 13px;
+  font-size: 11.7px;
   line-height: 1.4;
   cursor: default;
   box-shadow: 0 10px 30px rgba(8, 12, 22, 0.35);
@@ -172,7 +173,7 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   all: initial;
   min-width: 0;
   color: #fff;
-  font: 400 13px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 400 11.7px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .ccp-toast-action,
@@ -185,18 +186,18 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
 
 .ccp-toast-action {
   color: #a9bef5;
-  font: 700 13px/1.2 system-ui, sans-serif;
+  font: 700 11.7px/1.2 system-ui, sans-serif;
   text-decoration: underline;
 }
 
 .ccp-toast-dismiss {
   display: grid;
-  width: 24px;
-  height: 24px;
+  width: 21.6px;
+  height: 21.6px;
   place-items: center;
-  border-radius: 7px;
+  border-radius: 6.3px;
   color: #d1d5db;
-  font: 20px/1 system-ui, sans-serif;
+  font: 18px/1 system-ui, sans-serif;
 }
 
 .ccp-toast-dismiss:hover {
