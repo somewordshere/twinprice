@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.3.1 · October 22, 2026
+
+- Korean prices written with 원, such as 58,000원, now convert. So do amounts in ten-thousands, such as 290만원 (2,900,000 won), and prices followed by a word, such as 6,000원부터 ("from 6,000 won").
+- Japanese prices such as 1万円 (10,000 yen) and 1,000円から ("from 1,000 yen") now convert too.
+
 ## 2.3.0 · October 21, 2026
 
 - New: **Convert all websites automatically** under **Page options**. Turn it on and prices convert on every website as soon as they appear, without the Convert button or a message. It is off unless you turn it on.

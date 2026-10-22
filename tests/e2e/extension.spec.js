@@ -23,6 +23,11 @@ const SPLIT_FRACTION_HTML = fs.readFileSync(
   path.resolve(__dirname, "../fixtures/allegro-split-fraction.html"),
   "utf8"
 );
+const CERAGEM_URL = "https://api.frankfurter.dev/ceragem-event";
+const CERAGEM_HTML = fs.readFileSync(
+  path.resolve(__dirname, "../fixtures/ceragem-won.html"),
+  "utf8"
+);
 const TAP_AZ_URL = "https://api.frankfurter.dev/tap-az-listing";
 const TAP_AZ_HTML = fs.readFileSync(
   path.resolve(__dirname, "../fixtures/tap-az-listing.html"),
@@ -497,6 +502,30 @@ test("reported: tap.az converts manat prices React split across text nodes", asy
   await expect(shop.locator("#listing-price-two .ccp-badge")).toContainText("75,00");
   // An amount inside a linked product title is not a price on offer.
   await expect(shop.locator(".ad-card-title ccp-conversion")).toHaveCount(0);
+});
+
+test("reported: Ceragem converts won written as 원, in ten-thousands and before a particle", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, { settings: { showPagePrompt: true } });
+  const shop = await context.newPage();
+  await serveFixture(shop, CERAGEM_URL, CERAGEM_HTML);
+  await shop.goto(CERAGEM_URL);
+
+  // Only ₩ and KRW were known, so the page offered nothing to convert at all.
+  await expect(shop.locator(".ccp-page-prompt")).toBeVisible();
+  const conversion = await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", CERAGEM_URL);
+  expect(conversion.ok).toBe(true);
+  expect(conversion.count).toBe(4);
+  expect(conversion.detectedCurrency).toBe("KRW");
+  await expect(shop.locator("#purchase-original .ccp-badge")).toContainText("1.450,00");
+  await expect(shop.locator("#purchase-price .ccp-badge")).toContainText("1.400,00");
+  await expect(shop.locator("#subscription-original .ccp-badge")).toContainText("29,00");
+  await expect(shop.locator("#subscription-price .ccp-badge")).toContainText("3,00");
+  await expect(shop.locator("#subscription-price")).toContainText("부터");
+  // "3원칙" is "three principles", not three won.
+  await expect(shop.locator(".event_title ccp-conversion")).toHaveCount(0);
 });
 
 test("reported: Trendyol converts lira written as TL", async ({
