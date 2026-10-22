@@ -24,7 +24,7 @@
     JOD: { symbols: ["د.ا", "JD"], locale: "ar-JO" },
     JPY: { symbols: ["JP¥", "¥", "￥", "円"], locale: "ja-JP" },
     KES: { symbols: ["KSh"], locale: "en-KE" },
-    KRW: { symbols: ["₩"], locale: "ko-KR" },
+    KRW: { symbols: ["₩", "원"], locale: "ko-KR" },
     KWD: { symbols: ["د.ك", "KD"], locale: "ar-KW" },
     KZT: { symbols: ["₸"], locale: "kk-KZ" },
     LKR: { symbols: ["LKR", "රු", "Rs"], locale: "si-LK" },

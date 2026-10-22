@@ -404,4 +404,24 @@ for (const testCase of DETECTION_CASES) {
   );
 }
 
+// Korean shops write won as 원 after the amount, count large amounts in ten-thousands
+// (만) and hundred-millions (억), and attach particles such as 부터 ("from") straight
+// to the currency. Japanese does the same with 円, 万 and から.
+{
+  const read = (text) => JSON.parse(JSON.stringify(detector.findCurrencyMatches(text)
+    .map(({ raw, amount, currency }) => [raw, amount, currency])));
+  assert.deepEqual(read("월 58,000원"), [["58,000원", 58000, "KRW"]]);
+  assert.deepEqual(read("290만원"), [["290만원", 2900000, "KRW"]]);
+  assert.deepEqual(read("1.5만 원"), [["1.5만 원", 15000, "KRW"]]);
+  assert.deepEqual(read("3억원"), [["3억원", 300000000, "KRW"]]);
+  assert.deepEqual(read("월 6,000원부터"), [["6,000원", 6000, "KRW"]]);
+  assert.deepEqual(read("가격 12,000원입니다"), [["12,000원", 12000, "KRW"]]);
+  assert.deepEqual(read("1,000円から"), [["1,000円", 1000, "JPY"]]);
+  assert.deepEqual(read("1万円"), [["1万円", 10000, "JPY"]]);
+  assert.deepEqual(read("건강 습관 3원칙"), [], "원칙 is a word, not won");
+  assert.deepEqual(read("2원리"), [], "원리 is a word, not won");
+  assert.deepEqual(read("5 Rpm"), [], "a Latin symbol still may not run on into a word");
+  assert.deepEqual(read("5원3"), [], "a digit may not follow the currency");
+}
+
 console.log("detector tests passed");

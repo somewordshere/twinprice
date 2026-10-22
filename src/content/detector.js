@@ -18,6 +18,19 @@
     "g"
   );
   const WORD_LIKE_CURRENCY_CODES = new Set(["AMD", "MAD", "TRY"]);
+  // Korean, Japanese and Chinese count large amounts in ten-thousands and
+  // hundred-millions: 290만원 is 2,900,000 won and 1.5万円 is 15,000 yen.
+  const EAST_ASIAN_NUMBER_UNITS = Object.freeze({ "만": 1e4, "万": 1e4, "억": 1e8, "億": 1e8 });
+  const EAST_ASIAN_UNIT_CAPTURE = `([${Object.keys(EAST_ASIAN_NUMBER_UNITS).join("")}])`;
+  // A symbol written after the amount must not run on into a word ("5 Rp" is not
+  // "5 Rpm"), but Korean and Japanese attach particles straight to it: 6,000원부터
+  // is "from 6,000 won" and 1,000円から "from 1,000 yen". A symbol that ends in one
+  // of those scripts may therefore be followed by letters, never by digits.
+  const SUFFIX_MARKER_END =
+    "(?!\\p{N})(?:(?<=[\\p{sc=Han}\\p{sc=Hangul}\\p{sc=Hiragana}\\p{sc=Katakana}])|(?!\\p{L}))";
+  // Words that begin with a currency character after a number: 3원칙 is "three
+  // principles" and 2원리 "two principles", not prices in won.
+  const MARKER_WORD_GUARDS = Object.freeze({ "원": "(?![칙리])" });
   const NON_PRICE_CONTEXT_PATTERN =
     /\b(?:available|availability|delivery|items?|left|quantity|rating|reviews?|stock|stück|stueck|verfügbar|lieferung|anzahl|оцінок|наявност[іи]|товар(?:ів|а)?|залишилось)\b/iu;
   let pageCurrencyDetection = null;
@@ -172,16 +185,17 @@
     }
 
     const regex = new RegExp(
-      `(?:(?<![\\p{N}.,，．\\u066b\\u066c+\\-−])([+\\-−]?)\\s*(?:${markerPattern})[\\s\\u00a0\\u202f]*${NUMBER_CAPTURE}(?![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])|(?<![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])${NUMBER_CAPTURE}[\\s\\u00a0\\u202f]*(?:${markerPattern})(?![\\p{L}\\p{N}]))`,
+      `(?:(?<![\\p{N}.,，．\\u066b\\u066c+\\-−])([+\\-−]?)\\s*(?:${markerPattern})[\\s\\u00a0\\u202f]*${NUMBER_CAPTURE}(?![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])|(?<![\\p{L}\\p{N}.,，．\\u066b\\u066c+\\-−])${NUMBER_CAPTURE}[\\s\\u00a0\\u202f]*(?:${EAST_ASIAN_UNIT_CAPTURE}[\\s\\u00a0\\u202f]*)?(?:${markerPattern})${SUFFIX_MARKER_END})`,
       "giu"
     );
     const results = [];
     let found;
 
     while ((found = regex.exec(text)) !== null) {
-      const amount = parseLocaleNumber(`${found[1] || ""}${found[2] || found[3]}`, {
+      const number = parseLocaleNumber(`${found[1] || ""}${found[2] || found[3]}`, {
         allowThreeDecimals: CurrencyCatalog.currencyFractionDigits(currency) === 3
       });
+      const amount = found[4] ? number * EAST_ASIAN_NUMBER_UNITS[found[4]] : number;
 
       if (Number.isFinite(amount)) {
         results.push({
@@ -206,7 +220,7 @@
       meta.symbols.filter((other) => other.length > marker.length && other.endsWith(marker))
         .map((other) => other.slice(0, -marker.length).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
     );
-    const pattern = `${prefixes.length ? `(?<!${[...new Set(prefixes)].join("|")})` : ""}${buildMarkerPattern(marker)}`;
+    const pattern = `${prefixes.length ? `(?<!${[...new Set(prefixes)].join("|")})` : ""}${buildMarkerPattern(marker)}${MARKER_WORD_GUARDS[marker] || ""}`;
     PRICE_MARKER_PATTERNS.set(key, pattern);
     return pattern;
   }

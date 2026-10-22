@@ -49,6 +49,13 @@ const PROVIDER_CURRENCIES = Object.freeze([
     endDate: RATE_DATE
   }),
   Object.freeze({
+    code: "KRW",
+    name: "South Korean Won",
+    symbol: "₩",
+    startDate: "1999-01-04",
+    endDate: RATE_DATE
+  }),
+  Object.freeze({
     code: "PLN",
     name: "Polish Zloty",
     symbol: "PLN",
@@ -77,7 +84,8 @@ const RATES_BY_BASE = Object.freeze({
   CHF: Object.freeze({ CHF: 1, EUR: 1.08 }),
   PLN: Object.freeze({ PLN: 1, EUR: 0.235 }),
   AZN: Object.freeze({ AZN: 1, EUR: 0.5 }),
-  TRY: Object.freeze({ TRY: 1, EUR: 0.02 })
+  TRY: Object.freeze({ TRY: 1, EUR: 0.02 }),
+  KRW: Object.freeze({ KRW: 1, EUR: 0.0005 })
 });
 
 function createSeededExtensionState({
