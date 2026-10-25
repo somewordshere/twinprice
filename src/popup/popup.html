@@ -137,6 +137,30 @@
               </span>
             </div>
 
+            <div class="remember-row">
+              <input id="rememberSite" type="checkbox" aria-labelledby="rememberSiteLabel" aria-describedby="rememberSiteHelp" disabled>
+              <span>
+                <label id="rememberSiteLabel" for="rememberSite"><strong data-i18n="popup.rememberSite">Convert this site automatically</strong></label>
+                <small id="rememberSiteHelp">Uses local price detection to convert this site automatically when you visit it.</small>
+              </span>
+            </div>
+
+            <div class="remember-row">
+              <input id="autoConvertAllSites" type="checkbox" aria-labelledby="autoConvertAllSitesLabel" aria-describedby="autoConvertAllSitesHelp" disabled>
+              <span>
+                <label id="autoConvertAllSitesLabel" for="autoConvertAllSites"><strong data-i18n="popup.autoAllSites">Convert all websites automatically</strong></label>
+                <small id="autoConvertAllSitesHelp" data-i18n="popup.autoAllSitesHelp">Converts prices on every website as soon as they are detected, without asking first. Price scanning stays on this device.</small>
+              </span>
+            </div>
+
+            <div class="prompt-row">
+              <input id="showPagePrompt" type="checkbox" aria-labelledby="showPagePromptLabel" aria-describedby="showPagePromptHelp" disabled>
+              <span>
+                <label id="showPagePromptLabel" for="showPagePrompt"><strong data-i18n="popup.showPrompt">Show the on-page Convert button</strong></label>
+                <small id="showPagePromptHelp" data-i18n="popup.showPromptHelp">Appears automatically after a supported price is detected on the page.</small>
+              </span>
+            </div>
+
             <div class="display-row">
               <span data-i18n="popup.language">Language</span>
               <span class="select-menu">
@@ -231,30 +255,6 @@
               <span id="appearanceAnnouncement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
               <button id="resetAppearance" class="reset-appearance" type="button" data-i18n="popup.resetAppearance" disabled>Reset appearance</button>
             </fieldset>
-
-            <div class="remember-row">
-              <input id="rememberSite" type="checkbox" aria-labelledby="rememberSiteLabel" aria-describedby="rememberSiteHelp" disabled>
-              <span>
-                <label id="rememberSiteLabel" for="rememberSite"><strong data-i18n="popup.rememberSite">Convert this site automatically</strong></label>
-                <small id="rememberSiteHelp">Uses local price detection to convert this site automatically when you visit it.</small>
-              </span>
-            </div>
-
-            <div class="remember-row">
-              <input id="autoConvertAllSites" type="checkbox" aria-labelledby="autoConvertAllSitesLabel" aria-describedby="autoConvertAllSitesHelp" disabled>
-              <span>
-                <label id="autoConvertAllSitesLabel" for="autoConvertAllSites"><strong data-i18n="popup.autoAllSites">Convert all websites automatically</strong></label>
-                <small id="autoConvertAllSitesHelp" data-i18n="popup.autoAllSitesHelp">Converts prices on every website as soon as they are detected, without asking first. Price scanning stays on this device.</small>
-              </span>
-            </div>
-
-            <div class="prompt-row">
-              <input id="showPagePrompt" type="checkbox" aria-labelledby="showPagePromptLabel" aria-describedby="showPagePromptHelp" disabled>
-              <span>
-                <label id="showPagePromptLabel" for="showPagePrompt"><strong data-i18n="popup.showPrompt">Show the on-page Convert button</strong></label>
-                <small id="showPagePromptHelp" data-i18n="popup.showPromptHelp">Appears automatically after a supported price is detected on the page.</small>
-              </span>
-            </div>
           </div>
         </details>
       </div>

@@ -4,6 +4,10 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.3.3 · October 22, 2026
+
+- In **Page options**, the switches for converting automatically and for the on-page Convert button now come right after **Enable converter**, so you no longer have to scroll past the color settings to find them.
+
 ## 2.3.2 · October 22, 2026
 
 - The Convert button that appears on a page, and the message after converting, are now about 10% smaller, so they cover less of the page.

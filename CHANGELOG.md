@@ -19,6 +19,20 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.3.3 - 2026-10-22
+
+### Changed
+
+- **Page options** now lists **Convert this site automatically**, **Convert all websites automatically** and **Show the on-page Convert button** right below **Enable converter**, ahead of the language, theme and price-display menus. **Converted price appearance** comes last, so the options that decide when prices convert no longer sit below the appearance editor.
+
+### Privacy
+
+- Policy version bumped to 2.3.3; the wording is unchanged. Website policy pages regenerated.
+
+### Tests
+
+- No test changes. A Chrome screenshot of the popup confirmed the new order.
+
 ## 2.3.2 - 2026-10-22
 
 ### Changed
