@@ -17,8 +17,8 @@ package and text are used for Microsoft Edge Add-ons once it is listed there.
 
 ## Privacy practices tab
 
-These answers are written to match Twinprice version 2.3.0 and the privacy policy
-dated October 21, 2026. If the permissions, stored data, or network requests change,
+These answers are written to match Twinprice version 2.4.0 and the privacy policy
+dated October 26, 2026. If the permissions, stored data, or network requests change,
 update this file and the policy together.
 
 ### Single purpose
