@@ -13,7 +13,7 @@ Zobacz, ile zagraniczna cena kosztuje w Twojej walucie, dokładnie tam, gdzie je
 Otwórz sklep z cenami w innej walucie, a Twinprice znajdzie ceny, zaproponuje ich przeliczenie i pokaże kurs, zanim się zgodzisz. Każda przeliczona kwota pojawia się obok oryginału, więc zawsze widzisz, ile naprawdę pobiera sklep.
 
 DLACZEGO PROSI O DOSTĘP DO DANYCH NA WSZYSTKICH STRONACH
-Cena może być w każdym sklepie, więc Twinprice musi zajrzeć na otwierane strony, żeby ją zauważyć. Czyta je wyłącznie na Twoim urządzeniu. Treść stron, ceny i odwiedzane adresy nigdy nie opuszczają przeglądarki. Jedyne, co jest wysyłane, to trzyliterowy kod waluty, np. EUR, aby pobrać dzisiejszy kurs referencyjny. Bez reklam, bez analityki, bez śledzenia. Kod jest otwarty (licencja MIT): github.com/somewordshere/twinprice
+Cena może być w każdym sklepie, więc Twinprice musi zajrzeć na otwierane strony, żeby ją zauważyć. Czyta je wyłącznie na Twoim urządzeniu. Treść stron, ceny i odwiedzane adresy nigdy nie opuszczają przeglądarki. Jedyne, co jest wysyłane, to trzyliterowy kod waluty, np. EUR, aby pobrać dzisiejszy kurs referencyjny. Jedynym wyjątkiem jest „Zgłoś tę witrynę”: gdy strona się nie przelicza i go naciśniesz, do twinprice.com trafia tylko nazwa witryny, np. shop.example, aby można było naprawić problem. Bez reklam, bez analityki, bez śledzenia. Kod jest otwarty (licencja MIT): github.com/somewordshere/twinprice
 
 CO MOŻESZ PRZELICZYĆ
 - Wszystkie ceny na stronie jednym kliknięciem

@@ -165,6 +165,12 @@ assert.deepEqual(
   firefoxManifest.browser_specific_settings.gecko.data_collection_permissions.required,
   ["websiteContent"]
 );
+// Only "Report this website" sends a hostname, so Firefox asks for that the first
+// time someone reports, not on install or update.
+assert.deepEqual(
+  firefoxManifest.browser_specific_settings.gecko.data_collection_permissions.optional,
+  ["browsingActivity"]
+);
 
 const popupScripts = [...popupHtml.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi)]
   .map((match) => match[1]);
@@ -230,6 +236,10 @@ const runtimeFiles = [
   "src/background/catalog-snapshot.js",
   "src/background/onboarding.js",
   "src/background/review-prompt.js",
+  "src/background/site-report.js",
+  "src/popup/report.html",
+  "src/popup/report.js",
+  "src/popup/report.css",
   "src/_locales/en/messages.json",
   "src/onboarding/onboarding.html",
   "src/onboarding/onboarding.css",

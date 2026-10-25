@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-i18n="page.report.consentTitle">Report this website</title>
+    <link rel="stylesheet" href="report.css">
+  </head>
+  <body>
+    <main class="report">
+      <h1 data-i18n="page.report.consentTitle">Report this website</h1>
+      <p id="reportMessage" class="message"></p>
+      <div class="actions">
+        <button id="reportSend" class="primary" type="button" data-i18n="page.report.send" disabled>Send report</button>
+        <button id="reportCancel" type="button" data-i18n="page.report.cancel">Cancel</button>
+      </div>
+      <p id="reportStatus" class="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="../shared/browser-api.js"></script>
+    <script src="../shared/messages.js"></script>
+    <script src="../shared/settings.js"></script>
+    <script src="../shared/i18n.js"></script>
+    <script src="../shared/translations-page.js"></script>
+    <script src="report.js"></script>
+  </body>
+</html>

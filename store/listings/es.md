@@ -10,7 +10,7 @@ Mira cuánto cuesta un precio extranjero en tu propia moneda, justo donde aparec
 Abre una tienda con precios en otra moneda y Twinprice encuentra los precios, te ofrece convertirlos y te muestra el tipo de cambio antes de aceptar. Cada importe convertido aparece junto al original, así siempre ves lo que cobra realmente la tienda.
 
 POR QUÉ PIDE LEER Y CAMBIAR DATOS EN TODOS LOS SITIOS WEB
-Un precio puede estar en cualquier tienda, así que Twinprice necesita mirar las páginas que abres para detectarlo. Solo las lee en tu dispositivo. El contenido de las páginas, los precios y los sitios que visitas nunca salen de tu navegador. Lo único que se envía es un código de moneda de tres letras, como EUR, para obtener el tipo de referencia del día. Sin anuncios, sin analíticas, sin rastreo. El código es abierto (licencia MIT): github.com/somewordshere/twinprice
+Un precio puede estar en cualquier tienda, así que Twinprice necesita mirar las páginas que abres para detectarlo. Solo las lee en tu dispositivo. El contenido de las páginas, los precios y los sitios que visitas nunca salen de tu navegador. Lo único que se envía es un código de moneda de tres letras, como EUR, para obtener el tipo de referencia del día. La única excepción es «Informar de este sitio web»: si una página no se convierte y lo pulsas, solo se envía a twinprice.com el nombre del sitio, como shop.example, para poder corregirlo. Sin anuncios, sin analíticas, sin rastreo. El código es abierto (licencia MIT): github.com/somewordshere/twinprice
 
 QUÉ PUEDES CONVERTIR
 - Todos los precios de una página con un clic

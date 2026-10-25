@@ -43,9 +43,22 @@ The real shopping screenshot is copied unchanged from the extension repository. 
 
 ## Hosting
 
-The public website is https://twinprice.com/. The Wrangler configuration deploys only this directory's authored dist/ assets to the existing twinprice Worker. The custom domain is managed by Cloudflare. The workers.dev endpoint and preview URLs are disabled.
+The public website is https://twinprice.com/. The Wrangler configuration deploys this directory's authored dist/ assets and `worker.js` to the existing twinprice Worker. The custom domain is managed by Cloudflare. The workers.dev endpoint and preview URLs are disabled.
 
 Use Wrangler 4.x from this directory: run wrangler deploy --dry-run, then wrangler deploy. Worker Access is scoped to previews only so the production custom domain is public; do not modify the shared owner-only Access policy or other applications.
+
+### Website reports
+
+`worker.js` answers `POST /api/report`, which the extension's **Report this website** button calls. `run_worker_first: ["/api/*"]` sends only those paths to the script; every page is still served straight from dist/. The Worker accepts requests only from extension origins, checks every field against a fixed format (hostname, reason, version, browser, currency code, language) and opens one GitHub issue per website, titled `Site report: <hostname>` with the `site-report` label. Later reports for the same site become comments. The `REPORT_LIMITER` binding allows five reports a minute from one visitor; the visitor's IP is used only as that key and is never logged or sent to GitHub. Tests: `tests/site-report-worker.test.js` in the repository root.
+
+One-time setup before the first deploy that includes it:
+
+1. Create the `site-report` label in the repository's issues.
+2. Create a fine-grained GitHub token for `somewordshere/twinprice` only, with **Issues: Read and write** and nothing else.
+3. From this directory, run `wrangler secret put GITHUB_TOKEN` and paste the token. `GITHUB_REPO` is a plain variable in `wrangler.jsonc`.
+4. Deploy the website before the extension version that offers the button reaches the stores.
+
+Without the token the endpoint answers 503 and the extension shows "The report could not be sent".
 
 The website source and assets are tracked in GitHub. Extension source and release archives must remain outside the deployed dist/ directory.
 

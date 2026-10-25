@@ -10,7 +10,7 @@ Voyez ce que coûte un prix étranger dans votre propre devise, là où il s'aff
 Ouvrez une boutique qui affiche une autre devise : Twinprice trouve les prix, propose de les convertir et vous montre le taux avant que vous acceptiez. Chaque montant converti s'affiche à côté de l'original, pour que vous voyiez toujours ce que la boutique facture vraiment.
 
 POURQUOI IL DEMANDE À LIRE ET MODIFIER LES DONNÉES DE TOUS LES SITES
-Un prix peut se trouver sur n'importe quelle boutique, donc Twinprice doit regarder les pages que vous ouvrez pour le repérer. Il ne les lit que sur votre appareil. Le contenu des pages, les prix et les sites visités ne quittent jamais votre navigateur. La seule chose envoyée est un code de devise à trois lettres, comme EUR, pour obtenir le taux de référence du jour. Pas de publicité, pas d'analyse, pas de pistage. Le code est libre (licence MIT) : github.com/somewordshere/twinprice
+Un prix peut se trouver sur n'importe quelle boutique, donc Twinprice doit regarder les pages que vous ouvrez pour le repérer. Il ne les lit que sur votre appareil. Le contenu des pages, les prix et les sites visités ne quittent jamais votre navigateur. La seule chose envoyée est un code de devise à trois lettres, comme EUR, pour obtenir le taux de référence du jour. Seule exception : « Signaler ce site ». Si une page ne se convertit pas et que vous appuyez dessus, seul le nom du site, par exemple shop.example, est envoyé à twinprice.com pour qu'il puisse être corrigé. Pas de publicité, pas d'analyse, pas de pistage. Le code est libre (licence MIT) : github.com/somewordshere/twinprice
 
 CE QUE VOUS POUVEZ CONVERTIR
 - Tous les prix d'une page, en un clic

@@ -68,6 +68,17 @@ async function stubRateProvider(extensionWorker, {
         );
         return json({ base, date: rateDate, rates: quoted });
       }
+      // "Report this website" must never reach the live endpoint from a test. Each
+      // report is kept for the test to read; __ccpReportStatus fakes a failure.
+      if (url.startsWith("https://twinprice.com/api/")) {
+        globalThis.__ccpReports = globalThis.__ccpReports || [];
+        globalThis.__ccpReports.push(JSON.parse(init?.body || "null"));
+        const status = globalThis.__ccpReportStatus || 200;
+        return new Response(JSON.stringify({ ok: status === 200 }), {
+          status,
+          headers: { "content-type": "application/json" }
+        });
+      }
       return realFetch(input, init);
     };
   }, {

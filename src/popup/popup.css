@@ -969,6 +969,45 @@ button:disabled, select:disabled, input:disabled { cursor: not-allowed; opacity:
 .status-container[data-kind="error"] .status { color: var(--banner-error-text); }
 .status-container[data-kind="warning"] .status { color: var(--banner-info-text); }
 
+/* Offered under the status after a page converts nothing. A text button, so it
+   stays quieter than Convert. */
+.report-site {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  margin: 0;
+}
+.report-site[hidden],
+.report-site-action[hidden] { display: none; }
+.report-site-action {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.report-site-action:hover { color: var(--primary-bg); }
+.report-site-action:disabled { cursor: wait; opacity: 0.7; }
+.report-site-action:focus-visible {
+  outline: 2px solid var(--focus-outline);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.report-site-note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-2xs);
+  line-height: 1.35;
+}
+.report-site[data-state="error"] .report-site-note { color: var(--banner-error-text); }
+.report-site[data-state="success"] .report-site-note { color: var(--banner-success-text); }
+
 .rate-info {
   min-height: 0;
   margin: 0;

@@ -16,5 +16,6 @@ importScripts(
   "page-actions.js",
   "onboarding.js",
   "review-prompt.js",
+  "site-report.js",
   "main.js"
 );

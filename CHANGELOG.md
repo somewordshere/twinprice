@@ -21,6 +21,16 @@ whose `package.json` declares the release version.
 
 ## Unreleased
 
+### Added
+
+- **Report this website.** When a conversion fails for a reason that may be the website's (no prices found, the source currency not detected, or nothing converted), the on-page prompt, the conversion notice and the popup offer a one-press report. It sends the hostname, never the path, query, title or contents, plus the failure reason, extension version, browser, target currency and interface language to `https://twinprice.com/api/report`. A rate outage or a page already in the target currency offers no report. One report per page; pressing again just thanks you again.
+- `website/worker.js`: the twinprice.com Worker now runs first for `/api/*` only. `POST /api/report` accepts extension origins only, checks every field against a closed format, applies a five-a-minute rate limit per visitor, and opens one GitHub issue per website (`Site report: <hostname>`, label `site-report`), adding later reports as comments. It needs a `GITHUB_TOKEN` secret; see `website/README.md`.
+- Firefox asks for the optional `browsingActivity` data-collection permission the first time someone reports. A press on a web page cannot show that prompt, so it opens a small Twinprice window (`popup/report.html`) whose button can; the popup asks directly. Chrome needs no permission and the manifest's host access is unchanged.
+
+### Privacy
+
+- New "Website reports" section in the privacy policy, and the README, the Chrome listing's privacy answers and every store listing now name the one exception to "the sites you visit never leave your browser". The policy's version line is updated at release.
+
 ### Fixed
 
 - Middle-clicking **Rate it** in the popup's rating reminder now counts as rating, like a normal click. A middle click opens the store in a new tab but fires `auxclick` instead of `click`, so the reminder stayed and kept coming back.
@@ -30,6 +40,9 @@ whose `package.json` declares the release version.
 
 ### Tests
 
+- New unit tests for the report Worker (`tests/site-report-worker.test.js`: issue then comment, closed format, extension-only CORS, rate limit, GitHub failure) and the background report service (`tests/site-report.test.js`: hostname only, no report for local or extension pages, Firefox consent window and decline, translated errors).
+- New Chrome tests (`tests/e2e/site-report.spec.js`) for the report from the on-page prompt, the conversion notice and the popup, including a refused (429) report and a second press that sends nothing. The browser-test harness now answers `twinprice.com/api/` inside the worker, so no test reaches the live endpoint.
+- New Firefox runtime test: on a page that converts nothing, the notice's **Report this website** opens the consent window for that site and reason, and nothing is sent without consent. The test checks that consent is not already granted before it presses, so it can never file a real report. Firefox's own consent prompt cannot be driven from WebDriver, so the press on **Send report** after a yes is not covered there.
 - New Chrome tests for **Rate it** with a left and a middle click: the link opens in a new tab, the reminder hides, "rated" is stored and the reminder stays gone. Until now only ✕ was tested. The middle-click test fails without the fix. A separate check in Chrome's real toolbar popup confirmed that "rated" is saved even when the popup closes straight after the click, and a check in Firefox confirmed the reminder appears after five pages, links to addons.mozilla.org and stays gone after ✕.
 - New Chrome test with an amazon.com search result in US dollars, the shared `$` symbol and the złoty pop-up (`tests/fixtures/amazon-dollar.html`). It fails without the detector change, with the prompt quoting PLN. On live amazon.com in dollars the fix converted 74 prices with none skipped, against 1 before.
 - New Chrome test with an amazon.com search result in PLN (`tests/fixtures/amazon-currency-code.html`), from Amazon's live markup. On live amazon.com with a Polish delivery address, the 2.2.6, 2.3.0 and 2.3.3 builds skipped every main search-result price; with the fix all 83 price elements converted.

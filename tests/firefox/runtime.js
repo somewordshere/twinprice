@@ -23,6 +23,8 @@ const FIREFOX_TIMEOUT_MS = 30_000;
 const SELECTION_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Selection</title></head>
 <body style="font: 28px sans-serif"><p>Folding bike <span id="usd">$100.00</span></p>
 <p>Helmet <span id="eur">€89.00</span></p><p>Bell <span id="pln">PLN 49.90</span></p></body></html>`;
+const EMPTY_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Catalog</title></head>
+<body><h1>Catalog</h1><p>Nothing for sale here today.</p></body></html>`;
 
 test("Firefox page access and popup handlers convert and undo a real webpage", { timeout: 120_000 }, async () => {
   const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-runtime-"));
@@ -418,6 +420,98 @@ test("Firefox selection button, right-click action, and same-currency notice wor
   }
 });
 
+test("Firefox opens its consent window for a website report and sends nothing before a yes", { timeout: 120_000 }, async () => {
+  const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-runtime-"));
+  let fixture;
+  let driver;
+  let installedAddonId;
+
+  try {
+    const archivePath = buildTemporaryArchive(temporaryDirectory);
+    fixture = await startFixtureServer();
+    driver = await createFirefoxDriver();
+    await driver.manage().setTimeouts({
+      pageLoad: FIREFOX_TIMEOUT_MS,
+      script: FIREFOX_TIMEOUT_MS
+    });
+
+    installedAddonId = await driver.installAddon(archivePath, true);
+    assert.equal(installedAddonId, ADDON_ID);
+    const extensionOrigin = await getExtensionOrigin(driver, ADDON_ID);
+    await seedExtensionState(driver, extensionOrigin, fixture.url, { fromCurrency: "USD" });
+
+    // Without consent nothing may be sent. Checking first also keeps this test from
+    // ever filing a real report if a Firefox build granted it by default.
+    const consented = await driver.executeAsyncScript(`
+      const done = arguments[arguments.length - 1];
+      browser.permissions.contains({ data_collection: ["browsingActivity"] }).then(done, () => done("error"));
+    `);
+    assert.equal(consented, false);
+    const extensionHandle = await driver.getWindowHandle();
+
+    // A report needs a hostname with a dot, which 127.0.0.1 is not; Firefox sends
+    // every *.localhost name to the loopback address.
+    const emptyUrl = fixture.emptyUrl.replace("127.0.0.1", "shop.localhost");
+    await driver.switchTo().newWindow("tab");
+    const shopHandle = await driver.getWindowHandle();
+    await driver.get(emptyUrl);
+    await driver.wait(until.elementLocated(By.css("h1")), FIREFOX_TIMEOUT_MS);
+
+    await driver.switchTo().window(extensionHandle);
+    const result = await driver.executeAsyncScript(`
+      const done = arguments[arguments.length - 1];
+      (async () => {
+        // The welcome tab opens on install too, so the shop is found by its address.
+        const [shop] = await browser.tabs.query({ url: "http://shop.localhost/*" });
+        if (!shop) throw new Error("The shop tab was not found.");
+        return browser.tabs.sendMessage(shop.id, { type: "RUN_SITE_CONVERSION" });
+      })().then(done, (failure) => done({ failure: String(failure?.message || failure) }));
+    `);
+    assert.equal(result.failure, undefined, result.failure);
+    assert.equal(result.reportReason, "no-prices");
+
+    await driver.switchTo().window(shopHandle);
+    const reportButton = await driver.wait(
+      until.elementLocated(By.css(".ccp-toast .ccp-toast-action")),
+      FIREFOX_TIMEOUT_MS
+    );
+    assert.equal(await reportButton.getText(), "Report this website");
+    const handlesBefore = await driver.getAllWindowHandles();
+    await reportButton.click();
+    await driver.wait(async () => (
+      (await driver.findElement(By.css(".ccp-toast-message")).getText()) ===
+        "Confirm the report in the Twinprice window that opened."
+    ), FIREFOX_TIMEOUT_MS);
+
+    let consentHandle;
+    await driver.wait(async () => {
+      const handles = await driver.getAllWindowHandles();
+      consentHandle = handles.find((handle) => !handlesBefore.includes(handle));
+      return Boolean(consentHandle);
+    }, FIREFOX_TIMEOUT_MS);
+    await driver.switchTo().window(consentHandle);
+    const consentAddress = await driver.getCurrentUrl();
+    assert.ok(consentAddress.startsWith(`${extensionOrigin}/popup/report.html?`), consentAddress);
+    const consentUrl = new URL(consentAddress);
+    assert.equal(consentUrl.searchParams.get("site"), "shop.localhost");
+    assert.equal(consentUrl.searchParams.get("reason"), "no-prices");
+    const message = await driver.wait(until.elementLocated(By.id("reportMessage")), FIREFOX_TIMEOUT_MS);
+    await driver.wait(async () => /shop\.localhost/.test(await message.getText()), FIREFOX_TIMEOUT_MS);
+    const send = await driver.findElement(By.id("reportSend"));
+    await driver.wait(async () => send.isEnabled(), FIREFOX_TIMEOUT_MS);
+    assert.equal(await send.getText(), "Send report");
+  } finally {
+    if (driver) {
+      if (installedAddonId) {
+        await driver.uninstallAddon(installedAddonId).catch(() => {});
+      }
+      await driver.quit().catch(() => {});
+    }
+    if (fixture) await fixture.close();
+    removeTemporaryDirectory(temporaryDirectory);
+  }
+});
+
 function buildTemporaryArchive(temporaryDirectory) {
   const filename = "twinprice-firefox-runtime.zip";
   const webExtCli = path.join(ROOT, "node_modules", "web-ext", "bin", "web-ext.js");
@@ -456,6 +550,11 @@ async function startFixtureServer() {
       response.end(SELECTION_HTML);
       return;
     }
+    if (request.url === "/empty") {
+      response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      response.end(EMPTY_HTML);
+      return;
+    }
     response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
     response.end("Not found");
   });
@@ -470,6 +569,7 @@ async function startFixtureServer() {
   return {
     url: `http://127.0.0.1:${address.port}/test-shop`,
     selectionUrl: `http://127.0.0.1:${address.port}/selection`,
+    emptyUrl: `http://127.0.0.1:${address.port}/empty`,
     close: () => new Promise((resolve, reject) => {
       server.close((error) => error ? reject(error) : resolve());
     })
