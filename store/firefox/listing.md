@@ -30,7 +30,7 @@ What the Firefox description adds compared with the Chrome text:
 
 - It names Firefox for Android near the top. AMO's Android catalogue is small, and few converters work there.
 - It marks the right-click menu and keyboard shortcut as desktop only, because Firefox for Android has neither.
-- It explains Firefox's own install prompt: website access plus the `websiteContent` data-collection permission declared in `manifests/firefox.json`.
+- It explains Firefox's own install prompt: website access plus the `websiteContent` data-collection permission declared in `manifests/firefox.json`. Since 2.4.0 the manifest also lists `browsingActivity` as optional. Firefox does not ask for it on install, only the first time someone presses **Report this website**, and the description names that one exception.
 - It links the rate provider, source code, privacy policy and user guide.
 
 ## Screenshots
@@ -58,6 +58,12 @@ screenshots are rebuilt.
 | --- | --- |
 | Privacy policy | Paste `privacy-policy.md` from the repository root. Mozilla asks for the text in the listing, not only a link. Update it whenever the policy version changes. |
 | License | MIT |
+
+These notes are written to match Twinprice version 2.4.0 and the privacy policy
+dated October 26, 2026. 2.4.0 added the policy's "Website reports" section, so
+paste the whole current text into the Privacy policy field with that upload. If
+the permissions, data collection, stored data, or network requests change, update
+this file and the policy together.
 
 ## Version details (per upload)
 
