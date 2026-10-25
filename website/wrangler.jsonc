@@ -7,8 +7,25 @@
   "routes": [
     { "pattern": "twinprice.com", "custom_domain": true }
   ],
+  // Only /api/* reaches the Worker first; every other request is served straight
+  // from dist/ as before.
+  "main": "./worker.js",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
-  }
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "GITHUB_REPO": "somewordshere/twinprice"
+  },
+  // Five reports a minute from one visitor, per Cloudflare location. GITHUB_TOKEN
+  // is a secret: wrangler secret put GITHUB_TOKEN
+  "ratelimits": [
+    {
+      "name": "REPORT_LIMITER",
+      "namespace_id": "4201",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ]
 }

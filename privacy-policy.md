@@ -70,15 +70,44 @@ browsing history are not sent to Frankfurter.
 
 Requests use HTTPS. As with normal internet requests, Frankfurter and its infrastructure provider may receive technical request information such as the user's IP address and browser network metadata. Their handling of that information is governed by their own practices.
 
+## Website reports
+
+When a conversion fails, the on-page prompt, the conversion notice and the popup
+offer **Report this website**. Nothing is sent unless the user presses it. Each
+press sends one HTTPS request to https://twinprice.com/api/report containing only:
+
+- The website's hostname, such as `shop.example`, never the page address, its path
+  or query, its title or its contents
+- Why the conversion failed: no prices found, the source currency not detected,
+  or the conversion failed
+- The extension version and whether it is the Chrome, Edge or Firefox build
+- The selected target currency code and the interface language
+
+The report is filed as a public issue in the extension's GitHub repository
+(https://github.com/somewordshere/twinprice/issues), one issue per website, so the
+problem can be fixed. Later reports for the same website are added to that issue as
+comments. Reports carry no account, identifier or cookie. twinprice.com runs on
+Cloudflare, which receives the user's IP address as with any web request; the
+report service uses it only to limit how many reports one visitor can send per
+minute, does not store or log it and does not pass it to GitHub. GitHub's handling of
+public issues is governed by its own practices.
+
+In Firefox, the browser asks for permission to send this information the first time
+the user reports a website. Declining sends nothing. The permission can be withdrawn
+in Firefox's add-on settings under **Permissions and data**. To ask for a report to
+be removed, open an issue at the address under Contact.
+
 ## Data sharing and sale
 
 The developer does not:
 
 - Collect or sell personal information
-- Collect browsing history
+- Collect browsing history (a website report contains only the one hostname the user
+  chose to report)
 - Use analytics or advertising trackers
 - Use data for personalized advertising
-- Share webpage content, highlighted text, or visited URLs with third parties
+- Share webpage content, highlighted text, or visited URLs with third parties, apart
+  from the hostname in a website report the user sends, which is published on GitHub
 - Allow humans to read user webpage data
 
 ## Permissions
@@ -93,6 +122,8 @@ The extension uses the following browser permissions:
 - `activeTab` and `scripting`: provides a user-triggered fallback on supported
   pages where the normal detector was not loaded, including manually allowed local files
 - Access to `api.frankfurter.dev`: retrieves exchange rates
+- Website reports need no extra permission. In Firefox they use the optional
+  "browsing activity" data-collection permission, requested on the first report
 - Optional HTTP and HTTPS site access: requested by **Activate my open tabs**
   to find existing web tabs and start the local detector without reloading them.
   You can decline and reload those tabs instead. Turning on **Convert all websites
@@ -140,7 +171,7 @@ other settings, and no browsing information, and nothing is sent when the page o
 
 ## Security
 
-All external exchange-rate requests use HTTPS. The extension does not execute remotely hosted code.
+All external exchange-rate requests and website reports use HTTPS. The extension does not execute remotely hosted code.
 
 ## Children
 

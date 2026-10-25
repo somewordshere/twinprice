@@ -240,7 +240,9 @@
       inspectedTextNodes: textScan.inspected,
       error: count === 0
         ? rateError?.error || t("convert.noneConverted")
-        : undefined
+        : undefined,
+      // A rate outage is not the website's fault, so it offers no report.
+      reportReason: count === 0 && !rateError ? "failed" : null
     };
   }
 
@@ -261,7 +263,10 @@
           ? t("convert.lowConfidence")
           : settings.fromCurrency !== "AUTO"
             ? t("convert.manualNotFound", { currency: settings.fromCurrency })
-            : t("convert.noPrices")
+            : t("convert.noPrices"),
+      // Which kind of "Report this website" fits. A page already in the target
+      // currency is working as intended, so it offers none.
+      reportReason: sameAsTarget ? null : autoDetectionFailed ? "no-currency" : "no-prices"
     };
   }
 

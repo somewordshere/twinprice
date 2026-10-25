@@ -10,6 +10,10 @@
   let pagePromptRate = null;
   let pageConvertClose = null;
   let pagePromptPreviousFocus = null;
+  let pageReportRow = null;
+  let pageReportButton = null;
+  let pageReportNote = null;
+  let pageReportReason = null;
   let selectionPopup = null;
   let pendingSelectionText = "";
   let pendingSelectionSourceCurrency = "";
@@ -19,6 +23,7 @@
   let runConversion = null;
   let clearConversion = null;
   let convertSelection = null;
+  let reportSite = null;
   let listenersInstalled = false;
   let toastNode = null;
   let toastPreviousFocus = null;
@@ -40,6 +45,7 @@
     runConversion = options.runConversion;
     clearConversion = options.clearConversion;
     convertSelection = options.convertSelection;
+    reportSite = options.reportSite;
   }
 
   function installSelectionListeners() {
@@ -59,6 +65,7 @@
       pageConvertRate = null;
       pageConvertClose = null;
       pagePromptPreviousFocus = null;
+      clearReportRefs();
     }
     if (pageConvertPrompt || !settings?.enabled || !document.body || window.top !== window) return;
     pagePromptPreviousFocus = getActiveElementForRestore();
@@ -111,7 +118,29 @@
     pageConvertButton.textContent = t("page.prompt.convert");
     pageConvertButton.addEventListener("click", handlePagePromptAction);
 
-    pageConvertPrompt.append(header, pageConvertMessage, pageConvertRate, pageConvertButton);
+    // Offered only after a conversion fails, so a website that does not work can
+    // be sent to twinprice.com in one press. The note says what is sent.
+    pageReportRow = document.createElement("div");
+    pageReportRow.className = "ccp-page-prompt-report";
+    pageReportRow.hidden = true;
+    pageReportButton = document.createElement("button");
+    pageReportButton.type = "button";
+    pageReportButton.className = "ccp-page-prompt-report-action";
+    pageReportButton.textContent = t("page.report.action");
+    pageReportButton.addEventListener("click", handlePageReportAction);
+    pageReportNote = document.createElement("span");
+    pageReportNote.className = "ccp-page-prompt-report-note";
+    pageReportNote.setAttribute("role", "status");
+    pageReportNote.setAttribute("aria-live", "polite");
+    pageReportRow.append(pageReportButton, pageReportNote);
+
+    pageConvertPrompt.append(
+      header,
+      pageConvertMessage,
+      pageConvertRate,
+      pageConvertButton,
+      pageReportRow
+    );
     pageConvertPrompt.addEventListener("keydown", handlePagePromptKeydown);
     document.body.appendChild(pageConvertPrompt);
   }
@@ -140,6 +169,7 @@
     if (!pageConvertPrompt || !pageConvertButton || !pageConvertMessage) return;
     const prompt = pageConvertPrompt;
     pagePromptIdle = false;
+    hideReportOption();
     if (pagePromptAction === "undo") {
       pageConvertButton.disabled = true;
       pageConvertButton.textContent = t("page.prompt.restoring");
@@ -190,6 +220,7 @@
         t("page.prompt.convertFailed")
       );
       pageConvertPrompt.dataset.state = "error";
+      showReportOption("failed");
       return;
     }
     if (pageConvertPrompt !== prompt) return;
@@ -214,7 +245,66 @@
         ? t("page.prompt.lowConfidence")
         : result?.error || t("page.prompt.genericError");
       pageConvertPrompt.dataset.state = "error";
+      showReportOption(result?.reportReason);
     }
+  }
+
+  function showReportOption(reason) {
+    if (!pageReportRow || !pageReportButton || !pageReportNote) return;
+    if (!reason || typeof reportSite !== "function") {
+      hideReportOption();
+      return;
+    }
+    pageReportReason = reason;
+    pageReportRow.hidden = false;
+    pageReportButton.hidden = false;
+    pageReportButton.disabled = false;
+    pageReportButton.textContent = t("page.report.action");
+    pageReportNote.textContent = t("page.report.note", { site: global.location.hostname });
+    delete pageReportRow.dataset.state;
+  }
+
+  function hideReportOption() {
+    if (pageReportRow) pageReportRow.hidden = true;
+  }
+
+  async function handlePageReportAction() {
+    if (!pageReportButton || !pageReportNote || !pageReportRow) return;
+    const button = pageReportButton;
+    const hadFocus = document.activeElement === button;
+    button.disabled = true;
+    button.textContent = t("page.report.sending");
+    let result;
+    try {
+      result = await reportSite(pageReportReason);
+    } catch (error) {
+      result = { ok: false, error: formatActionFailure(error, t("page.report.failed")) };
+    }
+    if (pageReportButton !== button || !pageReportNote || !pageReportRow) return;
+    button.disabled = false;
+    if (result?.ok) {
+      button.hidden = true;
+      pageReportNote.textContent = t("page.report.sent");
+      pageReportRow.dataset.state = "success";
+      // The pressed button is gone; keep keyboard focus inside the prompt.
+      if (hadFocus) pageConvertButton?.focus({ preventScroll: true });
+      return;
+    }
+    button.textContent = t("page.report.action");
+    if (result?.consentWindow) {
+      pageReportNote.textContent = t("page.report.confirmWindow");
+      pageReportRow.dataset.state = "info";
+      return;
+    }
+    pageReportNote.textContent = result?.error || t("page.report.failed");
+    pageReportRow.dataset.state = "error";
+  }
+
+  function clearReportRefs() {
+    pageReportRow = null;
+    pageReportButton = null;
+    pageReportNote = null;
+    pageReportReason = null;
   }
 
   // Re-renders the offer in place after the language changes. A prompt that is
@@ -245,6 +335,7 @@
     pageConvertMessage = null;
     pageConvertRate = null;
     pageConvertClose = null;
+    clearReportRefs();
     pagePromptRate = null;
     pagePromptAction = "convert";
     pagePromptIdle = true;
@@ -477,6 +568,9 @@
       action.className = "ccp-toast-action";
       action.textContent = options.actionLabel;
       action.addEventListener("click", async () => {
+        // A toast that would dismiss itself stays while its action runs.
+        if (toastTimer) window.clearTimeout(toastTimer);
+        toastTimer = null;
         action.disabled = true;
         action.setAttribute("aria-busy", "true");
         try {
@@ -514,7 +608,7 @@
     window.requestAnimationFrame(() => {
       if (toastNode === toast && toast.isConnected) text.textContent = message;
     });
-    if (!options.actionLabel) {
+    if (!options.actionLabel || options.autoDismiss) {
       toastTimer = window.setTimeout(() => removeToast({ restoreFocus: false }), options.duration || 6000);
     }
   }

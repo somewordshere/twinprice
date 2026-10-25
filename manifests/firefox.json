@@ -19,6 +19,7 @@
       "background/page-actions.js",
       "background/onboarding.js",
       "background/review-prompt.js",
+      "background/site-report.js",
       "background/main.js"
     ]
   },
@@ -29,6 +30,9 @@
       "data_collection_permissions": {
         "required": [
           "websiteContent"
+        ],
+        "optional": [
+          "browsingActivity"
         ]
       }
     },

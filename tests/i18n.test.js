@@ -95,6 +95,7 @@ test("every key the source code asks for exists in English", () => {
   const known = baseKeys(i18n.dictionary("en"));
   const files = [
     "popup/popup.js", "popup/popup.html", "popup/settings-controller.js",
+    "popup/report.js", "popup/report.html",
     "onboarding/onboarding.js", "onboarding/onboarding.html",
     "content/page-ui.js", "content/content.js", "content/converter.js",
     "shared/page-access.js"

@@ -10,7 +10,7 @@ Veja quanto um preço estrangeiro custa na sua moeda, exatamente onde ele aparec
 Abra uma loja com preços em outra moeda e o Twinprice encontra os preços, oferece a conversão e mostra a cotação antes de você aceitar. Cada valor convertido aparece ao lado do original, então você sempre vê quanto a loja realmente cobra.
 
 POR QUE ELE PEDE PARA LER E ALTERAR DADOS EM TODOS OS SITES
-Um preço pode estar em qualquer loja, então o Twinprice precisa olhar as páginas que você abre para encontrá-lo. Ele só lê essas páginas no seu dispositivo. O conteúdo das páginas, os preços e os sites que você visita nunca saem do seu navegador. A única coisa enviada é um código de moeda de três letras, como USD, para buscar a cotação de referência do dia. Sem anúncios, sem análises, sem rastreamento. O código é aberto (licença MIT): github.com/somewordshere/twinprice
+Um preço pode estar em qualquer loja, então o Twinprice precisa olhar as páginas que você abre para encontrá-lo. Ele só lê essas páginas no seu dispositivo. O conteúdo das páginas, os preços e os sites que você visita nunca saem do seu navegador. A única coisa enviada é um código de moeda de três letras, como USD, para buscar a cotação de referência do dia. A única exceção é "Relatar este site": se uma página não for convertida e você tocar nele, só o nome do site, como shop.example, é enviado para twinprice.com para que ele possa ser corrigido. Sem anúncios, sem análises, sem rastreamento. O código é aberto (licença MIT): github.com/somewordshere/twinprice
 
 O QUE VOCÊ PODE CONVERTER
 - Todos os preços de uma página com um clique

@@ -10,7 +10,7 @@ Yabancı bir fiyatın kendi para biriminde ne tuttuğunu, fiyatın sayfada durdu
 Başka bir para birimi kullanan bir mağaza aç: Twinprice fiyatları bulur, çevirmeyi önerir ve sen kabul etmeden önce kuru gösterir. Çevrilen her tutar özgün fiyatın yanında görünür; böylece mağazanın gerçekte ne istediğini her zaman görürsün.
 
 NEDEN TÜM WEB SİTELERİNDEKİ VERİLERİ OKUMA VE DEĞİŞTİRME İZNİ İSTİYOR
-Bir fiyat herhangi bir mağazada olabilir; bu yüzden Twinprice bir fiyatı fark edebilmek için açtığın sayfalara bakmak zorunda. Sayfaları yalnızca senin cihazında okur. Sayfa içeriği, fiyatlar ve ziyaret ettiğin siteler tarayıcından asla çıkmaz. Başka bir yere gönderilen tek şey, o günün referans kurunu almak için EUR gibi üç harfli bir para birimi kodudur. Reklam yok, analiz yok, izleme yok. Kod, MIT lisansıyla açık kaynaktır: github.com/somewordshere/twinprice
+Bir fiyat herhangi bir mağazada olabilir; bu yüzden Twinprice bir fiyatı fark edebilmek için açtığın sayfalara bakmak zorunda. Sayfaları yalnızca senin cihazında okur. Sayfa içeriği, fiyatlar ve ziyaret ettiğin siteler tarayıcından asla çıkmaz. Başka bir yere gönderilen tek şey, o günün referans kurunu almak için EUR gibi üç harfli bir para birimi kodudur. Tek istisna "Bu web sitesini bildir" düğmesidir: Bir sayfa çevrilemediğinde ona basarsan, düzeltilebilmesi için yalnızca sitenin adı (ör. shop.example) twinprice.com'a gönderilir. Reklam yok, analiz yok, izleme yok. Kod, MIT lisansıyla açık kaynaktır: github.com/somewordshere/twinprice
 
 NELERİ ÇEVİREBİLİRSİN
 - Bir sayfadaki tüm fiyatları tek tıkla

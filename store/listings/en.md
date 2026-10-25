@@ -12,7 +12,7 @@ See what a foreign price costs in your own money, right where the price sits on 
 Open a shop that uses another currency and Twinprice finds the prices, offers to convert them, and shows you the rate before you accept. Each converted value appears beside the original, so you always see what the shop actually charges.
 
 WHY IT ASKS TO READ AND CHANGE DATA ON ALL WEBSITES
-A price can be on any shop, so Twinprice has to look at the pages you open to notice one. It only reads them on your device. Page content, prices and the sites you visit never leave your browser. The only thing sent anywhere is a three-letter currency code such as EUR, to fetch that day's reference rate. No ads, no analytics, no tracking. The code is open source under the MIT licence: github.com/somewordshere/twinprice
+A price can be on any shop, so Twinprice has to look at the pages you open to notice one. It only reads them on your device. Page content, prices and the sites you visit never leave your browser. The only thing sent anywhere is a three-letter currency code such as EUR, to fetch that day's reference rate. The one exception is Report this website: when a page will not convert and you press it, only that site's name, such as shop.example, is sent to twinprice.com so it can be fixed. No ads, no analytics, no tracking. The code is open source under the MIT licence: github.com/somewordshere/twinprice
 
 WHAT YOU CAN CONVERT
 - Every price on a page, in one click

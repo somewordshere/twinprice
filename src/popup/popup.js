@@ -32,6 +32,11 @@ const secondaryActionsNode = document.getElementById("secondaryActions");
 const statusContainerNode = document.getElementById("statusContainer");
 const statusNode = document.getElementById("status");
 const rateInfoNode = document.getElementById("rateInfo");
+const reportSiteNode = document.getElementById("reportSite");
+const reportSiteButton = document.getElementById("reportSiteButton");
+const reportSiteNote = document.getElementById("reportSiteNote");
+// Firefox asks once before Twinprice sends the name of a site you visit.
+const FIREFOX_REPORT_CONSENT = Object.freeze({ data_collection: ["browsingActivity"] });
 const siteStateNode = document.getElementById("siteState");
 const quickAmountInput = document.getElementById("quickAmount");
 const quickResultNode = document.getElementById("quickResult");
@@ -85,6 +90,7 @@ let quickConversionRequestId = 0;
 let rateHistoryRequestId = 0;
 let renderedHistoryPair = null;
 let pageConversionError = null;
+let reportReason = null;
 let primaryActionBusy = false;
 let popupReady = false;
 let popupLocked = false;
@@ -222,6 +228,7 @@ async function initialize() {
   autoConvertAllSitesInput.addEventListener("change", handleAutoConvertAllSitesChange);
   convertSiteButton.addEventListener("click", convertWholeSite);
   clearPageButton.addEventListener("click", clearCurrentPage);
+  reportSiteButton.addEventListener("click", reportActiveSite);
   clearSiteButton.addEventListener("click", clearWholeSite);
   quickAmountInput.addEventListener("input", scheduleQuickConversion);
   chooseQuickSourceButton.addEventListener("click", () => fromCurrencySearch.focus());
@@ -1237,6 +1244,7 @@ async function convertWholeSite() {
   } else {
     setBusy(true);
   }
+  showReportSite(null);
   setStatus(t("popup.scanning"));
   const result = await sendToActivePage(M.RUN_SITE_CONVERSION);
   setBusy(false);
@@ -1278,6 +1286,7 @@ async function convertWholeSite() {
       : `${t("popup.noPrices")}${result?.error ? ` ${result.error}` : ""}`,
     hasConversions ? "success" : "warning"
   );
+  showReportSite(hasConversions ? null : result.reportReason);
   const cachedPart = result.staleRates
     ? t(result.cacheAgeLabel ? "popup.cachedAge" : "popup.cached", { age: result.cacheAgeLabel })
     : "";
@@ -1390,6 +1399,59 @@ function moveFocusBeforeHiding(node, wasFocused = node?.contains(document.active
     !candidate.closest("[inert]")
   );
   target?.focus();
+}
+
+// Offered under the status when a page converts nothing for a reason that may be
+// the website's (not a rate outage, not a page already in your currency).
+function showReportSite(reason) {
+  reportReason = reason || null;
+  reportSiteNode.hidden = !reportReason;
+  if (!reportReason) return;
+  reportSiteButton.hidden = false;
+  reportSiteButton.disabled = false;
+  reportSiteButton.textContent = t("page.report.action");
+  let site = "";
+  try {
+    site = new URL(activeTab?.url).hostname;
+  } catch (_error) {
+    // The background refuses a page without a hostname; the note just stays short.
+  }
+  reportSiteNote.textContent = t("page.report.note", { site });
+  delete reportSiteNode.dataset.state;
+}
+
+async function reportActiveSite() {
+  if (!reportReason) return;
+  // Firefox shows its consent prompt only from inside the click itself, so it is
+  // asked before anything is awaited. Once given, it answers at once.
+  const consent = CurrencyPageAccess.isFirefoxBuild()
+    ? ExtensionAPI.permissions.request(FIREFOX_REPORT_CONSENT).catch(() => false)
+    : Promise.resolve(true);
+  reportSiteButton.disabled = true;
+  reportSiteButton.textContent = t("page.report.sending");
+  await consent;
+  let result = null;
+  try {
+    result = I18n.localize(await ExtensionAPI.runtime.sendMessage({
+      type: M.REPORT_SITE,
+      origin: activeTab?.url,
+      reason: reportReason,
+      to: toCurrencySelect.value,
+      language: I18n.language()
+    }));
+  } catch (_error) {
+    result = null;
+  }
+  reportSiteButton.disabled = false;
+  if (result?.ok) {
+    reportSiteButton.hidden = true;
+    reportSiteNote.textContent = t("page.report.sent");
+    reportSiteNode.dataset.state = "success";
+    return;
+  }
+  reportSiteButton.textContent = t("page.report.action");
+  reportSiteNote.textContent = result?.error || t("error.reportFailed");
+  reportSiteNode.dataset.state = "error";
 }
 
 function setStatus(message, kind = "") {

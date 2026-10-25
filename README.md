@@ -4,7 +4,7 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 **[twinprice.com](https://twinprice.com/)** brings together installation links, help, privacy information, and source code. The add-on links to the website for product information and support. Follow the [illustrated user guide](https://twinprice.com/guide/) to convert a page or a selected price. The [product facts and publisher details](https://twinprice.com/about/) explain supported browsers, rate sources, limitations, and maintenance.
 
-Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
+Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
 **Current version:** 2.3.3 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
@@ -50,6 +50,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 - Keep the popup focused on the current site, currency pair, and one adaptive page-conversion action, with less-used controls in closed disclosures.
 - Scan ordinary webpages locally as they open and show the on-page conversion prompt only after a supported price is found.
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
+- Report a website that will not convert in one press, from the prompt, the conversion notice or the popup. Only its hostname is sent.
 - Use recent cached rates immediately while refreshing them in the background.
 
 ## Installation
@@ -134,7 +135,9 @@ These are heuristic confidence scores, not calibrated probabilities.
 
 All webpage scanning, price detection, conversion, and rendering happen locally inside the browser. The extension never transmits page contents, highlighted text, price values, visited URLs, or browsing history.
 
-The only external requests retrieve the currency catalog and reference rates from Frankfurter using ISO currency codes. No webpage text, prices, URLs, analytics, tracking identifiers, or advertising data is included. As with any HTTPS request, the service may receive ordinary network metadata such as an IP address. Preferences, recent currency choices, cached rates, and origins selected for automatic conversion remain in browser storage.
+When a conversion fails, the prompt, the conversion notice and the popup offer **Report this website**. Pressing it sends the site's hostname (never its path, query or contents), the failure reason, the extension version and browser, and the target currency and interface language to `twinprice.com/api/report`, which files one public GitHub issue per website. Firefox asks for permission the first time. The endpoint is the Worker in [`website/worker.js`](website/worker.js).
+
+Apart from a website report the user sends, the only external requests retrieve the currency catalog and reference rates from Frankfurter using ISO currency codes. No webpage text, prices, URLs, analytics, tracking identifiers, or advertising data is included. As with any HTTPS request, the service may receive ordinary network metadata such as an IP address. Preferences, recent currency choices, cached rates, and origins selected for automatic conversion remain in browser storage.
 
 | Permission | Why it is needed |
 | --- | --- |
@@ -252,10 +255,10 @@ See [What’s new](WHATS-NEW.md) for every release.
 ```text
 src/          Shared extension runtime used by both browsers
   _locales/   Store name and summary in each listed language
-  background/ Listener/router entry plus settings, site-preference, page-action, catalog, rate, onboarding, and rating-reminder services, over shared HTTP and catalog-snapshot helpers
+  background/ Listener/router entry plus settings, site-preference, page-action, catalog, rate, onboarding, rating-reminder, and website-report services, over shared HTTP and catalog-snapshot helpers
   content/    Detection and conversion runtime, conversion registry, bounded mutation scheduler, and page UI
   icons/      Extension icons
-  popup/      Popup UI and settings reconciliation controller
+  popup/      Popup UI, settings reconciliation controller, and Firefox's one-time website-report consent window
   shared/     Browser adapter, currency catalog, canonical settings schema, messages, page-access rules, and manifest-derived content-script injection
 manifests/    Common manifest plus Chrome and Firefox overrides
 dist/         Generated unpacked browser builds (not committed)
@@ -264,7 +267,7 @@ store/        Store listing text in thirteen languages, dashboard answers, scree
 screenshots/  README screenshots and an old/ archive of the previous interface
 scripts/      Manifest composition, validation, icon, screenshot, video, and release utilities
 tests/        Unit, integration, fixture, Chrome Playwright, and Firefox runtime tests
-website/      twinprice.com, deployed separately with Wrangler
+website/      twinprice.com and its website-report Worker, deployed separately with Wrangler
 ```
 
 ## 📄 License

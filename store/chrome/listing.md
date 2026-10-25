@@ -74,6 +74,15 @@ Required to retrieve reference exchange rates. Requests contain only ISO currenc
 codes for the source and supported quote currencies. Page content, selected text,
 price values, and visited URLs are not sent.
 
+#### Website reports (no permission)
+
+**Report this website** needs no permission and adds no host access: the
+twinprice.com endpoint allows requests from the extension, so the manifest is
+unchanged. It is offered only after a conversion fails, and only a press sends
+anything: the site's hostname, the failure reason, the extension version and
+browser, the target currency code and the interface language. Never the page
+address, path, query, title or contents.
+
 ### Remote code
 
 Select:
@@ -94,12 +103,16 @@ Chrome Storage Sync. Recent currencies, remembered origins, the rating-reminder
 count, and exchange-rate data are cached locally. Only currency codes are sent to
 Frankfurter.
 
+When the user presses **Report this website**, the hostname of that one website is
+sent to the developer (twinprice.com) and published as a GitHub issue so the
+problem can be fixed. Nothing is sent without that press.
+
 The interface language is a display preference. It is not personal information,
 location, or any other category the dashboard asks about, and it is never transmitted.
 
 When the dashboard asks which data is **collected**, answer according to the exact wording shown by the current dashboard:
 
-- If “collected” means transmitted off the user's device to the developer or a third party, do not select website content or browsing history. Neither is transmitted.
+- If “collected” means transmitted off the user's device to the developer or a third party, do not select website content. Select **Web history** and explain: "Only when the user presses Report this website after a failed conversion: the hostname of that one website (no path, query, title or contents) is sent to the developer so the problem can be fixed. Nothing is sent automatically."
 - If the dashboard explicitly treats local access or local processing as collection, select **Website content** and explain that it is processed locally only for the user-facing conversion feature and is never transmitted or retained.
 
 Do not claim collection of:
@@ -109,7 +122,7 @@ Do not claim collection of:
 - Authentication information
 - Personal communications
 - Location
-- Browsing history sent off-device
+- Browsing history sent off-device, beyond the one hostname in a website report the user sends
 - Financial or payment information
 
 Prices shown publicly on shopping webpages are processed as webpage content, not collected as the user's personal financial information.

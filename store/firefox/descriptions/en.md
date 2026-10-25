@@ -27,7 +27,7 @@ Works in Firefox on Windows, macOS and Linux, and in **Firefox for Android**.
 
 **Why Firefox asks for access to all websites and lists website content**
 
-A price can be on any shop, so Twinprice has to read the pages you open to notice one. It reads them **only on your device**. Page content, prices and the sites you visit never leave your browser. The only thing sent anywhere is a three-letter currency code such as EUR, to fetch that day's reference rate. No ads, no analytics, no tracking.
+A price can be on any shop, so Twinprice has to read the pages you open to notice one. It reads them **only on your device**. Page content, prices and the sites you visit never leave your browser. The only thing sent anywhere is a three-letter currency code such as EUR, to fetch that day's reference rate. The one exception is **Report this website**: when a page will not convert and you press it, only that site's name, such as shop.example, is sent to twinprice.com so it can be fixed. Firefox asks for your permission the first time. No ads, no analytics, no tracking.
 
 **About the rates**
 

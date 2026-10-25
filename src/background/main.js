@@ -6,6 +6,7 @@
   const pageActions = global.CurrencyPageActions;
   const onboarding = global.CurrencyOnboardingService;
   const reviewPrompt = global.CurrencyReviewPrompt;
+  const siteReport = global.CurrencySiteReport;
 
   // The goodbye page follows the popup's language, so its address is set again on
   // install, on browser start and whenever the language setting changes.
@@ -92,6 +93,8 @@
         return reviewPrompt.dismiss();
       case messages.MARK_REVIEW_OPENED:
         return reviewPrompt.markRated();
+      case messages.REPORT_SITE:
+        return siteReport.report(message, sender);
       default:
         return { ok: false, error: "Unknown extension request." };
     }

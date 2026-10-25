@@ -17,6 +17,7 @@
   // made, so turning that setting off can take them back.
   let convertedForAllSites = false;
   let successRecorded = false;
+  let siteReported = false;
   let currentRoute = readRouteKey();
 
   ExtensionAPI.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -297,7 +298,8 @@
       settings,
       runConversion: runSiteConversion,
       clearConversion: clearPromptConversion,
-      convertSelection: convertSelectionText
+      convertSelection: convertSelectionText,
+      reportSite: reportCurrentSite
     });
     return {
       rateSettingsChanged,
@@ -572,9 +574,46 @@
           duration: 8000
         }
       );
+    } else if (result?.reportReason) {
+      CurrencyPageUi.showToast(
+        `${result.error || t("toast.noPrices")} ${t("page.report.note", { site: location.hostname })}`,
+        {
+          actionLabel: t("page.report.action"),
+          onAction: () => reportFromToast(result.reportReason),
+          autoDismiss: true,
+          duration: 10000
+        }
+      );
     } else {
       CurrencyPageUi.showToast(result?.error || t("toast.noPrices"));
     }
+  }
+
+  async function reportFromToast(reason) {
+    const result = await reportCurrentSite(reason);
+    if (result?.ok) CurrencyPageUi.showToast(t("page.report.sent"));
+    else if (result?.consentWindow) CurrencyPageUi.showToast(t("page.report.confirmWindow"));
+    else return result;
+    return { ok: true };
+  }
+
+  // One report per page is enough. Pressing again, from the prompt or a toast,
+  // thanks you again without sending a second one.
+  async function reportCurrentSite(reason) {
+    if (siteReported) return { ok: true };
+    let result;
+    try {
+      result = CurrencyI18n.localize(await ExtensionAPI.runtime.sendMessage({
+        type: M.REPORT_SITE,
+        reason,
+        to: settings?.toCurrency,
+        language: CurrencyI18n.language()
+      }));
+    } catch (_error) {
+      result = null;
+    }
+    if (result?.ok) siteReported = true;
+    return result || { ok: false, error: t("error.reportFailed") };
   }
 
   function updateBadge(count) {

@@ -10,7 +10,7 @@ Zie wat een buitenlandse prijs in je eigen valuta kost, precies waar de prijs op
 Open een winkel die een andere valuta gebruikt: Twinprice vindt de prijzen, biedt aan ze om te rekenen en laat je de koers zien voordat je akkoord gaat. Elk omgerekend bedrag verschijnt naast het origineel, zodat je altijd ziet wat de winkel echt rekent.
 
 WAAROM HET TOEGANG VRAAGT TOT GEGEVENS OP ALLE WEBSITES
-Een prijs kan in elke winkel staan, dus Twinprice moet de pagina's die je opent bekijken om er een op te merken. Dat gebeurt alleen op je eigen apparaat. Pagina-inhoud, prijzen en de sites die je bezoekt verlaten je browser nooit. Het enige wat ergens naartoe wordt gestuurd, is een valutacode van drie letters, zoals EUR, om de referentiekoers van die dag op te halen. Geen reclame, geen analyse, geen tracking. De code is open source onder de MIT-licentie: github.com/somewordshere/twinprice
+Een prijs kan in elke winkel staan, dus Twinprice moet de pagina's die je opent bekijken om er een op te merken. Dat gebeurt alleen op je eigen apparaat. Pagina-inhoud, prijzen en de sites die je bezoekt verlaten je browser nooit. Het enige wat ergens naartoe wordt gestuurd, is een valutacode van drie letters, zoals EUR, om de referentiekoers van die dag op te halen. De enige uitzondering is 'Deze website melden': als een pagina niet wordt omgerekend en je daarop drukt, wordt alleen de naam van de site, zoals shop.example, naar twinprice.com gestuurd zodat het probleem kan worden opgelost. Geen reclame, geen analyse, geen tracking. De code is open source onder de MIT-licentie: github.com/somewordshere/twinprice
 
 WAT JE KUNT OMREKENEN
 - Alle prijzen op een pagina, met één klik

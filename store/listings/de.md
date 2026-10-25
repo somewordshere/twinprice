@@ -10,7 +10,7 @@ Sieh sofort, was ein ausländischer Preis in deiner eigenen Währung kostet, dir
 Öffne einen Shop in einer anderen Währung: Twinprice findet die Preise, bietet die Umrechnung an und zeigt dir vorher den Kurs. Jeder umgerechnete Betrag erscheint neben dem Original, damit du immer siehst, was der Shop tatsächlich verlangt.
 
 WARUM ES ZUGRIFF AUF DATEN AUF ALLEN WEBSITES BRAUCHT
-Ein Preis kann in jedem Shop stehen, deshalb muss Twinprice die Seiten ansehen, die du öffnest. Das passiert nur auf deinem Gerät. Seiteninhalte, Preise und besuchte Adressen verlassen deinen Browser nie. Gesendet wird nur ein dreistelliger Währungscode wie EUR, um den Referenzkurs des Tages abzurufen. Keine Werbung, keine Analyse, kein Tracking. Der Code ist quelloffen (MIT-Lizenz): github.com/somewordshere/twinprice
+Ein Preis kann in jedem Shop stehen, deshalb muss Twinprice die Seiten ansehen, die du öffnest. Das passiert nur auf deinem Gerät. Seiteninhalte, Preise und besuchte Adressen verlassen deinen Browser nie. Gesendet wird nur ein dreistelliger Währungscode wie EUR, um den Referenzkurs des Tages abzurufen. Einzige Ausnahme ist „Diese Website melden“: Wenn eine Seite nicht umgerechnet wird und du darauf drückst, wird nur der Name der Website, etwa shop.example, an twinprice.com gesendet, damit sie verbessert werden kann. Keine Werbung, keine Analyse, kein Tracking. Der Code ist quelloffen (MIT-Lizenz): github.com/somewordshere/twinprice
 
 WAS DU UMRECHNEN KANNST
 - Alle Preise einer Seite mit einem Klick
