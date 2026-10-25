@@ -20,6 +20,19 @@ const MAX_BODY_BYTES = 1024;
 // browser; it is not a defence against scripts, which the rate limit covers.
 const EXTENSION_ORIGIN = /^(?:chrome-extension:\/\/[a-p]{32}|moz-extension:\/\/[0-9a-f-]{36})$/;
 const HOSTNAME = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
+// Reports become public issues, so a name that only exists inside a company or a
+// home network (hr.intranet.acme.corp, nas.local) must never be published. These
+// endings are reserved or in common private use; the extension refuses them too.
+// Anything else must also resolve, in public DNS, to a public address.
+const PRIVATE_ENDINGS = new Set([
+  'alt', 'arpa', 'corp', 'example', 'home', 'internal', 'intranet', 'invalid', 'lan',
+  'local', 'localdomain', 'localhost', 'onion', 'private', 'test'
+]);
+const DNS_RESOLVER = 'https://cloudflare-dns.com/dns-query';
+// At most this many new issues an hour across all visitors, so a script that
+// fakes the extension's origin from many addresses cannot flood the repository.
+// Reports for a website that already has an open issue are still added to it.
+const NEW_ISSUES_PER_HOUR = 20;
 
 export default {
   async fetch(request, env) {
@@ -60,15 +73,68 @@ export async function handleReport(request, env, fetchImpl = fetch) {
 
   const report = parseReport(await readBody(request));
   if (!report) return json({ ok: false, error: 'invalid' }, 400, cors);
+  if (isPrivateName(report.site)) return json({ ok: false, error: 'not-public' }, 400, cors);
   if (!env.GITHUB_TOKEN) return json({ ok: false, error: 'unavailable' }, 503, cors);
 
+  let outcome;
   try {
-    await fileReport(report, env, fetchImpl);
+    if (!(await resolvesPublicly(report.site, fetchImpl))) {
+      return json({ ok: false, error: 'not-public' }, 400, cors);
+    }
+    outcome = await fileReport(report, env, fetchImpl);
   } catch (error) {
     console.error('Could not file a website report.', error instanceof Error ? error.message : error);
     return json({ ok: false, error: 'unavailable' }, 502, cors);
   }
+  if (outcome === 'busy') return json({ ok: false, error: 'rate-limited' }, 429, cors);
   return json({ ok: true }, 200, cors);
+}
+
+export function isPrivateName(site) {
+  return PRIVATE_ENDINGS.has(site.slice(site.lastIndexOf('.') + 1));
+}
+
+// Asks public DNS for the name's addresses. A name that does not exist outside a
+// private network, or that points only at private addresses (a common way to
+// publish intranet hosts), is not public and is not reported.
+export async function resolvesPublicly(site, fetchImpl = fetch) {
+  for (const [type, code] of [['A', 1], ['AAAA', 28]]) {
+    const response = await fetchImpl(`${DNS_RESOLVER}?name=${encodeURIComponent(site)}&type=${type}`, {
+      headers: { Accept: 'application/dns-json' }
+    });
+    if (!response.ok) throw new Error(`DNS lookup answered ${response.status}`);
+    const answer = await response.json();
+    const addresses = (answer.Answer || [])
+      .filter((record) => record.type === code)
+      .map((record) => record.data);
+    if (addresses.some(isPublicAddress)) return true;
+  }
+  return false;
+}
+
+export function isPublicAddress(address) {
+  if (typeof address !== 'string') return false;
+  const mapped = address.toLowerCase().match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
+  const ipv4 = mapped ? mapped[1] : address;
+  if (/^\d+\.\d+\.\d+\.\d+$/.test(ipv4)) {
+    const [a, b] = ipv4.split('.').map(Number);
+    return !(
+      a === 0 || a === 10 || a === 127 || a >= 224 ||
+      (a === 100 && b >= 64 && b <= 127) ||
+      (a === 169 && b === 254) ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 168) ||
+      (a === 198 && (b === 18 || b === 19))
+    );
+  }
+  const ipv6 = address.toLowerCase();
+  if (!ipv6.includes(':')) return false;
+  return !(
+    ipv6 === '::' || ipv6 === '::1' ||
+    /^f[cd]/.test(ipv6) ||
+    /^fe[89ab]/.test(ipv6) ||
+    /^ff/.test(ipv6)
+  );
 }
 
 async function readBody(request) {
@@ -120,6 +186,7 @@ async function fileReport(report, env, fetchImpl) {
   const search = await github(`/search/issues?q=${encodeURIComponent(query)}&per_page=10`);
   if (!search.ok) throw new Error(`GitHub search answered ${search.status}`);
   const existing = (await search.json()).items?.find((issue) => issue.title === title);
+  if (!existing && await newIssueCapReached(github, repo)) return 'busy';
 
   const response = existing
     ? await github(`/repos/${repo}/issues/${existing.number}/comments`, {
@@ -131,6 +198,17 @@ async function fileReport(report, env, fetchImpl) {
       body: JSON.stringify({ title, labels: [LABEL], body: issueBody(report) })
     });
   if (!response.ok) throw new Error(`GitHub answered ${response.status}`);
+  return existing ? 'commented' : 'opened';
+}
+
+// GitHub's own count is the counter, so the cap holds across every Cloudflare
+// location without extra storage. Its search can trail by about a minute.
+async function newIssueCapReached(github, repo) {
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z');
+  const query = `repo:${repo} is:issue label:${LABEL} created:>=${since}`;
+  const response = await github(`/search/issues?q=${encodeURIComponent(query)}&per_page=1`);
+  if (!response.ok) throw new Error(`GitHub count answered ${response.status}`);
+  return (await response.json()).total_count >= NEW_ISSUES_PER_HOUR;
 }
 
 function issueBody(report) {

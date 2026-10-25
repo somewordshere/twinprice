@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
-**Current version:** 2.3.3 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.4.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.3.3/twinprice-2.3.3-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.3.3/twinprice-2.3.3-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.4.0/twinprice-2.4.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.4.0/twinprice-2.4.0-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -56,7 +56,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.3.3/twinprice-2.3.3-chrome.zip) or [Firefox build](release/2.3.3/twinprice-2.3.3-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.4.0/twinprice-2.4.0-chrome.zip) or [Firefox build](release/2.4.0/twinprice-2.4.0-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -135,7 +135,7 @@ These are heuristic confidence scores, not calibrated probabilities.
 
 All webpage scanning, price detection, conversion, and rendering happen locally inside the browser. The extension never transmits page contents, highlighted text, price values, visited URLs, or browsing history.
 
-When a conversion fails, the prompt, the conversion notice and the popup offer **Report this website**. Pressing it sends the site's hostname (never its path, query or contents), the failure reason, the extension version and browser, and the target currency and interface language to `twinprice.com/api/report`, which files one public GitHub issue per website. Firefox asks for permission the first time. The endpoint is the Worker in [`website/worker.js`](website/worker.js).
+When a conversion fails, the prompt, the conversion notice and the popup offer **Report this website**. Pressing it sends the site's hostname (never its path, query or contents), the failure reason, the extension version and browser, and the target currency and interface language to `twinprice.com/api/report`, which files one public GitHub issue per website. Names of private networks (`.local`, `.corp`, `.internal` and similar) are never sent, and the endpoint refuses any name that public DNS does not know or that points only at private addresses. Firefox asks for permission the first time. The endpoint is the Worker in [`website/worker.js`](website/worker.js).
 
 Apart from a website report the user sends, the only external requests retrieve the currency catalog and reference rates from Frankfurter using ISO currency codes. No webpage text, prices, URLs, analytics, tracking identifiers, or advertising data is included. As with any HTTPS request, the service may receive ordinary network metadata such as an IP address. Preferences, recent currency choices, cached rates, and origins selected for automatic conversion remain in browser storage.
 
@@ -221,6 +221,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.4.0 | Report this website: one press sends a site that will not convert to twinprice.com; amazon.com dollar and currency-code prices convert again | [Chrome](release/2.4.0/twinprice-2.4.0-chrome.zip) · [Firefox](release/2.4.0/twinprice-2.4.0-firefox.zip) |
 | 2.3.3 | Automatic-conversion and Convert-button options moved to the top of Page options | [Chrome](release/2.3.3/twinprice-2.3.3-chrome.zip) · [Firefox](release/2.3.3/twinprice-2.3.3-firefox.zip) |
 | 2.3.2 | A 10% smaller on-page Convert prompt and conversion notice | [Chrome](release/2.3.2/twinprice-2.3.2-chrome.zip) · [Firefox](release/2.3.2/twinprice-2.3.2-firefox.zip) |
 | 2.3.1 | Korean prices written with 원, 만 and 억, and Japanese 万円, now convert | [Chrome](release/2.3.1/twinprice-2.3.1-chrome.zip) · [Firefox](release/2.3.1/twinprice-2.3.1-firefox.zip) |

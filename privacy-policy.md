@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: October 21, 2026 (version 2.3.3)
+Effective date: October 26, 2026 (version 2.4.0)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 
@@ -92,6 +92,14 @@ report service uses it only to limit how many reports one visitor can send per
 minute, does not store or log it and does not pass it to GitHub. GitHub's handling of
 public issues is governed by its own practices.
 
+Only websites that exist on the public internet are reported. The extension never
+sends names that belong to private networks, such as those ending in `.local`,
+`.corp`, `.internal`, `.lan` or `.home.arpa`. Before filing a report,
+twinprice.com looks the hostname up in public DNS through Cloudflare's resolver
+(cloudflare-dns.com) and refuses it if the name does not exist publicly or points
+only to private network addresses, so internal company or home hostnames are not
+published.
+
 In Firefox, the browser asks for permission to send this information the first time
 the user reports a website. Declining sends nothing. The permission can be withdrawn
 in Firefox's add-on settings under **Permissions and data**. To ask for a report to
@@ -107,8 +115,11 @@ The developer does not:
 - Use analytics or advertising trackers
 - Use data for personalized advertising
 - Share webpage content, highlighted text, or visited URLs with third parties, apart
-  from the hostname in a website report the user sends, which is published on GitHub
-- Allow humans to read user webpage data
+  from the hostname in a website report the user sends, which is looked up in
+  Cloudflare's public DNS and published on GitHub
+- Allow humans to read user webpage data. The only user data people can read is the
+  hostname in a website report, which the user sends deliberately by pressing
+  **Report this website** and which is published as a public GitHub issue
 
 ## Permissions
 
@@ -137,7 +148,10 @@ Information received through browser extension APIs is used only to provide
 Twinprice's disclosed single purpose and is handled in accordance
 with the Chrome Web Store User Data Policy, including the Limited Use
 requirements. It is not used for advertising, profiling, credit decisions, sale,
-or unrelated purposes, and humans are not allowed to read webpage data.
+or unrelated purposes, and humans are not allowed to read webpage data. The one
+exception is the hostname of a website the user chooses to report: pressing
+**Report this website** is the user's affirmative agreement for that hostname to be
+read by the developer and published, so the problem can be fixed.
 
 ## Data retention and deletion
 

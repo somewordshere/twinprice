@@ -3,7 +3,7 @@ const path = require("node:path");
 const { test, expect } = require("./fixtures");
 const { openPopupForPage, runPageCommand, seedExtension } = require("./harness");
 
-const BROKEN_SHOP_URL = "https://broken-shop.example.test/basket?order=4417";
+const BROKEN_SHOP_URL = "https://broken-shop.twinprice-fixture.com/basket?order=4417";
 // The harness finds a tab by its address, which the extension can read only on a
 // site it may access, so this page borrows the rate provider's host.
 const EMPTY_SHOP_URL = "https://api.frankfurter.dev/empty-catalog?session=88";
@@ -45,7 +45,7 @@ test("a failed conversion in the on-page prompt offers a report that sends only 
   await expect(prompt).toHaveAttribute("data-state", "error");
   await expect(report).toBeVisible();
   await expect(report.locator(".ccp-page-prompt-report-note"))
-    .toHaveText("Sends only broken-shop.example.test to twinprice.com.");
+    .toHaveText("Sends only broken-shop.twinprice-fixture.com to twinprice.com.");
 
   await report.getByRole("button", { name: "Report this website" }).click();
   await expect(report.locator(".ccp-page-prompt-report-note")).toHaveText("Thanks! The website was reported.");
@@ -54,7 +54,7 @@ test("a failed conversion in the on-page prompt offers a report that sends only 
 
   const reports = await reportsSent(extensionWorker);
   expect(reports).toEqual([{
-    site: "broken-shop.example.test",
+    site: "broken-shop.twinprice-fixture.com",
     reason: "no-prices",
     version: require("../../package.json").version,
     browser: "chrome",
