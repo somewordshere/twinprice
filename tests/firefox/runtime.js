@@ -478,9 +478,12 @@ test("Firefox opens its consent window for a website report and sends nothing be
     assert.equal(await reportButton.getText(), "Report this website");
     const handlesBefore = await driver.getAllWindowHandles();
     await reportButton.click();
+    // The press replaces the notice with a new one, so a found element can go
+    // stale before its text is read. Reading it in one script avoids that race.
     await driver.wait(async () => (
-      (await driver.findElement(By.css(".ccp-toast-message")).getText()) ===
-        "Confirm the report in the Twinprice window that opened."
+      (await driver.executeScript(
+        "return document.querySelector('.ccp-toast-message')?.textContent || '';"
+      )) === "Confirm the report in the Twinprice window that opened."
     ), FIREFOX_TIMEOUT_MS);
 
     let consentHandle;
