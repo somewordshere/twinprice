@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that ever leaves it is an ISO currency code such as `USD` or `EUR` — never page content, prices, or the sites you visit.
 
-**Current version:** 2.3.2 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.3.3 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.3.2/twinprice-2.3.2-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.3.2/twinprice-2.3.2-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.3.3/twinprice-2.3.3-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.3.3/twinprice-2.3.3-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -55,7 +55,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.3.2/twinprice-2.3.2-chrome.zip) or [Firefox build](release/2.3.2/twinprice-2.3.2-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.3.3/twinprice-2.3.3-chrome.zip) or [Firefox build](release/2.3.3/twinprice-2.3.3-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -218,6 +218,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.3.3 | Automatic-conversion and Convert-button options moved to the top of Page options | [Chrome](release/2.3.3/twinprice-2.3.3-chrome.zip) · [Firefox](release/2.3.3/twinprice-2.3.3-firefox.zip) |
 | 2.3.2 | A 10% smaller on-page Convert prompt and conversion notice | [Chrome](release/2.3.2/twinprice-2.3.2-chrome.zip) · [Firefox](release/2.3.2/twinprice-2.3.2-firefox.zip) |
 | 2.3.1 | Korean prices written with 원, 만 and 억, and Japanese 万円, now convert | [Chrome](release/2.3.1/twinprice-2.3.1-chrome.zip) · [Firefox](release/2.3.1/twinprice-2.3.1-firefox.zip) |
 | 2.3.0 | Convert all websites automatically, without the prompt or a message | [Chrome](release/2.3.0/twinprice-2.3.0-chrome.zip) · [Firefox](release/2.3.0/twinprice-2.3.0-firefox.zip) |
