@@ -35,8 +35,6 @@ const rateInfoNode = document.getElementById("rateInfo");
 const reportSiteNode = document.getElementById("reportSite");
 const reportSiteButton = document.getElementById("reportSiteButton");
 const reportSiteNote = document.getElementById("reportSiteNote");
-// Firefox asks once before Twinprice sends the name of a site you visit.
-const FIREFOX_REPORT_CONSENT = Object.freeze({ data_collection: ["browsingActivity"] });
 const siteStateNode = document.getElementById("siteState");
 const quickAmountInput = document.getElementById("quickAmount");
 const quickResultNode = document.getElementById("quickResult");
@@ -1422,22 +1420,20 @@ function showReportSite(reason) {
 
 async function reportActiveSite() {
   if (!reportReason) return;
-  // Firefox shows its consent prompt only from inside the click itself, so it is
-  // asked before anything is awaited. Once given, it answers at once.
-  const consent = CurrencyPageAccess.isFirefoxBuild()
-    ? ExtensionAPI.permissions.request(FIREFOX_REPORT_CONSENT).catch(() => false)
-    : Promise.resolve(true);
   reportSiteButton.disabled = true;
   reportSiteButton.textContent = t("page.report.sending");
-  await consent;
   let result = null;
   try {
+    // Without Firefox's consent yet, the background opens the same small consent
+    // window a press on the page does. Asking from here instead could close the
+    // popup when Firefox's prompt appears, and the report would be lost.
     result = I18n.localize(await ExtensionAPI.runtime.sendMessage({
       type: M.REPORT_SITE,
       origin: activeTab?.url,
       reason: reportReason,
       to: toCurrencySelect.value,
-      language: I18n.language()
+      language: I18n.language(),
+      openConsent: true
     }));
   } catch (_error) {
     result = null;
@@ -1450,6 +1446,11 @@ async function reportActiveSite() {
     return;
   }
   reportSiteButton.textContent = t("page.report.action");
+  if (result?.consentWindow) {
+    reportSiteNote.textContent = t("page.report.confirmWindow");
+    reportSiteNode.dataset.state = "info";
+    return;
+  }
   reportSiteNote.textContent = result?.error || t("error.reportFailed");
   reportSiteNode.dataset.state = "error";
 }

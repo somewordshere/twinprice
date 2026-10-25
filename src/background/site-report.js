@@ -11,6 +11,13 @@
   const FIREFOX_CONSENT = Object.freeze({ data_collection: ["browsingActivity"] });
   const CONSENT_PAGE = "popup/report.html";
   const HOSTNAME = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
+  // Reports become public GitHub issues, so names that only exist inside a company
+  // or home network are never sent. twinprice.com refuses the same endings
+  // (website/worker.js) and also any name public DNS does not know.
+  const PRIVATE_ENDINGS = new Set([
+    "alt", "arpa", "corp", "example", "home", "internal", "intranet", "invalid", "lan",
+    "local", "localdomain", "localhost", "onion", "private", "test"
+  ]);
 
   function createSiteReportService({
     api,
@@ -23,7 +30,8 @@
         const url = new URL(pageUrl);
         if (url.protocol !== "http:" && url.protocol !== "https:") return null;
         const hostname = url.hostname.replace(/\.$/, "").toLowerCase();
-        return HOSTNAME.test(hostname) ? hostname : null;
+        if (!HOSTNAME.test(hostname)) return null;
+        return PRIVATE_ENDINGS.has(hostname.slice(hostname.lastIndexOf(".") + 1)) ? null : hostname;
       } catch (_error) {
         return null;
       }
@@ -67,8 +75,10 @@
       }
       const reason = REASONS.includes(message?.reason) ? message.reason : "failed";
 
+      // The popup asks for the window too (openConsent): Firefox can close a popup
+      // when its own consent prompt appears, which would drop the report.
       if (!(await hasConsent())) {
-        if (isExtensionPage(sender)) {
+        if (isExtensionPage(sender) && !message?.openConsent) {
           return {
             ok: false,
             declined: true,
@@ -108,7 +118,19 @@
           errorKey: "error.reportLimited"
         };
       }
+      // twinprice.com found no public address for the name, so it is not reported.
+      if (response.status === 400 && (await readError(response)) === "not-public") {
+        return { ok: false, error: "This page cannot be reported.", errorKey: "error.reportPage" };
+      }
       return failure();
+    }
+
+    async function readError(response) {
+      try {
+        return (await response.json())?.error;
+      } catch (_error) {
+        return null;
+      }
     }
 
     function failure() {

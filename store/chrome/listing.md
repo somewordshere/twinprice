@@ -129,7 +129,7 @@ Prices shown publicly on shopping webpages are processed as webpage content, not
 
 ### Limited Use certification
 
-The extension's use of webpage access is limited to its single user-facing purpose: detecting and converting prices. Data is not used for advertising, profiling, credit decisions, sale, or unrelated purposes. The developer does not allow humans to read user webpage data.
+The extension's use of webpage access is limited to its single user-facing purpose: detecting and converting prices. Data is not used for advertising, profiling, credit decisions, sale, or unrelated purposes. The developer does not allow humans to read user webpage data. The one exception is the hostname of a website the user chooses to report: pressing **Report this website**, which states that only that name is sent, is the user's affirmative agreement for the developer to read it and publish it as a GitHub issue so the problem can be fixed. Names of private networks (`.local`, `.corp`, `.internal` and similar) are never sent, and twinprice.com refuses names that public DNS does not know or that point only to private addresses.
 
 ### Privacy policy URL
 

@@ -4,6 +4,13 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.4.0 · October 26, 2026
+
+- New: when Twinprice can't convert a page, the message now offers **Report this website**. One press sends only the website's name, such as shop.example, to twinprice.com so the problem can be fixed. Nothing else from the page is sent, and nothing is sent unless you press it. The popup offers the same button when it finds no prices. Websites that only exist inside a company or home network are never reported.
+- In Firefox, your first report asks for your permission once.
+- amazon.com prices in US dollars convert again. So do Amazon prices shown with a currency code, such as PLN 34.98, including prices per unit and crossed-out list prices.
+- Middle-clicking **Rate it** in the rating reminder now counts, so the reminder no longer comes back.
+
 ## 2.3.3 · October 22, 2026
 
 - In **Page options**, the switches for converting automatically and for the on-page Convert button now come right after **Enable converter**, so you no longer have to scroll past the color settings to find them.

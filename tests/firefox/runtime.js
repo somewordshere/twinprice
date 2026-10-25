@@ -20,6 +20,7 @@ const ADDON_ID = "currency-converter-pro@somewordshere";
 const ADDON_NAME = "Twinprice";
 const SHOP_HTML = fs.readFileSync(path.join(ROOT, "tests", "fixtures", "shop.html"), "utf8");
 const FIREFOX_TIMEOUT_MS = 30_000;
+const FIXTURE_HOST = "shop.twinprice-fixture.com";
 const SELECTION_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Selection</title></head>
 <body style="font: 28px sans-serif"><p>Folding bike <span id="usd">$100.00</span></p>
 <p>Helmet <span id="eur">€89.00</span></p><p>Bell <span id="pln">PLN 49.90</span></p></body></html>`;
@@ -449,9 +450,10 @@ test("Firefox opens its consent window for a website report and sends nothing be
     assert.equal(consented, false);
     const extensionHandle = await driver.getWindowHandle();
 
-    // A report needs a hostname with a dot, which 127.0.0.1 is not; Firefox sends
-    // every *.localhost name to the loopback address.
-    const emptyUrl = fixture.emptyUrl.replace("127.0.0.1", "shop.localhost");
+    // A report needs a public-looking hostname: not 127.0.0.1, and not a private
+    // ending such as .localhost, which the extension refuses. createFirefoxDriver
+    // points this name at the loopback address.
+    const emptyUrl = fixture.emptyUrl.replace("127.0.0.1", FIXTURE_HOST);
     await driver.switchTo().newWindow("tab");
     const shopHandle = await driver.getWindowHandle();
     await driver.get(emptyUrl);
@@ -462,7 +464,7 @@ test("Firefox opens its consent window for a website report and sends nothing be
       const done = arguments[arguments.length - 1];
       (async () => {
         // The welcome tab opens on install too, so the shop is found by its address.
-        const [shop] = await browser.tabs.query({ url: "http://shop.localhost/*" });
+        const [shop] = await browser.tabs.query({ url: "http://shop.twinprice-fixture.com/*" });
         if (!shop) throw new Error("The shop tab was not found.");
         return browser.tabs.sendMessage(shop.id, { type: "RUN_SITE_CONVERSION" });
       })().then(done, (failure) => done({ failure: String(failure?.message || failure) }));
@@ -496,10 +498,10 @@ test("Firefox opens its consent window for a website report and sends nothing be
     const consentAddress = await driver.getCurrentUrl();
     assert.ok(consentAddress.startsWith(`${extensionOrigin}/popup/report.html?`), consentAddress);
     const consentUrl = new URL(consentAddress);
-    assert.equal(consentUrl.searchParams.get("site"), "shop.localhost");
+    assert.equal(consentUrl.searchParams.get("site"), FIXTURE_HOST);
     assert.equal(consentUrl.searchParams.get("reason"), "no-prices");
     const message = await driver.wait(until.elementLocated(By.id("reportMessage")), FIREFOX_TIMEOUT_MS);
-    await driver.wait(async () => /shop\.localhost/.test(await message.getText()), FIREFOX_TIMEOUT_MS);
+    await driver.wait(async () => (await message.getText()).includes(FIXTURE_HOST), FIREFOX_TIMEOUT_MS);
     const send = await driver.findElement(By.id("reportSend"));
     await driver.wait(async () => send.isEnabled(), FIREFOX_TIMEOUT_MS);
     assert.equal(await send.getText(), "Send report");
@@ -582,6 +584,8 @@ async function startFixtureServer() {
 async function createFirefoxDriver() {
   const options = new firefox.Options();
   options.enableBidi();
+  // Resolves the report test's public-looking hostname to this machine.
+  options.setPreference("network.dns.localDomains", FIXTURE_HOST);
   options.windowSize({ width: 1280, height: 900 });
   if (process.env.FIREFOX_HEADLESS !== "0") options.addArguments("-headless");
 

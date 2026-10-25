@@ -19,17 +19,20 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.4.0 - 2026-10-26
 
 ### Added
 
 - **Report this website.** When a conversion fails for a reason that may be the website's (no prices found, the source currency not detected, or nothing converted), the on-page prompt, the conversion notice and the popup offer a one-press report. It sends the hostname, never the path, query, title or contents, plus the failure reason, extension version, browser, target currency and interface language to `https://twinprice.com/api/report`. A rate outage or a page already in the target currency offers no report. One report per page; pressing again just thanks you again.
 - `website/worker.js`: the twinprice.com Worker now runs first for `/api/*` only. `POST /api/report` accepts extension origins only, checks every field against a closed format, applies a five-a-minute rate limit per visitor, and opens one GitHub issue per website (`Site report: <hostname>`, label `site-report`), adding later reports as comments. It needs a `GITHUB_TOKEN` secret; see `website/README.md`. If the `GITHUB_REPO` variable is missing from the live version, which happened once after secrets were edited in the Cloudflare dashboard, it falls back to `somewordshere/twinprice` instead of refusing every report.
-- Firefox asks for the optional `browsingActivity` data-collection permission the first time someone reports. A press on a web page cannot show that prompt, so it opens a small Twinprice window (`popup/report.html`) whose button can; the popup asks directly. Chrome needs no permission and the manifest's host access is unchanged.
+- Firefox asks for the optional `browsingActivity` data-collection permission the first time someone reports. A press on a web page cannot show that prompt, so it opens a small Twinprice window (`popup/report.html`) whose button can. The popup opens the same window instead of asking itself, because Firefox can close a popup when its own prompt appears and the report would be lost. Chrome needs no permission and the manifest's host access is unchanged.
+
+- Reports never publish internal hostnames. The extension refuses names with private endings (`.local`, `.corp`, `.internal`, `.lan`, `.home.arpa`, `.localhost`, `.test`, `.example` and others) before sending anything, and the Worker refuses the same endings plus any name that public DNS (Cloudflare's DNS-over-HTTPS resolver) does not know or that points only at private, loopback or link-local addresses. A DNS outage refuses the report rather than publishing an unchecked name. The extension shows "This page cannot be reported." for these.
+- The Worker opens at most 20 new issues an hour across all visitors, counted with GitHub's own issue search, so a script that fakes the extension's origin from many addresses cannot flood the repository. Reports for a website that already has an open issue are still added to it; past the cap the extension says there were too many reports.
 
 ### Privacy
 
-- New "Website reports" section in the privacy policy, and the README, the Chrome listing's privacy answers and every store listing now name the one exception to "the sites you visit never leave your browser". The policy's version line is updated at release.
+- New "Website reports" section in the privacy policy, and the README, the Chrome listing's privacy answers and every store listing now name the one exception to "the sites you visit never leave your browser". The policy, its Limited Use section and the Chrome listing's Limited Use answer now say that the hostname in a report the user sends is the one piece of user data people read and publish, with the press as the user's agreement, and describe the public-name check. Policy version 2.4.0, effective October 26, 2026; website policy pages regenerated.
 
 ### Fixed
 
@@ -41,6 +44,7 @@ whose `package.json` declares the release version.
 ### Tests
 
 - New unit tests for the report Worker (`tests/site-report-worker.test.js`: issue then comment, closed format, extension-only CORS, rate limit, GitHub failure) and the background report service (`tests/site-report.test.js`: hostname only, no report for local or extension pages, Firefox consent window and decline, translated errors).
+- The Worker tests also cover private endings, names public DNS does not know, intranet names published with private addresses, IPv4 and IPv6 address ranges, a DNS outage and the hourly cap. The background tests cover private endings and the popup opening Firefox's consent window. The Chrome and Firefox tests now use public-looking hostnames (`*.twinprice-fixture.com`, which Firefox maps to this machine with `network.dns.localDomains`), because `.test` and `.localhost` are refused.
 - New Chrome tests (`tests/e2e/site-report.spec.js`) for the report from the on-page prompt, the conversion notice and the popup, including a refused (429) report and a second press that sends nothing. The browser-test harness now answers `twinprice.com/api/` inside the worker, so no test reaches the live endpoint.
 - New Firefox runtime test: on a page that converts nothing, the notice's **Report this website** opens the consent window for that site and reason, and nothing is sent without consent. The test checks that consent is not already granted before it presses, so it can never file a real report. Firefox's own consent prompt cannot be driven from WebDriver, so the press on **Send report** after a yes is not covered there.
 - New Chrome tests for **Rate it** with a left and a middle click: the link opens in a new tab, the reminder hides, "rated" is stored and the reminder stays gone. Until now only ✕ was tested. The middle-click test fails without the fix. A separate check in Chrome's real toolbar popup confirmed that "rated" is saved even when the popup closes straight after the click, and a check in Firefox confirmed the reminder appears after five pages, links to addons.mozilla.org and stays gone after ✕.
