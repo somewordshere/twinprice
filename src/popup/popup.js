@@ -248,9 +248,14 @@ async function showReviewPromptIfDue() {
   if (!result?.show || !result.url) return;
   reviewLinkNode.href = result.url;
   reviewPromptNode.hidden = false;
-  reviewLinkNode.addEventListener("click", () => {
+  const markOpened = () => {
     reviewPromptNode.hidden = true;
     ExtensionAPI.runtime.sendMessage({ type: M.MARK_REVIEW_OPENED }).catch(() => {});
+  };
+  reviewLinkNode.addEventListener("click", markOpened);
+  // A middle click opens the store in a new tab too, but fires auxclick, not click.
+  reviewLinkNode.addEventListener("auxclick", (event) => {
+    if (event.button === 1) markOpened();
   });
   dismissReviewButton.addEventListener("click", () => {
     reviewPromptNode.hidden = true;

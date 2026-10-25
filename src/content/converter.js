@@ -357,7 +357,7 @@
       ) continue;
       const text = element.textContent?.trim();
       if (!text || text.length > 120) continue;
-      const matches = CurrencyDetector.findMatchesForContext(text, element, settings);
+      const matches = CurrencyDetector.findMatchesForContext(splitPriceText(element, text), element, settings);
       const currencies = usableDiscoveryCurrencies(matches);
       if (currencies.length) return { found: true, currencies };
     }
@@ -603,11 +603,20 @@
 
       const text = element.textContent?.trim();
       if (!text || text.length > 100) continue;
-      const matches = CurrencyDetector.findMatchesForContext(text, element, settings);
+      const matches = CurrencyDetector.findMatchesForContext(splitPriceText(element, text), element, settings);
       if (!matches.length || elementHasCompletePriceNode(element)) continue;
       plans.push({ element, originalText: text, matches: [matches[0]] });
     }
     return plans;
+  }
+
+  // Amazon writes each price twice in one element: a screen-reader copy
+  // (.a-offscreen, "PLN 34.98") and the visible copy split across spans. Read
+  // together they run into each other, "PLN 34.98PLN34.98", and a currency code
+  // then matches neither (a symbol, "$34.98$34.98", happens to survive). The
+  // screen-reader copy is always whole, so it is the one to read.
+  function splitPriceText(element, text) {
+    return element.querySelector(":scope > .a-offscreen")?.textContent?.trim() || text;
   }
 
   // Whether the element's text is spread over more than one node, so no single
@@ -625,10 +634,15 @@
     return false;
   }
 
+  // A whole price in a single text node is left to the text pass, unless that pass
+  // will never convert it: Amazon's visible "PLN17.51" sits whole inside
+  // aria-hidden="true", which the text pass skips, so the element must take it.
   function elementHasCompletePriceNode(element) {
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) {
-      if (walker.currentNode.parentElement?.closest(PRICE_FRAGMENT_SELECTOR)) continue;
+      if (walker.currentNode.parentElement?.closest(
+        `${PRICE_FRAGMENT_SELECTOR}, [hidden], [inert], [aria-hidden='true'], template`
+      )) continue;
       if (CurrencyDetector.findMatchesForContext(
         walker.currentNode.nodeValue || "",
         walker.currentNode.parentElement,
