@@ -55,7 +55,7 @@ One-time setup before the first deploy that includes it:
 
 1. Create the `site-report` label in the repository's issues.
 2. Create a fine-grained GitHub token for `somewordshere/twinprice` only, with **Issues: Read and write** and nothing else.
-3. From this directory, run `wrangler secret put GITHUB_TOKEN` and paste the token. `GITHUB_REPO` is a plain variable in `wrangler.jsonc`.
+3. From this directory, run `wrangler secret put GITHUB_TOKEN` and paste the token. `GITHUB_REPO` is a plain variable in `wrangler.jsonc`. Editing secrets in the Cloudflare dashboard has dropped it from the live version before, so the Worker falls back to `somewordshere/twinprice` when it is missing; `npx wrangler deploy` restores it.
 4. Deploy the website before the extension version that offers the button reaches the stores.
 
 Without the token the endpoint answers 503 and the extension shows "The report could not be sent".

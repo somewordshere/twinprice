@@ -10,6 +10,10 @@ const REASONS = Object.freeze({
 });
 const BROWSERS = new Set(['chrome', 'firefox', 'edge']);
 const LABEL = 'site-report';
+// GITHUB_REPO in wrangler.jsonc names the repository. Editing secrets in the
+// Cloudflare dashboard has dropped that variable from the live version before
+// (2026-10-25), so reports fall back to the extension's own repository.
+const DEFAULT_REPO = 'somewordshere/twinprice';
 const MAX_BODY_BYTES = 1024;
 // The store build's ID, unpacked Chrome builds (32 letters a–p) and Firefox's
 // per-install UUIDs. CORS stops other websites from posting with a visitor's
@@ -56,7 +60,7 @@ export async function handleReport(request, env, fetchImpl = fetch) {
 
   const report = parseReport(await readBody(request));
   if (!report) return json({ ok: false, error: 'invalid' }, 400, cors);
-  if (!env.GITHUB_TOKEN || !env.GITHUB_REPO) return json({ ok: false, error: 'unavailable' }, 503, cors);
+  if (!env.GITHUB_TOKEN) return json({ ok: false, error: 'unavailable' }, 503, cors);
 
   try {
     await fileReport(report, env, fetchImpl);
@@ -110,18 +114,19 @@ async function fileReport(report, env, fetchImpl) {
       ...(init.body ? { 'Content-Type': 'application/json' } : {})
     }
   });
+  const repo = env.GITHUB_REPO || DEFAULT_REPO;
   const title = `Site report: ${report.site}`;
-  const query = `repo:${env.GITHUB_REPO} is:issue is:open label:${LABEL} in:title "${title}"`;
+  const query = `repo:${repo} is:issue is:open label:${LABEL} in:title "${title}"`;
   const search = await github(`/search/issues?q=${encodeURIComponent(query)}&per_page=10`);
   if (!search.ok) throw new Error(`GitHub search answered ${search.status}`);
   const existing = (await search.json()).items?.find((issue) => issue.title === title);
 
   const response = existing
-    ? await github(`/repos/${env.GITHUB_REPO}/issues/${existing.number}/comments`, {
+    ? await github(`/repos/${repo}/issues/${existing.number}/comments`, {
       method: 'POST',
       body: JSON.stringify({ body: `Reported again.\n\n${details(report)}` })
     })
-    : await github(`/repos/${env.GITHUB_REPO}/issues`, {
+    : await github(`/repos/${repo}/issues`, {
       method: 'POST',
       body: JSON.stringify({ title, labels: [LABEL], body: issueBody(report) })
     });

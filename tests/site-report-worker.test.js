@@ -165,6 +165,18 @@ test("a GitHub failure or a missing token is reported as unavailable", async () 
   assert.equal(missing.status, 503);
 });
 
+test("a live version that lost GITHUB_REPO still files to the extension's repository", async () => {
+  const { handleReport } = await import(workerUrl);
+  for (const repo of [undefined, ""]) {
+    const github = fakeGitHub();
+    const response = await handleReport(request(), env({ GITHUB_REPO: repo }), github.fetchImpl);
+    assert.equal(response.status, 200, `GITHUB_REPO ${JSON.stringify(repo)}`);
+    const [search, create] = github.calls;
+    assert.match(decodeURIComponent(search.url), /repo:somewordshere\/twinprice /);
+    assert.equal(create.url, "https://api.github.com/repos/somewordshere/twinprice/issues");
+  }
+});
+
 test("only /api/ reaches the Worker's own code; pages come from the assets", async () => {
   const { default: worker } = await import(workerUrl);
   const served = [];
