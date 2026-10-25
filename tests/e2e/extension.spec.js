@@ -23,6 +23,16 @@ const SPLIT_FRACTION_HTML = fs.readFileSync(
   path.resolve(__dirname, "../fixtures/allegro-split-fraction.html"),
   "utf8"
 );
+const AMAZON_CODE_URL = "https://api.frankfurter.dev/amazon-currency-code";
+const AMAZON_CODE_HTML = fs.readFileSync(
+  path.resolve(__dirname, "../fixtures/amazon-currency-code.html"),
+  "utf8"
+);
+const AMAZON_DOLLAR_URL = "https://api.frankfurter.dev/amazon-dollar";
+const AMAZON_DOLLAR_HTML = fs.readFileSync(
+  path.resolve(__dirname, "../fixtures/amazon-dollar.html"),
+  "utf8"
+);
 const CERAGEM_URL = "https://api.frankfurter.dev/ceragem-event";
 const CERAGEM_HTML = fs.readFileSync(
   path.resolve(__dirname, "../fixtures/ceragem-won.html"),
@@ -202,6 +212,47 @@ test("the rating link appears after five helped pages and stays gone once dismis
   await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
   await expect(popup.locator("#reviewPrompt")).toBeHidden();
 });
+
+for (const button of ["left", "middle"]) {
+  test(`a ${button} click on Rate it opens the store and the rating link stays gone`, async ({
+    context,
+    extensionWorker,
+    extensionId
+  }) => {
+    await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+    await extensionWorker.evaluate(() => chrome.storage.local.set({ reviewPrompt: { successCount: 5 } }));
+    const shop = await context.newPage();
+    await serveFixture(shop, SHOP_URL, SHOP_HTML);
+    await shop.goto(SHOP_URL);
+
+    let popup = await openPopupForPage(context, extensionId, shop);
+    await expect(popup.locator("#reviewPrompt")).toBeVisible();
+    await expect(popup.locator("#reviewLink")).toHaveAttribute("target", "_blank");
+    // Chromium keeps tests from intercepting the Web Store's own address, so the
+    // click goes to a stand-in page that needs no network (a tab opened by a middle
+    // click starts before request interception applies to it).
+    await expect(popup.locator("#reviewLink")).toHaveAttribute(
+      "href",
+      "https://chromewebstore.google.com/detail/mocmiipnkiobjgjkfehpcmlapgjaepfk/reviews"
+    );
+    const standIn = `chrome-extension://${extensionId}/popup/popup.html?review-stand-in`;
+    await popup.locator("#reviewLink").evaluate((link, url) => { link.href = url; }, standIn);
+    const opened = context.waitForEvent("page");
+    await popup.locator("#reviewLink").click({ button });
+    await expect(await opened).toHaveURL(standIn);
+
+    // A middle click fires auxclick rather than click; both must count as rating.
+    await expect(popup.locator("#reviewPrompt")).toBeHidden();
+    await expect.poll(() => extensionWorker.evaluate(async () =>
+      (await chrome.storage.local.get("reviewPrompt")).reviewPrompt?.rated
+    )).toBe(true);
+    await popup.close();
+
+    popup = await openPopupForPage(context, extensionId, shop);
+    await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+    await expect(popup.locator("#reviewPrompt")).toBeHidden();
+  });
+}
 
 test("automatically detects prices and offers conversion on an ordinary website", async ({
   context,
@@ -502,6 +553,53 @@ test("reported: tap.az converts manat prices React split across text nodes", asy
   await expect(shop.locator("#listing-price-two .ccp-badge")).toContainText("75,00");
   // An amount inside a linked product title is not a price on offer.
   await expect(shop.locator(".ad-card-title ccp-conversion")).toHaveCount(0);
+});
+
+test("reported: Amazon converts prices shown as a currency code, not only as a symbol", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, { settings: { showPagePrompt: true } });
+  const shop = await context.newPage();
+  await serveFixture(shop, AMAZON_CODE_URL, AMAZON_CODE_HTML);
+  await shop.goto(AMAZON_CODE_URL);
+
+  // Each price is its screen-reader copy and its visible copy in one element. Read
+  // together, "PLN 34.98PLN34.98" matched nothing, so the main price was skipped and
+  // the page did not offer to convert. The per-count and list prices keep their
+  // visible copy whole inside aria-hidden, which the text pass never converts.
+  await expect(shop.locator(".ccp-page-prompt")).toBeVisible();
+  const conversion = await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", AMAZON_CODE_URL);
+  expect(conversion.ok).toBe(true);
+  expect(conversion.count).toBe(3);
+  expect(conversion.detectedCurrency).toBe("PLN");
+  await expect(shop.locator("#main-price .ccp-badge")).toContainText("8,22");
+  await expect(shop.locator("#unit-price .ccp-badge")).toContainText("4,11");
+  await expect(shop.locator("#list-price .ccp-badge")).toContainText("9,16");
+  // The product title above the price stays as it is.
+  await expect(shop.locator("h2 ccp-conversion")).toHaveCount(0);
+});
+
+test("reported: Amazon US converts its $ prices when only the page language names the dollar", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, { settings: { showPagePrompt: true } });
+  const shop = await context.newPage();
+  await serveFixture(shop, AMAZON_DOLLAR_URL, AMAZON_DOLLAR_HTML);
+  await shop.goto(AMAZON_DOLLAR_URL);
+
+  // "$" is shared by several currencies and lang="en-us" alone left the page at
+  // low confidence, so every dollar price was skipped and the offer quoted złoty.
+  await expect(shop.locator(".ccp-page-prompt-rate")).toHaveText(/^1 USD = 0\.9000 EUR/);
+  const conversion = await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", AMAZON_DOLLAR_URL);
+  expect(conversion.ok).toBe(true);
+  expect(conversion.count).toBe(5);
+  await expect(shop.locator("#main-price .ccp-badge")).toContainText("8,07");
+  await expect(shop.locator("#unit-price .ccp-badge")).toContainText("4,04");
+  await expect(shop.locator("#list-price .ccp-badge")).toContainText("8,99");
+  await expect(shop.locator("#second-price .ccp-badge")).toContainText("17,99");
+  await expect(shop.locator(".a-popover .ccp-badge")).toContainText("23,50");
 });
 
 test("reported: Ceragem converts won written as 원, in ten-thousands and before a particle", async ({

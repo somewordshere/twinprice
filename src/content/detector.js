@@ -12,6 +12,8 @@
   const SYMBOL_GROUPS = createSymbolGroups();
   const PRICE_MARKER_PATTERNS = new Map();
   const SINGLE_CURRENCY_MARKER_PATTERNS = createSingleCurrencyMarkerPatterns();
+  const SHARED_MARKER_GROUPS = SYMBOL_GROUPS.filter((group) => group.currencies.length > 1);
+  const SHARED_MARKER_PATTERNS = new Map();
   const MAX_COUNTED_PRICE_MARKERS = 4;
   const CURRENCY_CODE_PATTERN = new RegExp(
     `(?<![A-Za-z])(${CURRENCY_CODES.join("|")})(?![A-Za-z])`,
@@ -399,6 +401,40 @@
       // is the whole case the marker signal exists to serve.
       add(currency, Math.min(30, count * (needsContext ? 15 : 10)), "visible price marker");
     }
+
+    // A shared symbol such as "$" cannot name a currency, but a page full of "$8.97"
+    // confirms the dollar its language or domain already suggested. Without this,
+    // amazon.com, whose only other evidence is lang="en-us", stayed at low confidence
+    // and none of its "$" prices converted. Only a currency that exactly one other
+    // signal named is corroborated, so the symbol never picks between candidates.
+    const namedScores = { ...scores };
+    for (const group of SHARED_MARKER_GROUPS) {
+      const named = group.currencies.filter((currency) => namedScores[currency] > 0);
+      if (named.length !== 1) continue;
+      if (!group.lowerMarkers.some((marker) => lowerBodyText.includes(marker))) continue;
+      const pattern = sharedMarkerPattern(group, named[0]);
+      pattern.lastIndex = 0;
+      let count = 0;
+      while (count < MAX_COUNTED_PRICE_MARKERS && pattern.exec(bodyText) !== null) count += 1;
+      if (count) add(named[0], Math.min(30, count * 15), "visible price marker");
+    }
+  }
+
+  // The same marker rules as conversion (priceMarkerPattern), so "$" does not count
+  // the dollar inside "CA$" or "NZ$".
+  function sharedMarkerPattern(group, currency) {
+    const key = `${currency}:${group.lowerMarkers.join("|")}`;
+    if (SHARED_MARKER_PATTERNS.has(key)) return SHARED_MARKER_PATTERNS.get(key);
+    const markerPattern = [...new Set(group.markers)]
+      .map((marker) => priceMarkerPattern(marker, currency))
+      .sort((a, b) => b.length - a.length)
+      .join("|");
+    const pattern = new RegExp(
+      `(?:${markerPattern})[\\s\\u00a0\\u202f]*[0-9０-９]|[0-9０-９][\\s\\u00a0\\u202f]*(?:${markerPattern})`,
+      "giu"
+    );
+    SHARED_MARKER_PATTERNS.set(key, pattern);
+    return pattern;
   }
 
   function createSingleCurrencyMarkerPatterns() {

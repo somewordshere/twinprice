@@ -19,6 +19,21 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Fixed
+
+- Middle-clicking **Rate it** in the popup's rating reminder now counts as rating, like a normal click. A middle click opens the store in a new tab but fires `auxclick` instead of `click`, so the reminder stayed and kept coming back.
+- amazon.com in US dollars converts again. Its pages now name the currency only through `lang="en-us"`, and every price uses the shared `$` symbol, so detection stayed at low confidence and every dollar price was skipped. A store-suggestion pop-up with "100 zł" then made the Convert prompt quote złoty. A shared symbol such as `$` now corroborates a currency when exactly one other signal names it (here the page language), using the same marker rules as conversion, so "CA$" does not count for the dollar. The symbol still never picks between candidates on its own. 2.2.6 and 2.3.0 fail on the live page the same way, so this follows a change in Amazon's pages, not in the extension.
+- amazon.com prices convert again when Amazon shows them with a currency code instead of a symbol, as it does for a delivery address outside the US ("PLN 34.98" for Poland). Amazon writes each price twice in one element, a screen-reader copy and a visible copy split across spans. Read together they ran into each other ("PLN 34.98PLN34.98") and matched nothing, so the search results' prices were skipped and a page could go without the Convert prompt. The converter now reads the screen-reader copy. A symbol such as $ happened to survive, which is why the same pages worked with US prices.
+- Amazon's per-unit and struck-through list prices ("(PLN17.51/count)", "List: PLN 38.96") now convert too. Their visible copy sits whole inside an aria-hidden element, which the text pass never converts, and it also stopped the element from converting as a whole. These were skipped with $ prices as well.
+
+### Tests
+
+- New Chrome tests for **Rate it** with a left and a middle click: the link opens in a new tab, the reminder hides, "rated" is stored and the reminder stays gone. Until now only ✕ was tested. The middle-click test fails without the fix. A separate check in Chrome's real toolbar popup confirmed that "rated" is saved even when the popup closes straight after the click, and a check in Firefox confirmed the reminder appears after five pages, links to addons.mozilla.org and stays gone after ✕.
+- New Chrome test with an amazon.com search result in US dollars, the shared `$` symbol and the złoty pop-up (`tests/fixtures/amazon-dollar.html`). It fails without the detector change, with the prompt quoting PLN. On live amazon.com in dollars the fix converted 74 prices with none skipped, against 1 before.
+- New Chrome test with an amazon.com search result in PLN (`tests/fixtures/amazon-currency-code.html`), from Amazon's live markup. On live amazon.com with a Polish delivery address, the 2.2.6, 2.3.0 and 2.3.3 builds skipped every main search-result price; with the fix all 83 price elements converted.
+
 ## 2.3.3 - 2026-10-22
 
 ### Changed
