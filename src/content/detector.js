@@ -54,10 +54,14 @@
     const manualCurrency = settings.fromCurrency !== "AUTO"
       ? settings.fromCurrency
       : null;
+    // A chosen source currency still yields to the page: "1,064,700" beside a
+    // separate "원" is won, and reading it as the chosen currency put an NZ$ rate
+    // on a Korean price.
     const allowBare = manualCurrency
       ? selection || (
         isLikelyStandalonePriceText(text, element) &&
-        !hasMarkedPriceInContainer(element, manualCurrency)
+        !hasMarkedPriceInContainer(element, manualCurrency) &&
+        !hasMarkedPriceInContainer(element)
       )
       : detection.confidence === "high" && (
         selection || (
@@ -564,12 +568,21 @@
       !trimmed ||
       trimmed.length > 40 ||
       NON_PRICE_CONTEXT_PATTERN.test(trimmed) ||
-      /[A-Za-z\p{L}]{2,}/u.test(trimmed)
+      /[A-Za-z\p{L}]{2,}/u.test(trimmed) ||
+      isFollowedByPercentSign(trimmed, element)
     ) {
       return false;
     }
 
     return isLikelyPriceElement(element);
+  }
+
+  // React writes a discount as "37<!-- -->%": the "%" sits in the next text node,
+  // where the bare-number check cannot see it.
+  function isFollowedByPercentSign(text, element) {
+    const elementText = element?.textContent || "";
+    const at = elementText.indexOf(text);
+    return at >= 0 && elementText.slice(at + text.length).trimStart().startsWith("%");
   }
 
   function hasMarkedPriceInContainer(element, forcedCurrency = null) {

@@ -237,6 +237,37 @@ assert.equal(
   "manual provider-catalog currencies should support bare amounts in price elements"
 );
 
+// lfmall.co.kr renders "<span>1,064,700</span><span>원</span>". With the source
+// currency set to NZD the bare number was read as NZ$ beside its own won sign.
+const wonPriceBlock = element("ProductBasic_inner", "37%1,064,700원정보 보기");
+assert.equal(
+  detector.findMatchesForContext(
+    "1,064,700",
+    element("ProductBasic_discountPrice", "1,064,700", wonPriceBlock),
+    { fromCurrency: "NZD", toCurrency: "PLN" }
+  ).length,
+  0,
+  "a chosen source currency must not claim a bare amount marked as another currency beside it"
+);
+assert.equal(
+  detector.findMatchesForContext(
+    "1,064,700",
+    element("ProductBasic_discountPrice", "1,064,700", element("ProductBasic_inner", "37%1,064,700")),
+    { fromCurrency: "NZD", toCurrency: "PLN" }
+  )[0].currency,
+  "NZD",
+  "a chosen source currency still converts a bare amount with no marker beside it"
+);
+assert.equal(
+  detector.findMatchesForContext(
+    "37",
+    element("rate price-discount", "37%"),
+    { fromCurrency: "NZD", toCurrency: "PLN" }
+  ).length,
+  0,
+  "a discount split into \"37\" and \"%\" text nodes is not a price"
+);
+
 assert.equal(
   detector.findCurrencyMatches("9800X3D", {
     pageDetection: { currency: "CHF", confidence: "high" }
@@ -346,6 +377,17 @@ const DETECTION_CASES = [
     currency: "NZD",
     minConfidence: "medium",
     converts: { "$1,283.97": "NZD:1283.97", "US$5.00": "USD:5" }
+  },
+  {
+    // lfmall.co.kr product page (text captured 2026-10-28): no priceCurrency, only
+    // the domain, lang="ko" and "원" prices.
+    name: "Korean product page pricing in 원",
+    lang: "ko",
+    hostname: "www.lfmall.co.kr",
+    bodyText: "구매자 귀책 3,000원 6,000원 LF 브랜드 상품 30,000원 이상 무료배송 1,690,000원 37% 1,064,700원 정보 보기",
+    currency: "KRW",
+    minConfidence: "medium",
+    converts: { "1,064,700원": "KRW:1064700" }
   },
   {
     name: "Australian shop pricing in plain $",
