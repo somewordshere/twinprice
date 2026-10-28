@@ -15,6 +15,7 @@
   const SHARED_MARKER_GROUPS = SYMBOL_GROUPS.filter((group) => group.currencies.length > 1);
   const SHARED_MARKER_PATTERNS = new Map();
   const MAX_COUNTED_PRICE_MARKERS = 4;
+  const OWN_BADGE_SELECTOR = "ccp-conversion[data-ccp-owned='true'] .ccp-badge";
   const CURRENCY_CODE_PATTERN = new RegExp(
     `(?<![A-Za-z])(${CURRENCY_CODES.join("|")})(?![A-Za-z])`,
     "g"
@@ -586,8 +587,7 @@
   }
 
   function hasMarkedPriceInContainer(element, forcedCurrency = null) {
-    const container = element?.parentElement;
-    const text = container?.textContent?.trim();
+    const text = siteTextOf(element?.parentElement).trim();
     if (!text || text.length > 100) return false;
 
     return findCurrencyMatches(text, {
@@ -595,6 +595,21 @@
       allowBare: false,
       pageDetection: getPageCurrencyDetection()
     }).length > 0;
+  }
+
+  // The container's text without our own "≈ 2 560 000,00 zł" badges. Read with
+  // them, a converted price made its block look priced in the target currency,
+  // and a sibling price the shop re-rendered afterwards was refused.
+  function siteTextOf(container) {
+    if (!container?.querySelector?.(OWN_BADGE_SELECTOR)) return container?.textContent || "";
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    let text = "";
+    while (walker.nextNode() && text.length <= 200) {
+      if (!walker.currentNode.parentElement?.closest(OWN_BADGE_SELECTOR)) {
+        text += walker.currentNode.nodeValue;
+      }
+    }
+    return text;
   }
 
   function describeDetectedCurrencies(...planGroups) {

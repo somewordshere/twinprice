@@ -146,3 +146,25 @@ test("automatic detection rechecks prices added later on the same URL", async ({
   await expect(page.locator(".ccp-page-prompt")).toBeVisible();
   await expect(page.locator(".ccp-page-prompt-rate")).toHaveText(/^1 TRY = 0\.0200 EUR/);
 });
+
+// lfmall.co.kr writes "<span>1,064,700</span><span>원</span>". A hand-chosen
+// currency must leave that won price alone, and must still convert a bare price
+// the shop re-renders beside one it already converted: our own badge is not the
+// shop's price.
+test("a chosen source currency skips a bare won price and reconverts a re-rendered sibling", async ({ context, extensionWorker }) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", toCurrency: "EUR" } });
+  const page = await context.newPage();
+  await page.route(DEFAULT_SHOP_URL, route => route.fulfill({ contentType: "text/html; charset=utf-8", body: `
+    <div class="price-box"><span id="won" class="sale-price">1,064,700</span><span>원</span></div>
+    <div class="product-price"><span id="regular">1,690.00</span> <span id="sale">1,064.70</span></div>
+  ` }));
+  await page.goto(DEFAULT_SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION");
+  await expect(page.locator("#regular .ccp-badge")).toHaveText("≈ 1.521,00 €");
+  await expect(page.locator("#sale .ccp-badge")).toHaveText("≈ 958,23 €");
+  await expect(page.locator("#won ccp-conversion")).toHaveCount(0);
+
+  await page.locator("#sale").evaluate(element => { element.textContent = "999.00"; });
+  await expect(page.locator("#sale .ccp-badge")).toHaveText("≈ 899,10 €");
+  await expect(page.locator("#won ccp-conversion")).toHaveCount(0);
+});

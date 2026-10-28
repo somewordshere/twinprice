@@ -24,15 +24,17 @@ whose `package.json` declares the release version.
 ### Fixed
 
 - A source currency chosen by hand no longer claims a bare number whose price block shows another currency right beside it. lfmall.co.kr writes `<span>1,064,700</span><span>원</span>`. With NZD chosen, the number alone matched as a bare NZD amount, so a Korean price of 1,064,700 won showed as ≈ 2 380 243,32 zł (the NZD rate) instead of ≈ 3 158 zł. The bare amount is now refused when its container holds a price marked in any currency, which automatic detection already required. Automatic mode was not affected: the page detects as KRW (domain, `lang="ko"` and 원 prices, 65 points, medium) and converts the split price from won.
+- That container check now ignores Twinprice's own badges. It read the container's whole text, so a converted sibling's "≈ 2 560 000,00 zł" counted as a price marked in another currency. A bare price the shop re-rendered in the same block afterwards (a new size, a sale price update) was then refused. In automatic mode this affected bare prices on pages detected with high confidence. The first version of the fix above, commit 25ac9fb, extended it to every hand-chosen currency; that version was never released.
 - A discount split by React into "37" and "%" text nodes is no longer converted as a price of 37. The percent check only looked inside the number's own text node.
 - With a source currency chosen by hand, the on-page notice now names that currency. It named the page's detected currency, so lfmall said "converted from KRW" while every badge said NZD.
 
 ### Tests
 
-- `tests/detector.test.js`: a hand-chosen NZD must not take `1,064,700` beside a separate `원` but still takes it with no marker beside it, a split "37" + "%" is not a price, and a page-detection case for the lfmall product page (KRW, medium). The first and second fail on 2.4.1.
+- `tests/detector.test.js`: a hand-chosen NZD must not take `1,064,700` beside a separate `원` but still takes it with no marker beside it, a split "37" + "%" is not a price, and a page-detection case for the lfmall product page (KRW, medium). The `원` and "%" cases fail on 2.4.1; the other two pass on it.
+- `tests/e2e/bug-regressions.spec.js`: with USD chosen, a bare `1,064,700` beside a separate `원` stays unconverted, and a bare price re-rendered beside an already converted one converts again. It fails on 2.4.1 (the won price converts) and on 25ac9fb (the re-rendered price does not).
 - `tests/live-sites.json`: added the lfmall.co.kr product page, priceme.co.nz and computerdirect.co.nz. The headless KRW and NZD sweep on 2026-10-28 checked little: LF Mall passed in automatic mode (10 conversions from KRW). Coupang, Gmarket, SSG and six of the seven NZ shops (priceme.co.nz and computerdirect.co.nz among them) answered HTTP 403. Trade Me failed to load. On Naver Shopping and 11st the page control never appeared.
-- The built extension on the live lfmall page, rates seeded at 1 KRW = 0.0029665 PLN and 1 NZD = 2.2355 PLN: in automatic mode the main price shows ≈ 3158,43 zł from KRW. With NZD chosen, the main price block is left alone, the "37%" badges no longer convert (183 conversions before, 120 after) and the notice says NZD.
-- `npm run verify`: 148 unit tests passed. `npm run test:browser`: 60 passed. `npm run test:browser:firefox`: 5 passed.
+- The built extension on the live lfmall page, rates seeded at 1 KRW = 0.0029665 PLN and 1 NZD = 2.2355 PLN: in automatic mode the main price shows ≈ 3158,43 zł from KRW. With NZD chosen, the main price block is left alone, the "37%" badges no longer convert (183 conversions before, 120 after) and the notice says NZD. A sale price the page re-rendered beside a converted original price converted again; on 25ac9fb it did not.
+- `npm run verify`: 148 unit tests passed. `npm run test:browser`: 61 passed. `npm run test:browser:firefox`: 5 passed.
 
 ## 2.4.1 - 2026-10-28
 
