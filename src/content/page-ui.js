@@ -226,8 +226,11 @@
     if (pageConvertPrompt !== prompt) return;
 
     if (result?.ok) {
-      const source = result.detectedCurrency || result.detectedCurrencies ||
-        t("page.prompt.detectedFallback");
+      // A chosen source currency is what every price was converted from, whatever
+      // the page itself looks like.
+      const source = settings.fromCurrency !== "AUTO"
+        ? settings.fromCurrency
+        : result.detectedCurrency || result.detectedCurrencies || t("page.prompt.detectedFallback");
       pagePromptAction = "undo";
       pageConvertButton.disabled = false;
       pageConvertButton.textContent = t("page.prompt.undo");

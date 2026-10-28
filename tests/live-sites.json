@@ -70,6 +70,7 @@
   { "currency": "KRW", "name": "Gmarket", "url": "https://www.gmarket.co.kr/" },
   { "currency": "KRW", "name": "11st", "url": "https://www.11st.co.kr/" },
   { "currency": "KRW", "name": "SSG", "url": "https://www.ssg.com/" },
+  { "currency": "KRW", "name": "LF Mall product page", "url": "https://www.lfmall.co.kr/app/product/0AJA5C414CG" },
 
   { "currency": "SEK", "name": "Amazon Sweden", "url": "https://www.amazon.se/" },
   { "currency": "SEK", "name": "ICA", "url": "https://www.ica.se/" },
@@ -88,6 +89,8 @@
   { "currency": "NZD", "name": "The Warehouse", "url": "https://www.thewarehouse.co.nz/" },
   { "currency": "NZD", "name": "Mighty Ape", "url": "https://www.mightyape.co.nz/" },
   { "currency": "NZD", "name": "Noel Leeming", "url": "https://www.noelleeming.co.nz/" },
+  { "currency": "NZD", "name": "PriceMe", "url": "https://www.priceme.co.nz/" },
+  { "currency": "NZD", "name": "Computer Direct", "url": "https://www.computerdirect.co.nz/" },
 
   { "currency": "NOK", "name": "FINN Marketplace", "url": "https://www.finn.no/bap/forsale" },
   { "currency": "NOK", "name": "Elkjop", "url": "https://www.elkjop.no/" },
