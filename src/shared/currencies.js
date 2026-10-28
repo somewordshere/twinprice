@@ -1,13 +1,17 @@
 (function initializeCurrencyCatalog(global) {
+  // sharedSymbols are written by a currency's own shops but also by other
+  // countries: a New Zealand store prices "$497.00", never "NZ$497.00". They only
+  // resolve once the page has been identified as using that currency, and they
+  // are never shown as the currency's symbol.
   const CURRENCY_META = {
     AED: { symbols: ["د.إ", "DH"], locale: "ar-AE" },
     AMD: { symbols: ["֏"], locale: "hy-AM" },
-    AUD: { symbols: ["AU$", "A$"], locale: "en-AU" },
+    AUD: { symbols: ["AU$", "A$"], sharedSymbols: ["$"], locale: "en-AU" },
     AZN: { symbols: ["₼"], locale: "az-AZ" },
     BDT: { symbols: ["৳"], locale: "bn-BD" },
     BHD: { symbols: ["د.ب", "BD"], locale: "ar-BH" },
     BRL: { symbols: ["R$"], locale: "pt-BR" },
-    CAD: { symbols: ["CA$", "C$"], locale: "en-CA" },
+    CAD: { symbols: ["CA$", "C$"], sharedSymbols: ["$"], locale: "en-CA" },
     CHF: { symbols: ["CHF", "SFr.", "SFr", "Fr.", "Fr"], locale: "de-CH" },
     CNY: { symbols: ["CN¥", "¥", "￥"], locale: "zh-CN" },
     CZK: { symbols: ["Kč"], locale: "cs-CZ" },
@@ -16,7 +20,7 @@
     EUR: { symbols: ["€"], locale: "de-DE" },
     GBP: { symbols: ["£"], locale: "en-GB" },
     GEL: { symbols: ["₾"], locale: "ka-GE" },
-    HKD: { symbols: ["HK$"], locale: "zh-HK" },
+    HKD: { symbols: ["HK$"], sharedSymbols: ["$"], locale: "zh-HK" },
     HUF: { symbols: ["Ft"], locale: "hu-HU" },
     IDR: { symbols: ["Rp"], locale: "id-ID" },
     ILS: { symbols: ["₪"], locale: "he-IL" },
@@ -33,7 +37,7 @@
     MYR: { symbols: ["RM"], locale: "ms-MY" },
     NGN: { symbols: ["₦"], locale: "en-NG" },
     NOK: { symbols: ["kr"], locale: "nb-NO" },
-    NZD: { symbols: ["NZ$"], locale: "en-NZ" },
+    NZD: { symbols: ["NZ$"], sharedSymbols: ["$"], locale: "en-NZ" },
     OMR: { symbols: ["ر.ع.", "RO"], locale: "ar-OM" },
     PHP: { symbols: ["₱"], locale: "en-PH" },
     PKR: { symbols: ["PKR", "Rs"], locale: "en-PK" },
@@ -42,7 +46,7 @@
     RON: { symbols: ["lei"], locale: "ro-RO" },
     SAR: { symbols: ["ر.س", "SR"], locale: "ar-SA" },
     SEK: { symbols: ["kr"], locale: "sv-SE" },
-    SGD: { symbols: ["S$"], locale: "en-SG" },
+    SGD: { symbols: ["S$"], sharedSymbols: ["$"], locale: "en-SG" },
     THB: { symbols: ["฿"], locale: "th-TH" },
     TRY: { symbols: ["₺", "TL"], locale: "tr-TR" },
     TWD: { symbols: ["NT$"], locale: "zh-TW" },

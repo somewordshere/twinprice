@@ -162,13 +162,16 @@
 
     return mergeNonOverlappingMatches([
       ...findMatchesWithMarkers(text, [currency], currency, "code"),
-      ...findMatchesWithMarkers(text, meta.symbols, currency, "symbol")
+      ...findMatchesWithMarkers(text, priceSymbols(meta), currency, "symbol")
     ]);
   }
 
+  function priceSymbols(meta) {
+    return [...(meta?.symbols || []), ...(meta?.sharedSymbols || [])];
+  }
+
   function hasCurrencyMarker(text, currency) {
-    const meta = CURRENCY_META[currency];
-    const markers = [currency, ...(meta?.symbols || [])];
+    const markers = [currency, ...priceSymbols(CURRENCY_META[currency])];
     const markerPattern = [...new Set(markers)]
       .map(buildMarkerPattern)
       .sort((a, b) => b.length - a.length)
@@ -594,7 +597,7 @@
   function createSymbolGroups() {
     const groups = new Map();
     for (const [currency, meta] of Object.entries(CURRENCY_META)) {
-      for (const symbol of meta.symbols) {
+      for (const symbol of priceSymbols(meta)) {
         const key = symbol.toLocaleLowerCase();
         const group = groups.get(key) ||
           { markers: [], lowerMarkers: [], currencies: [], needsContext: false };

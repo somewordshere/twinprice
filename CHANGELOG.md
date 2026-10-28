@@ -19,6 +19,21 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.4.1 - 2026-10-28
+
+### Fixed
+
+- Shops in New Zealand, Australia, Canada, Singapore and Hong Kong that write prices with a plain `$` now convert. Twinprice detected the right currency from the domain and page language (for example priceme.co.nz: `.nz` plus `lang="en-NZ"`, 35 points, medium confidence), but `$` belonged only to USD and MXN, so not one price matched and the page reported "No confidently identified prices found". AUD, CAD, HKD, NZD and SGD now list `$` as a shared symbol (`sharedSymbols` in `src/shared/currencies.js`). It resolves only when the page names exactly one of them, and a page full of `$` prices corroborates that currency the way amazon.com's corroborates USD (priceme.co.nz now scores 65, and 40 of its 40 prices convert). With nothing else to go on, or with two dollars named, `$` still converts nothing. The popup still shows these currencies as NZ$, A$ and so on. Choosing NZD by hand now also reads `$` prices, but never the `$` inside US$ or A$.
+
+### Release
+
+- `privacy-policy.md` now says `(version 2.4.1)`, which the project check requires; its text and effective date (October 26, 2026) are unchanged, and the website's policy and What's new pages were regenerated. The store privacy answers still describe 2.4.0, since nothing they cover changed.
+
+### Tests
+
+- `tests/detector.test.js`: page-detection cases for a New Zealand price-comparison page and an Australian shop pricing in plain `$`, a US shop that must stay USD, a `$` page with no other signal and a `.co.nz` page with a US language that must convert nothing, and a hand-chosen NZD that reads `$` but not US$ or A$. The new cases fail on the previous source.
+- `npm run release`: project checks, 148 unit tests, Firefox lint (0 errors, 0 warnings, 0 notices), build and the final check passed. `npm run test:browser`: 60 passed. `npm run test:browser:firefox`: 5 passed. One unit test still logs "Twinprice initialization failed" (its stand-in browser has no `runtime.getURL`), as on 2.4.0; it passes. The live priceme.co.nz page (text captured on 2026-10-28) was replayed through the old and new detector: 0 of 40 prices converted before, 40 of 40 after. computerdirect.co.nz was not checked because it showed a Cloudflare bot check.
+
 ## 2.4.0 - 2026-10-26
 
 ### Added
