@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.4.1 · October 28, 2026
+
+- Shops in New Zealand, Australia, Canada, Singapore and Hong Kong that show prices with just a $ sign, such as priceme.co.nz, now convert. Twinprice found the right currency on these pages but converted none of the prices.
+- If you choose the New Zealand, Australian, Canadian, Singapore or Hong Kong dollar as the source currency yourself, prices with just a $ sign now convert too.
+
 ## 2.4.0 · October 26, 2026
 
 - New: when Twinprice can't convert a page, the message now offers **Report this website**. One press sends only the website's name, such as shop.example, to twinprice.com so the problem can be fixed. Nothing else from the page is sent, and nothing is sent unless you press it. The popup offers the same button when it finds no prices. Websites that only exist inside a company or home network are never reported.

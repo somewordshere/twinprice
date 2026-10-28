@@ -335,6 +335,51 @@ const DETECTION_CASES = [
     currency: "PLN",
     minConfidence: "medium",
     converts: { "79,00 zł": "PLN:79" }
+  },
+  {
+    // priceme.co.nz: no priceCurrency anywhere, only the domain, the language and
+    // a grid of "$" prices. NZD's own symbol is "NZ$", which the page never prints.
+    name: "New Zealand price comparison pricing in plain $",
+    lang: "en-NZ",
+    hostname: "www.priceme.co.nz",
+    bodyText: "Smart Watches $497.00 $393.97 $1,283.97 $696.97 $799.90 Compare prices",
+    currency: "NZD",
+    minConfidence: "medium",
+    converts: { "$1,283.97": "NZD:1283.97", "US$5.00": "USD:5" }
+  },
+  {
+    name: "Australian shop pricing in plain $",
+    lang: "en-AU",
+    hostname: "www.example.com.au",
+    bodyText: "Cart $59.95 $129.00 $8.50 Free delivery",
+    currency: "AUD",
+    minConfidence: "medium",
+    converts: { "$129.00": "AUD:129" }
+  },
+  {
+    name: "US shop pricing in plain $",
+    lang: "en-US",
+    hostname: "www.example.com",
+    bodyText: "Cart $59.95 $129.00 $8.50 Free shipping",
+    currency: "USD",
+    minConfidence: "medium",
+    converts: { "$129.00": "USD:129" }
+  },
+  {
+    // "$" alone names no country, so it must not pick one of the dollars.
+    name: "Page with plain $ and nothing else to go on",
+    lang: "en",
+    hostname: "www.example.com",
+    bodyText: "Cart $59.95 $129.00 $8.50",
+    inert: ["$129.00"]
+  },
+  {
+    // Both the domain and the language name a dollar, so "$" corroborates neither.
+    name: "New Zealand domain with a US page language",
+    lang: "en-US",
+    hostname: "www.example.co.nz",
+    bodyText: "Cart $59.95 $129.00 $8.50",
+    inert: ["$129.00"]
   }
 ];
 
@@ -376,6 +421,18 @@ for (const testCase of DETECTION_CASES) {
       `${testCase.name}: ${text} must not be treated as money`
     );
   }
+}
+
+// A source currency chosen by hand reads its shared "$" too, but still not the "$"
+// inside another dollar's own symbol.
+{
+  const read = (text) => detector.findCurrencyMatches(text, { forcedCurrency: "NZD" })
+    .map((match) => `${match.currency}:${match.amount}`)
+    .join();
+  assert.equal(read("Now $497.00"), "NZD:497");
+  assert.equal(read("NZ$497.00"), "NZD:497");
+  assert.equal(read("US$497.00"), "", "US$ is not a New Zealand dollar");
+  assert.equal(read("A$497.00"), "", "A$ is not a New Zealand dollar");
 }
 
 // A price already in the target currency is dropped from conversion, but a selection can
