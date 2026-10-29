@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
-**Current version:** 2.4.1 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.4.2 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.4.1/twinprice-2.4.1-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.4.1/twinprice-2.4.1-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.4.2/twinprice-2.4.2-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.4.2/twinprice-2.4.2-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -56,7 +56,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.4.1/twinprice-2.4.1-chrome.zip) or [Firefox build](release/2.4.1/twinprice-2.4.1-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.4.2/twinprice-2.4.2-chrome.zip) or [Firefox build](release/2.4.2/twinprice-2.4.2-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -221,6 +221,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.4.2 | A hand-chosen source currency no longer converts prices a page shows in another currency; prices loaded after converting keep converting | [Chrome](release/2.4.2/twinprice-2.4.2-chrome.zip) · [Firefox](release/2.4.2/twinprice-2.4.2-firefox.zip) |
 | 2.4.1 | Plain-$ prices convert on New Zealand, Australian, Canadian, Singapore and Hong Kong shops | [Chrome](release/2.4.1/twinprice-2.4.1-chrome.zip) · [Firefox](release/2.4.1/twinprice-2.4.1-firefox.zip) |
 | 2.4.0 | Report this website: one press sends a site that will not convert to twinprice.com; amazon.com dollar and currency-code prices convert again | [Chrome](release/2.4.0/twinprice-2.4.0-chrome.zip) · [Firefox](release/2.4.0/twinprice-2.4.0-firefox.zip) |
 | 2.3.3 | Automatic-conversion and Convert-button options moved to the top of Page options | [Chrome](release/2.3.3/twinprice-2.3.3-chrome.zip) · [Firefox](release/2.3.3/twinprice-2.3.3-firefox.zip) |
