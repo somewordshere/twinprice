@@ -16,6 +16,9 @@
   const SHARED_MARKER_PATTERNS = new Map();
   const MAX_COUNTED_PRICE_MARKERS = 4;
   const OWN_BADGE_SELECTOR = "ccp-conversion[data-ccp-owned='true'] .ccp-badge";
+  // The notices page-ui.js draws; converter.js keeps the same list as UI_SELECTOR.
+  const OWN_UI_SELECTOR = ".ccp-toast, .ccp-selection-popup, .ccp-page-prompt";
+  const HIDDEN_ORIGINAL_SELECTOR = "ccp-conversion[data-ccp-owned='true'] > .ccp-original";
   const CURRENCY_CODE_PATTERN = new RegExp(
     `(?<![A-Za-z])(${CURRENCY_CODES.join("|")})(?![A-Za-z])`,
     "g"
@@ -354,7 +357,7 @@
     }
 
     addLocationSignals(add);
-    const bodyText = document.body?.innerText?.slice(0, 100000) || "";
+    const bodyText = shopTextOf(document.body).slice(0, 100000);
     const codeCounts = {};
     let visibleCode;
     CURRENCY_CODE_PATTERN.lastIndex = 0;
@@ -382,6 +385,37 @@
       score,
       signals: currency ? signals[currency] : []
     };
+  }
+
+  // The page's visible text as the shop wrote it. Detection runs again whenever the
+  // page changes, by then over our own output: "≈ 25,00 €" badges and notices such
+  // as "Detected: TRY" counted as the page's prices and codes, and converted-only
+  // mode hid the shop's "1.250,00 TL" from innerText. A lira page then read as euro
+  // and the next lira price it loaded did not convert.
+  function shopTextOf(body) {
+    const text = body?.innerText || "";
+    const own = body?.querySelectorAll?.(`${OWN_BADGE_SELECTOR}, ${OWN_UI_SELECTOR}`) || [];
+    if (!own.length) return text;
+    // innerText lists the page in document order, as querySelectorAll does, so each
+    // piece of our own text is found after the previous one.
+    let shopText = "";
+    let from = 0;
+    for (const element of own) {
+      // A hidden badge is not in the page's innerText, but its own innerText still
+      // returns its text, and searching for it could skip past badges that are.
+      if (!element.getClientRects().length) continue;
+      const ownText = element.innerText;
+      const at = ownText ? text.indexOf(ownText, from) : -1;
+      if (at < 0) continue;
+      shopText += text.slice(from, at);
+      from = at + ownText.length;
+    }
+    shopText += text.slice(from);
+    const hidden = [...body.querySelectorAll(HIDDEN_ORIGINAL_SELECTOR)]
+      .filter((original) => original.style.display === "none")
+      .map((original) => original.textContent);
+    // First, so the length cap applied by the caller cannot cut them off.
+    return hidden.length ? `${hidden.join("\n")}\n${shopText}` : shopText;
   }
 
   // Prices written with a symbol rather than an ISO code are the only currency
@@ -599,15 +633,18 @@
 
   // The container's text without our own "≈ 2 560 000,00 zł" badges. Read with
   // them, a converted price made its block look priced in the target currency,
-  // and a sibling price the shop re-rendered afterwards was refused.
+  // and a sibling price the shop re-rendered afterwards was refused. Reading stops
+  // once the trimmed text is too long to accept, which more text cannot undo; a
+  // cap on the raw length stopped inside an indented block's leading whitespace,
+  // before its "원".
   function siteTextOf(container) {
     if (!container?.querySelector?.(OWN_BADGE_SELECTOR)) return container?.textContent || "";
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
     let text = "";
-    while (walker.nextNode() && text.length <= 200) {
-      if (!walker.currentNode.parentElement?.closest(OWN_BADGE_SELECTOR)) {
-        text += walker.currentNode.nodeValue;
-      }
+    while (walker.nextNode()) {
+      if (walker.currentNode.parentElement?.closest(OWN_BADGE_SELECTOR)) continue;
+      text += walker.currentNode.nodeValue;
+      if (text.trim().length > 100) break;
     }
     return text;
   }
