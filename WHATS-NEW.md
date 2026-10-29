@@ -4,6 +4,14 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.4.2 · October 29, 2026
+
+- If you choose the source currency yourself, prices a page clearly shows in another currency are no longer converted as if they were in yours. On a Korean shop such as lfmall.co.kr, with the New Zealand dollar chosen, a price of 1,064,700 won was converted as 1,064,700 New Zealand dollars.
+- Discount badges such as "37%" are no longer converted as a price of 37.
+- With the source currency chosen yourself, the message after converting now names that currency instead of the one the page seemed to use.
+- On some pages whose prices show no currency sign, a price the shop changes after Twinprice converted the prices around it, for example when you pick another size, now converts too.
+- In the mode that shows only converted prices, a page whose currency Twinprice recognized now keeps it. Before, its own converted prices could make it lose track of the shop's currency, and prices the page loaded later, such as while scrolling, stayed unconverted.
+
 ## 2.4.1 · October 28, 2026
 
 - Shops in New Zealand, Australia, Canada, Singapore and Hong Kong that show prices with just a $ sign, such as priceme.co.nz, now convert. Twinprice found the right currency on these pages but converted none of the prices.

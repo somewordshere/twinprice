@@ -19,7 +19,7 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.4.2 - 2026-10-29
 
 ### Fixed
 
@@ -29,13 +29,17 @@ whose `package.json` declares the release version.
 - Automatic detection no longer reads Twinprice's own output as the shop's. It runs again whenever the page changes, over the page's visible text, which by then held our badges ("≈ 25,00 €") and notices ("Detected: TRY", "1 TRY = 0.0200 EUR"). In converted-only mode the shop's own prices were also hidden from that text. A Turkish page known only by its language and four "TL" prices read as lira, medium confidence, 45 points, before converting. After converting in converted-only mode, once the notice closed, it read as euro at low confidence (30 points, all from our badges), and a lira price the page loaded next stayed unconverted. Detection now leaves out our badges and notices and counts the originals converted-only mode hides; the same page reads lira, medium, 45, before and after, in both display modes. This was in 2.4.1 and earlier.
 - With a source currency chosen by hand, the on-page notice now names that currency. It named the page's detected currency, so lfmall said "converted from KRW" while every badge said NZD.
 
+### Release
+
+- `privacy-policy.md` now says `(version 2.4.2)`, which the project check requires; its text and effective date (October 26, 2026) are unchanged, and the website's policy and What's new pages were regenerated. Nothing about stored data, permissions or network requests changed, so the store privacy answers are unchanged.
+
 ### Tests
 
 - `tests/detector.test.js`: a hand-chosen NZD must not take `1,064,700` beside a separate `원` but still takes it with no marker beside it, a split "37" + "%" is not a price, and a page-detection case for the lfmall product page (KRW, medium). The `원` and "%" cases fail on 2.4.1; the other two pass on it.
 - `tests/e2e/bug-regressions.spec.js`: with USD chosen, a bare `1,064,700` beside a separate `원` stays unconverted, and a bare price re-rendered beside an already converted one converts again. It fails on 2.4.1 (the won price converts) and on 25ac9fb (the re-rendered price does not). A second test adds a won price to a block that opens with 220 spaces of indentation and already holds a badge; it must stay unconverted. It fails on abf5ca9. Two more tests, one per display mode, convert a Turkish page with four "TL" prices, close the notice and add a fifth price, which must convert. The converted-only one fails without the detection fix; the side-by-side one passes either way, because the original prices stay visible there.
 - `tests/live-sites.json`: added the lfmall.co.kr product page, priceme.co.nz and computerdirect.co.nz. The headless KRW and NZD sweep on 2026-10-28 checked little: LF Mall passed in automatic mode (10 conversions from KRW). Coupang, Gmarket, SSG and six of the seven NZ shops (priceme.co.nz and computerdirect.co.nz among them) answered HTTP 403. Trade Me failed to load. On Naver Shopping and 11st the page control never appeared.
 - The built extension on the live lfmall page, rates seeded at 1 KRW = 0.0029665 PLN and 1 NZD = 2.2355 PLN: in automatic mode the main price shows ≈ 3158,43 zł from KRW. With NZD chosen, the main price block is left alone, the "37%" badges no longer convert (183 conversions before, 120 after) and the notice says NZD. A sale price the page re-rendered beside a converted original price converted again; on 25ac9fb it did not.
-- `npm run verify`: 148 unit tests passed. `npm run test:browser`: 64 passed. `npm run test:browser:firefox`: 5 passed. `npm run lint:firefox`: 0 errors, 0 warnings, 0 notices.
+- `npm run release`: project checks, 148 unit tests, Firefox lint (0 errors, 0 warnings, 0 notices), build and the final check passed. It had to follow an `npm run build`: the project check rejects a release folder that holds its notes but not yet both ZIPs, and runs before the build. `npm run test:browser`: 64 passed. `npm run test:browser:firefox`: 5 passed. One unit test still logs "Twinprice initialization failed" (its stand-in browser has no `runtime.getURL`), as on 2.4.1; it passes.
 
 ## 2.4.1 - 2026-10-28
 
