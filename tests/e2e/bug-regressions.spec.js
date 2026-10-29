@@ -168,3 +168,59 @@ test("a chosen source currency skips a bare won price and reconverts a re-render
   await expect(page.locator("#sale .ccp-badge")).toHaveText("≈ 899,10 €");
   await expect(page.locator("#won ccp-conversion")).toHaveCount(0);
 });
+
+// Server-rendered blocks often open with a long run of indentation. Once one price
+// in such a block carries a badge, a won price the shop adds to it must still be
+// read with its "원", not cut off inside the leading whitespace.
+test("a chosen source currency skips a won price added to an indented block that already has a badge", async ({ context, extensionWorker }) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", toCurrency: "EUR" } });
+  const page = await context.newPage();
+  const indent = `\n${" ".repeat(220)}`;
+  await page.route(DEFAULT_SHOP_URL, route => route.fulfill({ contentType: "text/html; charset=utf-8", body: `
+    <div id="block" class="price-box">${indent}<span id="first" class="sale-price">5.00</span></div>
+  ` }));
+  await page.goto(DEFAULT_SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION");
+  await expect(page.locator("#first .ccp-badge")).toHaveText("≈ 4,50 €");
+
+  await page.locator("#block").evaluate(element => {
+    element.insertAdjacentHTML("beforeend", ' <span id="won" class="sale-price">1,064,700</span><span>원</span>');
+  });
+  await expect(page.locator("#won")).toHaveText("1,064,700");
+  // Give the page's change time to be scanned before asserting nothing was added.
+  await page.waitForTimeout(1500);
+  await expect(page.locator("#won ccp-conversion")).toHaveCount(0);
+});
+
+// Automatic detection runs again whenever the page changes, and it reads the
+// page's visible text. Our own badges are not the shop's prices: counted, they
+// made the page look priced in the target currency, and in converted-only mode,
+// where the originals are hidden, the shop's own "TL" disappeared from view too.
+// Our notices counted as well: "Detected: TRY" and "1 TRY = 0.0200 EUR" name codes.
+for (const displayMode of ["beside", "replace"]) {
+  test(`a lira price added after converting still converts in ${displayMode} mode`, async ({ context, extensionWorker }) => {
+    await seedExtension(extensionWorker, { settings: { fromCurrency: "AUTO", toCurrency: "EUR", displayMode } });
+    const page = await context.newPage();
+    await page.route(DEFAULT_SHOP_URL, route => route.fulfill({ contentType: "text/html; charset=utf-8", body: `
+      <html lang="tr"><body>
+        <p id="first" class="price">1.250,00 TL</p>
+        <p class="price">79,90 TL</p>
+        <p class="price">149,90 TL</p>
+        <p class="price">2.499,00 TL</p>
+        <main id="later"></main>
+      </body></html>
+    ` }));
+    await page.goto(DEFAULT_SHOP_URL);
+    const conversion = await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION");
+    expect(conversion.detectedCurrency).toBe("TRY");
+    await expect(page.locator("#first .ccp-badge")).toHaveText("≈ 25,00 €");
+    // Its own notice says "Detected: TRY", which also counted; it closes after 8 seconds.
+    await page.locator(".ccp-toast-dismiss").click();
+    await expect(page.locator(".ccp-toast")).toHaveCount(0);
+
+    await page.locator("#later").evaluate(element => {
+      element.innerHTML = '<p id="second" class="price">899,90 TL</p>';
+    });
+    await expect(page.locator("#second .ccp-badge")).toHaveText("≈ 18,00 €");
+  });
+}
