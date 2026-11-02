@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "Twinprice - převodník měn pro každou cenu na stránce",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - převodník měn na stránkách",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Ceny v obchodech ve vaší měně, hned vedle původní. Přes 160 měn. Obsah stránek nikdy neopustí váš prohlížeč.",
+    "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Převést ceny na aktuální stránce",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  }
+}

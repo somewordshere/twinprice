@@ -5,18 +5,24 @@
   // wrong one can still find theirs. These never need translating.
   const NATIVE_NAMES = Object.freeze({
     en: "English",
+    cs: "Čeština",
     de: "Deutsch",
     es: "Español",
     fr: "Français",
+    id: "Bahasa Indonesia",
     it: "Italiano",
     ja: "日本語",
     ko: "한국어",
+    ms: "Bahasa Melayu",
     nl: "Nederlands",
     pl: "Polski",
     "pt-BR": "Português (Brasil)",
+    th: "ไทย",
     tr: "Türkçe",
     uk: "Українська",
-    "zh-CN": "简体中文"
+    vi: "Tiếng Việt",
+    "zh-CN": "简体中文",
+    "zh-TW": "繁體中文"
   });
   const SUPPORTED = Object.freeze(Object.keys(NATIVE_NAMES));
   const dictionaries = new Map();
@@ -38,16 +44,21 @@
   }
 
   // Maps any BCP 47 tag ("pt", "uk-UA", "de-CH") to a language that has
-  // translations, or null when none fits. Chinese has only the Simplified
-  // translation, so Traditional tags (zh-TW, zh-Hant) use it too.
+  // translations, or null when none fits. Chinese goes by script first, then by
+  // region: zh-Hant, Taiwan, Hong Kong and Macau read Traditional characters,
+  // everything else Simplified.
   function matchLanguage(tag) {
     if (typeof tag !== "string" || !tag.trim()) return null;
     const normalized = tag.trim().replace(/_/g, "-").toLowerCase();
     const exact = SUPPORTED.find((code) => code.toLowerCase() === normalized);
     if (exact) return exact;
-    const primary = normalized.split("-")[0];
+    const [primary, ...subtags] = normalized.split("-");
     if (primary === "pt") return "pt-BR";
-    if (primary === "zh") return "zh-CN";
+    if (primary === "zh") {
+      if (subtags.includes("hans")) return "zh-CN";
+      if (subtags.some((subtag) => ["hant", "tw", "hk", "mo"].includes(subtag))) return "zh-TW";
+      return "zh-CN";
+    }
     return SUPPORTED.find((code) => code.toLowerCase() === primary) || null;
   }
 

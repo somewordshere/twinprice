@@ -46,7 +46,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 - Show converted prices beside the originals or replace them, with exact undo support.
 - Customize converted-price text, background, and corner shape with a live before-and-after preview and contrast guidance.
 - Choose whether the popup follows the system theme or always uses light or dark mode.
-- Use the popup, the welcome page, and the on-page prompts in thirteen languages (English, German, Spanish, French, Italian, Dutch, Polish, Brazilian Portuguese, Turkish, Ukrainian, Japanese, Korean, and Simplified Chinese), following the browser's language or chosen from **Page options**.
+- Use the popup, the welcome page, and the on-page prompts in nineteen languages (English, Czech, German, Spanish, French, Indonesian, Italian, Malay, Dutch, Polish, Brazilian Portuguese, Thai, Turkish, Ukrainian, Vietnamese, Japanese, Korean, Simplified Chinese, and Traditional Chinese), following the browser's language or chosen from **Page options**.
 - Keep the popup focused on the current site, currency pair, and one adaptive page-conversion action, with less-used controls in closed disclosures.
 - Scan ordinary webpages locally as they open and show the on-page conversion prompt only after a supported price is found.
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
@@ -266,7 +266,7 @@ src/          Shared extension runtime used by both browsers
 manifests/    Common manifest plus Chrome and Firefox overrides
 dist/         Generated unpacked browser builds (not committed)
 release/      One folder per version: release notes plus the Chrome and Firefox ZIPs
-store/        Store listing text in thirteen languages, dashboard answers, screenshots, and promo art
+store/        Store listing text in nineteen languages, dashboard answers, screenshots, and promo art
 screenshots/  README screenshots and an old/ archive of the previous interface
 scripts/      Manifest composition, validation, icon, screenshot, video, and release utilities
 tests/        Unit, integration, fixture, Chrome Playwright, and Firefox runtime tests

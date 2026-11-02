@@ -19,7 +19,8 @@
   // languages that ship translations (see shared/translations-*.js). A test keeps
   // the two in step.
   const LANGUAGES = Object.freeze([
-    "auto", "en", "de", "es", "fr", "it", "ja", "ko", "nl", "pl", "pt-BR", "tr", "uk", "zh-CN"
+    "auto", "en", "cs", "de", "es", "fr", "id", "it", "ja", "ko", "ms", "nl", "pl", "pt-BR", "th", "tr",
+    "uk", "vi", "zh-CN", "zh-TW"
   ]);
   const CONVERTED_SHAPES = Object.freeze(["square", "rounded", "pill"]);
   const SHAPE_RADII = Object.freeze({

@@ -10,9 +10,10 @@ const rateNote = document.querySelector('#demo-rate');
 const language = document.documentElement.lang || 'en';
 const currencyNames = language !== 'en' && Intl.DisplayNames ? new Intl.DisplayNames([language], { type: 'currency' }) : null;
 const fill = (text, values) => text.replace(/\{(\w+)\}/g, (match, key) => values[key] ?? match);
-// Fixed demonstration rates, never live quotes.
+// Fixed demonstration rates, never live quotes, all per euro.
 const examples = {
   PLN: { rate: 4.30, locale: 'pl-PL', label: 'Polish złoty' },
+  EUR: { rate: 1, locale: 'de-DE', label: 'euros' },
   USD: { rate: 1.10, locale: 'en-US', label: 'US dollars' },
   JPY: { rate: 162, locale: 'ja-JP', label: 'Japanese yen' },
   UAH: { rate: 45.50, locale: 'uk-UA', label: 'Ukrainian hryvnias' },
@@ -26,12 +27,31 @@ const examples = {
   BRL: { rate: 5.60, locale: 'pt-BR', label: 'Brazilian reais' },
   TRY: { rate: 55, locale: 'tr-TR', label: 'Turkish lira' },
   THB: { rate: 37.50, locale: 'th-TH', label: 'Thai baht' },
+  CZK: { rate: 25, locale: 'cs-CZ', label: 'Czech korunas' },
+  IDR: { rate: 18500, locale: 'id-ID', label: 'Indonesian rupiahs' },
+  MYR: { rate: 4.90, locale: 'ms-MY', label: 'Malaysian ringgits' },
+  VND: { rate: 29000, locale: 'vi-VN', label: 'Vietnamese dong' },
+  CNY: { rate: 8, locale: 'zh-CN', label: 'Chinese yuan' },
+  TWD: { rate: 35, locale: 'zh-TW', label: 'New Taiwan dollars' },
 };
-const sequence = Object.keys(examples);
-// Format once and reserve enough room for every example without measuring layout.
-const amounts = Object.fromEntries(sequence.map(code => [code, new Intl.NumberFormat(examples[code].locale, {
+// The lamp is priced the way a shop in the page's language would price it: in euros
+// on English and euro-area pages, in złoty on the Polish one. It is the same €89 lamp
+// at the rates above, so every conversion agrees. Its own currency is left out of the
+// menu and the animation, where it would only repeat the original price.
+const lampCurrencies = {
+  cs: 'CZK', id: 'IDR', ja: 'JPY', ko: 'KRW', ms: 'MYR', pl: 'PLN', 'pt-BR': 'BRL',
+  th: 'THB', tr: 'TRY', uk: 'UAH', vi: 'VND', 'zh-CN': 'CNY', 'zh-TW': 'TWD',
+};
+const lampCurrency = lampCurrencies[language] || 'EUR';
+const sequence = Object.keys(examples).filter(code => code !== lampCurrency);
+// Amounts this large carry no cents on a price tag: Rp 1.646.500, not Rp 1.646.500,00.
+const formatPrice = (value, code, locale) => new Intl.NumberFormat(locale, {
   style: 'currency', currency: code, currencyDisplay: 'narrowSymbol',
-}).format(89 * examples[code].rate)]));
+  ...(value >= 100000 ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } : {}),
+}).format(value);
+const lampPrice = formatPrice(89 * examples[lampCurrency].rate, lampCurrency, language);
+// Format once and reserve enough room for every example without measuring layout.
+const amounts = Object.fromEntries(sequence.map(code => [code, formatPrice(89 * examples[code].rate, code, examples[code].locale)]));
 const sizing = document.createElement('span');
 sizing.className = 'price-sizing';
 sizing.setAttribute('aria-hidden', 'true');
@@ -83,12 +103,20 @@ function updateDemo({ announce = false, slide = false } = {}) {
   converted.hidden = !toggle.checked;
   caption.hidden = !toggle.checked;
   toggleLabel.textContent = toggle.checked ? toggleLabel.dataset.textOn : toggleLabel.dataset.textOff;
-  const rate = example.rate.toLocaleString(language, { useGrouping: false, minimumFractionDigits: Number.isInteger(example.rate) ? 0 : 2 });
-  rateNote.textContent = fill(rateNote.dataset.textRate, { rate, code: currency.value });
+  rateNote.textContent = fill(rateNote.dataset.textRate, { pair: ratePair(currency.value) });
   // Automatic changes stay quiet for screen readers; announce deliberate actions.
   if (announce) status.textContent = toggle.checked
-    ? fill(status.dataset.textOn, { amount, currency: currencyNames ? currencyNames.of(currency.value) : example.label })
-    : status.dataset.textOff;
+    ? fill(status.dataset.textOn, { original: lampPrice, amount, currency: currencyNames ? currencyNames.of(currency.value) : example.label })
+    : fill(status.dataset.textOff, { original: lampPrice });
+}
+
+// "1 PLN = 0.26 USD" reads worse than "1 USD = 3.91 PLN", so the pair is turned
+// around whenever that keeps the number at 1 or more.
+function ratePair(code) {
+  const perLamp = examples[code].rate / examples[lampCurrency].rate;
+  const [from, to, value] = perLamp >= 1 ? [lampCurrency, code, perLamp] : [code, lampCurrency, 1 / perLamp];
+  const digits = value >= 100 ? 0 : 2;
+  return `1 ${from} = ${value.toLocaleString(language, { minimumFractionDigits: digits, maximumFractionDigits: digits })} ${to}`;
 }
 
 function schedule() {
@@ -105,6 +133,10 @@ function schedule() {
 }
 
 if (toggle && currency && playback) {
+  document.querySelector('.original-price').textContent = lampPrice;
+  currency.querySelector(`option[value="${lampCurrency}"]`)?.remove();
+  // A lamp priced in another currency starts out converted into euros.
+  if (lampCurrency !== 'EUR') currency.value = 'EUR';
   playback.hidden = false;
   toggle.addEventListener('change', () => { updateDemo({ announce: true }); schedule(); });
   currency.addEventListener('change', () => {

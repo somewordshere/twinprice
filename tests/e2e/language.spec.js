@@ -25,7 +25,7 @@ async function openShop(context) {
   return shop;
 }
 
-test("the language menu offers thirteen languages and retranslates the popup and the page prompt", async ({
+test("the language menu offers nineteen languages and retranslates the popup and the page prompt", async ({
   context,
   extensionWorker,
   extensionId
@@ -40,13 +40,15 @@ test("the language menu offers thirteen languages and retranslates the popup and
 
   const language = popup.getByRole("combobox", { name: "Language", exact: true });
   await expect(popup.locator("#language")).toHaveValue("auto");
-  // Automatic plus thirteen languages, each named in its own tongue.
+  // Automatic plus nineteen languages, each named in its own tongue.
   await language.click();
-  await expect(popup.locator("#languageList [role='option']")).toHaveCount(14);
+  await expect(popup.locator("#languageList [role='option']")).toHaveCount(20);
   await expect(popup.locator("#languageList [data-value='uk']")).toHaveText("Українська");
   await expect(popup.locator("#languageList [data-value='ja']")).toHaveText("日本語");
   await expect(popup.locator("#languageList [data-value='ko']")).toHaveText("한국어");
   await expect(popup.locator("#languageList [data-value='zh-CN']")).toHaveText("简体中文");
+  await expect(popup.locator("#languageList [data-value='zh-TW']")).toHaveText("繁體中文");
+  await expect(popup.locator("#languageList [data-value='th']")).toHaveText("ไทย");
   await expect(popup.locator("#convertSite")).toHaveText("Convert page prices");
 
   await popup.locator("#languageList [data-value='uk']").click();
@@ -143,7 +145,13 @@ test("the welcome page follows the saved language and can change it", async ({
 for (const { language, prompt, action, convertPage } of [
   { language: "ja", prompt: "このページに表示されている価格を", action: "価格を換算", convertPage: "ページの価格を換算" },
   { language: "ko", prompt: "이 페이지에 보이는 가격을", action: "가격 환산", convertPage: "페이지 가격 환산" },
-  { language: "zh-CN", prompt: "将此页面上可见的价格换算为", action: "换算价格", convertPage: "换算页面价格" }
+  { language: "zh-CN", prompt: "将此页面上可见的价格换算为", action: "换算价格", convertPage: "换算页面价格" },
+  { language: "zh-TW", prompt: "將此頁面上顯示的價格換算為", action: "換算價格", convertPage: "換算頁面價格" },
+  { language: "cs", prompt: "Převést ceny zobrazené na této stránce", action: "Převést ceny", convertPage: "Převést ceny na stránce" },
+  { language: "th", prompt: "แปลงราคาที่แสดงในหน้านี้เป็น", action: "แปลงราคา", convertPage: "แปลงราคาบนหน้าเว็บ" },
+  { language: "vi", prompt: "Quy đổi các giá hiển thị trên trang này", action: "Quy đổi giá", convertPage: "Quy đổi giá trên trang" },
+  { language: "id", prompt: "Konversi harga yang terlihat di halaman ini", action: "Konversi harga", convertPage: "Konversi harga di halaman" },
+  { language: "ms", prompt: "Tukar harga yang kelihatan pada halaman ini", action: "Tukar harga", convertPage: "Tukar harga halaman" }
 ]) {
   test(`the popup and the page prompt speak ${language} when it is chosen`, async ({
     context,
