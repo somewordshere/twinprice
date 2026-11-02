@@ -381,9 +381,20 @@ test("the website guide quotes the extension's own button and field names in eve
     "3985de": ["page.prompt.converting"],
     "1e28aa": ["popup.restorePrices", "popup.pageOptions", "popup.rememberSite", "popup.enable"]
   };
+  // The right-click entry is named by the browser from src/_locales, not by translations-*.js.
+  const menuQuotes = ["f70fed", "41c629"];
   for (const language of languages) {
     const table = JSON.parse(fs.readFileSync(path.join(root, "website/i18n", `${language}.json`), "utf8"));
     const dictionary = i18n.dictionary(language);
+    const menu = JSON.parse(fs.readFileSync(
+      path.join(root, "src/_locales", language.replace("-", "_"), "messages.json"), "utf8"
+    )).contextMenuConvertSelection.message;
+    for (const unit of menuQuotes) {
+      assert.ok(
+        language === "en" || table[unit].includes(menu),
+        `${language} ${unit} should quote the right-click entry as "${menu}"`
+      );
+    }
     for (const [unit, keys] of Object.entries(quotes)) {
       assert.ok(table[unit], `website/i18n/${language}.json has no unit ${unit}`);
       for (const key of keys) {

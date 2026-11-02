@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Převést ceny na aktuální stránce",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Převést vybranou cenu",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

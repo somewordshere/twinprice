@@ -117,7 +117,10 @@ function createBackground({
         uninstallUrls.push(url);
       }
     },
-    i18n: { getUILanguage: () => "en-US" },
+    i18n: {
+      getUILanguage: () => "en-US",
+      getMessage: (name) => readJson("src/_locales/en/messages.json")[name]?.message ?? ""
+    },
     contextMenus: {
       onClicked: events.contextMenu,
       async removeAll() {},

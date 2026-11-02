@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Geçerli sayfadaki fiyatları çevir",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Seçili fiyatı çevir",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }
