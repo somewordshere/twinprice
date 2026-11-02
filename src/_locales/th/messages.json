@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "Twinprice - ตัวแปลงสกุลเงินสำหรับทุกราคาบนหน้าเว็บ",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - ตัวแปลงสกุลเงินบนหน้าเว็บ",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "ดูราคาสินค้าเป็นสกุลเงินของคุณ ข้างราคาเดิม รองรับกว่า 160 สกุลเงิน เนื้อหาหน้าเว็บไม่เคยออกจากเบราว์เซอร์ของคุณ",
+    "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "แปลงราคาบนหน้าปัจจุบัน",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  }
+}

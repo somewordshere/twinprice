@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "Twinprice - Quy đổi tiền tệ cho mọi mức giá trên trang",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Quy đổi tiền tệ trên trang web",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Xem giá cửa hàng bằng tiền tệ của bạn, ngay cạnh giá gốc. Hơn 160 loại tiền tệ. Nội dung trang không bao giờ rời trình duyệt.",
+    "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Quy đổi giá trên trang hiện tại",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  }
+}

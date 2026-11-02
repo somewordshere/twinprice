@@ -17,18 +17,24 @@ const PAGES = ['', 'guide/', 'about/', 'privacy/', 'whats-new/', 'goodbye/'];
 // date a language's pages first appeared when it was added after the others.
 const LANGUAGES = {
   en: { name: 'English', label: 'Language' },
+  cs: { name: 'Čeština', label: 'Jazyk', since: '2026-11-02' },
   de: { name: 'Deutsch', label: 'Sprache' },
   es: { name: 'Español', label: 'Idioma', amo: 'es-ES' },
   fr: { name: 'Français', label: 'Langue' },
+  id: { name: 'Bahasa Indonesia', label: 'Bahasa', since: '2026-11-02' },
   it: { name: 'Italiano', label: 'Lingua' },
   ja: { name: '日本語', label: '言語', since: '2026-10-21' },
   ko: { name: '한국어', label: '언어', since: '2026-10-21' },
+  ms: { name: 'Bahasa Melayu', label: 'Bahasa', since: '2026-11-02' },
   nl: { name: 'Nederlands', label: 'Taal' },
   pl: { name: 'Polski', label: 'Język' },
   'pt-BR': { name: 'Português (Brasil)', label: 'Idioma', short: 'PT' },
+  th: { name: 'ไทย', label: 'ภาษา', since: '2026-11-02' },
   tr: { name: 'Türkçe', label: 'Dil' },
   uk: { name: 'Українська', label: 'Мова' },
+  vi: { name: 'Tiếng Việt', label: 'Ngôn ngữ', since: '2026-11-02' },
   'zh-CN': { name: '简体中文', label: '语言', short: 'ZH', since: '2026-10-21' },
+  'zh-TW': { name: '繁體中文', label: '語言', short: 'TW', since: '2026-11-02' },
 };
 // Translated pages first appeared on this date; the sitemap never reports an earlier one.
 const TRANSLATED_SINCE = '2026-10-13';

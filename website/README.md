@@ -23,7 +23,7 @@ Run `npm run check` to check JavaScript syntax. No installation is required; the
 
 ## Languages
 
-The site is published in the extension's thirteen interface languages: English at the root and German, Spanish, French, Italian, Japanese, Korean, Dutch, Polish, Brazilian Portuguese, Turkish, Ukrainian and Simplified Chinese under `dist/<language>/`. The English pages in `dist/` remain the authored source. `npm run i18n` (`build-i18n.mjs`) reads them and writes every translated page, the language menu in each header, the `hreflang` links, and the translated entries in `sitemap.xml`. Commit the generated pages; deployment still has no build step.
+The site is published in the extension's nineteen interface languages: English at the root and Czech, German, Spanish, French, Indonesian, Italian, Japanese, Korean, Malay, Dutch, Polish, Brazilian Portuguese, Thai, Turkish, Ukrainian, Vietnamese, Simplified Chinese and Traditional Chinese under `dist/<language>/`. The English pages in `dist/` remain the authored source. `npm run i18n` (`build-i18n.mjs`) reads them and writes every translated page, the language menu in each header, the `hreflang` links, and the translated entries in `sitemap.xml`. Commit the generated pages; deployment still has no build step.
 
 - `i18n/en.json`: every piece of English text, keyed by a short hash of its wording. Generated; do not edit.
 - `i18n/<language>.json`: the translation for each key. Inline markup is written as numbered tags (`<1>…</1>`, `<2/>`) that must match the English entry.

@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "Twinprice - Penukar Mata Wang untuk Setiap Harga pada Halaman",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Penukar Mata Wang pada Halaman",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Lihat harga kedai dalam mata wang anda, di sebelah harga asal. Lebih 160 mata wang. Kandungan halaman kekal dalam pelayar.",
+    "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Tukar harga pada halaman semasa",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  }
+}

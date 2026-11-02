@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "Twinprice - 網頁上每個價格的貨幣換算工具",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - 網頁貨幣換算工具",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "在原價旁看到商店價格換算成你的貨幣是多少。支援 160 多種貨幣。頁面內容絕不會離開你的瀏覽器。",
+    "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "換算目前頁面上的價格",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  }
+}

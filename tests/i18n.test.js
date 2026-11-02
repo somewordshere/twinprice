@@ -38,8 +38,8 @@ function placeholders(text) {
 
 test("the settings schema offers exactly the languages that ship translations", () => {
   assert.deepEqual([...context.CurrencySettings.LANGUAGES], ["auto", ...languages]);
-  assert.equal(languages.length, 13, "the add-on promises thirteen interface languages");
-  for (const language of ["uk", "ja", "ko", "zh-CN"]) {
+  assert.equal(languages.length, 19, "the add-on promises nineteen interface languages");
+  for (const language of ["uk", "ja", "ko", "zh-CN", "zh-TW", "cs", "th", "vi", "id", "ms"]) {
     assert.ok(languages.includes(language), `${language} must be one of them`);
   }
   for (const language of languages) {
@@ -81,7 +81,7 @@ test("languages with several plural forms provide each of them", () => {
       .map((key) => key.replace(PLURAL_SUFFIX, ""))
   )];
   assert.ok(pluralKeys.length > 0);
-  for (const language of ["pl", "uk"]) {
+  for (const language of ["pl", "uk", "cs"]) {
     const dictionary = i18n.dictionary(language);
     for (const key of pluralKeys.filter((candidate) => candidate !== "popup.spark.span")) {
       for (const form of ["one", "few", "many", "other"]) {
@@ -140,10 +140,20 @@ test("an explicit choice wins; automatic follows the browser and falls back to E
   assert.equal(i18n.matchLanguage("pt_BR"), "pt-BR");
   assert.equal(i18n.matchLanguage("UK"), "uk");
   assert.equal(i18n.matchLanguage("zh_CN"), "zh-CN");
-  // Simplified Chinese is the only Chinese translation, so every Chinese tag uses it.
-  for (const tag of ["zh", "zh-Hans", "zh-SG", "zh-TW", "zh-HK", "zh-Hant-TW"]) {
+  // Chinese goes by script, then region: Traditional for zh-Hant, Taiwan, Hong Kong
+  // and Macau, Simplified for everything else.
+  for (const tag of ["zh", "zh-Hans", "zh-SG", "zh-CN", "zh-Hans-HK"]) {
     assert.equal(i18n.matchLanguage(tag), "zh-CN", tag);
   }
+  for (const tag of ["zh-TW", "zh_TW", "zh-HK", "zh-MO", "zh-Hant", "zh-Hant-TW"]) {
+    assert.equal(i18n.matchLanguage(tag), "zh-TW", tag);
+  }
+  assert.equal(withBrowser("zh-TW").resolve("auto"), "zh-TW");
+  assert.equal(withBrowser("cs-CZ").resolve("auto"), "cs");
+  assert.equal(withBrowser("th-TH").resolve("auto"), "th");
+  assert.equal(withBrowser("vi-VN").resolve("auto"), "vi");
+  assert.equal(withBrowser("id-ID").resolve("auto"), "id");
+  assert.equal(withBrowser("ms-MY").resolve("auto"), "ms");
   assert.equal(i18n.matchLanguage("nb"), null);
   assert.equal(i18n.matchLanguage(""), null);
   assert.equal(i18n.matchLanguage(null), null);
@@ -340,7 +350,8 @@ test("links to twinprice.com open the website in the extension's language", () =
   assert.equal(scoped.websiteUrl("en"), "https://twinprice.com/");
   assert.equal(scoped.websiteUrl("ja", "#faq"), "https://twinprice.com/ja/#faq");
   assert.equal(scoped.websiteUrl("pt-BR", "goodbye/"), "https://twinprice.com/pt-BR/goodbye/");
-  assert.equal(scoped.websiteUrl("zh-TW"), "https://twinprice.com/zh-CN/");
+  assert.equal(scoped.websiteUrl("zh-TW"), "https://twinprice.com/zh-TW/");
+  assert.equal(scoped.websiteUrl("zh-HK"), "https://twinprice.com/zh-TW/");
   assert.equal(scoped.websiteUrl("sv"), "https://twinprice.com/");
   scoped.setLanguage("ko");
   assert.equal(scoped.websiteUrl(), "https://twinprice.com/ko/");

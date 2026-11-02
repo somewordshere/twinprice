@@ -19,6 +19,20 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Added
+
+- Six interface languages: Czech, Indonesian, Malay, Thai, Vietnamese and Traditional Chinese, so the **Language** menu now offers nineteen. They translate the popup, the welcome page and everything Twinprice shows on web pages (`src/shared/translations-app.js`, `translations-page.js`). Czech has all four plural forms. The extensions' store name, summary and shortcut name (`src/_locales/{cs,id,ms,th,vi,zh_TW}/messages.json`) and the Chrome store descriptions (`store/listings/{cs,id,ms,th,vi,zh_TW}.md`) are translated too; the Firefox description stays in English, as for every other language. twinprice.com gains the same six languages (`website/i18n/*.json`, `build-i18n.mjs`, first published 2026-11-02).
+- twinprice.com's demo lamp is priced in the currency of the page's language: 382,70 zł on the Polish page, ¥712.00 on the Simplified Chinese one, 2 225,00 Kč on the Czech one, and so on; English and the euro-area languages keep €89.00. It is the same €89 lamp at the demo's fixed example rates, so every conversion still agrees. Its own currency is left out of the **Show prices in** menu and the animation, which gains EUR, CZK, IDR, MYR, VND, CNY and TWD; a lamp not priced in euros starts out converted into euros. The rate note reads "1 PLN = 4,88 MXN", turned around when that keeps the number at 1 or more, and the screen-reader sentences name the lamp's own price instead of "89 euros" (`website/dist/demo.js`, `index.html`; the three affected sentences were moved to new keys in all nineteen `website/i18n` files, with their wording otherwise unchanged). Without JavaScript the page still shows the euro price. The selection demo and the "Compare at a glance" sample still show €89.00.
+- Browsers set to Traditional Chinese now get it: `zh-Hant`, Taiwan, Hong Kong and Macau tags resolve to `zh-TW`, which used to fall back to Simplified Chinese. `zh-Hans` and every other Chinese tag still resolve to `zh-CN`. The goodbye page and the welcome page's help link follow.
+
+### Tests
+
+- `tests/i18n.test.js`: the add-on promises nineteen languages, Czech joins Polish and Ukrainian in needing every plural form, and Chinese tags resolve by script and region. The existing checks that every language translates every key with the same placeholders, and that the website guide quotes the extension's own button names, now cover the six new languages. `tests/onboarding.test.js`: Taiwan and Czech browsers get their own goodbye pages.
+- `tests/e2e/language.spec.js`: the language menu has twenty entries (Automatic plus nineteen), and the popup and on-page prompt are checked in each new language. `tests/firefox/runtime.js`: the Firefox menu has twenty entries too.
+- `npm run verify`: 148 unit tests passed. `npm run test:browser`: 70 passed. `npm run test:browser:firefox`: 5 passed. `npm run lint:firefox`: 0 errors, 0 warnings, 0 notices. Store screenshots stay English-only; no localized sets were made.
+
 ## 2.4.2 - 2026-10-29
 
 ### Fixed

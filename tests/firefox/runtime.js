@@ -226,7 +226,7 @@ test("Firefox language menu retranslates the popup, the page, and the welcome pa
     );
     assert.equal(await popup("document.documentElement.lang"), "pl");
     assert.equal(await popup("document.querySelector('#convertSite').textContent"), "Przelicz ceny na stronie");
-    assert.equal(await popup("document.querySelector('#language').options.length"), 14);
+    assert.equal(await popup("document.querySelector('#language').options.length"), 20);
 
     // Switch to Ukrainian through the real menu and watch the whole popup follow.
     await popup(

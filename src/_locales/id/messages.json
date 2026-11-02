@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "Twinprice - Konverter Mata Uang untuk Setiap Harga di Halaman",
+    "description": "Chrome Web Store name. At most 75 characters. Keep Twinprice first."
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Konverter Mata Uang di Halaman",
+    "description": "Firefox Add-ons name. At most 45 characters, or AMO rejects the upload."
+  },
+  "extDescription": {
+    "message": "Lihat harga toko dalam mata uang Anda, di samping harga aslinya. Lebih dari 160 mata uang. Isi halaman tidak keluar dari browser.",
+    "description": "Store summary. At most 132 characters."
+  },
+  "commandConvertPage": {
+    "message": "Konversi harga di halaman saat ini",
+    "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  }
+}
