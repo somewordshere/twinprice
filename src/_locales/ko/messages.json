@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "현재 페이지의 가격 환산",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "선택한 가격 환산",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Preise auf der aktuellen Seite umrechnen",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Markierten Preis umrechnen",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

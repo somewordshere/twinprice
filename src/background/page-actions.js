@@ -10,7 +10,8 @@
       await api.contextMenus.removeAll();
       api.contextMenus.create({
         id: "convert-selection",
-        title: "Convert selected currency",
+        // Named in the browser's language, like the keyboard shortcut.
+        title: api.i18n.getMessage("contextMenuConvertSelection") || "Convert selected currency",
         contexts: ["selection"]
       });
     }

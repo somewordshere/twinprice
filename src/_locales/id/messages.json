@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Konversi harga di halaman saat ini",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Konversi harga yang dipilih",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

@@ -19,6 +19,19 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Fixed
+
+- The right-click entry for converting a highlighted price is now shown in the
+  browser's language in all nineteen languages instead of always in English
+  (`contextMenuConvertSelection` in `src/_locales`). The website's FAQ and guide
+  quote the translated entry, and `tests/i18n.test.js` checks that they match.
+- Traditional Chinese now names the AUTO source option as the popup shows it,
+  Dutch labels recent pairs "Recent gebruikt", and the Italian website demo
+  switch reads "Attivo"/"Disattivo" instead of English "On"/"Off".
+  These translations have not been reviewed by native speakers.
+
 ## 2.5.0 - 2026-11-02
 
 ### Added

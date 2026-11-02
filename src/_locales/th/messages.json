@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "แปลงราคาบนหน้าปัจจุบัน",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "แปลงราคาที่เลือก",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Converti i prezzi della pagina corrente",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Converti il prezzo selezionato",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

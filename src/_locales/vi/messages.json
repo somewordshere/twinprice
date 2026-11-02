@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Quy đổi giá trên trang hiện tại",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Quy đổi giá đã chọn",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "换算当前页面上的价格",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "换算所选价格",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

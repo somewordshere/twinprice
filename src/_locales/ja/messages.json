@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "現在のページの価格を換算",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "選択した価格を換算",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }

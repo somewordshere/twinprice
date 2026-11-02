@@ -14,5 +14,9 @@
   "commandConvertPage": {
     "message": "Przelicz ceny na bieżącej stronie",
     "description": "Name of the keyboard shortcut on the browser's shortcuts page."
+  },
+  "contextMenuConvertSelection": {
+    "message": "Przelicz zaznaczoną cenę",
+    "description": "Right-click menu entry shown when text is selected."
   }
 }
