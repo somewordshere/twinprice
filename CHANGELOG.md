@@ -19,7 +19,7 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.5.0 - 2026-11-02
 
 ### Added
 
@@ -27,11 +27,19 @@ whose `package.json` declares the release version.
 - twinprice.com's demo lamp is priced in the currency of the page's language: 382,70 zł on the Polish page, ¥712.00 on the Simplified Chinese one, 2 225,00 Kč on the Czech one, and so on; English and the euro-area languages keep €89.00. It is the same €89 lamp at the demo's fixed example rates, so every conversion still agrees. Its own currency is left out of the **Show prices in** menu and the animation, which gains EUR, CZK, IDR, MYR, VND, CNY and TWD; a lamp not priced in euros starts out converted into euros. The rate note reads "1 PLN = 4,88 MXN", turned around when that keeps the number at 1 or more, and the screen-reader sentences name the lamp's own price instead of "89 euros" (`website/dist/demo.js`, `index.html`; the three affected sentences were moved to new keys in all nineteen `website/i18n` files, with their wording otherwise unchanged). Without JavaScript the page still shows the euro price. The selection demo and the "Compare at a glance" sample still show €89.00.
 - Browsers set to Traditional Chinese now get it: `zh-Hant`, Taiwan, Hong Kong and Macau tags resolve to `zh-TW`, which used to fall back to Simplified Chinese. `zh-Hans` and every other Chinese tag still resolve to `zh-CN`. The goodbye page and the welcome page's help link follow.
 
+### Fixed
+
+- Four Indonesian and Malay website labels wrote "&amp;" where every other language writes "&" (browsers showed "&" either way), and the Firefox language names in the Indonesian and Traditional Chinese listing headers now match AMO ("Bahasa Indonesia", "正體中文 (繁體)").
+
+### Release
+
+- `privacy-policy.md` now says `(version 2.5.0)`, which the project check requires; its text and effective date (October 26, 2026) are unchanged, and the website's policy and What's new pages were regenerated. Nothing about stored data, permissions or network requests changed, so the store privacy answers are unchanged. 2.5.0 is a minor version because it adds interface languages, as 2.3.0 did.
+
 ### Tests
 
 - `tests/i18n.test.js`: the add-on promises nineteen languages, Czech joins Polish and Ukrainian in needing every plural form, and Chinese tags resolve by script and region. The existing checks that every language translates every key with the same placeholders, and that the website guide quotes the extension's own button names, now cover the six new languages. `tests/onboarding.test.js`: Taiwan and Czech browsers get their own goodbye pages.
 - `tests/e2e/language.spec.js`: the language menu has twenty entries (Automatic plus nineteen), and the popup and on-page prompt are checked in each new language. `tests/firefox/runtime.js`: the Firefox menu has twenty entries too.
-- `npm run verify`: 148 unit tests passed. `npm run test:browser`: 70 passed. `npm run test:browser:firefox`: 5 passed. `npm run lint:firefox`: 0 errors, 0 warnings, 0 notices. Store screenshots stay English-only; no localized sets were made.
+- `npm run release`: project checks, 148 unit tests, Firefox lint (0 errors, 0 warnings, 0 notices), build and the final check passed, after an `npm run build` so the new release folder held both ZIPs. `npm run test:browser`: 70 passed. `npm run test:browser:firefox`: 5 passed. One unit test still logs "Twinprice initialization failed" (its stand-in browser has no `runtime.getURL`), as on 2.4.2; it passes. Store screenshots stay English-only; no localized sets were made.
 
 ## 2.4.2 - 2026-10-29
 
