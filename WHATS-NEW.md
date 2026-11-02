@@ -4,6 +4,12 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.5.0 · November 2, 2026
+
+- Twinprice now speaks Czech, Indonesian, Malay, Thai, Vietnamese and Traditional Chinese, so you can choose from nineteen languages under **Language** in Page options. The translations were written without review by native speakers; corrections are welcome.
+- If your browser is set to Chinese for Taiwan, Hong Kong or Macau, Twinprice now uses Traditional Chinese on its own. Before, it always showed Simplified Chinese.
+- twinprice.com is available in the same six new languages, and the demo lamp on its front page is priced in the currency of the page's language, such as złoty on the Polish page.
+
 ## 2.4.2 · October 29, 2026
 
 - If you choose the source currency yourself, prices a page clearly shows in another currency are no longer converted as if they were in yours. On a Korean shop such as lfmall.co.kr, with the New Zealand dollar chosen, a price of 1,064,700 won was converted as 1,064,700 New Zealand dollars.
