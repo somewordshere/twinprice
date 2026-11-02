@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.5.1 · November 2, 2026
+
+- The right-click menu entry for converting a highlighted price now appears in your browser's language. Before, it was always in English.
+- A few words that were still in English, or didn't match what Twinprice shows, are now translated: the recent currency pairs in Dutch, a hint about AUTO in Traditional Chinese, and the demo switch on the Italian twinprice.com page. The translations were written without review by native speakers; corrections are welcome.
+
 ## 2.5.0 · November 2, 2026
 
 - Twinprice now speaks Czech, Indonesian, Malay, Thai, Vietnamese and Traditional Chinese, so you can choose from nineteen languages under **Language** in Page options. The translations were written without review by native speakers; corrections are welcome.
