@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.5.2 · November 3, 2026
+
+- After Twinprice has converted prices on five pages, it now asks once, right on the page, whether you'd like to rate it: "Enjoying Twinprice? **Rate it**". The question appears above the conversion message, so **Undo** stays where it was. **Rate it** opens the store's review page, × means you won't be asked again, and if you ignore it, it goes away by itself. Until now the question only appeared at the bottom of the Twinprice window, where many people never saw it. The translations were written without review by native speakers; corrections are welcome.
+- Prices that a shop loads a moment after the page appears now count toward those five pages too.
+
 ## 2.5.1 · November 2, 2026
 
 - The right-click menu entry for converting a highlighted price now appears in your browser's language. Before, it was always in English.

@@ -59,9 +59,10 @@ screenshots are rebuilt.
 | Privacy policy | Paste `privacy-policy.md` from the repository root. Mozilla asks for the text in the listing, not only a link. Update it whenever the policy version changes. |
 | License | MIT |
 
-These notes are written to match Twinprice version 2.4.0 and the privacy policy
-dated October 26, 2026. 2.4.0 added the policy's "Website reports" section, so
-paste the whole current text into the Privacy policy field with that upload. If
+These notes are written to match Twinprice version 2.5.2 and the privacy policy
+dated November 3, 2026. 2.5.2 added to the policy's list of stored data whether the
+rating reminder was already shown on a webpage, so paste the whole current text
+into the Privacy policy field with that upload. If
 the permissions, data collection, stored data, or network requests change, update
 this file and the policy together.
 

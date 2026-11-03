@@ -19,7 +19,7 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.5.2 - 2026-11-03
 
 ### Changed
 
@@ -49,9 +49,16 @@ whose `package.json` declares the release version.
 - Chrome tests: the request stacks above the result and Rate it opens the Chrome
   Web Store review page; × on the page hides the popup line too; prices added after
   the first pass are counted.
-- `npm run verify` 153 passed; `npm run test:browser` 73 passed;
-  `npm run test:browser:firefox` 5 passed; `npm run lint:firefox` 0 errors,
-  0 warnings, 0 notices.
+- Firefox runtime test: the fifth converted page shows the request, × removes it,
+  and the stored state is dismissed and asked-on-page with the popup line hidden.
+- `npm run release` passed: project checks, 153 unit tests, `web-ext lint` with
+  0 errors, 0 warnings, 0 notices. `npm run test:browser` 73 passed;
+  `npm run test:browser:firefox` 6 passed. One unit test still logs "Twinprice
+  initialization failed" because its stand-in browser has no `runtime.getURL`, as
+  in 2.5.1; the test passes.
+- The privacy policy (version 2.5.2, effective November 3, 2026) and both store
+  listing notes list the new locally stored asked-on-page flag; twinprice.com's
+  privacy and What's new pages were regenerated.
 
 ## 2.5.1 - 2026-11-02
 
