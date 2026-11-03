@@ -178,6 +178,14 @@ function buildPage(english, page, language, context) {
 
   const currencyNames = new Intl.DisplayNames([language], { type: 'currency' });
   const localize = url => url.startsWith(SITE) && !/\.\w+$/.test(url.split(/[?#]/)[0]) ? SITE + language + '/' + url.slice(SITE.length) : url;
+  // Store links open the store in the page's language, and their utm_campaign names that language for the store statistics.
+  const storeLink = value => {
+    const url = new URL(value.replaceAll('&amp;', '&'));
+    if (url.hostname === 'addons.mozilla.org') url.pathname = url.pathname.replace('/en-US/', `/${store.amo || language}/`);
+    else url.searchParams.set('hl', language);
+    if (url.searchParams.has('utm_campaign')) url.searchParams.set('utm_campaign', language);
+    return url.href.replaceAll('&', '&amp;');
+  };
   const pageContext = {
     ...context,
     language,
@@ -193,8 +201,7 @@ function buildPage(english, page, language, context) {
         const value = node.attributes[name];
         if (value === undefined || inMenu) continue;
         if (/^(https?:|#|mailto:|data:)/.test(value)) {
-          if (node.tag === 'a' && value.includes('addons.mozilla.org/en-US/')) values.set(name, value.replace('/en-US/', `/${store.amo || language}/`));
-          else if (node.tag === 'a' && value.includes('chromewebstore.google.com/')) values.set(name, `${value}?hl=${language}`);
+          if (node.tag === 'a' && /^https:\/\/(addons\.mozilla\.org|chromewebstore\.google\.com)\//.test(value)) values.set(name, storeLink(value));
           else if (node.tag === 'link' && node.attributes.rel === 'canonical') values.set(name, localize(value));
         } else if (/\.\w+$/.test(value.split(/[?#]/)[0])) {
           values.set(name, '../' + value); // Shared styles, scripts and images live one level up.
