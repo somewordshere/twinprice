@@ -1111,3 +1111,11 @@ h1 {
 .language-menu[open] ul { animation: language-menu-in .16s ease-out; }
 @keyframes language-menu-in { from { opacity: 0; transform: translateY(-6px); } }
 @media (prefers-reduced-motion: reduce) { .language-menu[open] ul { animation: none; } }
+/* Shown by browser-detect.js where the usual store button can't install Twinprice. */
+.install-note { font-size: 13px; color: #495468; max-width: 465px; margin-top: 14px; }
+/* Phones: the main links move to a row of their own under the brand. */
+@media (max-width: 760px) {
+  .site-header { height: auto; flex-wrap: wrap; row-gap: 0; padding-top: 19px; }
+  .site-header nav { display: flex; flex-wrap: wrap; order: 1; flex-basis: 100%; gap: 0 20px; margin: 4px 0 0; }
+  .site-header nav a { padding: 10px 0; line-height: 24px; }
+}

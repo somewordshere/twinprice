@@ -12,6 +12,7 @@ Run `npm run check` to check JavaScript syntax. No installation is required; the
 - `dist/index.html`: landing page, store links, screenshot, FAQs.
 - `dist/styles.css`: shared responsive styles, keyboard focus, reduced motion.
 - `dist/demo.js`: local example conversions; no requests or persistence.
+- `dist/browser-detect.js`: matches the install buttons to the visitor's browser. Firefox gets the Firefox button first; Edge and Opera get their own label on the Chrome Web Store button. Android browsers other than Firefox get only the Firefox for Android button, plus a note that most phone browsers can't add extensions. iPhone, iPad and unsupported desktop browsers keep both buttons and get a note saying where Twinprice works. Every label and note is a `data-text-*` attribute, so each language page carries its own.
 - `dist/privacy/index.html`: the full existing extension policy and website privacy information.
 - `dist/guide/index.html`: illustrated installation and conversion guide, with worked shopping examples and troubleshooting.
 - `dist/about/index.html`: public product facts, publisher attribution, sources, rate and privacy details, and an invitation for honest reviews. Publisher attribution was checked against both official store listings on 2026-09-14; avoid presenting an invented personal biography or a common store version.
