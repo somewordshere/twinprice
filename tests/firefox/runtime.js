@@ -181,6 +181,70 @@ test("Firefox converts every website automatically without a prompt or a message
   }
 });
 
+test("Firefox asks for a rating on the fifth converted page, and × ends it", { timeout: 120_000 }, async () => {
+  const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-review-"));
+  let fixture;
+  let driver;
+  let installedAddonId;
+
+  try {
+    const archivePath = buildTemporaryArchive(temporaryDirectory);
+    fixture = await startFixtureServer();
+    driver = await createFirefoxDriver();
+    await driver.manage().setTimeouts({
+      pageLoad: FIREFOX_TIMEOUT_MS,
+      script: FIREFOX_TIMEOUT_MS
+    });
+
+    installedAddonId = await driver.installAddon(archivePath, true);
+    assert.equal(installedAddonId, ADDON_ID);
+
+    const extensionOrigin = await getExtensionOrigin(driver, ADDON_ID);
+    await seedExtensionState(driver, extensionOrigin, fixture.url, {
+      fromCurrency: "USD",
+      autoConvertAllSites: true
+    });
+    const readReviewState = () => driver.executeAsyncScript(`
+      const done = arguments[arguments.length - 1];
+      browser.storage.local.get("reviewPrompt").then((stored) => done(stored.reviewPrompt || {}));
+    `);
+    await driver.executeAsyncScript(`
+      const done = arguments[arguments.length - 1];
+      browser.storage.local.set({ reviewPrompt: { successCount: 4 } }).then(() => done());
+    `);
+
+    await driver.get(fixture.url);
+    const ask = await driver.wait(
+      until.elementLocated(By.css(".ccp-review-request")),
+      FIREFOX_TIMEOUT_MS
+    );
+    await driver.wait(async () => (
+      (await ask.getText()).includes("Enjoying Twinprice?")
+    ), FIREFOX_TIMEOUT_MS);
+    assert.match(await ask.getText(), /Rate it/);
+    await ask.findElement(By.css(".ccp-toast-dismiss")).click();
+    await driver.wait(async () => (
+      await driver.findElements(By.css(".ccp-review-request"))
+    ).length === 0, FIREFOX_TIMEOUT_MS);
+
+    await driver.get(`${extensionOrigin}/popup/popup.html`);
+    await driver.wait(async () => (await readReviewState()).dismissed === true, FIREFOX_TIMEOUT_MS);
+    const state = await readReviewState();
+    assert.equal(state.successCount, 5);
+    assert.equal(state.askedOnPage, true);
+    assert.equal(await driver.findElement(By.id("reviewPrompt")).isDisplayed(), false);
+  } finally {
+    if (driver) {
+      if (installedAddonId) {
+        await driver.uninstallAddon(installedAddonId).catch(() => {});
+      }
+      await driver.quit().catch(() => {});
+    }
+    if (fixture) await fixture.close();
+    removeTemporaryDirectory(temporaryDirectory);
+  }
+});
+
 test("Firefox language menu retranslates the popup, the page, and the welcome page", { timeout: 120_000 }, async () => {
   const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "ccp-firefox-language-"));
   let fixture;

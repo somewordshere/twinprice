@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: October 26, 2026 (version 2.5.1)
+Effective date: November 3, 2026 (version 2.5.2)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 
@@ -42,8 +42,9 @@ The extension stores:
 - A cache of exchange rates, including the rate date and fetch time
 - The origins of websites the user chooses for automatic conversion
 - A source-currency mode for an automatic-conversion website, including a manual currency or `AUTO`
-- A count of webpages where a conversion succeeded, and whether the user opened or
-  dismissed the rating reminder, used only to decide when to show that reminder
+- A count of webpages where a conversion succeeded, whether the rating reminder was
+  already shown on a webpage, and whether the user opened or dismissed it, used only
+  to decide when to show that reminder
 
 Core extension settings use the browser's extension sync storage and may be
 synchronized by Google or Mozilla according to the user's browser settings and

@@ -17,8 +17,8 @@ package and text are used for Microsoft Edge Add-ons once it is listed there.
 
 ## Privacy practices tab
 
-These answers are written to match Twinprice version 2.4.0 and the privacy policy
-dated October 26, 2026. If the permissions, stored data, or network requests change,
+These answers are written to match Twinprice version 2.5.2 and the privacy policy
+dated November 3, 2026. If the permissions, stored data, or network requests change,
 update this file and the policy together.
 
 ### Single purpose
@@ -35,8 +35,8 @@ whether to convert all websites automatically.
 It also stores recent currency codes, the website origins the user chose to convert
 automatically (with their source-currency mode), the latest successful exchange-rate
 data so the extension can keep working temporarily while offline, and a count of
-webpages where a conversion succeeded plus whether the rating reminder was opened or
-dismissed, used only to decide when to show that reminder.
+webpages where a conversion succeeded plus whether the rating reminder was already
+shown on a webpage, opened or dismissed, used only to decide when to show that reminder.
 
 #### `contextMenus`
 
