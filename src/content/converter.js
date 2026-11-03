@@ -39,6 +39,10 @@
     "[data-testid*='price' i]",
     "[aria-label*='price' i]"
   ].join(",");
+  const SPLIT_INTEGER_PATTERN = /^\d+(?:[\s .']\d{3})*$/u;
+  const SPLIT_FRACTION_START_PATTERN = /^\s*\d{2}(?!\d)/u;
+  const SPLIT_PART_CLASS_PATTERN =
+    /(?:^|[-_\s])(?:major|minor|int|integer|dec|decimal|whole|fraction|frac|cents?)(?=$|[-_\s])/i;
 
   let settings = null;
   let activeRatesByBase = {};
@@ -569,6 +573,7 @@
       (!QUICK_CURRENCY_MARKER_PATTERN.test(node.nodeValue) && !CurrencyDetector.isLikelyPriceElement(parent)) ||
       parent.isContentEditable ||
       parent.closest(PRICE_FRAGMENT_SELECTOR) ||
+      isSplitPriceFraction(node) ||
       parent.closest("[hidden], [inert], [aria-hidden='true'], template") ||
       !isRendered(parent) ||
       parent.closest(`${OWNED_SELECTOR}, ${UI_SELECTOR}`)
@@ -622,7 +627,51 @@
   // then matches neither (a symbol, "$34.98$34.98", happens to survive). The
   // screen-reader copy is always whole, so it is the one to read.
   function splitPriceText(element, text) {
-    return element.querySelector(":scope > .a-offscreen")?.textContent?.trim() || text;
+    return element.querySelector(":scope > .a-offscreen")?.textContent?.trim() ||
+      joinSplitFraction(element) ||
+      text;
+  }
+
+  // doz.pl draws "44,99 zł" as <span class="price-major">44</span>
+  // <span class="price-minor">99 zł</span>, with no separator anywhere. Read as
+  // text that is "44 99 zł", and the minor span alone is a whole-looking
+  // "99 zł", so every tile was converted as 99 zł. Joining the parts with a
+  // decimal point gives the parser the price the page shows.
+  function joinSplitFraction(element) {
+    let joined = "";
+    let found = false;
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const value = walker.currentNode.nodeValue || "";
+      if (isSplitPriceFraction(walker.currentNode)) {
+        joined = `${joined.trimEnd()}.${value.trimStart()}`;
+        found = true;
+      } else {
+        joined += value;
+      }
+    }
+    return found ? joined.trim() : null;
+  }
+
+  // The first text of an element whose two leading digits are the fraction of
+  // the bare integer in the element just before it. Both parts must be named as
+  // price parts (major/minor, int/dec, whole/fraction), so "2" items beside
+  // "99 zł" is not read as 2.99 zł.
+  function isSplitPriceFraction(node) {
+    const fraction = node.parentElement;
+    if (!fraction || !SPLIT_FRACTION_START_PATTERN.test(node.nodeValue || "")) return false;
+    for (let sibling = node.previousSibling; sibling; sibling = sibling.previousSibling) {
+      if (sibling.nodeType !== Node.TEXT_NODE || sibling.nodeValue?.trim()) return false;
+    }
+    let integer = fraction.previousSibling;
+    while (integer?.nodeType === Node.TEXT_NODE && !integer.nodeValue?.trim()) {
+      integer = integer.previousSibling;
+    }
+    if (integer?.nodeType !== Node.ELEMENT_NODE) return false;
+    if (!SPLIT_INTEGER_PATTERN.test(integer.textContent?.trim() || "")) return false;
+    return SPLIT_PART_CLASS_PATTERN.test(
+      `${integer.getAttribute("class") || ""} ${fraction.getAttribute("class") || ""}`
+    );
   }
 
   // Whether the element's text is spread over more than one node, so no single
@@ -649,6 +698,7 @@
       if (walker.currentNode.parentElement?.closest(
         `${PRICE_FRAGMENT_SELECTOR}, [hidden], [inert], [aria-hidden='true'], template`
       )) continue;
+      if (isSplitPriceFraction(walker.currentNode)) continue;
       if (CurrencyDetector.findMatchesForContext(
         walker.currentNode.nodeValue || "",
         walker.currentNode.parentElement,

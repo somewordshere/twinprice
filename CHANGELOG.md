@@ -19,6 +19,27 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.5.3 - 2026-11-03
+
+### Fixed
+
+- Prices drawn as a bare integer element followed by a fraction element with the
+  currency, with no separator between them, are converted whole. doz.pl's homepage
+  tiles write 44,99 zł as `<span class="…price-major">44</span>` and
+  `<span class="…price-minor">99 zł</span>`: the second span read as a complete
+  "99 zł", so every tile was converted as 99 zł, while the product page, where the
+  price is one text node, was right. Both parts must carry a price-part class
+  (major/minor, int/dec, whole/fraction, cents), so a quantity beside a total is
+  not joined to it.
+- New Chrome test: an integer/fraction split tile, an int/dec split price and a
+  quantity beside a total each get one badge with the right amount. It fails
+  against 2.5.2 (the tile converts as 99 zł).
+- The privacy policy records version 2.5.3; its text and effective date are unchanged.
+- Validation: project checks, 153 of 153 unit tests, 74 of 74 Chrome tests and 6 of 6
+  Firefox runtime tests pass; Firefox package validation reports no errors, warnings
+  or notices. The first Firefox run failed one test, not captured; three reruns
+  passed all 6.
+
 ## 2.5.2 - 2026-11-03
 
 ### Changed
