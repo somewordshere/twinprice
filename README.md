@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
-**Current version:** 2.5.2 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.5.3 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.5.2/twinprice-2.5.2-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.5.2/twinprice-2.5.2-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.5.3/twinprice-2.5.3-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.5.3/twinprice-2.5.3-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -56,7 +56,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.5.2/twinprice-2.5.2-chrome.zip) or [Firefox build](release/2.5.2/twinprice-2.5.2-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.5.3/twinprice-2.5.3-chrome.zip) or [Firefox build](release/2.5.3/twinprice-2.5.3-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -221,6 +221,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.5.3 | Prices whose cents sit in a separate part, such as doz.pl's homepage tiles, convert at the full amount | [Chrome](release/2.5.3/twinprice-2.5.3-chrome.zip) · [Firefox](release/2.5.3/twinprice-2.5.3-firefox.zip) |
 | 2.5.2 | After five converted pages, the page itself asks once for a rating; prices that load after the page count too | [Chrome](release/2.5.2/twinprice-2.5.2-chrome.zip) · [Firefox](release/2.5.2/twinprice-2.5.2-firefox.zip) |
 | 2.5.1 | The right-click convert entry is shown in the browser's language; translation fixes for Traditional Chinese, Dutch and Italian | [Chrome](release/2.5.1/twinprice-2.5.1-chrome.zip) · [Firefox](release/2.5.1/twinprice-2.5.1-firefox.zip) |
 | 2.5.0 | Six new interface languages: Czech, Indonesian, Malay, Thai, Vietnamese and Traditional Chinese | [Chrome](release/2.5.0/twinprice-2.5.0-chrome.zip) · [Firefox](release/2.5.0/twinprice-2.5.0-firefox.zip) |

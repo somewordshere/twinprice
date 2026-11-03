@@ -449,6 +449,42 @@ test("converts a price the site split across bare text nodes", async ({
   await expect(shop.locator("#react-price .ccp-badge")).toContainText("1.169,10");
 });
 
+// doz.pl's homepage tiles write "44,99 zł" as a bare integer span and a "99 zł"
+// span, with no separator. The second span looked like a whole price, so every
+// tile was converted as 99 zł while the product page, one text node, was right.
+test("converts a price whose integer and fraction sit in separate elements", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker);
+  const shop = await context.newPage();
+  await shop.route(SHOP_URL, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/html; charset=utf-8",
+    body: `<!doctype html>
+      <html lang="pl"><body><main>
+        <div id="tile" class="product-tile__prices">
+          <div class="product-tile__price">
+            <span class="product-tile__price-major">44</span>
+            <span class="product-tile__price-minor">99 zł</span>
+          </div>
+        </div>
+        <span id="wide" class="tile-wide__price"><b class="tile-wide__price-int">29</b><span class="tile-wide__price-dec">79 zł</span></span>
+        <p id="quantity" class="basket-line"><span class="basket-line__qty">2</span> <span class="basket-line__total">100 zł</span></p>
+      </main></body></html>`
+  }));
+  await shop.goto(SHOP_URL);
+
+  const conversion = await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION");
+  expect(conversion.ok).toBe(true);
+  expect(conversion.count).toBe(3);
+  await expect(shop.locator("#tile .ccp-badge")).toHaveCount(1);
+  await expect(shop.locator("#tile .ccp-badge")).toContainText("10,57");
+  await expect(shop.locator("#wide .ccp-badge")).toHaveCount(1);
+  await expect(shop.locator("#wide .ccp-badge")).toContainText("7,00");
+  await expect(shop.locator("#quantity .ccp-badge")).toContainText("23,50");
+});
+
 test("converted-only hides a price the site split across elements", async ({
   context,
   extensionWorker

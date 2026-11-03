@@ -4,6 +4,10 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.5.3 · November 3, 2026
+
+- Prices that a shop shows with the cents in a separate, smaller part, such as 44 and 99 zł for 44,99 zł, now convert at the full amount. On the doz.pl homepage, every product was converted as if it cost only the cents part, 99 zł, while product pages were right.
+
 ## 2.5.2 · November 3, 2026
 
 - After Twinprice has converted prices on five pages, it now asks once, right on the page, whether you'd like to rate it: "Enjoying Twinprice? **Rate it**". The question appears above the conversion message, so **Undo** stays where it was. **Rate it** opens the store's review page, × means you won't be asked again, and if you ignore it, it goes away by itself. Until now the question only appeared at the bottom of the Twinprice window, where many people never saw it. The translations were written without review by native speakers; corrections are welcome.
