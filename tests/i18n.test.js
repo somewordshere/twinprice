@@ -379,7 +379,13 @@ test("the website guide quotes the extension's own button and field names in eve
     "92a4a1": ["popup.to"],
     "93a253": ["page.selection.convert"],
     "3985de": ["page.prompt.converting"],
-    "1e28aa": ["popup.restorePrices", "popup.pageOptions", "popup.rememberSite", "popup.enable"]
+    "1e28aa": ["popup.restorePrices", "popup.pageOptions", "popup.rememberSite", "popup.enable"],
+    "692fc0": ["popup.autoAllSites", "popup.pageOptions"],
+    "5966f8": ["popup.language", "popup.pageOptions"],
+    "620ac0": ["popup.language", "popup.pageOptions"],
+    "dfe7c6": ["page.report.action"],
+    "d9bfe3": ["page.report.action"],
+    "e6a42b": ["page.report.action"]
   };
   // The right-click entry is named by the browser from src/_locales, not by translations-*.js.
   const menuQuotes = ["f70fed", "41c629"];
