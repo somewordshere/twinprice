@@ -99,6 +99,7 @@
           <a data-install="firefox" data-text-android="Get Twinprice for Firefox on Android" class="text-button" href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/">Get Twinprice for Firefox <span aria-hidden="true">↗</span></a>
         </div>
         <p class="free-note">Free to install. No account needed. <a href="guide/">Read the getting started guide</a>.</p>
+        <p class="rating-note"><span aria-hidden="true">★★★★★</span> <a href="https://addons.mozilla.org/en-US/firefox/addon/twinprice/reviews/">Rated 5 out of 5 on Firefox Add-ons (3 ratings)</a></p>
       </div>
       <div class="demo-stage" id="demo">
         <div class="demo-topline"><span>ONE PRICE. TWO PERSPECTIVES.</span><span class="demo-tag">Interactive demo</span></div>
@@ -160,7 +161,21 @@
           <article class="feature"><span class="feature-index">03 / MAKE IT YOURS</span><h3>Easy on your eyes.</h3><p>Choose converted-price colors and shapes, with a live preview. Keep the originals beside them or show converted prices in their place.</p><div class="appearance-samples" aria-label="Examples of converted price appearance"><span>≈ $97.90</span><span>≈ $97.90</span><span>≈ $97.90</span></div></article>
           <article class="feature"><span class="feature-index">04 / JUST ONE PRICE</span><h3>Highlight. Click. Convert.</h3><p>Highlight a price with its currency, then click <strong>Convert selection</strong> beneath it. Get a conversion for just the price you need. You can also convert a whole page or type an amount into the extension.</p><div class="mode-examples" aria-label="Three steps to convert a selected price"><span>1. Highlight a price</span><span>2. Click Convert selection</span><span>3. See your result</span></div></article>
         </div>
-        <details class="screenshot-disclosure"><summary>See Twinprice on a real shopping page <span aria-hidden="true">+</span></summary><figure><a href="assets/page-conversion.png" aria-label="Open full-size screenshot of the extension on a shopping page"><img src="assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="A real shopping page with green currency conversions added beside the original prices."></a><figcaption>Actual extension screenshot. Rates shown are from the screenshot, not current rates.</figcaption></figure></details>
+        <div class="why-block">
+          <figure class="popup-shot"><img src="assets/popup.png" width="420" height="456" loading="lazy" alt="The Twinprice popup: 1 USD = 0.9000 EUR, the rate’s date and source, a small chart of the last seven days, and the Convert page prices button."><figcaption>Actual popup screenshot. The rate is from 29 September 2026, not today’s.</figcaption></figure>
+          <div>
+            <h3>Why Twinprice?</h3>
+            <ul class="why-list">
+              <li><strong>Reads prices the way shops write them.</strong> €1.234,56, $1,234.56, 1万円 or 290만원: local number formats work, including Japanese and Korean amounts.</li>
+              <li><strong>Every website, or just your favorites.</strong> Convert the shops you choose automatically, or turn on <strong>Convert all websites automatically</strong> in <strong>Page options</strong>.</li>
+              <li><strong>A rate you can check.</strong> The popup shows the rate, its date and the last seven days. Recent rates keep working for up to seven days when a fresh one can’t be fetched.</li>
+              <li><strong>In your language.</strong> The extension follows your browser’s language, and nineteen languages are included.</li>
+              <li><strong>Open source, no trackers.</strong> Anyone can read the code on <a href="https://github.com/somewordshere/twinprice">GitHub</a>. No ads, no analytics, no account.</li>
+              <li><strong>Tell it about a shop it misses.</strong> When a page can’t be converted, <strong>Report this website</strong> sends only the website’s name, so support can be added.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="screenshot-block"><h3>See Twinprice on a real shopping page</h3><figure><a href="assets/page-conversion.png" aria-label="Open full-size screenshot of the extension on a shopping page"><img src="assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="A real shopping page with green currency conversions added beside the original prices."></a><figcaption>Actual extension screenshot. Rates shown are from the screenshot, not current rates.</figcaption></figure></div>
       </div>
     </section>
     <section class="section wrap privacy-section" id="privacy">
@@ -175,6 +190,7 @@
       <div><p class="eyebrow">04 / GOOD TO KNOW</p><h2>A few things<br>you might ask.</h2><p>Something else on your mind?<br><a href="https://github.com/somewordshere/twinprice/issues">Get help or report an issue</a>.</p></div>
       <div class="faq-list">
         <details><summary>Where can I learn how to use Twinprice?<span aria-hidden="true">+</span></summary><p>Follow the <a href="guide/">step-by-step user guide</a> for page and selection conversion. Its <a href="guide/#shopping-examples">shopping examples</a> explain euro-to-złoty conversion, ambiguous dollar signs, and differences at checkout.</p></details>
+        <details><summary>I installed Twinprice. Where is it?<span aria-hidden="true">+</span></summary><p>Open a shopping page: Twinprice finds supported prices and offers to convert them. To open the extension itself, click the puzzle-piece icon in your browser’s toolbar and choose Twinprice, then pin it to keep its button in view. In Firefox for Android, open the menu and choose Extensions.</p></details>
         <details><summary>Is Twinprice free?<span aria-hidden="true">+</span></summary><p>Yes. Twinprice is free to install and use, with no account required. The extension is open source and has no advertising or analytics trackers.</p></details>
         <details><summary>Which browsers and currencies are supported?<span aria-hidden="true">+</span></summary><p>Twinprice is available for Chrome and Firefox on computers, and for Firefox on Android phones. Search currencies by name or code in the extension. Manual conversion uses Frankfurter's active currency catalog; AUTO detection uses a smaller, curated set. Available currency pairs depend on the rate provider.</p></details>
         <details><summary>Can I convert just one price?<span aria-hidden="true">+</span></summary><p>Yes. Highlight a supported price, including its currency symbol or code (for example, €89), then click the blue “Convert selection” button beneath it. The button turns green and shows the result in your preferred currency. You can also right-click the highlighted price and choose “Convert selected currency.”</p></details>

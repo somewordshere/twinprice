@@ -101,6 +101,7 @@
           <a data-install="firefox" data-text-android="获取 Android 版 Firefox 的 Twinprice" class="text-button" href="https://addons.mozilla.org/zh-CN/firefox/addon/twinprice/">获取 Firefox 版 Twinprice <span aria-hidden="true">↗</span></a>
         </div>
         <p class="free-note">免费安装，无需账户。<a href="guide/">阅读入门指南</a>。</p>
+        <p class="rating-note"><span aria-hidden="true">★★★★★</span> <a href="https://addons.mozilla.org/zh-CN/firefox/addon/twinprice/reviews/">在 Firefox 附加组件上获得 5 分（满分 5 分，3 个评分）</a></p>
       </div>
       <div class="demo-stage" id="demo">
         <div class="demo-topline"><span>一个价格，两种视角。</span><span class="demo-tag">互动演示</span></div>
@@ -162,7 +163,21 @@
           <article class="feature"><span class="feature-index">03 / 打造你的风格</span><h3>看着舒服。</h3><p>选择换算价的颜色和形状，并实时预览。可以把原价保留在旁边，也可以用换算价代替原价显示。</p><div class="appearance-samples" aria-label="换算价外观示例"><span>≈ $97.90</span><span>≈ $97.90</span><span>≈ $97.90</span></div></article>
           <article class="feature"><span class="feature-index">04 / 只换算一个价格</span><h3>选中。点击。换算。</h3><p>选中带货币的价格，然后点击其下方的<strong>换算所选内容</strong>。只换算你需要的那个价格。你也可以换算整个页面，或在扩展中输入金额。</p><div class="mode-examples" aria-label="换算选中价格的三个步骤"><span>1. 选中价格</span><span>2. 点击“换算所选内容”</span><span>3. 查看结果</span></div></article>
         </div>
-        <details class="screenshot-disclosure"><summary>在真实的购物页面上查看 Twinprice <span aria-hidden="true">+</span></summary><figure><a href="../assets/page-conversion.png" aria-label="打开扩展在购物页面上运行的原尺寸截图"><img src="../assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="真实的购物页面，原价旁边添加了绿色的货币换算结果。"></a><figcaption>扩展的真实截图。图中的汇率来自截图当时，并非当前汇率。</figcaption></figure></details>
+        <div class="why-block">
+          <figure class="popup-shot"><img src="../assets/popup.png" width="420" height="456" loading="lazy" alt="Twinprice 弹出窗口：1 USD = 0.9000 EUR、汇率的日期和来源、最近七天的小图表，以及换算页面价格的按钮。"><figcaption>真实的弹出窗口截图。汇率来自 2026年9月29日，不是今天的汇率。</figcaption></figure>
+          <div>
+            <h3>为什么选择 Twinprice？</h3>
+            <ul class="why-list">
+              <li><strong>按商店的写法读取价格。</strong>€1.234,56、$1,234.56、1万円 或 290만원：支持各地的数字格式，包括日元和韩元的写法。</li>
+              <li><strong>所有网站，或只在你喜欢的网站。</strong>自动换算你选择的商店，或在<strong>页面选项</strong>中开启<strong>自动换算所有网站</strong>。</li>
+              <li><strong>可以核对的汇率。</strong>弹出窗口会显示汇率、汇率日期和最近七天的走势。无法获取新汇率时，最近的汇率最多还能使用七天。</li>
+              <li><strong>使用你的语言。</strong>扩展会跟随浏览器的语言，共提供十九种语言。</li>
+              <li><strong>开源，无跟踪器。</strong>任何人都可以在 <a href="https://github.com/somewordshere/twinprice">GitHub</a> 上阅读代码。没有广告，没有分析，无需账号。</li>
+              <li><strong>告诉它漏掉了哪家商店。</strong>页面无法换算时，<strong>报告此网站</strong>只会发送网站名称，以便添加支持。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="screenshot-block"><h3>在真实的购物页面上查看 Twinprice</h3><figure><a href="../assets/page-conversion.png" aria-label="打开扩展在购物页面上运行的原尺寸截图"><img src="../assets/page-conversion.png" width="1280" height="800" loading="lazy" alt="真实的购物页面，原价旁边添加了绿色的货币换算结果。"></a><figcaption>扩展的真实截图。图中的汇率来自截图当时，并非当前汇率。</figcaption></figure></div>
       </div>
     </section>
     <section class="section wrap privacy-section" id="privacy">
@@ -177,6 +192,7 @@
       <div><p class="eyebrow">04 / 须知</p><h2>你可能会问的<br>几个问题。</h2><p>还有其他问题？<br><a href="https://github.com/somewordshere/twinprice/issues">获取帮助或报告问题</a>。</p></div>
       <div class="faq-list">
         <details><summary>在哪里可以学习如何使用 Twinprice？<span aria-hidden="true">+</span></summary><p>请参阅<a href="guide/">分步用户指南</a>，了解页面换算和选中内容换算。其中的<a href="guide/#shopping-examples">购物示例</a>介绍了欧元换算兹罗提、含义不明确的美元符号以及结账时的差异。</p></details>
+        <details><summary>我已经安装了 Twinprice，它在哪里？<span aria-hidden="true">+</span></summary><p>打开一个购物页面：Twinprice 会找到支持的价格并提供换算。要打开扩展本身，请点击浏览器工具栏中的拼图图标并选择 Twinprice，然后将它固定，让按钮一直可见。在 Android 版 Firefox 中，请打开菜单并选择“扩展”。</p></details>
         <details><summary>Twinprice 免费吗？<span aria-hidden="true">+</span></summary><p>是的。Twinprice 可以免费安装和使用，无需账户。该扩展是开源的，没有广告或分析跟踪器。</p></details>
         <details><summary>支持哪些浏览器和货币？<span aria-hidden="true">+</span></summary><p>Twinprice 适用于电脑上的 Chrome 和 Firefox，以及 Android 手机上的 Firefox。在扩展中可以按名称或代码搜索货币。手动换算使用 Frankfurter 的现行货币目录；AUTO 检测使用一组较小的精选货币。可用的货币对取决于汇率提供方。</p></details>
         <details><summary>可以只换算一个价格吗？<span aria-hidden="true">+</span></summary><p>可以。选中一个支持的价格，包括其货币符号或代码（例如 €89），然后点击下方蓝色的“换算所选内容”按钮。按钮会变成绿色，并以你偏好的货币显示结果。你也可以右键点击选中的价格，然后选择“换算所选价格”。</p></details>
