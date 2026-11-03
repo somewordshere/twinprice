@@ -93,6 +93,8 @@
         return reviewPrompt.dismiss();
       case messages.MARK_REVIEW_OPENED:
         return reviewPrompt.markRated();
+      case messages.OPEN_REVIEW_PAGE:
+        return reviewPrompt.openStore();
       case messages.REPORT_SITE:
         return siteReport.report(message, sender);
       default:

@@ -213,6 +213,95 @@ test("the rating link appears after five helped pages and stays gone once dismis
   await expect(popup.locator("#reviewPrompt")).toBeHidden();
 });
 
+const reviewState = (extensionWorker) => extensionWorker.evaluate(async () => (
+  (await chrome.storage.local.get("reviewPrompt")).reviewPrompt || {}
+));
+
+test("the fifth helped page asks for a rating after the result, and Rate it opens the store", async ({
+  context,
+  extensionWorker
+}, testInfo) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+  await extensionWorker.evaluate(() => chrome.storage.local.set({ reviewPrompt: { successCount: 4 } }));
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  await shop.goto(SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+
+  // The ask stacks above the conversion result, which keeps its Undo.
+  const result = shop.locator(".ccp-toast:not(.ccp-review-request)");
+  const ask = shop.locator(".ccp-review-request");
+  await expect(result).toContainText("Converted");
+  await expect(ask).toContainText("Enjoying Twinprice?");
+  await expect(result).toBeVisible();
+  const [resultBox, askBox] = [await result.boundingBox(), await ask.boundingBox()];
+  expect(askBox.y + askBox.height).toBeLessThanOrEqual(resultBox.y);
+  await shop.screenshot({ path: testInfo.outputPath("review-on-page.png") });
+  await expect(ask.locator(".ccp-toast-dismiss"))
+    .toHaveAttribute("aria-label", "Don't ask me to rate Twinprice again");
+  await expect.poll(async () => (await reviewState(extensionWorker)).askedOnPage).toBe(true);
+
+  // The extension may not read a Web Store tab's address, so record the request.
+  await extensionWorker.evaluate(() => {
+    globalThis.openedForTest = [];
+    chrome.tabs.create = async ({ url }) => { globalThis.openedForTest.push(url); };
+  });
+  await ask.getByRole("button", { name: "Rate it" }).click();
+  await expect(ask).toHaveCount(0);
+  await expect(result).toBeVisible();
+  await expect.poll(() => extensionWorker.evaluate(() => globalThis.openedForTest)).toEqual([
+    "https://chromewebstore.google.com/detail/mocmiipnkiobjgjkfehpcmlapgjaepfk/reviews"
+  ]);
+  await expect.poll(async () => (await reviewState(extensionWorker)).rated).toBe(true);
+
+  // A later page converts quietly.
+  await shop.reload();
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  await shop.waitForTimeout(8000);
+  await expect(shop.getByText("Enjoying Twinprice?")).toHaveCount(0);
+});
+
+test("× on the page's rating ask ends it, in the popup too", async ({
+  context,
+  extensionWorker,
+  extensionId
+}) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+  await extensionWorker.evaluate(() => chrome.storage.local.set({ reviewPrompt: { successCount: 12 } }));
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  await shop.goto(SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+
+  const ask = shop.locator(".ccp-review-request");
+  await expect(ask).toContainText("Enjoying Twinprice?");
+  await ask.locator(".ccp-toast-dismiss").click();
+  await expect(ask).toHaveCount(0);
+  await expect.poll(async () => (await reviewState(extensionWorker)).dismissed).toBe(true);
+
+  const popup = await openPopupForPage(context, extensionId, shop);
+  await expect(popup.locator("#popupApp")).toHaveAttribute("aria-busy", "false");
+  await expect(popup.locator("#reviewPrompt")).toBeHidden();
+});
+
+test("prices a shop loads after the first pass count as a helped page", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, "<!doctype html><html lang=\"en-US\"><body><main></main></body></html>");
+  await shop.goto(SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  expect((await reviewState(extensionWorker)).successCount || 0).toBe(0);
+
+  await shop.evaluate(() => {
+    document.querySelector("main").innerHTML = "<p class=\"price\">$25.00</p>";
+  });
+  await expect(shop.locator("ccp-conversion[data-ccp-owned='true']")).toHaveCount(1);
+  await expect.poll(async () => (await reviewState(extensionWorker)).successCount).toBe(1);
+});
+
 for (const button of ["left", "middle"]) {
   test(`a ${button} click on Rate it opens the store and the rating link stays gone`, async ({
     context,

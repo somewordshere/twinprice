@@ -30,8 +30,10 @@ const EDGE_UA = `${CHROME_UA} Edg/140.0.0.0`;
 
 function createPrompt({ stored, firefox = false, userAgent = CHROME_UA } = {}) {
   const local = stored === undefined ? {} : { reviewPrompt: stored };
+  const openedTabs = [];
   const service = context.CurrencyReviewPrompt.create({
     api: {
+      tabs: { create: async (options) => openedTabs.push(options.url) },
       storage: {
         local: {
           get: async (key) => (Object.hasOwn(local, key) ? { [key]: local[key] } : {}),
@@ -42,7 +44,7 @@ function createPrompt({ stored, firefox = false, userAgent = CHROME_UA } = {}) {
     pageAccess: { isFirefoxBuild: () => firefox },
     userAgent
   });
-  return { service, local };
+  return { service, local, openedTabs };
 }
 
 async function recordTimes(service, times) {
@@ -85,6 +87,49 @@ test("each browser gets its own store, and Edge waits for a listing of its own",
   const edgeState = await edge.service.getState();
   assert.equal(edgeState.show, false);
   assert.equal(edgeState.url, null);
+});
+
+test("the page that brings the count to five asks once, on the page itself", async () => {
+  const { service } = createPrompt();
+  const asks = [];
+  for (let page = 1; page <= SUCCESSES_BEFORE_ASKING + 3; page += 1) {
+    asks.push((await service.recordSuccess()).askOnPage);
+  }
+  assert.deepEqual(asks, [false, false, false, false, true, false, false, false]);
+  // The popup line stays until the user answers, whether or not the page asked.
+  assert.equal((await service.getState()).show, true);
+});
+
+test("someone already past five pages is asked on the next page that converts", async () => {
+  const { service } = createPrompt({ stored: { successCount: 40 } });
+  assert.equal((await service.recordSuccess()).askOnPage, true);
+  assert.equal((await service.recordSuccess()).askOnPage, false);
+});
+
+test("two tabs reaching the fifth page together ask only once", async () => {
+  const { service } = createPrompt({ stored: { successCount: SUCCESSES_BEFORE_ASKING - 1 } });
+  const results = await Promise.all([service.recordSuccess(), service.recordSuccess()]);
+  assert.equal(results.filter((result) => result.askOnPage).length, 1);
+});
+
+test("the page never asks after an answer, or in Edge", async () => {
+  for (const stored of [{ successCount: 9, dismissed: true }, { successCount: 9, rated: true }]) {
+    const { service } = createPrompt({ stored });
+    assert.equal((await service.recordSuccess()).askOnPage, false, JSON.stringify(stored));
+  }
+  const edge = createPrompt({ userAgent: EDGE_UA, stored: { successCount: 9 } });
+  assert.equal((await edge.service.recordSuccess()).askOnPage, false);
+});
+
+test("Rate it on a page opens this browser's store and counts as rated", async () => {
+  const { service, openedTabs } = createPrompt({ stored: { successCount: 5 } });
+  assert.equal((await service.openStore()).ok, true);
+  assert.deepEqual(openedTabs, [REVIEW_URLS.chrome]);
+  assert.equal((await service.getState()).show, false);
+
+  const edge = createPrompt({ userAgent: EDGE_UA, stored: { successCount: 5 } });
+  assert.equal((await edge.service.openStore()).ok, false);
+  assert.deepEqual(edge.openedTabs, []);
 });
 
 test("simultaneous successes from several tabs are all counted", async () => {

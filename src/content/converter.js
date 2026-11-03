@@ -47,6 +47,7 @@
   let queuedConversion = null;
   let conversionGeneration = 0;
   let discoveryCallback = null;
+  let watchedConversionListener = null;
   let observedUrl = window.location.href;
   let splitPriceRecords = new WeakMap();
   const conversionRegistry = CurrencyConversionRegistry.create({
@@ -953,7 +954,15 @@
   async function convertMutationRoots(roots) {
     if (!roots.length || !settings?.enabled) return;
     if (settings.fromCurrency === "AUTO") CurrencyDetector.resetPageCurrencyDetection();
-    await runSiteConversion({ clearExisting: false, observe: true, roots }).catch(() => {});
+    const result = await runSiteConversion({ clearExisting: false, observe: true, roots })
+      .catch(() => null);
+    if (result?.ok && result.count > 0) watchedConversionListener?.();
+  }
+
+  // Prices a shop loads after the first pass are converted here, out of sight of
+  // the content script, which still needs to know the page was helped.
+  function onWatchedConversion(listener) {
+    watchedConversionListener = listener;
   }
 
   function isOwnedElement(element) {
@@ -1032,6 +1041,7 @@
     startDiscovering,
     stopDiscovering,
     startWatching,
-    stopWatching
+    stopWatching,
+    onWatchedConversion
   });
 })(globalThis);

@@ -19,6 +19,40 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Changed
+
+- The rating request now also appears on the web page. The page whose conversion
+  brings the count of helped pages to five shows "Enjoying Twinprice? Rate it ×"
+  once, stacked above the conversion result so the result and its Undo stay put.
+  Until now it was only a line in the popup footer, which people who convert from
+  the page never saw. Rate it opens the browser's store from the background
+  (`OPEN_REVIEW_PAGE`) and counts as rated; × ends the request, in the popup too;
+  left alone it closes after 15 seconds and the popup line remains. People who
+  already passed five pages are asked on their next converted page. Edge is still
+  never asked. The three strings reuse the popup's wording in all nineteen
+  languages (`page.review.*` in `translations-page.js`); these translations have
+  not been reviewed by native speakers.
+
+### Fixed
+
+- Prices a shop loads after the first conversion pass, which the page watcher
+  converts, now count as a helped page (`CurrencyPageConverter.onWatchedConversion`).
+  Pages whose prices arrived late never counted toward the rating request.
+
+### Tests
+
+- Unit tests for the on-page request: asked once on the fifth page, asked on the
+  next page for people already past five, only one ask when two tabs reach five
+  together, never after an answer or in Edge, and Rate it opening the right store.
+- Chrome tests: the request stacks above the result and Rate it opens the Chrome
+  Web Store review page; × on the page hides the popup line too; prices added after
+  the first pass are counted.
+- `npm run verify` 153 passed; `npm run test:browser` 73 passed;
+  `npm run test:browser:firefox` 5 passed; `npm run lint:firefox` 0 errors,
+  0 warnings, 0 notices.
+
 ## 2.5.1 - 2026-11-02
 
 ### Fixed
