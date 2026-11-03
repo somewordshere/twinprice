@@ -9,7 +9,8 @@ Run `npm run check` to check JavaScript syntax. No installation is required; the
 
 ## Content
 
-- `dist/index.html`: landing page, store links, screenshot, FAQs.
+- `dist/index.html`: landing page, store links, screenshots, FAQs. The rating line under the hero buttons quotes the Firefox Add-ons rating as checked on 2026-11-03 (5 out of 5, 3 ratings). Update it, in English and every `i18n/<language>.json`, when the listing's numbers change, and never round them up or add ratings from elsewhere.
+- `dist/assets/popup.png`: the popup with its seven-day chart, copied from `store/source/captures/usd-eur/v3-popup-light.png` (captured 2026-09-29). Its caption gives that date.
 - `dist/styles.css`: shared responsive styles, keyboard focus, reduced motion.
 - `dist/demo.js`: local example conversions; no requests or persistence.
 - `dist/browser-detect.js`: matches the install buttons to the visitor's browser. Firefox gets the Firefox button first; Edge and Opera get their own label on the Chrome Web Store button. Android browsers other than Firefox get only the Firefox for Android button, plus a note that most phone browsers can't add extensions. iPhone, iPad and unsupported desktop browsers keep both buttons and get a note saying where Twinprice works. Every label and note is a `data-text-*` attribute, so each language page carries its own.

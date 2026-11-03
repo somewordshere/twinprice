@@ -578,24 +578,20 @@ h1>span {
   padding:10px 12px;
   font-size:12px;
   background:#fafbfd}
-.screenshot-disclosure {
-  margin-top:24px}
-.screenshot-disclosure summary {
-  font-size:14px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:17px 0;
+.screenshot-block {
+  margin-top:48px}
+.screenshot-block h3 {
+  font-size:15px;
+  font-weight:600;
   color:#425477}
-.screenshot-disclosure figure {
+.screenshot-block figure {
   margin:10px 0 0}
-.screenshot-disclosure img {
+.screenshot-block img {
   display:block;
   width:100%;
   border:1px solid var(--line);
   border-radius:10px}
-.screenshot-disclosure figcaption {
+.screenshot-block figcaption {
   font-size:12px;
   color:var(--muted);
   line-height:1.7;
@@ -666,7 +662,7 @@ summary::-webkit-details-marker {
   font-size:16px;
   font-weight:550;
   cursor:pointer}
-.faq-list summary span,.screenshot-disclosure summary span {
+.faq-list summary span {
   font-size:22px;
   font-weight:400;
   color:#64738e;
@@ -1118,4 +1114,25 @@ h1 {
   .site-header { height: auto; flex-wrap: wrap; row-gap: 0; padding-top: 19px; }
   .site-header nav { display: flex; flex-wrap: wrap; order: 1; flex-basis: 100%; gap: 0 20px; margin: 4px 0 0; }
   .site-header nav a { padding: 10px 0; line-height: 24px; }
+}
+/* Why Twinprice: a list of reasons beside the current popup. */
+.why-block { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 56px; align-items: start; margin-top: 56px; }
+.popup-shot { margin: 0; }
+.popup-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px #14203810; }
+.popup-shot figcaption { font-size: 12px; color: var(--muted); line-height: 1.7; margin-top: 12px; }
+.why-block h3 { font-size: 28px; font-weight: 600; letter-spacing: -.8px; margin: 0 0 8px; }
+.why-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 32px; }
+.why-list li { font-size: 15px; line-height: 1.65; color: var(--muted); padding-top: 18px; border-top: 1px solid var(--line); }
+.why-list li > strong:first-child { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
+.why-list a { color: var(--blue); }
+.rating-note { font-size: 13px; margin-top: 10px; color: #495468; }
+.rating-note > span { color: #c98a00; letter-spacing: 1px; margin-right: 4px; }
+.rating-note a { color: inherit; }
+@media (max-width: 1000px) {
+  .why-block { grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: 36px; }
+  .why-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .why-block { grid-template-columns: 1fr; margin-top: 40px; }
+  .popup-shot { max-width: 340px; }
 }
