@@ -9,6 +9,7 @@
   // History routing fires no event of its own, so a slow poll is the portable
   // backstop behind popstate/hashchange and the Navigation API.
   const ROUTE_POLL_INTERVAL_MS = 1000;
+  const RATING_ASK_DELAY_MS = 1500;
   let settings = null;
   let settingsLoadPromise = null;
   let pageCommandGeneration = 0;
@@ -19,6 +20,7 @@
   let successRecorded = false;
   let siteReported = false;
   let currentRoute = readRouteKey();
+  CurrencyPageConverter.onWatchedConversion(recordSuccess);
 
   ExtensionAPI.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === M.CONTENT_READY) {
@@ -625,6 +627,21 @@
   function recordSuccess() {
     if (successRecorded) return;
     successRecorded = true;
-    ExtensionAPI.runtime.sendMessage({ type: M.RECORD_SUCCESS }).catch(() => {});
+    ExtensionAPI.runtime.sendMessage({ type: M.RECORD_SUCCESS })
+      .then((result) => {
+        if (result?.askOnPage) window.setTimeout(askForRating, RATING_ASK_DELAY_MS);
+      })
+      .catch(() => {});
+  }
+
+  // The page that brings the count to five asks once. The short wait lets the
+  // conversion's own notice appear first, so the ask stacks above it.
+  function askForRating() {
+    CurrencyPageUi.showReviewRequest({
+      onRate: () => ExtensionAPI.runtime.sendMessage({ type: M.OPEN_REVIEW_PAGE }),
+      onDismiss: () => {
+        ExtensionAPI.runtime.sendMessage({ type: M.DISMISS_REVIEW_PROMPT }).catch(() => {});
+      }
+    });
   }
 })();

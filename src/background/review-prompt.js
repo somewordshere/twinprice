@@ -34,7 +34,8 @@
           ? stored.successCount
           : 0,
         dismissed: stored?.dismissed === true,
-        rated: stored?.rated === true
+        rated: stored?.rated === true,
+        askedOnPage: stored?.askedOnPage === true
       };
     }
 
@@ -46,13 +47,21 @@
       return REVIEW_URLS.chrome;
     }
 
-    function recordSuccess() {
-      return update((state) => {
-        if (state.dismissed || state.rated || state.successCount >= MAX_COUNTED_SUCCESSES) {
-          return null;
-        }
-        return { ...state, successCount: state.successCount + 1 };
+    // The popup line is easy to miss for someone who never opens the popup, so the
+    // page that brings the count to five also asks, once. Deciding inside the queued
+    // write keeps two tabs from both asking.
+    async function recordSuccess() {
+      let askOnPage = false;
+      const result = await update((state) => {
+        if (state.dismissed || state.rated) return null;
+        const successCount = Math.min(state.successCount + 1, MAX_COUNTED_SUCCESSES);
+        askOnPage = Boolean(reviewUrl()) &&
+          !state.askedOnPage &&
+          successCount >= SUCCESSES_BEFORE_ASKING;
+        if (!askOnPage && successCount === state.successCount) return null;
+        return { ...state, successCount, askedOnPage: state.askedOnPage || askOnPage };
       });
+      return { ...result, askOnPage };
     }
 
     async function getState() {
@@ -76,7 +85,16 @@
       return update((state) => ({ ...state, rated: true }));
     }
 
-    return Object.freeze({ recordSuccess, getState, dismiss, markRated });
+    // The ask on a web page opens the store from here, since a link inside the page
+    // could be caught by the page's own click handlers.
+    async function openStore() {
+      const url = reviewUrl();
+      if (!url) return { ok: false };
+      await api.tabs.create({ url });
+      return markRated();
+    }
+
+    return Object.freeze({ recordSuccess, getState, dismiss, markRated, openStore });
   }
 
   global.CurrencyReviewPrompt = Object.freeze({

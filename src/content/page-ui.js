@@ -28,6 +28,9 @@
   let toastNode = null;
   let toastPreviousFocus = null;
   let toastTimer = null;
+  let reviewRequestNode = null;
+  let reviewRequestTimer = null;
+  const REVIEW_REQUEST_DURATION_MS = 15000;
 
   function isolateControls(element) {
     // Page-level delegated handlers must not treat extension controls as shop
@@ -608,6 +611,7 @@
 
     document.body.appendChild(toast);
     toastNode = toast;
+    placeReviewRequest();
     window.requestAnimationFrame(() => {
       if (toastNode === toast && toast.isConnected) text.textContent = message;
     });
@@ -624,8 +628,75 @@
     toastTimer = null;
     toastNode?.remove();
     toastNode = null;
+    placeReviewRequest();
     if (shouldRestoreFocus) restoreFocusTo(toastPreviousFocus);
     toastPreviousFocus = null;
+  }
+
+  // The rating ask is its own notice, stacked above the conversion result rather
+  // than replacing it, so the result and its Undo stay where they were.
+  function showReviewRequest({ onRate, onDismiss }) {
+    removeReviewRequest();
+    const ask = document.createElement("div");
+    isolateControls(ask);
+    ask.className = "ccp-toast ccp-review-request";
+    ask.lang = global.CurrencyI18n.language();
+    ask.setAttribute("role", "group");
+    ask.setAttribute("aria-label", t("page.review.message"));
+    const text = document.createElement("span");
+    text.className = "ccp-toast-message";
+    text.setAttribute("role", "status");
+    text.setAttribute("aria-live", "polite");
+    ask.appendChild(text);
+
+    const rate = document.createElement("button");
+    rate.type = "button";
+    rate.className = "ccp-toast-action";
+    rate.textContent = t("page.review.rate");
+    rate.addEventListener("click", async () => {
+      rate.disabled = true;
+      try {
+        const result = await onRate();
+        if (result?.ok === false) throw new Error();
+        removeReviewRequest();
+      } catch (_error) {
+        rate.disabled = false;
+      }
+    });
+    ask.appendChild(rate);
+
+    const dismiss = document.createElement("button");
+    dismiss.type = "button";
+    dismiss.className = "ccp-toast-dismiss";
+    dismiss.textContent = "×";
+    dismiss.setAttribute("aria-label", t("page.review.dismiss"));
+    dismiss.addEventListener("click", () => {
+      removeReviewRequest();
+      onDismiss();
+    });
+    ask.appendChild(dismiss);
+
+    document.body.appendChild(ask);
+    reviewRequestNode = ask;
+    placeReviewRequest();
+    window.requestAnimationFrame(() => {
+      if (reviewRequestNode === ask) text.textContent = t("page.review.message");
+    });
+    // Unanswered, it leaves on its own; the popup keeps the same offer.
+    reviewRequestTimer = window.setTimeout(removeReviewRequest, REVIEW_REQUEST_DURATION_MS);
+  }
+
+  function placeReviewRequest() {
+    if (!reviewRequestNode) return;
+    const below = toastNode?.isConnected ? toastNode.getBoundingClientRect().height + 8 : 0;
+    reviewRequestNode.style.setProperty("bottom", `${16 + below}px`, "important");
+  }
+
+  function removeReviewRequest() {
+    if (reviewRequestTimer) window.clearTimeout(reviewRequestTimer);
+    reviewRequestTimer = null;
+    reviewRequestNode?.remove();
+    reviewRequestNode = null;
   }
 
   function clearTransientUi() {
@@ -662,6 +733,7 @@
     refreshLanguage,
     removePageConvertPrompt,
     showToast,
+    showReviewRequest,
     clearTransientUi
   });
 })(globalThis);
