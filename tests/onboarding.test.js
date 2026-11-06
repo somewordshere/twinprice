@@ -193,6 +193,7 @@ test("with the language left on automatic, the goodbye page follows the browser'
     ["zh-TW", "https://twinprice.com/zh-TW/goodbye/"],
     ["zh-SG", "https://twinprice.com/zh-CN/goodbye/"],
     ["cs-CZ", "https://twinprice.com/cs/goodbye/"],
+    ["ro-RO", "https://twinprice.com/ro/goodbye/"],
     // A language the site has no page for falls back to English.
     ["sv", "https://twinprice.com/goodbye/"]
   ]) {

@@ -9,7 +9,7 @@ Run `npm run check` to check JavaScript syntax. No installation is required; the
 
 ## Content
 
-- `dist/index.html`: landing page, store links, screenshots, FAQs. The rating line under the hero buttons quotes the Firefox Add-ons rating as checked on 2026-11-03 (5 out of 5, 3 ratings). Update it, in English and every `i18n/<language>.json`, when the listing's numbers change, and never round them up or add ratings from elsewhere.
+- `dist/index.html`: landing page, store links, screenshots, FAQs.
 - `dist/assets/popup.png`: the popup with its seven-day chart, copied from `store/source/captures/usd-eur/v3-popup-light.png` (captured 2026-09-29). Its caption gives that date.
 - `dist/styles.css`: shared responsive styles, keyboard focus, reduced motion.
 - `dist/demo.js`: local example conversions; no requests or persistence.
@@ -27,7 +27,7 @@ Run `npm run check` to check JavaScript syntax. No installation is required; the
 
 ## Languages
 
-The site is published in the extension's nineteen interface languages: English at the root and Czech, German, Spanish, French, Indonesian, Italian, Japanese, Korean, Malay, Dutch, Polish, Brazilian Portuguese, Thai, Turkish, Ukrainian, Vietnamese, Simplified Chinese and Traditional Chinese under `dist/<language>/`. The English pages in `dist/` remain the authored source. `npm run i18n` (`build-i18n.mjs`) reads them and writes every translated page, the language menu in each header, the `hreflang` links, and the translated entries in `sitemap.xml`. Commit the generated pages; deployment still has no build step.
+The site is published in the extension's twenty interface languages: English at the root and Czech, German, Spanish, French, Indonesian, Italian, Japanese, Korean, Malay, Dutch, Polish, Brazilian Portuguese, Romanian, Thai, Turkish, Ukrainian, Vietnamese, Simplified Chinese and Traditional Chinese under `dist/<language>/`. The English pages in `dist/` remain the authored source. `npm run i18n` (`build-i18n.mjs`) reads them and writes every translated page, the language menu in each header, the `hreflang` links, and the translated entries in `sitemap.xml`. Commit the generated pages; deployment still has no build step.
 
 - `i18n/en.json`: every piece of English text, keyed by a short hash of its wording. Generated; do not edit.
 - `i18n/<language>.json`: the translation for each key. Inline markup is written as numbered tags (`<1>…</1>`, `<2/>`) that must match the English entry.
@@ -37,7 +37,7 @@ Changing an English sentence changes its key. The build then lists the sentence 
 
 The extension policy text on the privacy page stays in English in every language, marked `lang="en" translate="no"`, because it is synced verbatim from `privacy-policy.md`; the surrounding page and the "This website" section are translated. The store links on translated pages open the matching store language. To add a language, add it to `LANGUAGES` in `build-i18n.mjs` with the date its pages first go live (`since`, used for the sitemap), and create its JSON file. Korean text wraps between words (`:lang(ko)` in `styles.css`).
 
-Example rates are illustrative, not live financial data. The demo prices the lamp in the page language’s own currency (euros in English and euro-area languages), starts on USD (EUR where the lamp is not in euros) and loops through the other 20 currencies in its menu at 2.8-second intervals with a 420ms upward slide. The badge reserves space for the widest example; only text transforms and opacity animate, avoiding per-frame width layout. Formatted example amounts are cached once. These choices are not the full extension currency catalog. Selecting a currency pauses the loop; Play animation resumes it. Turning conversion off, focusing the currency picker, leaving the demo out of view, or hiding the tab suspends cycling. Reduced-motion preferences disable automatic playback by default and remove slide transitions. Automatic changes do not trigger screen-reader announcements. There is no standalone calculator, analytics, tracking, or account system.
+Example rates are illustrative, not live financial data. The demo prices the lamp in the page language’s own currency (euros in English and euro-area languages), starts on USD (EUR where the lamp is not in euros) and loops through the other 21 currencies in its menu at 2.8-second intervals with a 420ms upward slide. The badge reserves space for the widest example; only text transforms and opacity animate, avoiding per-frame width layout. Formatted example amounts are cached once. These choices are not the full extension currency catalog. Selecting a currency pauses the loop; Play animation resumes it. Turning conversion off, focusing the currency picker, leaving the demo out of view, or hiding the tab suspends cycling. Reduced-motion preferences disable automatic playback by default and remove slide transitions. Automatic changes do not trigger screen-reader announcements. There is no standalone calculator, analytics, tracking, or account system.
 
 ## Launch notes
 

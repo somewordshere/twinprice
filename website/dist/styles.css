@@ -5,6 +5,7 @@
 .selection-copy h2 { font-size:clamp(32px,3.7vw,46px); line-height:1.12; letter-spacing:-1.5px; margin:18px 0 22px; }
 .selection-copy > p:not(.eyebrow) { color:var(--muted); max-width:440px; }
 .selection-copy .selection-example-label { font-size:12px; margin-top:24px; }
+.selection-copy .animation-control { margin:4px 0 0; padding-left:0; }
 .selection-scene { min-width:0; height:260px; border:1px solid var(--line); border-radius:16px; background:#f7f9fd; overflow:hidden; box-shadow:0 16px 40px #14203808; }
 .selection-browser-bar { height:42px; display:flex; align-items:center; gap:18px; padding:0 22px; border-bottom:1px solid var(--line); background:white; font-size:11px; color:var(--muted); }
 .selection-example { position:relative; height:216px; margin:0 28px; }
@@ -487,97 +488,6 @@ h1>span {
 .features-background {
   background:#f7f9fc;
   border-block:1px solid var(--line)}
-.feature-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px}
-.feature {
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:30px}
-.feature-primary {
-  background:#eaf1ff;
-  border-color:#dce6fa}
-.feature-index {
-  font-size:10px;
-  letter-spacing:1.3px;
-  color:#546984}
-.feature h3 {
-  font-size:23px;
-  font-weight:600;
-  letter-spacing:-.6px;
-  margin:20px 0 12px}
-.feature p {
-  color:var(--muted);
-  font-size:15px;
-  max-width:450px}
-.price-sample {
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:15px;
-  margin-top:28px;
-  font-size:28px;
-  letter-spacing:-1px}
-.price-sample span+span {
-  color:var(--green);
-  background:#def1e5;
-  padding:7px 12px;
-  border-radius:6px;
-  font-weight:600}
-.feature-caption {
-  display:block;
-  font-size:11px;
-  color:#5f6c83;
-  margin-top:10px}
-.feature-detail {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  background:#f8fafc;
-  border:1px solid var(--line);
-  padding:20px 16px;
-  margin-top:35px;
-  border-radius:7px;
-  font-size:13px}
-.setting-badge {
-  color:var(--green);
-  background:#e6f5eb;
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:11px}
-.appearance-samples {
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-top:27px;
-  font-size:17px;
-  font-weight:600}
-.appearance-samples span {
-  background:#e5f5ec;
-  color:#146343;
-  padding:9px 12px}
-.appearance-samples span:nth-child(2) {
-  background:#edf2fd;
-  color:#3152ad;
-  border-radius:7px}
-.appearance-samples span:nth-child(3) {
-  background:#26334d;
-  color:#fff;
-  border-radius:30px}
-.mode-examples {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:32px}
-.mode-examples span {
-  border:1px solid var(--line);
-  border-radius:6px;
-  padding:10px 12px;
-  font-size:12px;
-  background:#fafbfd}
 .privacy-section {
   display:grid;
   grid-template-columns:1fr 1.15fr;
@@ -880,18 +790,10 @@ h1 {
   gap:45px}
 .faq-section {
   gap:35px}
-.feature {
-  padding:25px}
-.feature h3 {
-  font-size:21px}
 }
 
 @media(max-width:760px) {
-  .feature-grid {
-  grid-template-columns:1fr}
-.feature {
-  padding:25px}
-.privacy-section,.faq-section {
+  .privacy-section,.faq-section {
   grid-template-columns:1fr;
   gap:30px}
 .privacy-section h2,.faq-section h2 {
@@ -943,12 +845,6 @@ h1 {
   min-height:44px}
 .demo-footnote {
   font-size:11px}
-.feature-index,.feature-caption {
-  font-size:12px}
-.feature-detail,.mode-examples span {
-  font-size:14px}
-.setting-badge {
-  font-size:12px}
 .shop-edition {
   font-size:9px}
 .site-footer {
@@ -1107,9 +1003,6 @@ h1 {
 .why-list li { font-size: 15px; line-height: 1.65; color: var(--muted); padding-top: 18px; border-top: 1px solid var(--line); }
 .why-list li > strong:first-child { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
 .why-list a { color: var(--blue); }
-.rating-note { font-size: 13px; margin-top: 10px; color: #495468; }
-.rating-note > span { color: #c98a00; letter-spacing: 1px; margin-right: 4px; }
-.rating-note a { color: inherit; }
 @media (max-width: 1000px) {
   .why-block { grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: 36px; }
   .why-list { grid-template-columns: 1fr; }

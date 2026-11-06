@@ -25,7 +25,7 @@ retained by the extension, or transmitted to the developer or exchange-rate
 provider. A detected ISO source-currency code may be included in the rate request
 described below.
 
-The **Convert custom amount** disclosure processes the entered amount locally and
+The **Convert a custom amount** section processes the entered amount locally and
 does not need to inspect the current webpage. If the source remains `AUTO` and no
 page conversion has identified it, the popup requires the user to choose an
 explicit source currency. The amount itself is not included in the rate request.

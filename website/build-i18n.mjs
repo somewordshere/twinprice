@@ -29,6 +29,7 @@ const LANGUAGES = {
   nl: { name: 'Nederlands', label: 'Taal' },
   pl: { name: 'Polski', label: 'Język' },
   'pt-BR': { name: 'Português (Brasil)', label: 'Idioma', short: 'PT' },
+  ro: { name: 'Română', label: 'Limbă', since: '2026-11-06' },
   th: { name: 'ไทย', label: 'ภาษา', since: '2026-11-02' },
   tr: { name: 'Türkçe', label: 'Dil' },
   uk: { name: 'Українська', label: 'Мова' },

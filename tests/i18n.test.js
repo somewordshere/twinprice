@@ -38,8 +38,8 @@ function placeholders(text) {
 
 test("the settings schema offers exactly the languages that ship translations", () => {
   assert.deepEqual([...context.CurrencySettings.LANGUAGES], ["auto", ...languages]);
-  assert.equal(languages.length, 19, "the add-on promises nineteen interface languages");
-  for (const language of ["uk", "ja", "ko", "zh-CN", "zh-TW", "cs", "th", "vi", "id", "ms"]) {
+  assert.equal(languages.length, 20, "the add-on promises twenty interface languages");
+  for (const language of ["uk", "ja", "ko", "zh-CN", "zh-TW", "cs", "th", "vi", "id", "ms", "ro"]) {
     assert.ok(languages.includes(language), `${language} must be one of them`);
   }
   for (const language of languages) {
@@ -87,6 +87,13 @@ test("languages with several plural forms provide each of them", () => {
       for (const form of ["one", "few", "many", "other"]) {
         assert.ok(dictionary[`${key}_${form}`], `${language} needs ${key}_${form}`);
       }
+    }
+  }
+  // Romanian has three forms: one, few (2 to 19) and other (20 and up, with "de").
+  const romanian = i18n.dictionary("ro");
+  for (const key of pluralKeys) {
+    for (const form of ["one", "few", "other"]) {
+      assert.ok(romanian[`${key}_${form}`], `ro needs ${key}_${form}`);
     }
   }
 });
@@ -154,6 +161,8 @@ test("an explicit choice wins; automatic follows the browser and falls back to E
   assert.equal(withBrowser("vi-VN").resolve("auto"), "vi");
   assert.equal(withBrowser("id-ID").resolve("auto"), "id");
   assert.equal(withBrowser("ms-MY").resolve("auto"), "ms");
+  assert.equal(withBrowser("ro-RO").resolve("auto"), "ro");
+  for (const tag of ["ro", "ro-MD", "ro_RO", "mo"]) assert.equal(i18n.matchLanguage(tag), "ro", tag);
   assert.equal(i18n.matchLanguage("nb"), null);
   assert.equal(i18n.matchLanguage(""), null);
   assert.equal(i18n.matchLanguage(null), null);
@@ -181,6 +190,15 @@ test("messages fill placeholders and choose the right plural form per language",
   assert.equal(scoped.t("popup.converted", { count: 2 }), "Конвертовано 2 ціни.");
   assert.equal(scoped.t("popup.converted", { count: 7 }), "Конвертовано 7 цін.");
   assert.equal(scoped.t("popup.converted", { count: 21 }), "Конвертовано 21 ціну.");
+
+  // Romanian adds "de" from 20 on, including 101 to 119 but not 120.
+  scoped.setLanguage("ro");
+  assert.equal(scoped.t("popup.converted", { count: 1 }), "S-a convertit 1 preț.");
+  assert.equal(scoped.t("popup.converted", { count: 3 }), "S-au convertit 3 prețuri.");
+  assert.equal(scoped.t("popup.converted", { count: 19 }), "S-au convertit 19 prețuri.");
+  assert.equal(scoped.t("popup.converted", { count: 20 }), "S-au convertit 20 de prețuri.");
+  assert.equal(scoped.t("popup.converted", { count: 105 }), "S-au convertit 105 prețuri.");
+  assert.equal(scoped.t("popup.converted", { count: 120 }), "S-au convertit 120 de prețuri.");
 
   // Turkish has no separate singular here; both counts use the one form it supplies.
   scoped.setLanguage("tr");
@@ -237,6 +255,7 @@ test("the language menu lists every language by its own name, plus Automatic", (
   assert.equal(options.find((option) => option.value === "ja").label, "日本語");
   assert.equal(options.find((option) => option.value === "ko").label, "한국어");
   assert.equal(options.find((option) => option.value === "zh-CN").label, "简体中文");
+  assert.equal(options.find((option) => option.value === "ro").label, "Română");
 });
 
 test("each interface language also has a store listing", () => {
@@ -281,6 +300,9 @@ test("a cached rate's age is worded in every language, never in English", () => 
   scoped.setLanguage("uk");
   assert.deepEqual([2, 3, 5, 21].map((hours) => scoped.age(hours * 60 * minute)),
     ["2 години тому", "3 години тому", "5 годин тому", "21 годину тому"]);
+  scoped.setLanguage("ro");
+  assert.deepEqual([2, 5, 20, 47].map((hours) => scoped.age(hours * 60 * minute)),
+    ["acum 2 ore", "acum 5 ore", "acum 20 de ore", "acum 47 de ore"]);
 });
 
 test("background replies are shown in the page's language, with the English kept as a fallback", () => {
@@ -381,8 +403,8 @@ test("the website guide quotes the extension's own button and field names in eve
     "3985de": ["page.prompt.converting"],
     "1e28aa": ["popup.restorePrices", "popup.pageOptions", "popup.rememberSite", "popup.enable"],
     "692fc0": ["popup.autoAllSites", "popup.pageOptions"],
-    "5966f8": ["popup.language", "popup.pageOptions"],
-    "620ac0": ["popup.language", "popup.pageOptions"],
+    "b3ecfc": ["popup.language", "popup.pageOptions"],
+    "8efd50": ["popup.language", "popup.pageOptions"],
     "dfe7c6": ["page.report.action"],
     "d9bfe3": ["page.report.action"],
     "e6a42b": ["page.report.action"],

@@ -17,6 +17,7 @@
     nl: "Nederlands",
     pl: "Polski",
     "pt-BR": "Português (Brasil)",
+    ro: "Română",
     th: "ไทย",
     tr: "Türkçe",
     uk: "Українська",
@@ -54,6 +55,8 @@
     if (exact) return exact;
     const [primary, ...subtags] = normalized.split("-");
     if (primary === "pt") return "pt-BR";
+    // "mo" is the retired tag for Romanian as written in Moldova.
+    if (primary === "mo") return "ro";
     if (primary === "zh") {
       if (subtags.includes("hans")) return "zh-CN";
       if (subtags.some((subtag) => ["hant", "tw", "hk", "mo"].includes(subtag))) return "zh-TW";

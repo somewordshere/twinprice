@@ -19,6 +19,42 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Added
+
+- Romanian (`ro`), the twentieth interface language: the popup, the welcome page,
+  the on-page prompt, selection button and messages, the store name and summary,
+  the keyboard shortcut and right-click entry (`src/_locales/ro`), a Chrome
+  listing (`store/listings/ro.md`) and twinprice.com/ro/. Romanian counts in
+  three plural forms, one, few (2 to 19, and 101 to 119) and other (20 and up,
+  with "de": 20 de prețuri), so every counted string has `_one`, `_few` and
+  `_other`, and the seven-day chart's "last N trading days" does too. Automatic
+  language follows `ro-RO`, `ro-MD` and the retired tag `mo`. The translations
+  were written without review by a native speaker.
+- The website demo lamp is priced in lei on the Romanian page (89 € at an example
+  rate of 5.10 RON per EUR is 453,90 lei), and RON joins the demo's currency list
+  on the other pages.
+
+### Changed
+
+- "Nineteen languages" became "twenty" in the README, the Firefox description,
+  the store README and three twinprice.com sentences, updated in all twenty
+  languages (units `f0aa5d`, `b3ecfc` and `8efd50` replace `74c103`, `5966f8`
+  and `620ac0`).
+
+### Tests
+
+- `tests/i18n.test.js` expects twenty languages, checks Romanian's one, few and
+  other forms for every counted string, the "de" from 20 on (1, 3, 19, 20, 105
+  and 120 prices; 2, 5, 20 and 47 hours), and that `ro`, `ro-MD`, `ro_RO` and
+  `mo` resolve to Romanian. The language menu tests expect 21 entries (Automatic
+  plus twenty) in Chrome and Firefox, a Playwright case checks the Romanian popup
+  and page prompt, and the goodbye-page test covers `ro-RO`.
+- Results on 2026-11-07: `npm run verify` 153 passed, 0 failed;
+  `npm run test:browser` 75 passed; `npm run test:browser:firefox` 6 passed;
+  `npm run lint:firefox` 0 errors, 0 warnings, 0 notices.
+
 ## 2.5.3 - 2026-11-03
 
 ### Fixed
