@@ -4,6 +4,15 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.5.4 · November 7, 2026
+
+- Twinprice now speaks Romanian, so you can choose from twenty languages under **Language** in Page options. If your browser is set to Romanian, Twinprice uses it on its own. twinprice.com is available in Romanian too, with the demo lamp priced in lei. The translation was written without review by a native speaker; corrections are welcome.
+- The offer to convert a page's prices now goes away by itself after six seconds if you don't use it. It waits while your mouse is over it or you are using it with the keyboard, and once you press **Convert prices** it stays to show the result and **Undo**. You can still convert the page from the Twinprice window or with Ctrl+Shift+Y. The six seconds only count while you are looking at the tab, so a shop you open in a background tab still shows the offer when you switch to it.
+- After a successful conversion, the offer's green edge is a little thicker, so it is easier to see that it worked.
+- Twinprice's messages on the page, such as the conversion result with **Undo**, now appear in the top-right corner, below the offer, instead of at the bottom right. The result with **Undo** now goes away after eight seconds instead of staying until you close it, and no message disappears while your mouse is over it. You can still undo a conversion later with **Restore original prices** in the Twinprice window. The question asking you to rate Twinprice appears below the result and fades in and out gently instead of popping up.
+- The question asking you to rate Twinprice now comes after 5, 40 and 100 pages where it converted prices, instead of only after 5. If you answer it, with **Rate it** or ×, you won't be asked again.
+- If you use Twinprice in Microsoft Edge, you now get the same question about rating it, and the **Rate it** link in the Twinprice window, as in other browsers. Both open the Chrome Web Store, where Twinprice for Edge comes from.
+
 ## 2.5.3 · November 3, 2026
 
 - Prices that a shop shows with the cents in a separate, smaller part, such as 44 and 99 zł for 44,99 zł, now convert at the full amount. On the doz.pl homepage, every product was converted as if it cost only the cents part, 99 zł, while product pages were right.

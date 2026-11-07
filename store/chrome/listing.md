@@ -35,8 +35,9 @@ whether to convert all websites automatically.
 It also stores recent currency codes, the website origins the user chose to convert
 automatically (with their source-currency mode), the latest successful exchange-rate
 data so the extension can keep working temporarily while offline, and a count of
-webpages where a conversion succeeded plus whether the rating reminder was already
-shown on a webpage, opened or dismissed, used only to decide when to show that reminder.
+webpages where a conversion succeeded plus which of the rating reminders (after 5, 40
+and 100 such webpages) was last shown on a webpage, and whether it was opened or
+dismissed, used only to decide when to show that reminder.
 
 #### `contextMenus`
 

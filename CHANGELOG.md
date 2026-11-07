@@ -19,7 +19,7 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.5.4 - 2026-11-07
 
 ### Added
 
@@ -38,6 +38,59 @@ whose `package.json` declares the release version.
 
 ### Changed
 
+- The on-page offer to convert prices leaves on its own after six seconds when
+  nobody uses it, as the conversion notice already did. The countdown waits
+  while the pointer is over the offer or keyboard focus is inside it, and starts
+  again when they leave. Once **Convert prices** is pressed the prompt no longer
+  times out: it shows progress, then the result with Undo or an error with
+  Report this website, and stays until closed. As with ×, the offer does not
+  come back on that page until something re-offers it (a settings change or an
+  in-page route change); the popup and Ctrl+Shift+Y still convert the page. The
+  timer is `PAGE_PROMPT_DURATION_MS` in `src/content/page-ui.js`.
+- On-page countdowns run only while their tab is on screen: the offer's six
+  seconds, the rating ask's fifteen and the self-closing notices' six to ten.
+  Shoppers open products in background tabs; with plain timers the offer timed
+  out there before the tab was ever looked at, and since discovery stops once
+  the offer is shown it never came back. `visibleCountdown()` in
+  `src/content/page-ui.js` pauses on `visibilitychange` and resumes with the
+  time left. The rating ask also waits until its tab is visible before it
+  appears (`whenVisible()`), so a milestone earned by a page converting on its
+  own in a background tab is not spent unseen.
+- The conversion result with Undo now leaves after eight seconds on screen.
+  It was given an 8-second duration but, having an action, never used it, and
+  in the top-right corner it covered the shop's header (cart, account, search)
+  until closed. Restore original prices in the popup still undoes the page.
+  Every self-closing notice now waits while the pointer is over it or focus is
+  inside it, and starts its time over afterwards, so Undo or Report this
+  website never disappears from under the cursor.
+- After a successful conversion the offer's green edge is 2px instead of 1px.
+  The padding shrinks by the same pixel, so the card keeps its size.
+- The conversion notice (the result with Undo, report offers and short messages)
+  and the rating ask moved from the bottom-right to the top-right corner. Every
+  on-page notice now stacks down from there 8px apart: the convert offer, then
+  the notice, then the rating ask, which therefore sits below the result instead
+  of above it. `placeNotices()` sets each one's top and a `ResizeObserver` keeps
+  the stack in step as messages change; when one leaves, the ones below glide up
+  over 280ms.
+- The rating ask fades in over 520ms with 6px of downward drift and fades out
+  over 320ms (on Rate it, ×, or after its 15 seconds) instead of appearing and
+  vanishing at once. With reduced motion it only fades, and nothing glides.
+- The rating ask on the page comes at the 5th, 40th and 100th page where a
+  conversion worked, once each, instead of only at the 5th. Ignoring an ask
+  leaves the next one in place; × ("Don't ask me to rate Twinprice again") or
+  Rate it still ends them all, and the popup line still shows from the 5th page
+  until then. Someone already past a milestone they were not asked at is asked
+  on their next converted page. `reviewPrompt.askedOnPage` (a flag) became
+  `reviewPrompt.askedAt` (the last milestone asked, 0, 5, 40 or 100); a stored
+  `askedOnPage: true` reads as 5 and is replaced on the next write. The
+  milestones are `ASK_ON_PAGE_AT` in `src/background/review-prompt.js`.
+- Edge, like every other Chromium browser, now gets the rating ask on the page
+  and the "Rate it" line in the popup, both linking to the Chrome Web Store
+  reviews. The Chrome package is published only there, so anyone running it,
+  Edge users included, installed it from the Chrome Web Store. Until now
+  `reviewUrl()` returned nothing for an `Edg/` user agent, which hid both for
+  good while the count kept growing. The user-agent check is gone, and so are
+  the branches for a missing review link.
 - "Nineteen languages" became "twenty" in the README, the Firefox description,
   the store README and three twinprice.com sentences, updated in all twenty
   languages (units `f0aa5d`, `b3ecfc` and `8efd50` replace `74c103`, `5966f8`
@@ -51,9 +104,60 @@ whose `package.json` declares the release version.
   `mo` resolve to Romanian. The language menu tests expect 21 entries (Automatic
   plus twenty) in Chrome and Firefox, a Playwright case checks the Romanian popup
   and page prompt, and the goodbye-page test covers `ro-RO`.
-- Results on 2026-11-07: `npm run verify` 153 passed, 0 failed;
-  `npm run test:browser` 75 passed; `npm run test:browser:firefox` 6 passed;
-  `npm run lint:firefox` 0 errors, 0 warnings, 0 notices.
+- Two Playwright tests in `tests/e2e/extension.spec.js` check the offer's
+  timeout in real time: an untouched offer is still there at four seconds and
+  gone by eight; a hovered offer outlasts seven seconds and leaves after the
+  pointer moves away; a pressed offer still shows its result and Undo seven
+  seconds later, with a 2px success edge and an unchanged width.
+- `tests/review-prompt.test.js` no longer expects Edge to stay silent: the Chrome
+  package links the Chrome Web Store whatever the browser, and Rate it in the
+  Firefox package opens Firefox Add-ons. New cases check that 150 converted
+  pages ask on exactly the 5th, 40th and 100th, that counts of 17, 44 and 250
+  never asked are asked once on the next page, and that an old `askedOnPage`
+  flag counts as the ask at five. The Chrome and Firefox rating tests read
+  `askedAt: 5`.
+- A Chrome test checks that the result with Undo is still there at five seconds
+  and gone by ten, leaving the converted prices in place, and that a hovered one
+  outlasts nine seconds with Undo still working.
+- Two Chrome tests make the tab look hidden to the content scripts (a script in
+  the extension's isolated world overrides `document.visibilityState` and fires
+  `visibilitychange`, since headless Chrome reports every tab as visible): an
+  offer outlasts eight hidden seconds and leaves within six once shown, and a
+  rating ask earned while hidden appears only when the tab is shown. Both fail
+  with the visibility check removed. The Firefox rating test now closes the
+  welcome tab that opens on install, which had left the test page in a
+  background tab.
+- The rating test now expects the result in the top-right corner and the ask
+  8px below it, and a new test checks that a notice shown beside the offer sits
+  below it and glides up to the corner when the offer is closed.
+- Release validation on 2026-11-07: `npm run release` passed (project checks, 154
+  unit tests, Firefox lint with 0 errors, 0 warnings and 0 notices, and both
+  packages built); `npm run test:browser` 81 passed; `npm run test:browser:firefox`
+  6 passed. One unit test still logs "Twinprice initialization failed" from its
+  stand-in browser without `runtime.getURL`, as in 2.5.3; it passes.
+
+### Website
+
+- The home page is shorter. The four-part "Why Twinprice?" tour (Compare,
+  Remember, Make it yours, Just one price) is gone; its colours-and-shape point
+  became an item in the "Small addition. Everyday difference." list. The
+  numbered section labels (01 / … 04 /), the real shopping-page screenshot and
+  the Firefox Add-ons rating line under the hero buttons were removed.
+- The install buttons name Brave and Vivaldi for visitors using them, Chrome on
+  Android keeps the Chrome button, and the browser lists on the home and About
+  pages say the Chrome Web Store version also works in Edge, Opera, Brave and
+  Vivaldi.
+- The README and privacy policy call the popup section by its label, "Convert a
+  custom amount".
+
+### Privacy
+
+- The privacy policy (now effective November 7, 2026, version 2.5.4) says the
+  rating-reminder data records which of the reminders, after 5, 40 and 100
+  converted webpages, was last shown, instead of whether the one reminder was
+  shown. The Chrome privacy-practices answer in `store/chrome/listing.md` says
+  the same. Nothing new is stored or sent: it is still a count and a few
+  answers, kept locally and used only to time the reminder.
 
 ## 2.5.3 - 2026-11-03
 

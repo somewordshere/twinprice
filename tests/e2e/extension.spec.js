@@ -228,18 +228,25 @@ test("the fifth helped page asks for a rating after the result, and Rate it open
   await shop.goto(SHOP_URL);
   await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
 
-  // The ask stacks above the conversion result, which keeps its Undo.
+  // The result sits in the top-right corner and the ask stacks below it, so the
+  // result keeps its place and its Undo.
   const result = shop.locator(".ccp-toast:not(.ccp-review-request)");
   const ask = shop.locator(".ccp-review-request");
   await expect(result).toContainText("Converted");
   await expect(ask).toContainText("Enjoying Twinprice?");
   await expect(result).toBeVisible();
+  // Wait out the ask's half-second fade-in before measuring.
+  await expect.poll(() => ask.evaluate((node) => getComputedStyle(node).opacity)).toBe("1");
   const [resultBox, askBox] = [await result.boundingBox(), await ask.boundingBox()];
-  expect(askBox.y + askBox.height).toBeLessThanOrEqual(resultBox.y);
+  const viewport = shop.viewportSize();
+  expect(resultBox.y).toBeCloseTo(16, 0);
+  expect(viewport.width - (resultBox.x + resultBox.width)).toBeCloseTo(16, 0);
+  expect(askBox.y).toBeGreaterThanOrEqual(resultBox.y + resultBox.height + 7);
+  expect(askBox.y).toBeLessThanOrEqual(resultBox.y + resultBox.height + 9);
   await shop.screenshot({ path: testInfo.outputPath("review-on-page.png") });
   await expect(ask.locator(".ccp-toast-dismiss"))
     .toHaveAttribute("aria-label", "Don't ask me to rate Twinprice again");
-  await expect.poll(async () => (await reviewState(extensionWorker)).askedOnPage).toBe(true);
+  await expect.poll(async () => (await reviewState(extensionWorker)).askedAt).toBe(5);
 
   // The extension may not read a Web Store tab's address, so record the request.
   await extensionWorker.evaluate(() => {
@@ -362,6 +369,193 @@ test("automatically detects prices and offers conversion on an ordinary website"
   await expect(shop.locator(".ccp-page-prompt-rate")).toBeVisible();
   await expect(shop.locator(".ccp-page-prompt-rate")).toHaveText(/^1 USD = 0\.9000 EUR/);
   await expect(shop.locator("ccp-conversion[data-ccp-owned='true']")).toHaveCount(0);
+});
+
+async function openUnapprovedShop(context) {
+  const shop = await context.newPage();
+  await shop.route(UNAPPROVED_SHOP_URL, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/html; charset=utf-8",
+    body: SHOP_HTML
+  }));
+  await shop.goto(UNAPPROVED_SHOP_URL);
+  return shop;
+}
+
+test("an untouched conversion offer leaves the page after six seconds", async ({
+  context,
+  extensionWorker
+}) => {
+  test.setTimeout(30000);
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", showPagePrompt: true } });
+  const shop = await openUnapprovedShop(context);
+  const prompt = shop.locator(".ccp-page-prompt");
+
+  await expect(prompt).toBeVisible();
+  await shop.waitForTimeout(4000);
+  await expect(prompt).toBeVisible();
+  await expect(prompt).toHaveCount(0, { timeout: 4000 });
+  await expect(shop.locator("ccp-conversion[data-ccp-owned='true']")).toHaveCount(0);
+});
+
+test("a notice shown beside the offer stacks below it, then glides up when the offer closes", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", showPagePrompt: true } });
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  await shop.goto(SHOP_URL);
+  const prompt = shop.locator(".ccp-page-prompt");
+  await expect(prompt).toBeVisible();
+
+  // The right-click action with nothing selected answers with a plain notice.
+  await runPageCommand(extensionWorker, "CONVERT_SELECTION", SHOP_URL);
+  const notice = shop.locator(".ccp-toast");
+  await expect(notice).toContainText("Select a price first");
+  // Measure once the offer's entrance (a slight scale) has finished.
+  await prompt.evaluate((node) => Promise.all(node.getAnimations().map((animation) => animation.finished)));
+  const [promptBox, noticeBox] = [await prompt.boundingBox(), await notice.boundingBox()];
+  expect(promptBox.y).toBeCloseTo(16, 0);
+  // An 8px gap, give or take the whole-pixel rounding of the offer's height.
+  expect(Math.abs(noticeBox.y - (promptBox.y + promptBox.height + 8))).toBeLessThanOrEqual(2);
+
+  await shop.locator(".ccp-page-prompt-close").click();
+  await expect(prompt).toHaveCount(0);
+  await expect.poll(async () => (await notice.boundingBox()).y).toBeCloseTo(16, 0);
+});
+
+test("the conversion result with Undo leaves after eight seconds, but not from under the pointer", async ({
+  context,
+  extensionWorker
+}) => {
+  test.setTimeout(45000);
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  await shop.goto(SHOP_URL);
+  const result = shop.locator(".ccp-toast:not(.ccp-review-request)");
+
+  // Untouched, it is still there at five seconds and gone by ten.
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  await expect(result).toContainText("Converted");
+  await expect(result.locator(".ccp-toast-action")).toHaveText("Undo");
+  await shop.waitForTimeout(5000);
+  await expect(result).toHaveCount(1);
+  await expect(result).toHaveCount(0, { timeout: 5000 });
+  // Leaving does not undo anything: the converted prices stay.
+  await expect(shop.locator("ccp-conversion[data-ccp-owned='true']").first()).toBeVisible();
+
+  // Pointed at, it outlasts its eight seconds, and Undo still works.
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+  await expect(result).toContainText("Converted");
+  await result.hover();
+  await shop.waitForTimeout(9000);
+  await expect(result).toHaveCount(1);
+  await result.locator(".ccp-toast-action").click();
+  await expect(result).toHaveCount(0);
+  await expect(shop.locator("ccp-conversion[data-ccp-owned='true']")).toHaveCount(0);
+});
+
+// Headless Chrome reports every tab as visible, even a background one. The content
+// scripts read document.visibilityState in the extension's isolated world, so a
+// script run in that world can make the tab look hidden or shown to them.
+async function setTabHidden(extensionWorker, url, hidden) {
+  await extensionWorker.evaluate(async ({ url, hidden }) => {
+    const tab = (await chrome.tabs.query({})).find((candidate) => candidate.url === url);
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      args: [hidden],
+      func: (isHidden) => {
+        Object.defineProperty(document, "visibilityState", {
+          configurable: true,
+          get: () => (isHidden ? "hidden" : "visible")
+        });
+        document.dispatchEvent(new Event("visibilitychange"));
+      }
+    });
+  }, { url, hidden });
+}
+
+test("an offer in a background tab waits there until the tab is looked at", async ({
+  context,
+  extensionWorker
+}) => {
+  test.setTimeout(40000);
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", showPagePrompt: true } });
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  await shop.goto(SHOP_URL);
+  const prompt = shop.locator(".ccp-page-prompt");
+  await expect(prompt).toBeVisible();
+
+  // Hidden, the countdown stops: the offer outlasts its six seconds.
+  await setTabHidden(extensionWorker, SHOP_URL, true);
+  await shop.waitForTimeout(8000);
+  await expect(prompt).toHaveCount(1);
+
+  // Looked at, it carries on with what was left and then leaves.
+  await setTabHidden(extensionWorker, SHOP_URL, false);
+  await shop.waitForTimeout(2500);
+  await expect(prompt).toHaveCount(1);
+  await expect(prompt).toHaveCount(0, { timeout: 6000 });
+});
+
+test("a rating ask earned in a background tab appears when the tab is looked at", async ({
+  context,
+  extensionWorker
+}) => {
+  test.setTimeout(30000);
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD" } });
+  await extensionWorker.evaluate(() => chrome.storage.local.set({ reviewPrompt: { successCount: 4 } }));
+  const shop = await context.newPage();
+  await serveFixture(shop, SHOP_URL, SHOP_HTML);
+  await shop.goto(SHOP_URL);
+  await setTabHidden(extensionWorker, SHOP_URL, true);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION", SHOP_URL);
+
+  // The fifth page has earned the ask, but nobody is looking: it waits.
+  await expect.poll(async () => (await reviewState(extensionWorker)).askedAt).toBe(5);
+  await shop.waitForTimeout(4000);
+  const ask = shop.locator(".ccp-review-request");
+  await expect(ask).toHaveCount(0);
+
+  await setTabHidden(extensionWorker, SHOP_URL, false);
+  await expect(ask).toContainText("Enjoying Twinprice?");
+});
+
+test("the offer waits while it is pointed at, and a pressed offer stays with its result", async ({
+  context,
+  extensionWorker
+}) => {
+  test.setTimeout(45000);
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", showPagePrompt: true } });
+  const shop = await openUnapprovedShop(context);
+  const prompt = shop.locator(".ccp-page-prompt");
+  await expect(prompt).toBeVisible();
+
+  // Pointed at, it stays past six seconds, then counts down again once left.
+  await prompt.hover();
+  await shop.waitForTimeout(7000);
+  await expect(prompt).toBeVisible();
+  await shop.mouse.move(0, 0);
+  await shop.waitForTimeout(3000);
+  await expect(prompt).toBeVisible();
+  await expect(prompt).toHaveCount(0, { timeout: 5000 });
+
+  // A fresh offer that is pressed shows its result and Undo until closed.
+  await shop.reload();
+  await expect(prompt).toBeVisible();
+  const sizeBefore = await prompt.evaluate((node) => [node.offsetWidth, node.offsetHeight]);
+  await shop.locator(".ccp-page-prompt-action").click();
+  await expect(prompt).toHaveAttribute("data-state", "success");
+  // The success edge is 2px, and the card does not grow to make room for it.
+  await expect(prompt).toHaveCSS("border-top-width", "2px");
+  expect((await prompt.evaluate((node) => node.offsetWidth))).toBe(sizeBefore[0]);
+  await shop.mouse.move(0, 0);
+  await shop.waitForTimeout(7000);
+  await expect(prompt).toBeVisible();
+  await expect(shop.locator(".ccp-page-prompt-action")).toHaveText("Undo");
 });
 
 test("converts marked prices split across neutral, obfuscated elements", async ({

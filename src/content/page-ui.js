@@ -10,6 +10,11 @@
   let pagePromptRate = null;
   let pageConvertClose = null;
   let pagePromptPreviousFocus = null;
+  let pagePromptTimer = null;
+  let pagePromptPointerInside = false;
+  // The offer leaves on its own after this long; the popup and the keyboard
+  // shortcut still convert the page.
+  const PAGE_PROMPT_DURATION_MS = 6000;
   let pageReportRow = null;
   let pageReportButton = null;
   let pageReportNote = null;
@@ -31,6 +36,66 @@
   let reviewRequestNode = null;
   let reviewRequestTimer = null;
   const REVIEW_REQUEST_DURATION_MS = 15000;
+  // Long enough for the rating ask's fade-out, which is 320ms; it is removed then
+  // even where animations are off and animationend never comes.
+  const REVIEW_REQUEST_LEAVE_MS = 400;
+  const NOTICE_TOP_PX = 16;
+  const NOTICE_GAP_PX = 8;
+  let noticeSizeObserver = null;
+
+  // A countdown that only runs while the tab is on screen. Shoppers open products
+  // in background tabs and look at them later; an ordinary timer would close a
+  // notice there before anyone saw it. Hidden, it pauses and keeps what is left;
+  // shown again, it carries on.
+  function visibleCountdown(durationMs, onDone) {
+    let remaining = durationMs;
+    let timer = null;
+    let startedAt = 0;
+    let stopped = false;
+    const isHidden = () => document.visibilityState === "hidden";
+    function run() {
+      if (stopped || timer || isHidden()) return;
+      startedAt = Date.now();
+      timer = window.setTimeout(() => {
+        timer = null;
+        stop();
+        onDone();
+      }, remaining);
+    }
+    function pause() {
+      if (!timer) return;
+      window.clearTimeout(timer);
+      timer = null;
+      remaining = Math.max(0, remaining - (Date.now() - startedAt));
+    }
+    function onVisibilityChange() {
+      if (isHidden()) pause();
+      else run();
+    }
+    function stop() {
+      stopped = true;
+      if (timer) window.clearTimeout(timer);
+      timer = null;
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    run();
+    return { stop };
+  }
+
+  // Runs show() now if the tab is on screen, otherwise the first time it is.
+  function whenVisible(show) {
+    if (document.visibilityState !== "hidden") {
+      show();
+      return;
+    }
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden") return;
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      show();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+  }
 
   function isolateControls(element) {
     // Page-level delegated handlers must not treat extension controls as shop
@@ -145,7 +210,74 @@
       pageReportRow
     );
     pageConvertPrompt.addEventListener("keydown", handlePagePromptKeydown);
+    // Someone pointing at the offer or tabbing through it is about to use it, so
+    // the countdown waits for them and starts over when they move away.
+    pageConvertPrompt.addEventListener("pointerenter", () => {
+      pagePromptPointerInside = true;
+      cancelPagePromptDismissal();
+    });
+    pageConvertPrompt.addEventListener("pointerleave", () => {
+      pagePromptPointerInside = false;
+      schedulePagePromptDismissal();
+    });
+    pageConvertPrompt.addEventListener("focusin", cancelPagePromptDismissal);
+    pageConvertPrompt.addEventListener("focusout", (event) => {
+      if (!pageConvertPrompt?.contains(event.relatedTarget)) schedulePagePromptDismissal();
+    });
+    pagePromptPointerInside = false;
     document.body.appendChild(pageConvertPrompt);
+    trackNoticeSize(pageConvertPrompt);
+    placeNotices();
+    schedulePagePromptDismissal();
+  }
+
+  // Everything Twinprice says on a page stacks down from the top-right corner:
+  // the convert offer, then the notice, then the rating ask, 8px apart. Heights
+  // change as messages change, so a size observer keeps the stack in step.
+  function placeNotices() {
+    let top = NOTICE_TOP_PX;
+    for (const node of [pageConvertPrompt, toastNode, reviewRequestNode]) {
+      if (!node?.isConnected) continue;
+      node.style.setProperty("top", `${top}px`, "important");
+      top += node.offsetHeight + NOTICE_GAP_PX;
+    }
+  }
+
+  function trackNoticeSize(node) {
+    if (typeof ResizeObserver !== "function") return;
+    noticeSizeObserver ||= new ResizeObserver(() => placeNotices());
+    noticeSizeObserver.observe(node);
+  }
+
+  function untrackNoticeSize(node) {
+    if (node) noticeSizeObserver?.unobserve(node);
+  }
+
+  // A notice is placed before it may glide, so it appears where it belongs and
+  // only moves later, when something above it leaves.
+  function settleNotice(node) {
+    window.requestAnimationFrame(() => {
+      if (node.isConnected) node.dataset.ccpSettled = "";
+    });
+  }
+
+  // Only the untouched offer times out, and only while its tab is on screen. Once
+  // Convert is pressed the prompt shows progress, then the result with Undo or an
+  // error, and stays until closed.
+  function schedulePagePromptDismissal() {
+    cancelPagePromptDismissal();
+    const prompt = pageConvertPrompt;
+    if (!prompt || !pagePromptIdle || pagePromptPointerInside) return;
+    if (prompt.contains(document.activeElement)) return;
+    pagePromptTimer = visibleCountdown(PAGE_PROMPT_DURATION_MS, () => {
+      pagePromptTimer = null;
+      if (pageConvertPrompt === prompt && pagePromptIdle) removePageConvertPrompt({ restoreFocus: false });
+    });
+  }
+
+  function cancelPagePromptDismissal() {
+    pagePromptTimer?.stop();
+    pagePromptTimer = null;
   }
 
   function setPageConvertPromptRate(descriptor) {
@@ -172,6 +304,7 @@
     if (!pageConvertPrompt || !pageConvertButton || !pageConvertMessage) return;
     const prompt = pageConvertPrompt;
     pagePromptIdle = false;
+    cancelPagePromptDismissal();
     hideReportOption();
     if (pagePromptAction === "undo") {
       pageConvertButton.disabled = true;
@@ -335,8 +468,12 @@
     const shouldRestoreFocus = Boolean(
       restoreFocus && pageConvertPrompt?.contains(document.activeElement)
     );
+    cancelPagePromptDismissal();
+    pagePromptPointerInside = false;
+    untrackNoticeSize(pageConvertPrompt);
     pageConvertPrompt?.remove();
     pageConvertPrompt = null;
+    placeNotices();
     pageConvertButton = null;
     pageConvertMessage = null;
     pageConvertRate = null;
@@ -575,7 +712,7 @@
       action.textContent = options.actionLabel;
       action.addEventListener("click", async () => {
         // A toast that would dismiss itself stays while its action runs.
-        if (toastTimer) window.clearTimeout(toastTimer);
+        toastTimer?.stop();
         toastTimer = null;
         action.disabled = true;
         action.setAttribute("aria-busy", "true");
@@ -611,12 +748,45 @@
 
     document.body.appendChild(toast);
     toastNode = toast;
-    placeReviewRequest();
+    trackNoticeSize(toast);
+    placeNotices();
+    settleNotice(toast);
     window.requestAnimationFrame(() => {
       if (toastNode === toast && toast.isConnected) text.textContent = message;
     });
     if (!options.actionLabel || options.autoDismiss) {
-      toastTimer = window.setTimeout(() => removeToast({ restoreFocus: false }), options.duration || 6000);
+      const duration = options.duration || 6000;
+      let pointerInside = false;
+      // Like the offer, a notice waits while someone points at it or tabs into it,
+      // so Undo or Report never vanishes under the cursor, and starts over after.
+      const schedule = () => {
+        toastTimer?.stop();
+        toastTimer = null;
+        if (toastNode !== toast || pointerInside || toast.contains(document.activeElement)) return;
+        if (toast.querySelector(".ccp-toast-action[aria-busy='true']")) return;
+        toastTimer = visibleCountdown(duration, () => {
+          toastTimer = null;
+          if (toastNode === toast) removeToast({ restoreFocus: false });
+        });
+      };
+      const hold = () => {
+        if (toastNode !== toast) return;
+        toastTimer?.stop();
+        toastTimer = null;
+      };
+      toast.addEventListener("pointerenter", () => {
+        pointerInside = true;
+        hold();
+      });
+      toast.addEventListener("pointerleave", () => {
+        pointerInside = false;
+        schedule();
+      });
+      toast.addEventListener("focusin", hold);
+      toast.addEventListener("focusout", (event) => {
+        if (!toast.contains(event.relatedTarget)) schedule();
+      });
+      schedule();
     }
   }
 
@@ -624,18 +794,25 @@
     const shouldRestoreFocus = Boolean(
       restoreFocus && toastNode?.contains(document.activeElement)
     );
-    if (toastTimer) window.clearTimeout(toastTimer);
+    toastTimer?.stop();
     toastTimer = null;
+    untrackNoticeSize(toastNode);
     toastNode?.remove();
     toastNode = null;
-    placeReviewRequest();
+    placeNotices();
     if (shouldRestoreFocus) restoreFocusTo(toastPreviousFocus);
     toastPreviousFocus = null;
   }
 
-  // The rating ask is its own notice, stacked above the conversion result rather
-  // than replacing it, so the result and its Undo stay where they were.
-  function showReviewRequest({ onRate, onDismiss }) {
+  // The rating ask is its own notice, stacked below the conversion result rather
+  // than replacing it, so the result and its Undo stay where they were. The page
+  // that earns the ask may be a background tab converting on its own; the ask
+  // waits until that tab is on screen, so it is never spent unseen.
+  function showReviewRequest(options) {
+    whenVisible(() => renderReviewRequest(options));
+  }
+
+  function renderReviewRequest({ onRate, onDismiss }) {
     removeReviewRequest();
     const ask = document.createElement("div");
     isolateControls(ask);
@@ -658,7 +835,7 @@
       try {
         const result = await onRate();
         if (result?.ok === false) throw new Error();
-        removeReviewRequest();
+        removeReviewRequest({ fade: true });
       } catch (_error) {
         rate.disabled = false;
       }
@@ -671,32 +848,45 @@
     dismiss.textContent = "×";
     dismiss.setAttribute("aria-label", t("page.review.dismiss"));
     dismiss.addEventListener("click", () => {
-      removeReviewRequest();
+      removeReviewRequest({ fade: true });
       onDismiss();
     });
     ask.appendChild(dismiss);
 
     document.body.appendChild(ask);
     reviewRequestNode = ask;
-    placeReviewRequest();
+    trackNoticeSize(ask);
+    placeNotices();
+    settleNotice(ask);
     window.requestAnimationFrame(() => {
       if (reviewRequestNode === ask) text.textContent = t("page.review.message");
     });
-    // Unanswered, it leaves on its own; the popup keeps the same offer.
-    reviewRequestTimer = window.setTimeout(removeReviewRequest, REVIEW_REQUEST_DURATION_MS);
+    // Unanswered, it leaves on its own after 15 seconds on screen; the popup keeps
+    // the same offer.
+    reviewRequestTimer = visibleCountdown(REVIEW_REQUEST_DURATION_MS, () => {
+      reviewRequestTimer = null;
+      if (reviewRequestNode === ask) removeReviewRequest({ fade: true });
+    });
   }
 
-  function placeReviewRequest() {
-    if (!reviewRequestNode) return;
-    const below = toastNode?.isConnected ? toastNode.getBoundingClientRect().height + 8 : 0;
-    reviewRequestNode.style.setProperty("bottom", `${16 + below}px`, "important");
-  }
-
-  function removeReviewRequest() {
-    if (reviewRequestTimer) window.clearTimeout(reviewRequestTimer);
+  // Answered or timed out, the ask fades out where it is; a replacement or a
+  // page reset removes it at once.
+  function removeReviewRequest({ fade = false } = {}) {
+    reviewRequestTimer?.stop();
     reviewRequestTimer = null;
-    reviewRequestNode?.remove();
+    const ask = reviewRequestNode;
     reviewRequestNode = null;
+    if (!ask) return;
+    untrackNoticeSize(ask);
+    if (!fade || !ask.isConnected) {
+      ask.remove();
+      return;
+    }
+    ask.dataset.ccpLeaving = "";
+    ask.setAttribute("aria-hidden", "true");
+    const finish = () => ask.remove();
+    ask.addEventListener("animationend", finish, { once: true });
+    window.setTimeout(finish, REVIEW_REQUEST_LEAVE_MS);
   }
 
   function clearTransientUi() {

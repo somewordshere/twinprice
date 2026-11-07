@@ -213,7 +213,11 @@ test("Firefox asks for a rating on the fifth converted page, and × ends it", { 
       browser.storage.local.set({ reviewPrompt: { successCount: 4 } }).then(() => done());
     `);
 
+    // The ask waits for its tab to be on screen, and the welcome tab that opens on
+    // install would keep this one in the background.
+    await closeWelcomeTab(driver);
     await driver.get(fixture.url);
+    assert.equal(await driver.executeScript("return document.visibilityState"), "visible");
     const ask = await driver.wait(
       until.elementLocated(By.css(".ccp-review-request")),
       FIREFOX_TIMEOUT_MS
@@ -231,7 +235,7 @@ test("Firefox asks for a rating on the fifth converted page, and × ends it", { 
     await driver.wait(async () => (await readReviewState()).dismissed === true, FIREFOX_TIMEOUT_MS);
     const state = await readReviewState();
     assert.equal(state.successCount, 5);
-    assert.equal(state.askedOnPage, true);
+    assert.equal(state.askedAt, 5);
     assert.equal(await driver.findElement(By.id("reviewPrompt")).isDisplayed(), false);
   } finally {
     if (driver) {
@@ -643,6 +647,19 @@ async function startFixtureServer() {
       server.close((error) => error ? reject(error) : resolve());
     })
   };
+}
+
+// Installing the add-on opens its welcome page in a new tab in front of the test's
+// own. Close it, as a user would, so the test page is the tab on screen.
+async function closeWelcomeTab(driver) {
+  const main = await driver.getWindowHandle();
+  await driver.wait(async () => (await driver.getAllWindowHandles()).length > 1, 5000).catch(() => {});
+  for (const handle of await driver.getAllWindowHandles()) {
+    if (handle === main) continue;
+    await driver.switchTo().window(handle);
+    await driver.close();
+  }
+  await driver.switchTo().window(main);
 }
 
 async function createFirefoxDriver() {

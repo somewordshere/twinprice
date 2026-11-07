@@ -573,6 +573,9 @@
         {
           actionLabel: t("page.prompt.undo"),
           onAction: () => clearSiteConversion({ suppressPrompt: true }),
+          // It sits over the shop's header, so it leaves after 8 seconds on
+          // screen; Restore original prices in the popup still undoes it.
+          autoDismiss: true,
           duration: 8000
         }
       );

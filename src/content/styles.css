@@ -209,7 +209,9 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   display: flex;
   align-items: center;
   gap: 9px;
-  bottom: 16px;
+  /* Notices stack down from the top-right corner under the convert offer; the
+     script sets each one's top (see placeNotices in page-ui.js). */
+  top: 16px;
   right: 16px;
   max-width: min(324px, calc(100vw - 32px));
   padding: 9px 12.5px;
@@ -269,8 +271,12 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   opacity: 0.75;
 }
 
+/* A 2px edge reads as "done" at a glance; the padding gives back the extra pixel
+   so the card keeps its size and nothing inside it moves. */
 .ccp-page-prompt[data-state="success"] {
+  border-width: 2px;
   border-color: #86efac;
+  padding: 11.5px;
   animation: ccp-page-prompt-success 520ms cubic-bezier(.2, .8, .2, 1) both;
 }
 
@@ -326,6 +332,43 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   }
 }
 
+/* When a notice above leaves, the ones below glide up into its place. A notice
+   only glides once it has settled, so it never slides in from the corner. */
+.ccp-toast[data-ccp-settled] {
+  transition: top 280ms cubic-bezier(.22, .61, .36, 1);
+}
+
+/* The rating ask arrives slowly and quietly: a fade with a few pixels of drift,
+   and it fades out the same way, so it never jumps at the shopper. */
+.ccp-review-request {
+  animation: ccp-review-enter 520ms cubic-bezier(.22, .61, .36, 1) both;
+}
+
+.ccp-review-request[data-ccp-leaving] {
+  pointer-events: none;
+  animation: ccp-review-leave 320ms ease-in both;
+}
+
+@keyframes ccp-review-enter {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ccp-review-leave {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes ccp-review-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ccp-review-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 @keyframes ccp-converted-value-enter {
   from { opacity: 0; transform: translateY(3px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -336,6 +379,19 @@ ccp-conversion[data-display-mode="replace"] .ccp-badge {
   .ccp-page-prompt[data-state="success"],
   ccp-conversion .ccp-badge {
     animation: none;
+  }
+
+  .ccp-toast[data-ccp-settled] {
+    transition: none;
+  }
+
+  /* Without movement the rating ask still fades, so it does not pop. */
+  .ccp-review-request {
+    animation-name: ccp-review-fade-in;
+  }
+
+  .ccp-review-request[data-ccp-leaving] {
+    animation-name: ccp-review-fade-out;
   }
 }
 
