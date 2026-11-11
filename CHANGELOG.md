@@ -19,6 +19,24 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.5.5 - 2026-11-11
+
+### Fixed
+
+- Twinprice now recognizes Argentine peso prices on Alquiler Argentina. For
+  example, it reads $90.000 as 90,000 ARS per night and still reads explicit
+  US$ prices as US dollars.
+- The detector recognizes ARS and AR$ as explicit markers and uses .ar
+  domains and the es-AR page language as currency signals. The exact Alquiler
+  Argentina hostname supplies context for listings with generic Spanish.
+
+### Tests
+
+- Added detector cases for the reported prices, Argentine locale and domain
+  signals, and ambiguous dollar prices on an unrelated hostname.
+- Added a Chromium regression that offers and converts the nightly price in
+  the Mar del Plata listing markup.
+
 ## 2.5.4 - 2026-11-07
 
 ### Added

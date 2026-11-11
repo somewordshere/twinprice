@@ -1,6 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("./fixtures");
+const { PROVIDER_CURRENCIES, RATES_BY_BASE } = require("../helpers/extension-state");
 const {
   DEFAULT_SHOP_URL: SHOP_URL,
   chooseSetting,
@@ -919,6 +920,36 @@ test("reported: Amazon US converts its $ prices when only the page language name
   await expect(shop.locator("#list-price .ccp-badge")).toContainText("8,99");
   await expect(shop.locator("#second-price .ccp-badge")).toContainText("17,99");
   await expect(shop.locator(".a-popover .ccp-badge")).toContainText("23,50");
+});
+
+test("reported: Alquiler Argentina offers and converts nightly peso prices", async ({
+  context,
+  extensionWorker
+}) => {
+  await seedExtension(extensionWorker, {
+    settings: { showPagePrompt: true, language: "en" },
+    provider: {
+      currencies: [
+        ...PROVIDER_CURRENCIES,
+        { code: "ARS", name: "Argentine Peso", symbol: "$" }
+      ].sort((left, right) => left.code.localeCompare(right.code)),
+      ratesByBase: { ...RATES_BY_BASE, ARS: { ARS: 1, EUR: 0.001 } }
+    }
+  });
+  const url = "https://www.alquilerargentina.com/Buenos-Aires/Mar-Del-Plata/_F:07%7C12%7C2026-10%7C12%7C2026/";
+  const shop = await context.newPage();
+  await serveFixture(shop, url, `<!doctype html><html lang="es"><head>
+    <link rel="canonical" href="https://www.alquilerargentina.com/Buenos-Aires/Mar-Del-Plata/">
+    </head><body><a href="/alojamientos/kz40.html">
+      <h2>Alquiler Ambiente Integrado</h2>
+      <div class="MuiBox-root"><div><div><p class="MuiTypography-root">$90.000</p></div></div>
+      <p>por noche,<!-- -->2<!-- --> <!-- -->personas</p></div>
+    </a></body></html>`);
+  await shop.goto(url);
+
+  await expect(shop.locator(".ccp-page-prompt-rate")).toHaveText(/^1 ARS = 0\.0010 EUR/);
+  await shop.locator(".ccp-page-prompt-action").click();
+  await expect(shop.locator(".MuiTypography-root .ccp-badge")).toContainText("90,00");
 });
 
 test("reported: Ceragem converts won written as 원, in ten-thousands and before a particle", async ({

@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
-**Current version:** 2.5.4 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.5.5 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.5.4/twinprice-2.5.4-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.5.4/twinprice-2.5.4-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.5.5/twinprice-2.5.5-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.5.5/twinprice-2.5.5-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -56,7 +56,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.5.4/twinprice-2.5.4-chrome.zip) or [Firefox build](release/2.5.4/twinprice-2.5.4-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.5.5/twinprice-2.5.5-chrome.zip) or [Firefox build](release/2.5.5/twinprice-2.5.5-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -108,7 +108,7 @@ Open **Page options** and enable **Convert all websites automatically**. Every w
 AUTO detection gives every supported currency a weighted score based on evidence found on the page:
 
 $$
-S(c)=100M+100J+75E+\min(30,10V)+20D+40K+15L
+S(c)=100M+100J+75E+\min(30,10V)+20D+40K+15L+40H+P
 $$
 
 | Signal | Meaning | Weight |
@@ -120,6 +120,8 @@ $$
 | $D$ | Matching country-code domain | 20 |
 | $K$ | Matching canonical country-code domain | 40 |
 | $L$ | Matching page language or region | 15 |
+| $H$ | Known hostname with a verified local pricing currency | 40 |
+| $P$ | Visible price symbols | 10 per unambiguous match or 15 per match that corroborates another signal, up to 30 per symbol group |
 
 The currency with the highest score becomes the AUTO candidate. The runner-up score is also considered so that two competing currencies do not produce a misleadingly confident result.
 
@@ -221,6 +223,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.5.5 | Argentine peso prices on Alquiler Argentina now convert in AUTO mode | [Chrome](release/2.5.5/twinprice-2.5.5-chrome.zip) · [Firefox](release/2.5.5/twinprice-2.5.5-firefox.zip) |
 | 2.5.4 | Romanian, the twentieth language; the convert offer leaves after six seconds untouched; page messages move to the top-right corner; the rating ask comes at 5, 40 and 100 converted pages, in Edge too | [Chrome](release/2.5.4/twinprice-2.5.4-chrome.zip) · [Firefox](release/2.5.4/twinprice-2.5.4-firefox.zip) |
 | 2.5.3 | Prices whose cents sit in a separate part, such as doz.pl's homepage tiles, convert at the full amount | [Chrome](release/2.5.3/twinprice-2.5.3-chrome.zip) · [Firefox](release/2.5.3/twinprice-2.5.3-firefox.zip) |
 | 2.5.2 | After five converted pages, the page itself asks once for a rating; prices that load after the page count too | [Chrome](release/2.5.2/twinprice-2.5.2-chrome.zip) · [Firefox](release/2.5.2/twinprice-2.5.2-firefox.zip) |

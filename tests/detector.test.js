@@ -399,6 +399,32 @@ const DETECTION_CASES = [
     converts: { "$129.00": "AUD:129" }
   },
   {
+    name: "Alquiler Argentina lists nightly prices in pesos with a plain $",
+    lang: "es",
+    hostname: "www.alquilerargentina.com",
+    bodyText: "Mar Del Plata $90.000 por noche $70.000 por noche $100.000 por noche",
+    currency: "ARS",
+    minConfidence: "medium",
+    converts: { "$90.000": "ARS:90000", "US$120": "USD:120" }
+  },
+  {
+    name: "Argentine country domain and page locale identify the peso",
+    lang: "es-AR",
+    hostname: "www.example.com.ar",
+    bodyText: "Precio $90.000,50",
+    currency: "ARS",
+    minConfidence: "medium",
+    converts: { "$90.000,50": "ARS:90000.5" }
+  },
+  {
+    name: "A hostname containing Alquiler Argentina does not imply pesos",
+    lang: "es",
+    hostname: "www.alquilerargentina.com.example.com",
+    bodyText: "Precio $90.000",
+    inert: ["$90.000"],
+    converts: { "ARS 90.000": "ARS:90000", "AR$90.000": "ARS:90000" }
+  },
+  {
     name: "US shop pricing in plain $",
     lang: "en-US",
     hostname: "www.example.com",

@@ -6,6 +6,7 @@
   const CURRENCY_META = {
     AED: { symbols: ["د.إ", "DH"], locale: "ar-AE" },
     AMD: { symbols: ["֏"], locale: "hy-AM" },
+    ARS: { symbols: ["AR$"], sharedSymbols: ["$"], locale: "es-AR" },
     AUD: { symbols: ["AU$", "A$"], sharedSymbols: ["$"], locale: "en-AU" },
     AZN: { symbols: ["₼"], locale: "az-AZ" },
     BDT: { symbols: ["৳"], locale: "bn-BD" },

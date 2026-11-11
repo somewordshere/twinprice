@@ -4,6 +4,10 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.5.5 · November 11, 2026
+
+- Twinprice now recognizes Argentine peso prices on Alquiler Argentina. A nightly price like $90.000 converts from 90,000 pesos.
+
 ## 2.5.4 · November 7, 2026
 
 - Twinprice now speaks Romanian, so you can choose from twenty languages under **Language** in Page options. If your browser is set to Romanian, Twinprice uses it on its own. twinprice.com is available in Romanian too, with the demo lamp priced in lei. The translation was written without review by a native speaker; corrections are welcome.

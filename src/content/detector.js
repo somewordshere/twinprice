@@ -512,7 +512,7 @@
       tw: "TWD", pk: "PKR", bd: "BDT", lk: "LKR", ng: "NGN", ke: "KES",
       eg: "EGP", ma: "MAD", qa: "QAR", kw: "KWD", bh: "BHD", om: "OMR",
       jo: "JOD", ge: "GEL", am: "AMD", az: "AZN", kz: "KZT", ae: "AED",
-      sa: "SAR"
+      sa: "SAR", ar: "ARS"
     };
     const euroDomains = new Set([
       "de", "fr", "es", "it", "nl", "at", "be", "ie", "pt", "fi", "gr",
@@ -526,6 +526,10 @@
 
     const currentHost = window.location.hostname;
     if (currentHost) addDomainSignal(currentHost, 20, "country domain");
+    // Alquiler Argentina lists prices in pesos on a .com with lang="es".
+    if (currentHost === "alquilerargentina.com" || currentHost === "www.alquilerargentina.com") {
+      add("ARS", 40, "site currency");
+    }
 
     const canonicalUrl = document.querySelector("link[rel='canonical']")?.href;
     if (canonicalUrl) {
