@@ -19,6 +19,24 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.6.0 - 2026-11-11
+
+### Added
+
+- Uzbek in Latin script is the twenty-first interface language. Choose
+  **O‘zbekcha** in Page options for the popup, welcome page, conversion prompts,
+  selection controls and website reports.
+- The Uzbek website at `/uz/` includes the interactive demo, help guides, and
+  translated navigation. Links from the extension open the matching Uzbek page.
+- Firefox includes native Uzbek messages for the add-on name, keyboard shortcut
+  and context menu. Chromium builds use Twinprice’s shared Uzbek interface and
+  the browser’s supported locale for native messages.
+
+### Tests
+
+- Cover Uzbek locale matching, the uninstall page URL, translated guide labels,
+  and the popup and conversion prompt in Chromium.
+
 ## 2.5.5 - 2026-11-11
 
 ### Fixed

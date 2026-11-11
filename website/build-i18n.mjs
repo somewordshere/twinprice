@@ -33,6 +33,7 @@ const LANGUAGES = {
   th: { name: 'ไทย', label: 'ภาษา', since: '2026-11-02' },
   tr: { name: 'Türkçe', label: 'Dil' },
   uk: { name: 'Українська', label: 'Мова' },
+  uz: { name: 'O‘zbekcha', label: 'Til', chrome: 'en', amo: 'en-US', since: '2026-11-11' },
   vi: { name: 'Tiếng Việt', label: 'Ngôn ngữ', since: '2026-11-02' },
   'zh-CN': { name: '简体中文', label: '语言', short: 'ZH', since: '2026-10-21' },
   'zh-TW': { name: '繁體中文', label: '語言', short: 'TW', since: '2026-11-02' },
@@ -183,7 +184,7 @@ function buildPage(english, page, language, context) {
   const storeLink = value => {
     const url = new URL(value.replaceAll('&amp;', '&'));
     if (url.hostname === 'addons.mozilla.org') url.pathname = url.pathname.replace('/en-US/', `/${store.amo || language}/`);
-    else url.searchParams.set('hl', language);
+    else url.searchParams.set('hl', store.chrome || language);
     if (url.searchParams.has('utm_campaign')) url.searchParams.set('utm_campaign', language);
     return url.href.replaceAll('&', '&amp;');
   };

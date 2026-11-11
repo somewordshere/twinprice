@@ -38,8 +38,8 @@ function placeholders(text) {
 
 test("the settings schema offers exactly the languages that ship translations", () => {
   assert.deepEqual([...context.CurrencySettings.LANGUAGES], ["auto", ...languages]);
-  assert.equal(languages.length, 20, "the add-on promises twenty interface languages");
-  for (const language of ["uk", "ja", "ko", "zh-CN", "zh-TW", "cs", "th", "vi", "id", "ms", "ro"]) {
+  assert.equal(languages.length, 21, "the add-on promises twenty-one interface languages");
+  for (const language of ["uk", "ja", "ko", "zh-CN", "zh-TW", "cs", "th", "vi", "id", "ms", "ro", "uz"]) {
     assert.ok(languages.includes(language), `${language} must be one of them`);
   }
   for (const language of languages) {
@@ -163,6 +163,10 @@ test("an explicit choice wins; automatic follows the browser and falls back to E
   assert.equal(withBrowser("ms-MY").resolve("auto"), "ms");
   assert.equal(withBrowser("ro-RO").resolve("auto"), "ro");
   for (const tag of ["ro", "ro-MD", "ro_RO", "mo"]) assert.equal(i18n.matchLanguage(tag), "ro", tag);
+  for (const tag of ["uz", "uz-UZ", "uz-Latn-UZ"]) {
+    assert.equal(i18n.matchLanguage(tag), "uz", tag);
+    assert.equal(withBrowser(tag).resolve("auto"), "uz", tag);
+  }
   assert.equal(i18n.matchLanguage("nb"), null);
   assert.equal(i18n.matchLanguage(""), null);
   assert.equal(i18n.matchLanguage(null), null);
@@ -374,6 +378,7 @@ test("links to twinprice.com open the website in the extension's language", () =
   assert.equal(scoped.websiteUrl("pt-BR", "goodbye/"), "https://twinprice.com/pt-BR/goodbye/");
   assert.equal(scoped.websiteUrl("zh-TW"), "https://twinprice.com/zh-TW/");
   assert.equal(scoped.websiteUrl("zh-HK"), "https://twinprice.com/zh-TW/");
+  assert.equal(scoped.websiteUrl("uz-Latn-UZ", "guide/"), "https://twinprice.com/uz/guide/");
   assert.equal(scoped.websiteUrl("sv"), "https://twinprice.com/");
   scoped.setLanguage("ko");
   assert.equal(scoped.websiteUrl(), "https://twinprice.com/ko/");
@@ -403,8 +408,8 @@ test("the website guide quotes the extension's own button and field names in eve
     "3985de": ["page.prompt.converting"],
     "1e28aa": ["popup.restorePrices", "popup.pageOptions", "popup.rememberSite", "popup.enable"],
     "692fc0": ["popup.autoAllSites", "popup.pageOptions"],
-    "b3ecfc": ["popup.language", "popup.pageOptions"],
-    "8efd50": ["popup.language", "popup.pageOptions"],
+    "1ec8a4": ["popup.language", "popup.pageOptions"],
+    "b041cc": ["popup.language", "popup.pageOptions"],
     "dfe7c6": ["page.report.action"],
     "d9bfe3": ["page.report.action"],
     "e6a42b": ["page.report.action"],

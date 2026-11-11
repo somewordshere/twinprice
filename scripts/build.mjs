@@ -27,7 +27,11 @@ for (const browser of browsers) {
   mkdirSync(destination, { recursive: true });
 
   for (const directory of ["_locales", "background", "content", "icons", "onboarding", "popup", "shared"]) {
-    cpSync(join(root, "src", directory), join(destination, directory), { recursive: true });
+    cpSync(join(root, "src", directory), join(destination, directory), {
+      recursive: true,
+      // Chrome's native locale list omits Uzbek. The shared interface still supports it.
+      filter: (source) => browser !== "chrome" || source !== join(root, "src", "_locales", "uz")
+    });
   }
   if (browser === "firefox") {
     rmSync(join(destination, "background", "chrome-worker.js"));

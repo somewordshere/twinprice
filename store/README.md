@@ -20,6 +20,8 @@ growth.md              Marketing checklist and weekly numbers (not committed)
 
 The store name and short summary are not here. They come from
 `src/_locales/<locale>/messages.json` and change with each package upload.
+Uzbek is available in the extension’s own language menu. Firefox also ships
+Uzbek browser messages. Links from the Uzbek website open the English store pages.
 
 ## Regenerating images
 

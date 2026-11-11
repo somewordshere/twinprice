@@ -4,6 +4,10 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.6.0 · November 11, 2026
+
+- Twinprice now speaks Uzbek in Latin script. Choose **O‘zbekcha** under **Language** in Page options to use it in the popup, welcome page, and on-page controls. The website and help guides are available in Uzbek at [twinprice.com/uz/](https://twinprice.com/uz/).
+
 ## 2.5.5 · November 11, 2026
 
 - Twinprice now recognizes Argentine peso prices on Alquiler Argentina. A nightly price like $90.000 converts from 90,000 pesos.

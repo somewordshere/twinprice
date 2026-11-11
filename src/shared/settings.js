@@ -20,7 +20,7 @@
   // the two in step.
   const LANGUAGES = Object.freeze([
     "auto", "en", "cs", "de", "es", "fr", "id", "it", "ja", "ko", "ms", "nl", "pl", "pt-BR", "ro", "th",
-    "tr", "uk", "vi", "zh-CN", "zh-TW"
+    "tr", "uk", "uz", "vi", "zh-CN", "zh-TW"
   ]);
   const CONVERTED_SHAPES = Object.freeze(["square", "rounded", "pill"]);
   const SHAPE_RADII = Object.freeze({

@@ -294,7 +294,7 @@ test("Firefox language menu retranslates the popup, the page, and the welcome pa
     );
     assert.equal(await popup("document.documentElement.lang"), "pl");
     assert.equal(await popup("document.querySelector('#convertSite').textContent"), "Przelicz ceny na stronie");
-    assert.equal(await popup("document.querySelector('#language').options.length"), 21);
+    assert.equal(await popup("document.querySelector('#language').options.length"), 22);
 
     // Switch to Ukrainian through the real menu and watch the whole popup follow.
     await popup(
@@ -334,13 +334,13 @@ test("Firefox language menu retranslates the popup, the page, and the welcome pa
     assert.equal(await driver.findElement(By.id("language")).getAttribute("value"), "uk");
     await driver.executeScript(`
       const menu = document.getElementById("language");
-      menu.value = "de";
+      menu.value = "uz";
       menu.dispatchEvent(new Event("change", { bubbles: true }));
     `);
     await driver.wait(async () => (
       await driver.findElement(By.css("h1")).getText()
-    ) === "Zwei Schritte, und du bist fertig.", FIREFOX_TIMEOUT_MS);
-    assert.match(await driver.findElement(By.id("currencyNote")).getText(), /Eingestellt auf/);
+    ) === "Ikki qadamda tayyor.", FIREFOX_TIMEOUT_MS);
+    assert.match(await driver.findElement(By.id("currencyNote")).getText(), /Brauzer hududiga qarab/);
   } finally {
     if (driver) {
       if (installedAddonId) {

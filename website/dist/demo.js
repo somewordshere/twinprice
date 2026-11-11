@@ -34,6 +34,7 @@ const examples = {
   CNY: { rate: 8, locale: 'zh-CN', label: 'Chinese yuan' },
   TWD: { rate: 35, locale: 'zh-TW', label: 'New Taiwan dollars' },
   RON: { rate: 5.10, locale: 'ro-RO', label: 'Romanian lei' },
+  UZS: { rate: 14000, locale: 'uz-UZ', label: 'Uzbekistani som' },
 };
 // The lamp is priced the way a shop in the page's language would price it: in euros
 // on English and euro-area pages, in złoty on the Polish one. It is the same €89 lamp
@@ -41,7 +42,7 @@ const examples = {
 // menu and the animation, where it would only repeat the original price.
 const lampCurrencies = {
   cs: 'CZK', id: 'IDR', ja: 'JPY', ko: 'KRW', ms: 'MYR', pl: 'PLN', 'pt-BR': 'BRL',
-  ro: 'RON', th: 'THB', tr: 'TRY', uk: 'UAH', vi: 'VND', 'zh-CN': 'CNY', 'zh-TW': 'TWD',
+  ro: 'RON', th: 'THB', tr: 'TRY', uk: 'UAH', uz: 'UZS', vi: 'VND', 'zh-CN': 'CNY', 'zh-TW': 'TWD',
 };
 const lampCurrency = lampCurrencies[language] || 'EUR';
 const sequence = Object.keys(examples).filter(code => code !== lampCurrency);

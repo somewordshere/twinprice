@@ -25,7 +25,7 @@ async function openShop(context) {
   return shop;
 }
 
-test("the language menu offers twenty languages and retranslates the popup and the page prompt", async ({
+test("the language menu offers twenty-one languages and retranslates the popup and the page prompt", async ({
   context,
   extensionWorker,
   extensionId
@@ -40,9 +40,10 @@ test("the language menu offers twenty languages and retranslates the popup and t
 
   const language = popup.getByRole("combobox", { name: "Language", exact: true });
   await expect(popup.locator("#language")).toHaveValue("auto");
-  // Automatic plus twenty languages, each named in its own tongue.
+  // Automatic plus twenty-one languages, each named in its own tongue.
   await language.click();
-  await expect(popup.locator("#languageList [role='option']")).toHaveCount(21);
+  await expect(popup.locator("#languageList [role='option']")).toHaveCount(22);
+  await expect(popup.locator("#languageList [data-value='uz']")).toHaveText("O‘zbekcha");
   await expect(popup.locator("#languageList [data-value='uk']")).toHaveText("Українська");
   await expect(popup.locator("#languageList [data-value='ja']")).toHaveText("日本語");
   await expect(popup.locator("#languageList [data-value='ko']")).toHaveText("한국어");
@@ -153,7 +154,8 @@ for (const { language, prompt, action, convertPage } of [
   { language: "vi", prompt: "Quy đổi các giá hiển thị trên trang này", action: "Quy đổi giá", convertPage: "Quy đổi giá trên trang" },
   { language: "id", prompt: "Konversi harga yang terlihat di halaman ini", action: "Konversi harga", convertPage: "Konversi harga di halaman" },
   { language: "ms", prompt: "Tukar harga yang kelihatan pada halaman ini", action: "Tukar harga", convertPage: "Tukar harga halaman" },
-  { language: "ro", prompt: "prețurile vizibile pe această pagină", action: "Convertește prețurile", convertPage: "Convertește prețurile din pagină" }
+  { language: "ro", prompt: "prețurile vizibile pe această pagină", action: "Convertește prețurile", convertPage: "Convertește prețurile din pagină" },
+  { language: "uz", prompt: "ko‘rinib turgan narxlarni", action: "Narxlarni aylantirish", convertPage: "Sahifadagi narxlarni aylantirish" }
 ]) {
   test(`the popup and the page prompt speak ${language} when it is chosen`, async ({
     context,

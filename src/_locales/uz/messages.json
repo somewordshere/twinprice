@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "Twinprice - sahifadagi narxlarni valyutaga aylantirish"
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - narxlarni aylantirish"
+  },
+  "extDescription": {
+    "message": "Do‘kon narxlarini o‘z valyutangizda, asl narx yonida ko‘ring. 160 dan ortiq valyuta. Sahifa mazmuni brauzeringizda qoladi."
+  },
+  "commandConvertPage": {
+    "message": "Joriy sahifadagi narxlarni aylantirish"
+  },
+  "contextMenuConvertSelection": {
+    "message": "Tanlangan narxni aylantirish"
+  }
+}

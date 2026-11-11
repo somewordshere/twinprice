@@ -21,6 +21,7 @@
     th: "ไทย",
     tr: "Türkçe",
     uk: "Українська",
+    uz: "O‘zbekcha",
     vi: "Tiếng Việt",
     "zh-CN": "简体中文",
     "zh-TW": "繁體中文"
