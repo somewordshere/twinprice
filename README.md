@@ -12,7 +12,7 @@ Detection, conversion, and rendering all happen inside your browser. The only th
 
 **[What’s new →](WHATS-NEW.md)**
 
-[Screenshots](#-screenshots) · [Features](#features) · [Install](#installation) · [Use](#-how-to-use-it) · [How it works](#️-how-it-works) · [Detection](#-currency-detection-confidence) · [Privacy](#-privacy-and-permissions) · [Limitations](#️-limitations) · [Build](#️-building-a-release) · [Development](#-development)
+[Screenshots](#-screenshots) · [Features](#features) · [Use](#-how-to-use-it) · [How it works](#️-how-it-works) · [Detection](#-currency-detection-confidence) · [Privacy](#-privacy-and-permissions) · [Limitations](#️-limitations) · [Build](#️-building-a-release) · [Development](#-development)
 
 ## 📸 Screenshots
 
@@ -52,11 +52,6 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
 - Report a website that will not convert in one press, from the prompt, the conversion notice or the popup. Only its hostname is sent.
 - Use recent cached rates immediately while refreshing them in the background.
-
-## Installation
-
-- **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.7.0/twinprice-2.7.0-chrome.zip) or [Firefox build](release/2.7.0/twinprice-2.7.0-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
