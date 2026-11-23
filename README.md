@@ -1,20 +1,16 @@
 # 💱 Twinprice
 
-Twinprice is a Chrome and Firefox extension that shows converted prices beside the originals on shopping pages.
+Twinprice is a Chrome and Firefox extension that converts prices on shopping pages into a currency you understand.
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/)
+**[twinprice.com](https://twinprice.com/)** brings together installation links, help, privacy information, and source code. The add-on links to the website for product information and support. Follow the [illustrated user guide](https://twinprice.com/guide/) to convert a page or a selected price. The [product facts and publisher details](https://twinprice.com/about/) explain supported browsers, rate sources, limitations, and maintenance.
 
-**Quick start.** Choose your target currency in the Twinprice toolbar popup, then open a shopping page and select **Convert prices** when prompted. You can also start conversion from the popup.
-
-![A shopping page showing converted euro prices beside the originals, with an Undo button](screenshots/v2-inpage.png)
-
-Twinprice detects and converts prices locally in your browser. It fetches exchange rates using currency codes such as `USD` or `EUR`. See [Privacy and permissions](#-privacy-and-permissions) for details.
-
-[Website](https://twinprice.com/) · [Illustrated user guide](https://twinprice.com/guide/) · [Product and publisher details](https://twinprice.com/about/) · [What’s new](WHATS-NEW.md)
+Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
 **Current version:** 2.7.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.7.0/twinprice-2.7.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.7.0/twinprice-2.7.0-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.7.0/twinprice-2.7.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.7.0/twinprice-2.7.0-firefox.zip)
+
+**[What’s new →](WHATS-NEW.md)**
 
 [Screenshots](#-screenshots) · [Features](#features) · [Install](#installation) · [Use](#-how-to-use-it) · [How it works](#️-how-it-works) · [Detection](#-currency-detection-confidence) · [Privacy](#-privacy-and-permissions) · [Limitations](#️-limitations) · [Build](#️-building-a-release) · [Development](#-development)
 
@@ -30,7 +26,9 @@ Twinprice detects and converts prices locally in your browser. It fetches exchan
 
 Prices are detected locally as a page opens. The prompt appears only once a supported price is found, and it states the rate before you accept. Left alone, it goes away after six seconds; it waits while the pointer or keyboard focus is on it, and once **Convert prices** is pressed it stays to show the result and **Undo**.
 
-![A shopping page with a prompt offering to convert visible prices to EUR at the displayed rate](screenshots/v2-inpage-prompt.png)
+| Conversion offered | Whole page converted |
+| --- | --- |
+| ![A shopping page with a prompt offering to convert visible prices to EUR, showing the current rate](screenshots/v2-inpage-prompt.png) | ![The same shopping page with every price showing its euro equivalent beside the original, and a toast offering undo](screenshots/v2-inpage.png) |
 
 Or select a single price to convert just that one:
 
@@ -52,7 +50,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 - Keep the popup focused on the current site, currency pair, and one adaptive page-conversion action, with less-used controls in closed disclosures.
 - Scan ordinary webpages locally as they open and show the on-page conversion prompt only after a supported price is found.
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
-- Use **Report this website** when conversion fails. Submitting a report sends the site’s hostname and diagnostic details and can create a public GitHub issue. See [Privacy and permissions](#-privacy-and-permissions) for the fields sent.
+- Report a website that will not convert in one press, from the prompt, the conversion notice or the popup. Only its hostname is sent.
 - Use recent cached rates immediately while refreshing them in the background.
 
 ## Installation
@@ -221,13 +219,49 @@ CI runs every one of these on each push. `npm run build:icons` and `npm run buil
 
 ## 📦 Recent releases
 
-See the [changelog](CHANGELOG.md) for the full history and [GitHub Releases](https://github.com/somewordshere/twinprice/releases) for older downloads.
+Browse all published versions and download packages on [GitHub Releases](https://github.com/somewordshere/twinprice/releases).
 
 | Version | Highlights | Download |
 | --- | --- | --- |
 | 2.7.0 | Latin American Spanish in the extension and website | [Chrome](release/2.7.0/twinprice-2.7.0-chrome.zip) · [Firefox](release/2.7.0/twinprice-2.7.0-firefox.zip) |
 | 2.6.0 | Uzbek interface and help in Latin script | [Chrome](release/2.6.0/twinprice-2.6.0-chrome.zip) · [Firefox](release/2.6.0/twinprice-2.6.0-firefox.zip) |
 | 2.5.5 | Argentine peso prices on Alquiler Argentina now convert in AUTO mode | [Chrome](release/2.5.5/twinprice-2.5.5-chrome.zip) · [Firefox](release/2.5.5/twinprice-2.5.5-firefox.zip) |
+| 2.5.4 | Romanian, the twentieth language; the convert offer leaves after six seconds untouched; page messages move to the top-right corner; the rating ask comes at 5, 40 and 100 converted pages, in Edge too | [Chrome](release/2.5.4/twinprice-2.5.4-chrome.zip) · [Firefox](release/2.5.4/twinprice-2.5.4-firefox.zip) |
+| 2.5.3 | Prices whose cents sit in a separate part, such as doz.pl's homepage tiles, convert at the full amount | [Chrome](release/2.5.3/twinprice-2.5.3-chrome.zip) · [Firefox](release/2.5.3/twinprice-2.5.3-firefox.zip) |
+| 2.5.2 | After five converted pages, the page itself asks once for a rating; prices that load after the page count too | [Chrome](release/2.5.2/twinprice-2.5.2-chrome.zip) · [Firefox](release/2.5.2/twinprice-2.5.2-firefox.zip) |
+| 2.5.1 | The right-click convert entry is shown in the browser's language; translation fixes for Traditional Chinese, Dutch and Italian | [Chrome](release/2.5.1/twinprice-2.5.1-chrome.zip) · [Firefox](release/2.5.1/twinprice-2.5.1-firefox.zip) |
+| 2.5.0 | Six new interface languages: Czech, Indonesian, Malay, Thai, Vietnamese and Traditional Chinese | [Chrome](release/2.5.0/twinprice-2.5.0-chrome.zip) · [Firefox](release/2.5.0/twinprice-2.5.0-firefox.zip) |
+| 2.4.2 | A hand-chosen source currency no longer converts prices a page shows in another currency; prices loaded after converting keep converting | [Chrome](release/2.4.2/twinprice-2.4.2-chrome.zip) · [Firefox](release/2.4.2/twinprice-2.4.2-firefox.zip) |
+| 2.4.1 | Plain-$ prices convert on New Zealand, Australian, Canadian, Singapore and Hong Kong shops | [Chrome](release/2.4.1/twinprice-2.4.1-chrome.zip) · [Firefox](release/2.4.1/twinprice-2.4.1-firefox.zip) |
+| 2.4.0 | Report this website: one press sends a site that will not convert to twinprice.com; amazon.com dollar and currency-code prices convert again | [Chrome](release/2.4.0/twinprice-2.4.0-chrome.zip) · [Firefox](release/2.4.0/twinprice-2.4.0-firefox.zip) |
+| 2.3.3 | Automatic-conversion and Convert-button options moved to the top of Page options | [Chrome](release/2.3.3/twinprice-2.3.3-chrome.zip) · [Firefox](release/2.3.3/twinprice-2.3.3-firefox.zip) |
+| 2.3.2 | A 10% smaller on-page Convert prompt and conversion notice | [Chrome](release/2.3.2/twinprice-2.3.2-chrome.zip) · [Firefox](release/2.3.2/twinprice-2.3.2-firefox.zip) |
+| 2.3.1 | Korean prices written with 원, 만 and 억, and Japanese 万円, now convert | [Chrome](release/2.3.1/twinprice-2.3.1-chrome.zip) · [Firefox](release/2.3.1/twinprice-2.3.1-firefox.zip) |
+| 2.3.0 | Convert all websites automatically, without the prompt or a message | [Chrome](release/2.3.0/twinprice-2.3.0-chrome.zip) · [Firefox](release/2.3.0/twinprice-2.3.0-firefox.zip) |
+| 2.2.6 | Rate ages, background messages, numbers and website links in the chosen language; welcome page fixes for phones; Korean line breaks | [Chrome](release/2.2.6/twinprice-2.2.6-chrome.zip) · [Firefox](release/2.2.6/twinprice-2.2.6-firefox.zip) |
+| 2.2.5 | Japanese, Korean and Simplified Chinese in the extension, the store listings and the website | [Chrome](release/2.2.5/twinprice-2.2.5-chrome.zip) · [Firefox](release/2.2.5/twinprice-2.2.5-firefox.zip) |
+| 2.2.4 | Language, theme and price display dropdowns that match the currency dropdown, and an uninstall page in the extension's language | [Chrome](release/2.2.4/twinprice-2.2.4-chrome.zip) · [Firefox](release/2.2.4/twinprice-2.2.4-firefox.zip) |
+| 2.2.3 | A clear message when a selected price is already in the target currency, instead of a missing Convert selection button | [Chrome](release/2.2.3/twinprice-2.2.3-chrome.zip) · [Firefox](release/2.2.3/twinprice-2.2.3-firefox.zip) |
+| 2.2.2 | A language menu with ten interface languages, including Ukrainian, and store listings in all ten | [Chrome](release/2.2.2/twinprice-2.2.2-chrome.zip) · [Firefox](release/2.2.2/twinprice-2.2.2-firefox.zip) |
+| 2.2.0 | Store listing in six languages, a popup rating reminder after five helped pages, and an uninstall goodbye page | [Chrome](release/2.2.0/twinprice-2.2.0-chrome.zip) · [Firefox](release/2.2.0/twinprice-2.2.0-firefox.zip) |
+| 2.1.7 | Refreshed release packages, documentation, and restored legacy screenshots | [Chrome](release/2.1.7/twinprice-2.1.7-chrome.zip) · [Firefox](release/2.1.7/twinprice-2.1.7-firefox.zip) |
+| 2.1.6 | User-selectable system, light, and dark popup themes | [Chrome](release/2.1.6/twinprice-2.1.6-chrome.zip) · [Firefox](release/2.1.6/twinprice-2.1.6-firefox.zip) |
+| 2.1.5 | Setup, conversion, parsing, and dynamic-price reliability fixes | [Chrome](release/2.1.5/twinprice-2.1.5-chrome.zip) · [Firefox](release/2.1.5/twinprice-2.1.5-firefox.zip) |
+| 2.1.4 | Website and help links route through the Twinprice website; compact footer preserves the normal popup layout | [Chrome](release/2.1.4/twinprice-2.1.4-chrome.zip) · [Firefox](release/2.1.4/twinprice-2.1.4-firefox.zip) |
+| 2.1.3 | Public twinprice.com website, popup heading, and help links | [Chrome](release/2.1.3/twinprice-2.1.3-chrome.zip) · [Firefox](release/2.1.3/twinprice-2.1.3-firefox.zip) |
+| 2.1.2 | Website links in the extension and a compact popup layout | [Chrome](release/2.1.2/twinprice-2.1.2-chrome.zip) · [Firefox](release/2.1.2/twinprice-2.1.2-firefox.zip) |
+| 2.1.1 | Support link in the extension, a privacy policy that names a contact that exists, and the Firefox listing name the add-on actually uses | [Chrome](release/2.1.1/twinprice-2.1.1-chrome.zip) · [Firefox](release/2.1.1/twinprice-2.1.1-firefox.zip) |
+| 2.1.0 | Renamed to Twinprice, onboarding on first install, and a home currency taken from your browser region | [Chrome](release/2.1.0/twinprice-2.1.0-chrome.zip) · [Firefox](release/2.1.0/twinprice-2.1.0-firefox.zip) |
+| 2.0.3 | Turkish product pages with a single price now resolve, and a price whose symbol is nested deeper than its amount is no longer converted twice | [Chrome](release/2.0.3/currency-converter-pro-2.0.3-chrome.zip) · [Firefox](release/2.0.3/currency-converter-pro-2.0.3-firefox.zip) |
+| 2.0.2 | On-page offer returns after in-page navigation, prices split across text nodes are detected, Turkish lira written as TL is recognised, and "converted only" hides split prices | [Chrome](release/2.0.2/currency-converter-pro-2.0.2-chrome.zip) · [Firefox](release/2.0.2/currency-converter-pro-2.0.2-firefox.zip) |
+| 2.0.1 | Price detection about 1.7x faster, deduplicated runtime helpers, and a fix for the currency swap being refused | [Chrome](release/2.0.1/currency-converter-pro-2.0.1-chrome.zip) · [Firefox](release/2.0.1/currency-converter-pro-2.0.1-firefox.zip) |
+| 2.0.0 | Popup rebuilt around the live rate with a seven-day sparkline and freshness indicator, shared palette across every surface, and a new icon | [Chrome](release/2.0.0/currency-converter-pro-2.0.0-chrome.zip) · [Firefox](release/2.0.0/currency-converter-pro-2.0.0-firefox.zip) |
+| 1.9.2 | Behavior-preserving runtime refactor with more reliable SPA mutation scheduling, queued conversions, and in-place appearance updates | [Chrome](release/1.9.2/currency-converter-pro-1.9.2-chrome.zip) · [Firefox](release/1.9.2/currency-converter-pro-1.9.2-firefox.zip) |
+| 1.9.1 | Fixed Chrome and Firefox toolbar popup sizing, scrolling, and browser-native control rendering | [Chrome](release/1.9.1/currency-converter-pro-1.9.1-chrome.zip) · [Firefox](release/1.9.1/currency-converter-pro-1.9.1-firefox.zip) |
+| 1.9.0 | Custom converted-price colors and shapes, live before-and-after preview, WCAG contrast guidance, and one-click reset | [Chrome](release/1.9.0/currency-converter-pro-1.9.0-chrome.zip) · [Firefox](release/1.9.0/currency-converter-pro-1.9.0-firefox.zip) |
+| 1.8.0 | Always-on local price detection, price-gated on-page prompts, background rate prefetching, and instant stale-cache use while rates refresh | [Chrome](release/1.8.0/currency-converter-pro-1.8.0-chrome.zip) · [Firefox](release/1.8.0/currency-converter-pro-1.8.0-firefox.zip) |
+
+See [What’s new](WHATS-NEW.md) for every release.
 
 ## 🗂️ Project structure
 
