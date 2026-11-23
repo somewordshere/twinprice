@@ -18,9 +18,9 @@ Detection, conversion, and rendering all happen inside your browser. The only th
 
 ### The popup
 
-| Live rate and conversion | Dark mode | Page options |
-| --- | --- | --- |
-| ![Twinprice popup showing a live USD to EUR rate, a currency pair selector, and a quick amount converter](screenshots/v2-popup-light.png) | ![The same popup rendered in dark mode](screenshots/v2-popup-dark.png) | ![The popup with Page options expanded, showing the converter toggle, price display mode, and converted-price appearance controls](screenshots/v2-popup-options.png) |
+| Live rate and conversion | Dark mode |
+| --- | --- |
+| ![Twinprice popup showing a live USD to EUR rate, a currency pair selector, and a quick amount converter](screenshots/v2-popup-light.png) | ![The same popup rendered in dark mode](screenshots/v2-popup-dark.png) |
 
 ### On the page
 
@@ -35,6 +35,10 @@ Or select a single price to convert just that one:
 | Select any price | Converted in place |
 | --- | --- |
 | ![A single highlighted price with a Convert selection button beside it](screenshots/v2-inpage-selection.png) | ![The same selection showing the converted euro amount](screenshots/v2-inpage-selection-done.png) |
+
+### Page options
+
+![Expanded Page options showing automatic conversion, language, theme, price display, and the converted-price preview](screenshots/v2-popup-options.png)
 
 Earlier screenshots are preserved in the [legacy screenshot archive](screenshots/old/README.md). They show the previous Currency Converter Pro interface.
 
