@@ -19,6 +19,18 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.7.0 - 2026-11-23
+
+### Added
+
+- Latin American Spanish in the popup, welcome page, conversion prompts and
+  reporting controls. Automatic language selection recognizes Latin American
+  region tags and the saved Spain Spanish option continues to use `es`.
+- Nine Latin American Spanish website pages at `/es-419/`, including the help
+  guides, an example in Mexican pesos, and links back to the Spain Spanish pages.
+- Latin American Spanish browser messages and Chrome Web Store listing copy.
+  Site reports can record the `es-419` interface locale.
+
 ## 2.6.0 - 2026-11-11
 
 ### Added

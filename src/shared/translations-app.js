@@ -682,6 +682,45 @@
     "popup.catalogBuiltIn": "Se usa la lista integrada mientras se carga la del proveedor."
   });
 
+  i18n.register("es-419", {
+    "popup.pairGroup": "Par de monedas",
+    "popup.sourceCurrency": "Moneda de origen",
+    "popup.targetCurrency": "Moneda de destino",
+    "popup.sourceCurrencies": "Monedas de origen",
+    "popup.targetCurrencies": "Monedas de destino",
+    "popup.swap": "Intercambiar monedas",
+    "popup.recentGroup": "Pares de monedas recientes",
+    "popup.pairUnavailable": "Ese par de monedas ya no está disponible en el proveedor de tipos de cambio.",
+    "popup.noCurrencies": "No se encontraron monedas",
+    "popup.quickTitle": "Convertir un monto personalizado",
+    "popup.quickNeedsSource": "Elige una moneda de origen antes de convertir un monto.",
+    "popup.chooseSource": "Elegir moneda de origen",
+    "popup.amount": "Monto",
+    "popup.hexInvalid": "Ingresa un color hexadecimal de seis dígitos, por ejemplo #166534.",
+    "popup.contrastLow": "Contraste {ratio}:1. Es bajo para texto normal. Busca al menos 4.5:1.",
+    "popup.hint": "Selecciona un precio para convertirlo o presiona {shortcut}.",
+    "popup.rateIt": "Calificar",
+    "popup.dismissReviewLabel": "No volver a pedirme que califique Twinprice",
+    "popup.catalogAvailable": "Monedas del proveedor disponibles: {count}",
+    "popup.catalogCached": "Monedas del proveedor disponibles: {count} (catálogo en caché)",
+    "popup.catalogWarning": "Catálogo de monedas: {warning}",
+    "popup.pageUnavailableStatus": "{message} Aun así puedes convertir otro monto.",
+    "popup.validateCurrency": "Elige una moneda de la lista de sugerencias.",
+    "popup.validateDifferent": "Elige dos monedas distintas.",
+    "popup.needsConvertOnce": "Convierte una vez para que AUTO pueda identificar la moneda de origen.",
+    "popup.chooseSourceDetail": "Selecciona arriba una moneda de origen.",
+    "popup.chooseCurrencies": "Elige las monedas",
+    "popup.chooseSupported": "Selecciona monedas de origen y destino compatibles.",
+    "popup.chooseDifferent": "Elige monedas distintas",
+    "popup.enterAmount": "Ingresa un monto",
+    "popup.invalidAmount": "Monto no válido",
+    "popup.invalidAmountDetail": "Usa un número como 100 o 1,234.56.",
+    "onboarding.heading": "Configura Twinprice en dos pasos.",
+    "onboarding.loadingCurrencies": "Cargando monedas…",
+    "onboarding.tabsHeading": "Activa Twinprice en las pestañas abiertas",
+    "onboarding.currenciesFailed": "No se pudo cargar la lista de monedas."
+  }, "es");
+
   i18n.register("fr", {
     "popup.pageOptions": "Options de la page",
     "popup.rateLoading": "Chargement du dernier taux…",

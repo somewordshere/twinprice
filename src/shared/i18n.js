@@ -7,7 +7,8 @@
     en: "English",
     cs: "Čeština",
     de: "Deutsch",
-    es: "Español",
+    es: "Español (España)",
+    "es-419": "Español (Latinoamérica)",
     fr: "Français",
     id: "Bahasa Indonesia",
     it: "Italiano",
@@ -27,14 +28,20 @@
     "zh-TW": "繁體中文"
   });
   const SUPPORTED = Object.freeze(Object.keys(NATIVE_NAMES));
+  const AMERICAN_SPANISH_REGIONS = new Set(
+    "419 AR BO BR BZ CL CO CR CU DO EC GT HN MX NI PA PE PR PY SV US UY VE".toLowerCase().split(" ")
+  );
   const dictionaries = new Map();
   let activeLanguage = FALLBACK;
   let pluralRules = createPluralRules(FALLBACK);
 
-  // The translation files call this once per language, so a page that only
-  // needs the on-page strings never has to carry the popup's.
-  function register(language, entries) {
-    dictionaries.set(language, { ...dictionaries.get(language), ...entries });
+  // Regional variants can share wording with an already registered language.
+  function register(language, entries, baseLanguage) {
+    dictionaries.set(language, {
+      ...dictionaries.get(baseLanguage),
+      ...dictionaries.get(language),
+      ...entries
+    });
   }
 
   function createPluralRules(language) {
@@ -56,6 +63,10 @@
     if (exact) return exact;
     const [primary, ...subtags] = normalized.split("-");
     if (primary === "pt") return "pt-BR";
+    if (primary === "es") {
+      const region = /^(?:[a-z]{4}-)?([a-z]{2}|\d{3})(?:-|$)/.exec(subtags.join("-"))?.[1];
+      return AMERICAN_SPANISH_REGIONS.has(region) ? "es-419" : "es";
+    }
     // "mo" is the retired tag for Romanian as written in Moldova.
     if (primary === "mo") return "ro";
     if (primary === "zh") {

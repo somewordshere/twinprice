@@ -38,7 +38,7 @@ function placeholders(text) {
 
 test("the settings schema offers exactly the languages that ship translations", () => {
   assert.deepEqual([...context.CurrencySettings.LANGUAGES], ["auto", ...languages]);
-  assert.equal(languages.length, 21, "the add-on promises twenty-one interface languages");
+  assert.equal(languages.length, 22, "the add-on offers twenty-two interface language options");
   for (const language of ["uk", "ja", "ko", "zh-CN", "zh-TW", "cs", "th", "vi", "id", "ms", "ro", "uz"]) {
     assert.ok(languages.includes(language), `${language} must be one of them`);
   }
@@ -162,6 +162,11 @@ test("an explicit choice wins; automatic follows the browser and falls back to E
   assert.equal(withBrowser("id-ID").resolve("auto"), "id");
   assert.equal(withBrowser("ms-MY").resolve("auto"), "ms");
   assert.equal(withBrowser("ro-RO").resolve("auto"), "ro");
+  for (const tag of ["es-419", "es_MX", "es-AR", "es-Latn-CO", "es-US"]) {
+    assert.equal(withBrowser(tag).resolve("auto"), "es-419", tag);
+  }
+  assert.equal(withBrowser("es-ES").resolve("auto"), "es");
+  assert.equal(withBrowser("es-MX").resolve("es"), "es");
   for (const tag of ["ro", "ro-MD", "ro_RO", "mo"]) assert.equal(i18n.matchLanguage(tag), "ro", tag);
   for (const tag of ["uz", "uz-UZ", "uz-Latn-UZ"]) {
     assert.equal(i18n.matchLanguage(tag), "uz", tag);
@@ -379,6 +384,8 @@ test("links to twinprice.com open the website in the extension's language", () =
   assert.equal(scoped.websiteUrl("zh-TW"), "https://twinprice.com/zh-TW/");
   assert.equal(scoped.websiteUrl("zh-HK"), "https://twinprice.com/zh-TW/");
   assert.equal(scoped.websiteUrl("uz-Latn-UZ", "guide/"), "https://twinprice.com/uz/guide/");
+  assert.equal(scoped.websiteUrl("es-MX", "guide/"), "https://twinprice.com/es-419/guide/");
+  assert.equal(scoped.websiteUrl("es-ES"), "https://twinprice.com/es/");
   assert.equal(scoped.websiteUrl("sv"), "https://twinprice.com/");
   scoped.setLanguage("ko");
   assert.equal(scoped.websiteUrl(), "https://twinprice.com/ko/");
@@ -408,8 +415,8 @@ test("the website guide quotes the extension's own button and field names in eve
     "3985de": ["page.prompt.converting"],
     "1e28aa": ["popup.restorePrices", "popup.pageOptions", "popup.rememberSite", "popup.enable"],
     "692fc0": ["popup.autoAllSites", "popup.pageOptions"],
-    "1ec8a4": ["popup.language", "popup.pageOptions"],
-    "b041cc": ["popup.language", "popup.pageOptions"],
+    "f9a3ae": ["popup.language", "popup.pageOptions"],
+    "eb9276": ["popup.language", "popup.pageOptions"],
     "dfe7c6": ["page.report.action"],
     "d9bfe3": ["page.report.action"],
     "e6a42b": ["page.report.action"],

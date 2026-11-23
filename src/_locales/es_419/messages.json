@@ -1,0 +1,17 @@
+{
+  "extName": {
+    "message": "Twinprice - Convertidor de monedas para páginas web"
+  },
+  "extNameFirefox": {
+    "message": "Twinprice - Convertidor de monedas"
+  },
+  "extDescription": {
+    "message": "Ve los precios en tu moneda junto a los originales. Más de 160 monedas. El contenido de la página se queda en tu navegador."
+  },
+  "commandConvertPage": {
+    "message": "Convertir los precios de esta página"
+  },
+  "contextMenuConvertSelection": {
+    "message": "Convertir el precio seleccionado"
+  }
+}

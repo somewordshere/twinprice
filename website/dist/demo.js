@@ -41,7 +41,7 @@ const examples = {
 // at the rates above, so every conversion agrees. Its own currency is left out of the
 // menu and the animation, where it would only repeat the original price.
 const lampCurrencies = {
-  cs: 'CZK', id: 'IDR', ja: 'JPY', ko: 'KRW', ms: 'MYR', pl: 'PLN', 'pt-BR': 'BRL',
+  cs: 'CZK', 'es-419': 'MXN', id: 'IDR', ja: 'JPY', ko: 'KRW', ms: 'MYR', pl: 'PLN', 'pt-BR': 'BRL',
   ro: 'RON', th: 'THB', tr: 'TRY', uk: 'UAH', uz: 'UZS', vi: 'VND', 'zh-CN': 'CNY', 'zh-TW': 'TWD',
 };
 const lampCurrency = lampCurrencies[language] || 'EUR';

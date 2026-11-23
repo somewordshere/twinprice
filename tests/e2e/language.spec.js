@@ -25,7 +25,7 @@ async function openShop(context) {
   return shop;
 }
 
-test("the language menu offers twenty-one languages and retranslates the popup and the page prompt", async ({
+test("the language menu offers twenty-two languages and retranslates the popup and the page prompt", async ({
   context,
   extensionWorker,
   extensionId
@@ -40,9 +40,10 @@ test("the language menu offers twenty-one languages and retranslates the popup a
 
   const language = popup.getByRole("combobox", { name: "Language", exact: true });
   await expect(popup.locator("#language")).toHaveValue("auto");
-  // Automatic plus twenty-one languages, each named in its own tongue.
+  // Automatic plus twenty-two languages, each named in its own tongue.
   await language.click();
-  await expect(popup.locator("#languageList [role='option']")).toHaveCount(22);
+  await expect(popup.locator("#languageList [role='option']")).toHaveCount(23);
+  await expect(popup.locator("#languageList [data-value='es-419']")).toHaveText("Español (Latinoamérica)");
   await expect(popup.locator("#languageList [data-value='uz']")).toHaveText("O‘zbekcha");
   await expect(popup.locator("#languageList [data-value='uk']")).toHaveText("Українська");
   await expect(popup.locator("#languageList [data-value='ja']")).toHaveText("日本語");
@@ -145,6 +146,7 @@ test("the welcome page follows the saved language and can change it", async ({
 });
 
 for (const { language, prompt, action, convertPage } of [
+  { language: "es-419", prompt: "los precios que ves en esta página", action: "Convertir precios", convertPage: "Convertir los precios de la página" },
   { language: "ja", prompt: "このページに表示されている価格を", action: "価格を換算", convertPage: "ページの価格を換算" },
   { language: "ko", prompt: "이 페이지에 보이는 가격을", action: "가격 환산", convertPage: "페이지 가격 환산" },
   { language: "zh-CN", prompt: "将此页面上可见的价格换算为", action: "换算价格", convertPage: "换算页面价格" },
@@ -246,7 +248,7 @@ test("the welcome page fits a phone screen in every language and links to help i
   await seedExtension(extensionWorker, { settings: { language: "en" } });
   const setup = await context.newPage();
   await setup.setViewportSize({ width: 360, height: 800 });
-  for (const language of ["en", "es", "fr", "pt-BR", "de", "ja", "ko", "zh-CN"]) {
+  for (const language of ["en", "es", "es-419", "fr", "pt-BR", "de", "ja", "ko", "zh-CN"]) {
     await extensionWorker.evaluate((code) => chrome.storage.sync.set({ language: code }), language);
     await setup.goto(`chrome-extension://${extensionId}/onboarding/onboarding.html`);
     await expect(setup.locator("#homeCurrency")).toBeEnabled();

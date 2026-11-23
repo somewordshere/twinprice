@@ -232,6 +232,7 @@ test("anything outside the closed report format is refused", async () => {
     "optional fields that do not fit are dropped, and the hostname is lower-cased"
   );
   assert.deepEqual(parseReport({ ...REPORT, language: "pt-BR" }).language, "pt-BR");
+  assert.equal(parseReport({ ...REPORT, language: "es-419" }).language, "es-419");
 
   const services = fakeServices();
   const notJson = await handleReport(request({ body: "not json" }), env(), services.fetchImpl);

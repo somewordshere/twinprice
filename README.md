@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
-**Current version:** 2.6.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.7.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.6.0/twinprice-2.6.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.6.0/twinprice-2.6.0-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.7.0/twinprice-2.7.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.7.0/twinprice-2.7.0-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -46,7 +46,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 - Show converted prices beside the originals or replace them, with exact undo support.
 - Customize converted-price text, background, and corner shape with a live before-and-after preview and contrast guidance.
 - Choose whether the popup follows the system theme or always uses light or dark mode.
-- Use the popup, the welcome page, and the on-page prompts in twenty-one languages (English, Czech, German, Spanish, French, Indonesian, Italian, Malay, Dutch, Polish, Brazilian Portuguese, Romanian, Thai, Turkish, Ukrainian, Uzbek, Vietnamese, Japanese, Korean, Simplified Chinese, and Traditional Chinese), following the browser's language or chosen from **Page options**.
+- Use the popup, the welcome page, and the on-page prompts in twenty-two languages (English, Czech, German, Spanish (Spain), Latin American Spanish, French, Indonesian, Italian, Malay, Dutch, Polish, Brazilian Portuguese, Romanian, Thai, Turkish, Ukrainian, Uzbek, Vietnamese, Japanese, Korean, Simplified Chinese, and Traditional Chinese), following the browser's language or chosen from **Page options**.
 - Keep the popup focused on the current site, currency pair, and one adaptive page-conversion action, with less-used controls in closed disclosures.
 - Scan ordinary webpages locally as they open and show the on-page conversion prompt only after a supported price is found.
 - Remember a manual source currency or `AUTO` mode for websites that should convert automatically.
@@ -56,7 +56,7 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 ## Installation
 
 - **Store installation:** Install Twinprice from the [Chrome Web Store](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twinprice/).
-- **Manual installation:** Download the latest [Chrome build](release/2.6.0/twinprice-2.6.0-chrome.zip) or [Firefox build](release/2.6.0/twinprice-2.6.0-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
+- **Manual installation:** Download the latest [Chrome build](release/2.7.0/twinprice-2.7.0-chrome.zip) or [Firefox build](release/2.7.0/twinprice-2.7.0-firefox.zip), extract it, and load it through the browser's extension-development page. The Firefox build requires Mozilla signing for permanent installation.
 
 ## 🧭 How to use it
 
@@ -223,6 +223,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.7.0 | Latin American Spanish in the extension and website | [Chrome](release/2.7.0/twinprice-2.7.0-chrome.zip) · [Firefox](release/2.7.0/twinprice-2.7.0-firefox.zip) |
 | 2.6.0 | Uzbek interface and help in Latin script | [Chrome](release/2.6.0/twinprice-2.6.0-chrome.zip) · [Firefox](release/2.6.0/twinprice-2.6.0-firefox.zip) |
 | 2.5.5 | Argentine peso prices on Alquiler Argentina now convert in AUTO mode | [Chrome](release/2.5.5/twinprice-2.5.5-chrome.zip) · [Firefox](release/2.5.5/twinprice-2.5.5-firefox.zip) |
 | 2.5.4 | Romanian, the twentieth language; the convert offer leaves after six seconds untouched; page messages move to the top-right corner; the rating ask comes at 5, 40 and 100 converted pages, in Edge too | [Chrome](release/2.5.4/twinprice-2.5.4-chrome.zip) · [Firefox](release/2.5.4/twinprice-2.5.4-firefox.zip) |
@@ -275,7 +276,7 @@ src/          Shared extension runtime used by both browsers
 manifests/    Common manifest plus Chrome and Firefox overrides
 dist/         Generated unpacked browser builds (not committed)
 release/      One folder per version: release notes plus the Chrome and Firefox ZIPs
-store/        Store listing text in twenty languages, dashboard answers, screenshots, and promo art
+store/        Store listing text in twenty-one locales, dashboard answers, screenshots, and promo art
 screenshots/  README screenshots and an old/ archive of the previous interface
 scripts/      Manifest composition, validation, icon, screenshot, video, and release utilities
 tests/        Unit, integration, fixture, Chrome Playwright, and Firefox runtime tests

@@ -163,7 +163,7 @@ export function parseReport(input) {
   const browser = BROWSERS.has(input.browser) ? input.browser : null;
   if (!browser) return null;
   const to = typeof input.to === 'string' && /^[A-Z]{3}$/.test(input.to) ? input.to : null;
-  const language = typeof input.language === 'string' && /^[a-z]{2}(?:-[A-Z]{2})?$/.test(input.language)
+  const language = typeof input.language === 'string' && /^[a-z]{2}(?:-[A-Z]{2}|-419)?$/.test(input.language)
     ? input.language
     : null;
   return { site, reason: input.reason, version, browser, to, language };

@@ -332,6 +332,32 @@
     "rate.errorTooOld": "Los tipos de cambio actuales no están disponibles y los guardados en caché son demasiado antiguos ({age}). No se usan tipos de cambio de más de 7 días."
   });
 
+  i18n.register("es-419", {
+    "page.dismiss": "Cerrar el conversor de monedas",
+    "page.prompt.message": "Convierte a {currency} los precios que ves en esta página.",
+    "page.prompt.detectedFallback": "la moneda detectada",
+    "page.prompt.lowConfidence": "No pudimos detectar la moneda de origen. Elige una en la extensión y vuelve a intentarlo.",
+    "page.report.action": "Reportar este sitio web",
+    "page.report.sent": "¡Gracias! Se reportó el sitio web.",
+    "page.report.failed": "No se pudo enviar el reporte",
+    "page.report.confirmWindow": "Confirma el reporte en la ventana de Twinprice que se abrió.",
+    "page.report.consentTitle": "Reportar este sitio web",
+    "page.report.send": "Enviar reporte",
+    "error.reportFailed": "No se pudo enviar el reporte. Verifica tu conexión e inténtalo de nuevo.",
+    "error.reportLimited": "Se enviaron demasiados reportes en poco tiempo. Inténtalo de nuevo en un minuto.",
+    "error.reportDeclined": "No se envió el reporte. Firefox necesita tu permiso para enviar el nombre del sitio web.",
+    "error.reportPage": "No se puede reportar esta página.",
+    "page.selection.currencyFallback": "moneda",
+    "page.toast.group": "Resultado de la conversión de monedas",
+    "page.review.rate": "Calificar",
+    "page.review.dismiss": "No volver a pedirme que califique Twinprice",
+    "convert.sameAsTarget": "La moneda detectada en la página ya es {currency}. Elige otra moneda de destino.",
+    "convert.lowConfidence": "No se pudo detectar la moneda con seguridad. Selecciona la moneda de origen manualmente.",
+    "convert.manualNotFound": "No se encontró en esta página la moneda seleccionada manualmente ({currency}).",
+    "convert.selectionUnknown": "No se pudo identificar con seguridad la moneda de la selección.",
+    "convert.selectionSameAsTarget": "Este precio ya está en {currency}. Cambia la moneda de destino para convertirlo."
+  }, "es");
+
   i18n.register("fr", {
     "language.auto": "Automatique (langue du navigateur)",
     "page.dismiss": "Fermer le convertisseur de devises",

@@ -4,6 +4,11 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.7.0 · November 23, 2026
+
+- Choose **Español (Latinoamérica)** under **Language** in Page options. The popup, welcome page, and on-page controls use Latin American Spanish terminology and number formatting. Automatic language selection also recognizes regional settings such as Spanish for Mexico and Argentina.
+- The website and help guides are available in Latin American Spanish at [twinprice.com/es-419/](https://twinprice.com/es-419/).
+
 ## 2.6.0 · November 11, 2026
 
 - Twinprice now speaks Uzbek in Latin script. Choose **O‘zbekcha** under **Language** in Page options to use it in the popup, welcome page, and on-page controls. The website and help guides are available in Uzbek at [twinprice.com/uz/](https://twinprice.com/uz/).
