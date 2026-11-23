@@ -57,35 +57,27 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 
 ### Convert an entire page
 
-1. Open a shopping page. In the toolbar popup, choose your target currency and set the source to **AUTO** or a specific currency.
-2. Select **Convert prices** on the page or **Convert page prices** in the popup. If the converter is off, select **Turn on and convert page**.
-3. To undo, select **Restore original prices** in the popup.
-
-To stop scanning, prompts, and automatic conversion, turn off **Enable converter** under **Page options**.
+Choose your target currency in the popup and set the source to **AUTO** or a specific currency. Select **Convert prices** on the page or use the popup’s conversion button. Select **Restore original prices** in the popup to undo.
 
 ### Customize converted prices
 
-Open **Page options** and use **Converted price appearance** to choose text and background colors plus a square, rounded, or pill shape. The **Before** sample keeps the original converter style while **After** updates as you edit. The contrast message reports whether the selected colors meet WCAG AA for normal text, and **Reset appearance** restores the accessible green default.
-
-Use **App theme** in the same panel to match the browser's system theme or keep the popup in light or dark mode. The choice is synchronized with the rest of the extension settings.
-
-Use **Language** in the same panel to pick the interface language. **Automatic** follows the browser's language and falls back to English; the other entries are named in their own language so they can be found from any starting point. The choice applies to the popup, the welcome page, and the on-page prompt, button, and messages. Messages that come from the exchange-rate provider, such as a rate being unavailable, stay in English.
+In **Page options**, use **Converted price appearance** to change price colors and shape. Use **App theme** and **Language** to change the interface.
 
 ### Convert a custom amount
 
-Open the closed **Convert a custom amount** section and enter a value. The popup calculates the result without inspecting the current webpage. If the source is still `AUTO` and no page conversion has identified it, select an explicit source currency first.
+In the popup, open **Convert a custom amount** and enter a value. Choose a source currency if **AUTO** hasn’t detected one.
 
 ### Convert one highlighted price
 
-Highlight a supported price and use the **Convert selected currency** right-click action. The on-page conversion prompt appears automatically when local detection finds a supported price and the prompt option is enabled.
+Highlight the price, right-click, and select **Convert selected currency**.
 
 ### Remember a website
 
-Open **Page options** and enable **Convert this site automatically**. The selected manual source or `AUTO` mode is remembered for that origin, and supported prices are converted when the site is visited. Turning this option off deletes the saved origin and source mode; ordinary local price detection and the conversion prompt remain available.
+In **Page options**, turn on **Convert this site automatically**. Twinprice remembers your source currency or **AUTO** for that site.
 
 ### Convert every website
 
-Open **Page options** and enable **Convert all websites automatically**. Every website then converts its supported prices as soon as they are detected, without the on-page prompt or a notice. It is off by default. Turning it off restores the original prices on pages it converted; websites chosen with **Convert this site automatically** keep converting.
+In **Page options**, turn on **Convert all websites automatically** to convert supported prices without a prompt. Turn off **Enable converter** to stop all scanning and conversion.
 
 ## ⚙️ How it works
 
