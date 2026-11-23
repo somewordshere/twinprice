@@ -57,13 +57,11 @@ Earlier screenshots are preserved in the [legacy screenshot archive](screenshots
 
 ### Convert an entire page
 
-1. Open an ordinary HTTP or HTTPS webpage. Twinprice scans locally for supported prices.
-2. When a supported price is found, select **Convert prices** in the on-page prompt.
-3. Use the toolbar popup to keep **AUTO** selected or choose a source currency manually, and select the target currency.
-4. The popup action can also run conversion directly as **Turn on and convert page** or **Convert page prices**.
-5. **Restore original prices** appears only after the page contains conversions.
+1. Open a shopping page. In the toolbar popup, choose your target currency and set the source to **AUTO** or a specific currency.
+2. Select **Convert prices** on the page or **Convert page prices** in the popup. If the converter is off, select **Turn on and convert page**.
+3. To undo, select **Restore original prices** in the popup.
 
-The global **Enable converter** switch is under **Page options**. Turning it off stops local price scanning, prompts, and automatic conversion until the user enables it again.
+To stop scanning, prompts, and automatic conversion, turn off **Enable converter** under **Page options**.
 
 ### Customize converted prices
 
