@@ -130,23 +130,21 @@ These are heuristic confidence scores, not calibrated probabilities.
 
 ## 🔐 Privacy and permissions
 
-All webpage scanning, price detection, conversion, and rendering happen locally inside the browser. The extension never transmits page contents, highlighted text, price values, visited URLs, or browsing history.
+Twinprice detects and converts prices in your browser. Page text, prices, full URLs, and browsing history stay there. Twinprice fetches the currency catalog and looks up rates by ISO currency code through Frankfurter.
 
-When a conversion fails, the prompt, the conversion notice and the popup offer **Report this website**. Pressing it sends the site's hostname (never its path, query or contents), the failure reason, the extension version and browser, and the target currency and interface language to `twinprice.com/api/report`, which files one public GitHub issue per website. Names of private networks (`.local`, `.corp`, `.internal` and similar) are never sent, and the endpoint refuses any name that public DNS does not know or that points only at private addresses. Firefox asks for permission the first time. The endpoint is the Worker in [`website/worker.js`](website/worker.js).
-
-Apart from a website report the user sends, the only external requests retrieve the currency catalog and reference rates from Frankfurter using ISO currency codes. No webpage text, prices, URLs, analytics, tracking identifiers, or advertising data is included. As with any HTTPS request, the service may receive ordinary network metadata such as an IP address. Preferences, recent currency choices, cached rates, and origins selected for automatic conversion remain in browser storage.
+**Report this website** sends a public site's hostname, failure reason, browser, extension version, target currency, and interface language to Twinprice. Reports create or update a public GitHub issue. Firefox asks for permission on the first report.
 
 | Permission | Why it is needed |
 | --- | --- |
-| `storage` | Saves settings, recent currencies, automatic-conversion origins, their source modes, cached rates, and the local rating-reminder count. |
-| `contextMenus` | Adds the right-click command for a highlighted price. |
-| HTTP and HTTPS webpage access | Loads the local detector as pages open so it can find supported prices and offer conversion without a toolbar click. Page contents and URLs are not transmitted. |
-| `activeTab` and `scripting` | Provides a user-triggered fallback on supported pages where the normal detector was not loaded, including manually allowed local files. |
-| `api.frankfurter.dev` | Retrieves reference exchange rates using ISO currency codes. |
-| Optional HTTP and HTTPS site access | Requested when you click **Activate my open tabs**, allowing the detector to start in existing tabs without reloading them. You can decline and reload those tabs instead. Turning on **Convert all websites automatically** asks for the same access if the browser has not granted it. |
-| Firefox `websiteContent` data declaration | Discloses that a source ISO currency code detected from the page can be transmitted to the rate provider; raw page text, prices, and URLs are not transmitted. |
+| `storage` | Saves settings and caches rates. |
+| `contextMenus` | Adds right-click conversion for a selected price. |
+| HTTP and HTTPS access | Runs the local price detector as pages open. |
+| `activeTab` and `scripting` | Runs the detector on demand when it did not load. |
+| `api.frankfurter.dev` | Fetches the currency catalog and rates. |
+| Optional site access | Supports **Activate my open tabs** and **Convert all websites automatically**. |
+| Firefox `websiteContent` declaration | Covers currency codes detected on a page and sent for rate lookups. |
 
-Read the complete [privacy policy](privacy-policy.md) for retention, deletion, and provider details.
+See the [privacy policy](privacy-policy.md) for network metadata, storage, and deletion details.
 
 ## 🌍 Currency behavior
 
