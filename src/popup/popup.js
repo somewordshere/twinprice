@@ -405,8 +405,8 @@ function setRateHeroMessage(meta, kind = "offline") {
 async function refreshRateHistory(baseCurrency, quoteCurrency) {
   const pair = `${baseCurrency}:${quoteCurrency}`;
   if (pair === renderedHistoryPair) return;
-  const requestId = ++rateHistoryRequestId;
   hideSparkline();
+  const requestId = ++rateHistoryRequestId;
 
   let result = null;
   try {
@@ -430,6 +430,9 @@ function hideSparkline() {
   // <svg> only creates an expando and leaves the attribute in place. Set it directly.
   rateSparkNode.setAttribute("hidden", "");
   renderedHistoryPair = null;
+  // A history request still on its way belongs to the pair that was hidden, so it
+  // must not draw its chart under whatever the hero shows now.
+  rateHistoryRequestId += 1;
 }
 
 function renderSparkline(history, baseCurrency, quoteCurrency) {
@@ -1529,9 +1532,16 @@ async function calculateQuickConversion() {
     availableQuoteCurrencies = null;
     availableRatesSource = sourceCurrency;
   }
-  const result = I18n.localize(
-    await ExtensionAPI.runtime.sendMessage({ type: M.GET_RATES, baseCurrency: sourceCurrency })
-  );
+  // A background that cannot answer (restarting or updating) rejects the message.
+  // Left unhandled, that kept the converter on "Converting…" for good.
+  let result;
+  try {
+    result = I18n.localize(
+      await ExtensionAPI.runtime.sendMessage({ type: M.GET_RATES, baseCurrency: sourceCurrency })
+    );
+  } catch (_error) {
+    result = { ok: false, error: t("popup.rateServiceDown") };
+  }
   if (requestId !== quickConversionRequestId) return;
   if (result?.ok) {
     availableQuoteCurrencies = new Set(Object.keys(result.rates || {}));

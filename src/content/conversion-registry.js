@@ -62,10 +62,8 @@
 
   function restoreConvertedWrapper(wrapper) {
     if (wrapper.dataset?.ccpAppended === "true") {
-      // "Converted only" parks the site's own price nodes inside the badge; they
-      // have to go back where they came from before the badge disappears.
-      const captured = wrapper.querySelector?.(":scope > .ccp-original");
-      if (captured) wrapper.before(...captured.childNodes);
+      // A badge appended to a split price holds none of the site's nodes; the
+      // converter unhides them (it hid them in place) before this runs.
       wrapper.remove();
       return;
     }
@@ -74,5 +72,5 @@
     wrapper.replaceWith(ownerDocument.createTextNode(originalText));
   }
 
-  global.CurrencyConversionRegistry = Object.freeze({ create });
+  global.CurrencyConversionRegistry = Object.freeze({ create, restoreConvertedWrapper });
 })(globalThis);

@@ -92,6 +92,45 @@ test("uses recent stale rates with an age warning when the provider is unavailab
   assert.equal(result.rates.USD, 1.1);
 });
 
+// A fresh install fetches its first rates against the built-in currency list. Once
+// the provider's catalog arrives the signature differs, and those minutes-old rates
+// were served as stale, with a "cached rates … while fresh rates load" warning.
+test("refetches young rates saved under another catalog instead of calling them stale", async () => {
+  let fetches = 0;
+  const { service } = createRateService({
+    cache: cacheFromDaysAgo(10 / (24 * 60)),
+    fetchImpl: async () => {
+      fetches += 1;
+      return {
+        ok: true,
+        status: 200,
+        json: async () => [
+          { date: "2026-07-08", base: "EUR", quote: "USD", rate: 1.2 },
+          { date: "2026-07-08", base: "EUR", quote: "PLN", rate: 4.3 }
+        ]
+      };
+    }
+  });
+  const result = await service.getRates("EUR");
+  assert.equal(fetches, 1);
+  assert.equal(result.ok, true);
+  assert.equal(result.stale, false);
+  assert.equal(result.warning, undefined);
+  assert.equal(result.rates.USD, 1.2);
+});
+
+test("falls back to young rates from another catalog when the refetch fails", async () => {
+  const { service } = createRateService({
+    cache: cacheFromDaysAgo(10 / (24 * 60)),
+    fetchImpl: async () => ({ ok: false, status: 503 })
+  });
+  const result = await service.getRates("EUR");
+  assert.equal(result.ok, true);
+  assert.equal(result.stale, true);
+  assert.equal(result.warningKey, "rate.warnLiveUnavailable");
+  assert.equal(result.rates.USD, 1.1);
+});
+
 test("refuses cached rates older than seven days", async () => {
   const { service } = createRateService({
     cache: cacheFromDaysAgo(8),

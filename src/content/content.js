@@ -568,8 +568,9 @@
         : "";
       const rate = result.rateDate ? ` ${rateLine}${cached}.` : "";
       const scan = result.scanLimited ? ` ${t("toast.scanLimited")}` : "";
+      const failed = result.rateFailure ? ` ${result.rateFailure}` : "";
       CurrencyPageUi.showToast(
-        `${t("toast.converted", { count: result.count })}${detected}${rate}${scan}`,
+        `${t("toast.converted", { count: result.count })}${detected}${rate}${failed}${scan}`,
         {
           actionLabel: t("page.prompt.undo"),
           onAction: () => clearSiteConversion({ suppressPrompt: true }),

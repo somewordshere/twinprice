@@ -442,6 +442,49 @@ const DETECTION_CASES = [
     inert: ["$129.00"]
   },
   {
+    // Croatia adopted the euro in 2023. Its domain and language were missing from
+    // the euro lists, so one price left the page at low confidence.
+    name: "Croatian product page with a single euro price",
+    lang: "hr-HR",
+    hostname: "www.example.hr",
+    bodyText: "Košarica Cijena 129,99 € Dodaj u košaricu",
+    currency: "EUR",
+    minConfidence: "medium"
+  },
+  {
+    // Bulgaria has used the euro since 2026-01-01.
+    name: "Bulgarian product page with a single euro price",
+    lang: "bg",
+    hostname: "www.example.bg",
+    bodyText: "Количка Цена 59,90 € Добави",
+    currency: "EUR",
+    minConfidence: "medium"
+  },
+  {
+    // innerText applies text-transform, so a capitalised "Try it free" reads "TRY".
+    name: "English page with capitalised TRY buttons",
+    lang: "en",
+    hostname: "www.example.com",
+    bodyText: "TRY IT FREE Plans from $19.99 TRY NOW Compare plans TRY PRO",
+    notCurrency: "TRY"
+  },
+  {
+    name: "Electronics page naming AMD processors",
+    lang: "en",
+    hostname: "www.example.com",
+    bodyText: "AMD Ryzen 7 laptop $899.00 AMD Radeon graphics AMD Ryzen 9 desktop",
+    notCurrency: "AMD"
+  },
+  {
+    // Once the page language names the lira, the code corroborates it.
+    name: "Turkish page writing the lira as a code",
+    lang: "tr",
+    hostname: "www.example.com",
+    bodyText: "Price 1.250,00 TRY Shipping 79,90 TRY Total 1.329,90 TRY",
+    currency: "TRY",
+    minConfidence: "medium"
+  },
+  {
     // Both the domain and the language name a dollar, so "$" corroborates neither.
     name: "New Zealand domain with a US page language",
     lang: "en-US",

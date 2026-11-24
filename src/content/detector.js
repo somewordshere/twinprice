@@ -19,6 +19,8 @@
   // The notices page-ui.js draws; converter.js keeps the same list as UI_SELECTOR.
   const OWN_UI_SELECTOR = ".ccp-toast, .ccp-selection-popup, .ccp-page-prompt";
   const HIDDEN_ORIGINAL_SELECTOR = "ccp-conversion[data-ccp-owned='true'] > .ccp-original";
+  const HIDDEN_SPLIT_BADGE_SELECTOR =
+    "ccp-conversion[data-ccp-owned='true'][data-ccp-appended='true'][data-display-mode='replace']";
   const CURRENCY_CODE_PATTERN = new RegExp(
     `(?<![A-Za-z])(${CURRENCY_CODES.join("|")})(?![A-Za-z])`,
     "g"
@@ -362,6 +364,11 @@
     let visibleCode;
     CURRENCY_CODE_PATTERN.lastIndex = 0;
     while ((visibleCode = CURRENCY_CODE_PATTERN.exec(bodyText)) !== null) {
+      // "AMD Ryzen", and "Try it free" in a capitalised button (innerText applies
+      // text-transform), are words, even right after a price ("$899.00 AMD Radeon").
+      // Like a context-required symbol, such a code only corroborates a currency
+      // the metadata, domain or language already named.
+      if (WORD_LIKE_CURRENCY_CODES.has(visibleCode[1]) && !scores[visibleCode[1]]) continue;
       codeCounts[visibleCode[1]] = (codeCounts[visibleCode[1]] || 0) + 1;
     }
     for (const [currency, count] of Object.entries(codeCounts)) {
@@ -414,6 +421,14 @@
     const hidden = [...body.querySelectorAll(HIDDEN_ORIGINAL_SELECTOR)]
       .filter((original) => original.style.display === "none")
       .map((original) => original.textContent);
+    // A split price in converted-only mode keeps its own nodes in place but hides
+    // them, so innerText leaves those out too.
+    for (const badge of body.querySelectorAll(HIDDEN_SPLIT_BADGE_SELECTOR)) {
+      const host = badge.parentElement;
+      if (!host) continue;
+      hidden.push([...host.childNodes].filter((node) => node !== badge)
+        .map((node) => node.textContent).join(""));
+    }
     // First, so the length cap applied by the caller cannot cut them off.
     return hidden.length ? `${hidden.join("\n")}\n${shopText}` : shopText;
   }
@@ -514,9 +529,10 @@
       jo: "JOD", ge: "GEL", am: "AMD", az: "AZN", kz: "KZT", ae: "AED",
       sa: "SAR", ar: "ARS"
     };
+    // Croatia has used the euro since 2023 and Bulgaria since 2026-01-01.
     const euroDomains = new Set([
       "de", "fr", "es", "it", "nl", "at", "be", "ie", "pt", "fi", "gr",
-      "sk", "si", "ee", "lv", "lt", "lu", "cy", "mt"
+      "sk", "si", "ee", "lv", "lt", "lu", "cy", "mt", "hr", "bg"
     ]);
     const addDomainSignal = (host, points, signal) => {
       const tld = host.toLowerCase().split(".").pop();
@@ -548,7 +564,7 @@
     const languagePrefixes = {
       ja: "JPY", ko: "KRW", pl: "PLN", cs: "CZK", tr: "TRY", uk: "UAH",
       ro: "RON", hu: "HUF", he: "ILS", th: "THB", id: "IDR", ms: "MYR",
-      vi: "VND", ka: "GEL", hy: "AMD", az: "AZN", kk: "KZT"
+      vi: "VND", ka: "GEL", hy: "AMD", az: "AZN", kk: "KZT", hr: "EUR", bg: "EUR"
     };
     languageCurrency ||= languagePrefixes[language.split("-")[0]];
     if (languageCurrency) add(languageCurrency, 15, "page language");

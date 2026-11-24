@@ -54,7 +54,14 @@
   let watchedConversionListener = null;
   let observedUrl = window.location.href;
   let splitPriceRecords = new WeakMap();
+  // Badge → the inline styles it set to hide a split price's own nodes. A Map, not
+  // a WeakMap, so clearing can reach badges the shop already took off the page.
+  const hiddenOriginals = new Map();
   const conversionRegistry = CurrencyConversionRegistry.create({
+    restoreWrapper: (wrapper) => {
+      releaseOriginalContent(wrapper);
+      CurrencyConversionRegistry.restoreConvertedWrapper(wrapper);
+    },
     updateWrapperPresentation: updateConvertedPresentation
   });
   const discoveryScheduler = CurrencyMutationRootScheduler.create({
@@ -208,9 +215,11 @@
       return buildNoMatchesResult(textPlans, splitPlans);
     }
 
-    const rateResults = await Promise.all([...bases].map(ensureRates));
+    const baseList = [...bases];
+    const rateResults = await Promise.all(baseList.map(ensureRates));
     if (!isCurrentRun(generation, runSettings)) return cancelledConversionResult();
     const rateError = rateResults.find((result) => !result.ok);
+    const failedBases = baseList.filter((_base, index) => !rateResults[index].ok);
     const applied = await applyPlansInBatches(
       textPlans,
       splitPlans,
@@ -224,9 +233,15 @@
     conversionScheduler.discardRecords();
     if (observe) startWatching();
 
-    const usedMeta = [...bases]
+    const usedMeta = baseList
+      .filter((base) => !failedBases.includes(base))
       .map((base) => activeRateMetaByBase[base])
       .filter(Boolean);
+    // When some currencies converted and another's rates failed, the result is a
+    // success, and those prices were left as they were without a word. Name them.
+    const rateFailure = count > 0 && failedBases.length
+      ? `${failedBases.join(", ")}: ${rateError.error || t("convert.ratesFailed")}`
+      : null;
     return {
       ok: count > 0,
       count,
@@ -239,7 +254,8 @@
       cacheAgeLabel: cacheAgeLabel(usedMeta
         .filter((meta) => meta.stale && Number.isFinite(meta.cacheAgeMs))
         .sort((a, b) => b.cacheAgeMs - a.cacheAgeMs)[0]),
-      rateWarning: [...new Set(usedMeta.map(rateWarning).filter(Boolean))].join(" ") || null,
+      rateWarning: [...new Set([...usedMeta.map(rateWarning), rateFailure].filter(Boolean))].join(" ") || null,
+      rateFailure,
       scanLimited: textScan.limited,
       scannedTextNodes: textScan.nodes.length,
       inspectedTextNodes: textScan.inspected,
@@ -573,6 +589,9 @@
       (!QUICK_CURRENCY_MARKER_PATTERN.test(node.nodeValue) && !CurrencyDetector.isLikelyPriceElement(parent)) ||
       parent.isContentEditable ||
       parent.closest(PRICE_FRAGMENT_SELECTOR) ||
+      // Loose text beside a split price's own badge is already converted as part
+      // of that price, and in converted-only mode it is still there, just unseen.
+      parent.querySelector(":scope > ccp-conversion[data-ccp-appended='true']") ||
       isSplitPriceFraction(node) ||
       parent.closest("[hidden], [inert], [aria-hidden='true'], template") ||
       !isRendered(parent) ||
@@ -833,33 +852,71 @@
     badge.className = "ccp-conversion";
     badge.style.setProperty("display", "inline", "important");
     badge.appendChild(createConvertedBadge(match, { adjacent: displayMode !== "replace" }));
-    if (displayMode === "replace") captureOriginalContent(badge, element);
     element.appendChild(badge);
+    if (displayMode === "replace") hideOriginalContent(badge, element);
     conversionRegistry.add(badge);
     splitPriceRecords.set(element, { badge, originalText });
     return 1;
   }
 
   // A split price is drawn across nodes the extension does not own, so "converted
-  // only" cannot simply hide a wrapper it created. Moving those nodes inside the
-  // badge makes one style rule hide them and one move put them back — and leaves
-  // the default side-by-side mode appending, without touching the site's DOM.
-  function captureOriginalContent(badge, host) {
-    if (!host || badge.querySelector(":scope > .ccp-original")) return;
-    const original = document.createElement("span");
-    original.className = "ccp-original";
-    original.style.setProperty("display", "none", "important");
-    for (const child of [...host.childNodes]) {
-      if (child !== badge) original.appendChild(child);
+  // only" cannot simply hide a wrapper it created. Those nodes stay where the shop
+  // put them: moving them into the badge, as before, broke shops whose framework
+  // (React, Vue) later inserted or removed them under their old parent. Element
+  // children are hidden with an inline style. Loose text takes no style of its own:
+  // the host is made invisible (which takes it out of the rendered text and the
+  // accessibility tree) and zero-sized (which takes its space), while the badge is
+  // made visible again at the host's size. Every inline value is recorded so Undo
+  // puts back exactly what was there.
+  function hideOriginalContent(badge, host) {
+    if (!host || hiddenOriginals.has(badge)) return;
+    const record = { host, styles: [] };
+    let hasLooseText = false;
+    for (const child of host.childNodes) {
+      if (child === badge) continue;
+      if (child.nodeType === Node.ELEMENT_NODE && child.style) {
+        record.styles.push(overrideStyle(child, "display", "none"));
+      } else if (child.nodeType === Node.TEXT_NODE && child.nodeValue?.trim()) {
+        hasLooseText = true;
+      }
     }
-    badge.prepend(original);
+    if (hasLooseText) {
+      const fontSize = window.getComputedStyle(host).fontSize;
+      record.styles.push(overrideStyle(badge, "font-size", fontSize));
+      record.styles.push(overrideStyle(badge, "visibility", "visible"));
+      record.styles.push(overrideStyle(host, "font-size", "0"));
+      record.styles.push(overrideStyle(host, "visibility", "hidden"));
+    }
+    hiddenOriginals.set(badge, record);
   }
 
   function releaseOriginalContent(badge) {
-    const original = badge.querySelector(":scope > .ccp-original");
-    if (!original || !badge.parentNode) return;
-    badge.before(...original.childNodes);
-    original.remove();
+    const record = hiddenOriginals.get(badge);
+    if (!record) return;
+    hiddenOriginals.delete(badge);
+    for (const saved of record.styles.reverse()) restoreStyle(saved);
+  }
+
+  function releaseAllOriginalContent() {
+    for (const badge of [...hiddenOriginals.keys()]) releaseOriginalContent(badge);
+  }
+
+  function overrideStyle(element, property, value) {
+    const saved = {
+      element,
+      property,
+      value: element.style.getPropertyValue(property),
+      priority: element.style.getPropertyPriority(property),
+      hadStyleAttribute: element.hasAttribute("style")
+    };
+    element.style.setProperty(property, value, "important");
+    return saved;
+  }
+
+  function restoreStyle({ element, property, value, priority, hadStyleAttribute }) {
+    if (value) element.style.setProperty(property, value, priority);
+    else element.style.removeProperty(property);
+    if (!hadStyleAttribute && element.getAttribute("style") === "") element.removeAttribute("style");
   }
 
   function normalizeDisplayMode(value) {
@@ -923,7 +980,7 @@
     const displayMode = normalizeDisplayMode(nextSettings);
     wrapper.dataset.displayMode = displayMode;
     if (appended) {
-      if (displayMode === "replace") captureOriginalContent(wrapper, wrapper.parentElement);
+      if (displayMode === "replace") hideOriginalContent(wrapper, wrapper.parentElement);
       else releaseOriginalContent(wrapper);
     } else {
       wrapper.querySelector(".ccp-original")?.style.setProperty(
@@ -980,14 +1037,14 @@
       for (; host; host = host.parentElement) {
         const record = splitPriceRecords.get(host);
         if (!record) continue;
-        const captured = record.badge.querySelector(":scope > .ccp-original");
-        const currentText = captured && host.contains(record.badge)
-          ? captured.textContent.trim()
-          : [...host.childNodes].filter((node) => node !== record.badge)
-            .map((node) => node.textContent).join("").trim();
+        const currentText = [...host.childNodes].filter((node) => node !== record.badge)
+          .map((node) => node.textContent).join("").trim();
         if (currentText !== record.originalText || !host.contains(record.badge)) {
           hasSiteMutation = true;
           splitPriceRecords.delete(host);
+          // Released first: a badge the shop already removed is no longer connected,
+          // and the registry skips it, but the nodes it hid are still hidden.
+          releaseOriginalContent(record.badge);
           conversionRegistry.restore(record.badge);
           scheduler.queue(host);
         }
@@ -1053,6 +1110,7 @@
 
   function removeConversionsOnly() {
     conversionRegistry.restoreAll();
+    releaseAllOriginalContent();
     splitPriceRecords = new WeakMap();
   }
 

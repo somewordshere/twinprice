@@ -26,11 +26,16 @@
     const cachedBase = await readCachedBase(baseCurrency);
     if (isFresh(cachedBase, supportedCodes)) return buildSuccess(cachedBase, true, false);
 
+    // An entry that is young but was saved under another currency catalog (the
+    // built-in list a fresh install starts with) is not stale: it is fetched again
+    // now, and only falls back to the cache below if that fails. Serving it while
+    // refreshing called minutes-old rates "cached" and missed the new quotes.
     const cacheAgeMs = getCacheAgeMs(cachedBase);
     if (
       cachedBase?.rates &&
       Object.keys(cachedBase.rates).length > 1 &&
       Number.isFinite(cacheAgeMs) &&
+      cacheAgeMs >= FRESH_FOR_MS &&
       cacheAgeMs <= MAX_STALE_AGE_MS
     ) {
       refreshRatesInBackground(baseCurrency, supportedCodes);

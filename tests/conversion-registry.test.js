@@ -75,18 +75,16 @@ test("default restoration removes appended badges and replaces inline wrappers w
   assert.equal(registry.size(), 0);
 });
 
-test("restoring an appended badge hands the site back the price nodes it parked", () => {
-  const priceNodes = [{ nodeValue: "CHF" }, { nodeValue: "439.–" }];
-  const returned = [];
-  const captured = { childNodes: priceNodes, removed: false };
+test("restoring an appended badge removes only the badge, never moving site nodes", () => {
+  const moved = [];
   const appended = {
     isConnected: true,
     dataset: { ccpAppended: "true" },
-    querySelector(selector) {
-      return selector === ":scope > .ccp-original" ? captured : null;
+    querySelector() {
+      throw new Error("an appended badge holds none of the site's nodes to look for");
     },
     before(...nodes) {
-      returned.push(...nodes);
+      moved.push(...nodes);
     },
     remove() {
       this.removed = true;
@@ -97,8 +95,20 @@ test("restoring an appended badge hands the site back the price nodes it parked"
 
   registry.restoreAll();
 
-  assert.deepEqual(returned, priceNodes, "captured price nodes must go back before the badge");
+  assert.deepEqual(moved, [], "no site node is moved when a split-price badge goes");
   assert.equal(appended.removed, true);
+  assert.equal(registry.size(), 0);
+});
+
+test("a custom restore runs for each connected conversion", () => {
+  const restored = [];
+  const registry = create({ restoreWrapper: (wrapper) => restored.push(wrapper.id) });
+  registry.add({ id: "a", isConnected: true });
+  registry.add({ id: "b", isConnected: false });
+
+  registry.restoreAll();
+
+  assert.deepEqual(restored, ["a"]);
   assert.equal(registry.size(), 0);
 });
 

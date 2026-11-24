@@ -31,7 +31,11 @@ for (const displayMode of ["beside", "replace"]) {
     await page.locator("#amount").evaluate(node => { node.textContent = "300.00"; });
     await expect(page.locator("#price .ccp-badge")).toHaveText("≈ 270,00 €");
     await expect(page.locator("#price ccp-conversion")).toHaveCount(1);
-    if (displayMode === "replace") await expect(page.locator("#amount")).toBeHidden();
+    if (displayMode === "replace") {
+      await expect(page.locator("#amount")).toBeHidden();
+      // Hidden where the shop put it, not moved into the badge.
+      expect(await page.locator("#amount").evaluate(node => node.parentElement.id)).toBe("price");
+    }
     const selection = await extensionWorker.evaluate(async url => {
       const tab = (await chrome.tabs.query({})).find(tab => tab.url === url);
       const [{ result }] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, world: "ISOLATED",
@@ -41,10 +45,75 @@ for (const displayMode of ["beside", "replace"]) {
     expect(selection.converted).toBe("-9,00 €");
     await runPageCommand(extensionWorker, "CLEAR_SITE_CONVERSION");
     await expect(page.locator("#price")).toHaveText("$300.00");
+    // Undo leaves no inline style behind on the shop's own nodes.
+    expect(await page.locator("#price").evaluate(node => node.outerHTML))
+      .toBe('<p id="price" class="price"><b>$</b><span id="amount">300.00</span></p>');
     await expect(page.locator("#negative")).toHaveText("-10.00 USD");
     await expect(page.locator("ccp-conversion")).toHaveCount(0);
   });
 }
+
+// Converted-only mode used to move a split price's own nodes into the badge. A
+// framework that later removed or replaced them under their original parent, as
+// React does on a re-render, then threw "not a child of this node".
+test("a shop can still remove its split-price nodes in converted-only mode", async ({ context, extensionWorker }) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", toCurrency: "EUR", displayMode: "replace" } });
+  const page = await context.newPage();
+  await page.route(DEFAULT_SHOP_URL, route => route.fulfill({ contentType: "text/html", body: `
+    <p id="price" class="price">66 000<!-- --> USD</p>
+    <p id="split" class="price"><b id="symbol">$</b><span id="amount">100.00</span></p>
+  ` }));
+  await page.goto(DEFAULT_SHOP_URL);
+  await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION");
+  await expect(page.locator("#split .ccp-badge")).toHaveText("≈ 90,00 €");
+  await expect(page.locator("#price .ccp-badge")).toHaveText("≈ 59.400,00 €");
+  await expect(page.locator("#amount")).toBeHidden();
+  // Loose text cannot take a style; its host is made invisible and zero-sized,
+  // while the badge is visible at the host's size. A visitor reads only the badge.
+  await expect(page.locator("#price")).not.toContainText("66 000", { useInnerText: true });
+  await expect(page.locator("#price .ccp-badge")).toBeVisible();
+  expect(await page.locator("#price .ccp-badge").evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThan(0);
+
+  const removal = await page.evaluate(() => {
+    try {
+      const split = document.querySelector("#split");
+      split.removeChild(document.querySelector("#symbol"));
+      split.replaceChild(Object.assign(document.createElement("span"), { id: "amount", textContent: "$200.00" }),
+        document.querySelector("#amount"));
+      return "ok";
+    } catch (error) {
+      return error.message;
+    }
+  });
+  expect(removal).toBe("ok");
+  await expect(page.locator("#split .ccp-badge")).toHaveText("≈ 180,00 €");
+  await expect(page.locator("#split ccp-conversion")).toHaveCount(1);
+
+  await runPageCommand(extensionWorker, "CLEAR_SITE_CONVERSION");
+  expect(await page.locator("#split").evaluate(node => node.innerHTML)).toBe('<span id="amount">$200.00</span>');
+  expect(await page.locator("#price").evaluate(node => node.outerHTML))
+    .toBe('<p id="price" class="price">66 000<!-- --> USD</p>');
+});
+
+// A page priced in two currencies, one of which has no rates: the other still
+// converts, and the result says which prices were left as they were.
+test("a currency whose rates fail is named when others convert", async ({ context, extensionWorker }) => {
+  await seedExtension(extensionWorker, { settings: { fromCurrency: "AUTO", toCurrency: "EUR" } });
+  const page = await context.newPage();
+  await page.route(DEFAULT_SHOP_URL, route => route.fulfill({ contentType: "text/html", body: `
+    <p id="usd" class="price">USD 10.00</p>
+    <p id="gbp" class="price">GBP 20.00</p>
+  ` }));
+  await page.goto(DEFAULT_SHOP_URL);
+  const conversion = await runPageCommand(extensionWorker, "RUN_SITE_CONVERSION");
+  expect(conversion.ok).toBe(true);
+  expect(conversion.count).toBe(1);
+  expect(conversion.rateFailure).toMatch(/^GBP: /);
+  expect(conversion.rateWarning).toContain(conversion.rateFailure);
+  await expect(page.locator("#usd .ccp-badge")).toHaveText("≈ 9,00 €");
+  await expect(page.locator("#gbp ccp-conversion")).toHaveCount(0);
+  await expect(page.locator(".ccp-toast")).toContainText("GBP:");
+});
 
 test("popup preserves three-decimal currency amounts and rejects malformed input", async ({ context, extensionWorker, extensionId }) => {
   await seedExtension(extensionWorker, { settings: { fromCurrency: "USD", toCurrency: "EUR" } });

@@ -19,6 +19,48 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Fixed
+
+- "Converted only" no longer moves a split price's own nodes (such as
+  `<b>$</b><span>100.00</span>`) into the Twinprice badge. They stay where the
+  shop put them: element parts are hidden with an inline style, and loose text
+  by making its container invisible and zero-sized while the badge stays
+  visible at the container's size, so neither the page text nor screen readers
+  include the hidden original. Shops built with React or Vue could throw "not a child of this node"
+  when they later re-rendered those prices. Undo restores each inline style
+  exactly, including removing a `style` attribute Twinprice added.
+- When a page has prices in two currencies and one currency's rates fail, the
+  others still convert and the notice and popup now name the currency that was
+  left unconverted, instead of reporting a plain success.
+- Shops on `.hr` and `.bg` domains, and pages in Croatian or Bulgarian, count
+  as euro evidence. Croatia has used the euro since 2023 and Bulgaria since
+  2026-01-01.
+- The words "AMD", "TRY" and "MAD" no longer name a page's currency on their
+  own. Like the "TL" and "kr" symbols, they only confirm a currency that the
+  page's metadata, domain or language already suggests. A capitalised "Try it
+  free" button or "AMD Ryzen" could make a dollar page read as Turkish lira or
+  Armenian dram.
+- Right after installation, rates fetched minutes earlier are no longer
+  reported as stale cached rates once the provider's currency list arrives.
+  They are fetched again, and the cached copy is used only if that fails.
+- The popup no longer stays on "Converting…" when the background cannot
+  answer the rate request; it says the rate service could not be reached.
+- The popup no longer draws the previous currency pair's rate chart under a
+  pair whose rate failed to load.
+
+### Tests
+
+- Unit tests cover young rates saved under another catalog, both refetched and
+  as a fallback; Croatian and Bulgarian euro pages; capitalised TRY and AMD
+  words, including right after a price; TRY codes on a Turkish-language page;
+  and the registry no longer moving nodes.
+- Chromium tests cover split-price nodes staying in place in converted-only
+  mode, a shop removing and replacing them without errors, exact Undo of the
+  inline styles, and a page whose second currency has no rates.
+- The popup's rate-request failure and chart race have no automated test.
+
 ## 2.7.1 - 2026-11-24
 
 ### Fixed
