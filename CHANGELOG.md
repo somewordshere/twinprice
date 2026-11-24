@@ -19,7 +19,7 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
-## Unreleased
+## 2.7.2 - 2026-11-24
 
 ### Fixed
 

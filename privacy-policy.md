@@ -1,6 +1,6 @@
 # Twinprice Privacy Policy
 
-Effective date: November 24, 2026 (version 2.7.1)
+Effective date: November 24, 2026 (version 2.7.2)
 
 Twinprice is a Chrome and Firefox extension that identifies prices on webpages and converts them into a currency selected by the user.
 

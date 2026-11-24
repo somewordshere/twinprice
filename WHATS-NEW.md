@@ -4,6 +4,15 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.7.2 · November 24, 2026
+
+- With **Price display** set to show converted prices only, prices that a shop draws in several pieces (such as a currency sign and an amount) no longer get in the way of the shop. Some shops could stop updating those prices, or show an error, after you changed a product option. **Undo** still puts the page back exactly as it was.
+- If a page shows prices in two currencies and the rates for one of them can't be loaded, Twinprice still converts the others and now says which currency it could not convert, instead of only reporting success.
+- Shops in Croatia and Bulgaria, which use the euro, are now recognized as euro shops from their web address and language, so more of their prices convert.
+- Words such as "Try" on a button or "AMD" in a processor name no longer make Twinprice think a page is priced in Turkish lira or Armenian dram.
+- Just after you install Twinprice, the exchange rate is no longer marked as old when it was loaded minutes earlier.
+- The Twinprice window no longer keeps saying it is converting when the rate service can't be reached; it says so instead. It also no longer shows the previous currency pair's rate chart.
+
 ## 2.7.1 · November 24, 2026
 
 - Twinprice works again in Chrome and Microsoft Edge. With version 2.7.0 from the Chrome Web Store, Twinprice could not load exchange rates: its window said "The rate service could not be reached" and prices on pages did not convert. The Chrome Web Store had received the Firefox version by mistake. Nothing changes in Firefox.
