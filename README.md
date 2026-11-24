@@ -6,9 +6,9 @@ Twinprice is a Chrome and Firefox extension that converts prices on shopping pag
 
 Detection, conversion, and rendering all happen inside your browser. The only thing that leaves it on its own is an ISO currency code such as `USD` or `EUR` — never page content or prices. A site's name is sent only when you press **Report this website** on a page that would not convert.
 
-**Current version:** 2.7.0 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
+**Current version:** 2.7.1 · **Platforms:** Chrome and Firefox Manifest V3 · **Firefox:** 140+ · Android 142+ · **License:** MIT
 
-[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.7.0/twinprice-2.7.0-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.7.0/twinprice-2.7.0-firefox.zip)
+[![Verify](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml/badge.svg)](https://github.com/somewordshere/twinprice/actions/workflows/verify.yml) [![Chrome Web Store](https://img.shields.io/badge/Chrome-Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/twinprice-currency-conver/mocmiipnkiobjgjkfehpcmlapgjaepfk) [![Firefox Add-ons](https://img.shields.io/badge/Firefox-Add--ons-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/twinprice/) [![Chrome build](https://img.shields.io/badge/Chrome-Build-4285F4?logo=googlechrome&logoColor=white)](release/2.7.1/twinprice-2.7.1-chrome.zip) [![Firefox build](https://img.shields.io/badge/Firefox-Build-FF7139?logo=firefoxbrowser&logoColor=white)](release/2.7.1/twinprice-2.7.1-firefox.zip)
 
 **[What’s new →](WHATS-NEW.md)**
 
@@ -206,6 +206,7 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 
 | Version | Highlights | Download |
 | --- | --- | --- |
+| 2.7.1 | Chrome and Edge load exchange rates again: the Chrome Web Store had received the Firefox package as 2.7.0 | [Chrome](release/2.7.1/twinprice-2.7.1-chrome.zip) · [Firefox](release/2.7.1/twinprice-2.7.1-firefox.zip) |
 | 2.7.0 | Latin American Spanish in the extension and website | [Chrome](release/2.7.0/twinprice-2.7.0-chrome.zip) · [Firefox](release/2.7.0/twinprice-2.7.0-firefox.zip) |
 | 2.6.0 | Uzbek interface and help in Latin script | [Chrome](release/2.6.0/twinprice-2.6.0-chrome.zip) · [Firefox](release/2.6.0/twinprice-2.6.0-firefox.zip) |
 | 2.5.5 | Argentine peso prices on Alquiler Argentina now convert in AUTO mode | [Chrome](release/2.5.5/twinprice-2.5.5-chrome.zip) · [Firefox](release/2.5.5/twinprice-2.5.5-firefox.zip) |
@@ -215,7 +216,6 @@ Browse all published versions and download packages on [GitHub Releases](https:/
 | 2.5.1 | The right-click convert entry is shown in the browser's language; translation fixes for Traditional Chinese, Dutch and Italian | [Chrome](release/2.5.1/twinprice-2.5.1-chrome.zip) · [Firefox](release/2.5.1/twinprice-2.5.1-firefox.zip) |
 | 2.5.0 | Six new interface languages: Czech, Indonesian, Malay, Thai, Vietnamese and Traditional Chinese | [Chrome](release/2.5.0/twinprice-2.5.0-chrome.zip) · [Firefox](release/2.5.0/twinprice-2.5.0-firefox.zip) |
 | 2.4.2 | A hand-chosen source currency no longer converts prices a page shows in another currency; prices loaded after converting keep converting | [Chrome](release/2.4.2/twinprice-2.4.2-chrome.zip) · [Firefox](release/2.4.2/twinprice-2.4.2-firefox.zip) |
-| 2.4.1 | Plain-$ prices convert on New Zealand, Australian, Canadian, Singapore and Hong Kong shops | [Chrome](release/2.4.1/twinprice-2.4.1-chrome.zip) · [Firefox](release/2.4.1/twinprice-2.4.1-firefox.zip) |
 
 See [What’s new](WHATS-NEW.md) for every release.
 

@@ -42,6 +42,11 @@ it to rebuild the five current images.
 1. Deploy the website first (`wrangler deploy` from `website/`) when the
    privacy policy or any page the extension links to changed.
 2. Chrome: upload `release/<version>/twinprice-<version>-chrome.zip`.
+   Check the file name before uploading. The Firefox ZIP installs in Chrome
+   without an error but has no background worker there, so Twinprice cannot
+   load rates (this happened with 2.7.0). The Chrome ZIP's `manifest.json`
+   declares `"service_worker"`; the Firefox ZIP's declares `"scripts"` and
+   `"gecko"`.
 3. Firefox: upload `release/<version>/twinprice-<version>-firefox.zip`.
 4. If permissions, stored data or network requests changed: update the
    privacy answers in `chrome/listing.md` and the AMO data-collection answers.

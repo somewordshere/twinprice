@@ -4,6 +4,10 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.7.1 · November 24, 2026
+
+- Twinprice works again in Chrome and Microsoft Edge. With version 2.7.0 from the Chrome Web Store, Twinprice could not load exchange rates: its window said "The rate service could not be reached" and prices on pages did not convert. The Chrome Web Store had received the Firefox version by mistake. Nothing changes in Firefox.
+
 ## 2.7.0 · November 23, 2026
 
 - Choose **Español (Latinoamérica)** under **Language** in Page options. The popup, welcome page, and on-page controls use Latin American Spanish terminology and number formatting. Automatic language selection also recognizes regional settings such as Spanish for Mexico and Argentina.

@@ -19,6 +19,26 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.7.1 - 2026-11-24
+
+### Fixed
+
+- Twinprice works again in Chrome and Microsoft Edge. The Chrome Web Store had
+  received `twinprice-2.7.0-firefox.zip` as version 2.7.0. Its manifest declares
+  Firefox's `background.scripts`, which Chromium ignores in Manifest V3, and
+  has no `chrome-worker.js`. The extension therefore ran without a background
+  worker: the popup showed "The rate service could not be reached" and page
+  conversion could not load rates. 2.7.1 ships the same source as 2.7.0, built
+  again, for upload as the correct Chrome package.
+
+### Changed
+
+- The store upload checklist says how to tell the two packages apart before
+  uploading.
+- The README is shorter: the installation section is gone, the privacy,
+  usage and whole-page conversion sections are condensed, the release table
+  lists the ten latest releases, and the Page options screenshot is refreshed.
+
 ## 2.7.0 - 2026-11-23
 
 ### Added
