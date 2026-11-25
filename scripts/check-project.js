@@ -288,6 +288,34 @@ assert.ok(
   "privacy-policy.md must record the version it describes, or it silently goes stale"
 );
 
+// Every Chrome listing has an AMO description in the same locale, and each AMO
+// description points at its own language's pages on twinprice.com. Firefox may
+// have more (Uzbek, which Chrome does not support).
+{
+  const listingLocales = fs.readdirSync(path.join(root, "store/listings"))
+    .filter((name) => name.endsWith(".md")).map((name) => name.slice(0, -3));
+  const firefoxDir = path.join(root, "store/firefox/descriptions");
+  const firefoxLocales = fs.readdirSync(firefoxDir)
+    .filter((name) => name.endsWith(".md")).map((name) => name.slice(0, -3));
+  for (const locale of listingLocales) {
+    assert.ok(
+      firefoxLocales.includes(locale),
+      `store/firefox/descriptions/${locale}.md is missing; store/listings/${locale}.md has no AMO version`
+    );
+  }
+  for (const locale of firefoxLocales) {
+    const text = fs.readFileSync(path.join(firefoxDir, `${locale}.md`), "utf8");
+    const prefix = locale === "en" ? "" : `${locale.replace("_", "-")}/`;
+    for (const page of ["privacy", "guide"]) {
+      assert.ok(
+        text.includes(`https://twinprice.com/${prefix}${page}/`),
+        `store/firefox/descriptions/${locale}.md must link https://twinprice.com/${prefix}${page}/`
+      );
+    }
+    assert.ok(!/^#/m.test(text), `store/firefox/descriptions/${locale}.md must not use headings; AMO does not render them`);
+  }
+}
+
 // release/<version>/ holds the notes and the two store ZIPs, nothing else. Folders
 // before 2.1.0 keep their original Currency Converter file names.
 for (const entry of fs.readdirSync(path.join(root, "release"), { withFileTypes: true })) {

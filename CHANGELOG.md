@@ -19,6 +19,24 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## Unreleased
+
+### Store
+
+- Firefox Add-ons descriptions for every interface language, not only English:
+  `store/firefox/descriptions/<locale>.md` now covers the twenty-one Chrome
+  listing locales plus Uzbek, which Chrome does not support. Each follows the
+  English AMO text, reuses its Chrome listing's wording and links that
+  language's privacy policy and guide on twinprice.com. Native speakers have
+  not reviewed them. `store/firefox/listing.md` says which AMO Spanish
+  variants take `es.md` and `es_419.md`.
+
+### Tooling
+
+- `npm run check` fails when a Chrome listing locale has no AMO description,
+  when an AMO description does not link its own language's privacy policy and
+  guide, or when it uses a heading AMO cannot render.
+
 ## 2.7.3 - 2026-11-25
 
 ### Fixed

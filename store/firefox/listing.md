@@ -76,6 +76,15 @@ Leave out the `##` version line, because AMO does not show headings.
 The name and summary switch language by themselves (they come from
 `src/_locales`). For each language, switch the language at the top of the Edit
 Product Page, then paste `descriptions/<locale>.md` and the translated
-screenshot captions. Only English has an AMO-formatted description so far.
-Until the others exist, paste `../listings/<locale>.md`. It is plain text, so
-it displays correctly, just without bold or links.
+screenshot captions. Every interface language has an AMO description. They
+follow `descriptions/en.md` and reuse the wording of `../listings/<locale>.md`;
+native speakers have not reviewed them. Each links to that language's privacy
+policy and guide on twinprice.com. The interface languages are listed by the
+names the Language menu shows, so that line is the same in every file.
+
+AMO's language menu has no "Latin American Spanish". Paste `es.md` into
+Spanish (Spain) and `es_419.md` into Spanish (Mexico), Spanish (Argentina) and
+Spanish (Chile). If AMO does not offer Uzbek, leave `uz.md` unused.
+
+`scripts/check-project.js` fails if a `../listings/<locale>.md` has no
+description here, so a new language needs both files.

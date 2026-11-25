@@ -10,7 +10,7 @@ chrome/listing.md      Chrome dashboard fields and privacy-practices answers
 chrome/screenshots/en/ 1280x800 screenshots, 01–05, used for every language
 chrome/promo/          440x280 small promo tile
 firefox/listing.md     AMO fields, screenshot captions, version notes
-firefox/descriptions/  AMO descriptions in AMO Markdown (English so far)
+firefox/descriptions/  AMO descriptions in AMO Markdown (twenty-two locales, Uzbek included)
 firefox/screenshots/   The Chrome screenshots with a 1–5 number added
 video/                 Demo video notes (the .mp4 is not committed)
 archive/               Old Currency Converter Pro listing text, for reference only
@@ -21,7 +21,9 @@ growth.md              Marketing checklist and weekly numbers (not committed)
 The store name and short summary are not here. They come from
 `src/_locales/<locale>/messages.json` and change with each package upload.
 Uzbek is available in the extension’s own language menu. Firefox also ships
-Uzbek browser messages. Links from the Uzbek website open the English store pages.
+Uzbek browser messages, and `firefox/descriptions/uz.md` is its AMO description.
+Chrome has no Uzbek locale, so the Chrome package and `listings/` leave it out.
+Links from the Uzbek website open the English store pages.
 
 ## Regenerating images
 
