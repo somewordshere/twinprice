@@ -491,6 +491,42 @@ const DETECTION_CASES = [
     hostname: "www.example.co.nz",
     bodyText: "Cart $59.95 $129.00 $8.50",
     inert: ["$129.00"]
+  },
+  {
+    // eBay's search results name no currency: lang="en", a .com and bare "$" prices.
+    name: "eBay US search results",
+    lang: "en",
+    hostname: "www.ebay.com",
+    bodyText: "Under $310.00 $310.00 to $390.00 Over $390.00 iPhone 15 $289.99 to $419.99 From $275.49",
+    currency: "USD",
+    minConfidence: "medium",
+    converts: { "From $275.49": "USD:275.49" }
+  },
+  {
+    // A listing priced in another currency keeps its own code.
+    name: "eBay US listing priced in pounds",
+    lang: "en",
+    hostname: "ebay.com",
+    bodyText: "Vintage watch GBP 120.00 Leather strap $25.00 Watch box $15.00",
+    currency: "USD",
+    minConfidence: "medium",
+    converts: { "GBP 120.00": "GBP:120", "$25.00": "USD:25" }
+  },
+  {
+    // Only ebay.com: another .com with the same page still names no currency.
+    name: "Unknown .com search results",
+    lang: "en",
+    hostname: "www.example.com",
+    bodyText: "Under $310.00 $310.00 to $390.00 Over $390.00 iPhone 15 $289.99 to $419.99 From $275.49",
+    inert: ["From $275.49"]
+  },
+  {
+    name: "eBay UK keeps its own currency",
+    lang: "en-GB",
+    hostname: "www.ebay.co.uk",
+    bodyText: "Vintage watch £120.00 Leather strap £25.00 Watch box £15.00",
+    currency: "GBP",
+    minConfidence: "medium"
   }
 ];
 

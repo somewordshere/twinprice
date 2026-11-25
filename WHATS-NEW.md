@@ -4,6 +4,10 @@ Changes you can see, newest first. The technical history for developers is in
 [CHANGELOG.md](CHANGELOG.md). There was no 2.2.1. Before 2.1.0, Twinprice was
 called Currency Converter Pro.
 
+## 2.7.3 · November 25, 2026
+
+- Prices in eBay US search results now convert automatically. Twinprice used to say it could not tell which currency the page used, because those results show only "$" without saying which dollar.
+
 ## 2.7.2 · November 24, 2026
 
 - With **Price display** set to show converted prices only, prices that a shop draws in several pieces (such as a currency sign and an amount) no longer get in the way of the shop. Some shops could stop updating those prices, or show an error, after you changed a product option. **Undo** still puts the page back exactly as it was.

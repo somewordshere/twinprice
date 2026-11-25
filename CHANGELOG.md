@@ -19,6 +19,25 @@ GitHub's automatically generated source archives contain the tagged commit's sou
 The tag annotations record this distinction. Other release tags identify source
 whose `package.json` declares the release version.
 
+## 2.7.3 - 2026-11-25
+
+### Fixed
+
+- eBay's US search results (`ebay.com`) convert in AUTO mode. They print bare
+  "$" prices under `lang="en"` with no product data, so no signal named a
+  currency and page detection reported "The source currency could not be
+  detected" (site report: GitHub issue #8). `ebay.com` now counts as a US dollar
+  site, like Alquiler Argentina for pesos; both live in one `SITE_CURRENCIES`
+  table in the detector. eBay's country sites already resolve from their
+  domains, and a listing written with its own code ("GBP 120.00") still
+  converts as that currency.
+
+### Tests
+
+- Detector unit tests cover eBay US search results, a pound-priced listing on
+  `ebay.com`, the same search page on another `.com` staying unresolved, and
+  `ebay.co.uk` keeping pounds.
+
 ## 2.7.2 - 2026-11-24
 
 ### Fixed

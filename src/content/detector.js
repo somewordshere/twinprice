@@ -26,6 +26,10 @@
     "g"
   );
   const WORD_LIKE_CURRENCY_CODES = new Set(["AMD", "MAD", "TRY"]);
+  const SITE_CURRENCIES = Object.freeze({
+    "alquilerargentina.com": "ARS",
+    "ebay.com": "USD"
+  });
   // Korean, Japanese and Chinese count large amounts in ten-thousands and
   // hundred-millions: 290만원 is 2,900,000 won and 1.5万円 is 15,000 yen.
   const EAST_ASIAN_NUMBER_UNITS = Object.freeze({ "만": 1e4, "万": 1e4, "억": 1e8, "億": 1e8 });
@@ -542,10 +546,12 @@
 
     const currentHost = window.location.hostname;
     if (currentHost) addDomainSignal(currentHost, 20, "country domain");
-    // Alquiler Argentina lists prices in pesos on a .com with lang="es".
-    if (currentHost === "alquilerargentina.com" || currentHost === "www.alquilerargentina.com") {
-      add("ARS", 40, "site currency");
-    }
+    // Sites whose domain and language name no currency, and whose pages often do not
+    // either. Alquiler Argentina lists prices in pesos on a .com with lang="es".
+    // eBay's search results on ebay.com print bare "$" prices under lang="en" with no
+    // product data; its country sites (ebay.co.uk, ebay.de, ebay.ca...) have domains.
+    const siteCurrency = SITE_CURRENCIES[(currentHost || "").replace(/^www\./, "")];
+    if (siteCurrency) add(siteCurrency, 40, "site currency");
 
     const canonicalUrl = document.querySelector("link[rel='canonical']")?.href;
     if (canonicalUrl) {
