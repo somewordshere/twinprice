@@ -2,7 +2,7 @@
 
 Everything the Chrome Web Store and Firefox Add-ons (AMO) dashboards ask for, in
 one place. Text and final upload images are committed. Raw captures, the video
-file and `growth.md` stay on your machine (see `.gitignore`).
+file and `growth.md` stay on your machine and are not committed.
 
 ```text
 listings/<locale>.md   Plain-text descriptions (twenty-one locales), pasted into Chrome

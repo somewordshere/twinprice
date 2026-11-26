@@ -9,7 +9,9 @@ const packageLock = readJson("package-lock.json");
 const baseManifest = readJson("manifests/base.json");
 const chromeManifest = readJson("manifests/chrome.json");
 const firefoxManifest = readJson("manifests/firefox.json");
-const gitignore = fs.readFileSync(path.join(root, ".gitignore"), "utf8");
+// .gitignore is kept on the owner's machine only, so a fresh clone or CI has none.
+const gitignorePath = path.join(root, ".gitignore");
+const gitignore = fs.existsSync(gitignorePath) ? fs.readFileSync(gitignorePath, "utf8") : null;
 const nodeVersion = fs.readFileSync(path.join(root, ".nvmrc"), "utf8").trim();
 const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
 const changelog = fs.readFileSync(path.join(root, "CHANGELOG.md"), "utf8");
@@ -142,11 +144,19 @@ assert.ok(
   backgroundMain.split(/\r?\n/).length <= 150,
   "background/main.js must remain a small listener and routing entry point"
 );
-assert.match(gitignore, /^artifacts\/$/m, "generated browser artifacts must stay ignored");
-assert.match(
-  gitignore,
-  /^release\/\*\/\*\/$/m,
-  "unpacked release directories must stay ignored"
+if (gitignore !== null) {
+  assert.match(gitignore, /^artifacts\/$/m, "generated browser artifacts must stay ignored");
+  assert.match(
+    gitignore,
+    /^release\/\*\/\*\/$/m,
+    "unpacked release directories must stay ignored"
+  );
+  assert.match(gitignore, /^\/\.gitignore$/m, ".gitignore must ignore itself so it is never committed");
+}
+assert.equal(
+  spawnSync("git", ["ls-files", ".gitignore"], { cwd: root, encoding: "utf8" }).stdout.trim(),
+  "",
+  ".gitignore must not be tracked by Git"
 );
 assert.equal(chromeManifest.background.service_worker, "background/chrome-worker.js");
 assert.ok(Array.isArray(firefoxManifest.background.scripts));

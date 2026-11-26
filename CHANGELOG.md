@@ -36,6 +36,8 @@ whose `package.json` declares the release version.
 - `npm run check` fails when a Chrome listing locale has no AMO description,
   when an AMO description does not link its own language's privacy policy and
   guide, or when it uses a heading AMO cannot render.
+- `npm run check` no longer needs a `.gitignore` file, so it also passes in a
+  fresh clone and in CI.
 
 ## 2.7.3 - 2026-11-25
 
